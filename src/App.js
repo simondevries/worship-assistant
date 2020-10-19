@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import '@blueprintjs/core/lib/css/blueprint.css';
 import '@blueprintjs/icons/lib/css/blueprint-icons.css';
@@ -13,6 +13,12 @@ const StyledApp = styled.div`
 `;
 
 function App() {
+  let bc = new BroadcastChannel('test_channel');
+
+  useEffect(() => {
+    console.log('welcome papya');
+  }, []);
+
   const [currentSlideNumber, setCurrentSlideNumber] = useState({
     resourceIndex: 0,
     slideIndex: 0,
@@ -45,13 +51,24 @@ function App() {
   ]);
 
   const updateSlideNumber = (resourceIndex, slideIndex) => {
-    console.log('process ', resourceIndex, slideIndex);
+    const currentSlide = {
+      resourceIndex: resourceIndex,
+      slideIndex: slideIndex,
+    };
+
+    bc.postMessage(JSON.stringify(currentSlide));
 
     // broadcase
     setCurrentSlideNumber({
       resourceIndex: resourceIndex,
       slideIndex: slideIndex,
     });
+  };
+
+  bc.onmessage = function (ev) {
+    console.log('apple', ev.data);
+    const currentSlide = JSON.parse(ev.data);
+    setCurrentSlideNumber(currentSlide);
   };
 
   return (
