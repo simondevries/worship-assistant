@@ -7,9 +7,13 @@ const StyledCard = styled(Card)`
   margin-bottom: 10px;
 `;
 
-export default function ({ slideMetadata }) {
+export default function ({ slideMetadata, onClick }) {
   return (
-    <StyledCard interactive={true} elevation={Elevation.TWO}>
+    <StyledCard
+      onClick={onClick}
+      interactive={true}
+      elevation={Elevation.TWO}
+    >
       <h5>
         <a href="#">{slideMetadata.text}</a>
       </h5>

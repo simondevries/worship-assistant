@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Slide from './Slide';
 import ResourceManager from './resourceManager';
 import styled from 'styled-components/macro';
 
@@ -12,40 +11,20 @@ const StyledControllerPage = styled.div`
   height: 100%;
 `;
 
-export default function () {
-  const [resources, setResource] = useState([
-    {
-      title: 'How great thou art',
-      slides: [
-        { text: 'Slide 1' },
-        { text: 'Slide 2' },
-        { text: 'Slide 3' },
-      ],
-    },
-    {
-      title: 'How great thou art',
-      slides: [
-        { text: 'Slide 1' },
-        { text: 'Slide 2' },
-        { text: 'Slide 3' },
-      ],
-    },
-    {
-      title: 'How great thou art',
-      slides: [
-        { text: 'Slide 1' },
-        { text: 'Slide 2' },
-        { text: 'Slide 3' },
-      ],
-    },
-  ]);
+export default function ({ resources, updateSlideNumber }) {
+  const updateSlideNumberLocal = (rInx) => (sInx) => {
+    updateSlideNumber(rInx, sInx);
+  };
 
   return (
     <StyledControllerPage>
       <StyledResourcesContainer>
         {resources &&
-          resources.map((r) => (
-            <ResourceManager resource={r}></ResourceManager>
+          resources.map((r, rInx) => (
+            <ResourceManager
+              resource={r}
+              updateSlideNumber={updateSlideNumberLocal(rInx)}
+            ></ResourceManager>
           ))}
       </StyledResourcesContainer>
     </StyledControllerPage>

@@ -8,13 +8,18 @@ const StyledResourceManager = styled.div`
   margin: 0px 10px;
 `;
 
-export default function ({ resource }) {
+export default function ({ resource, updateSlideNumber }) {
   return (
     <StyledResourceManager>
       {resource.title}
       {resource &&
         resource.slides &&
-        resource.slides.map((s) => <Slide slideMetadata={s}></Slide>)}
+        resource.slides.map((s, sInx) => (
+          <Slide
+            onClick={() => updateSlideNumber(sInx)}
+            slideMetadata={s}
+          ></Slide>
+        ))}
     </StyledResourceManager>
   );
 }
