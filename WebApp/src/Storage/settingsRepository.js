@@ -7,9 +7,7 @@ export function set(settings) {
   // Put the sticky note into the object store
   store.put(settings, 'settings');
   // Wait for the database transaction to complete
-  tx.oncomplete = function () {
-    console.log('stored note!');
-  };
+  tx.oncomplete = function () {};
   tx.onerror = function (event) {
     alert('error storing note ' + event.target.errorCode);
   };

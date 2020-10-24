@@ -26,9 +26,7 @@ export function add(songContent) {
   let note = { lyrics: xmlContent, timestamp: Date.now() };
   store.add(note);
   // Wait for the database transaction to complete
-  tx.oncomplete = function () {
-    console.log('stored note!');
-  };
+  tx.oncomplete = function () {};
   tx.onerror = function (event) {
     alert('error storing note ' + event.target.errorCode);
   };

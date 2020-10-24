@@ -12,13 +12,17 @@ const StyledInput = styled.input`
   margin-bottom: 10px;
 `;
 
-export default (setSettingsModalOpen) => {
+export default ({ setSettingsModalOpen }) => {
   const { handleSubmit, register, errors, setValue } = useForm();
-  useEffect(async () => {
-    const res = await getSettings();
-    setValue('fontSize', res.fontSize);
-    setValue('textAlign', res.textAlign);
-  }, []);
+
+  useEffect(() => {
+    async function fetchData() {
+      const res = await getSettings();
+      setValue('fontSize', res.fontSize);
+      setValue('textAlign', res.textAlign);
+    }
+    fetchData();
+  });
 
   const StyledBody = styled.div`
     display: flex;
@@ -26,8 +30,8 @@ export default (setSettingsModalOpen) => {
   `;
 
   const onSubmit = (values) => {
-    setSettings(values);
     setSettingsModalOpen(false);
+    setSettings(values);
   };
 
   return (

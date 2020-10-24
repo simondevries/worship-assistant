@@ -18,7 +18,7 @@ const StyledEditableTextTitle = styled(EditableText)`
   }
 `;
 
-export default (setAddSongModalOpen) => {
+export default ({ setAddSongModalOpen }) => {
   const [songContent, setSongContent] = useState({
     // lyrics: [{ type: 'verse', content: '' }],
     // properties: {
@@ -59,7 +59,6 @@ export default (setAddSongModalOpen) => {
     setAddSongModalOpen(false);
   };
 
-  console.log(JSON.stringify(songContent));
   return (
     <>
       <Dialog
