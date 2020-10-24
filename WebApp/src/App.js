@@ -1,6 +1,7 @@
 /*global chrome*/
 import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
+import { Classes } from '@blueprintjs/core';
 import '@blueprintjs/core/lib/css/blueprint.css';
 import '@blueprintjs/icons/lib/css/blueprint-icons.css';
 import 'normalize.css/normalize.css';
@@ -13,10 +14,14 @@ import {
   Route,
   Link,
 } from 'react-router-dom';
+import { addSongLyrics } from './indexDbGateway';
+import Sidebar from './Components/Sidebar';
 
 const StyledApp = styled.div`
   background-color: #293742;
   height: 100%;
+  display: flex;
+  flex-direction: row;
 `;
 
 function App() {
@@ -58,6 +63,7 @@ function App() {
   ]);
 
   const onFocusTab = () => {
+    addSongLyrics('asda');
     // The ID of the extension we want to talk to.
     var editorExtensionId = 'idellhgacokfnmoagafaafnndbahoajf';
 
@@ -96,6 +102,7 @@ function App() {
 
   return (
     <StyledApp className="bp3-dark">
+      <Sidebar />
       <Router>
         <Switch>
           <Route path="/" exact>
