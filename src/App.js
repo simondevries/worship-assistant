@@ -6,6 +6,7 @@ import 'normalize.css/normalize.css';
 import styled from 'styled-components/macro';
 import ControllerPage from './Components/ControllerPage/ControllerPage';
 import ProjectorView from './Components/ProjectorView/ProjectorView';
+import Search from './Components/Search/Search';
 
 const StyledApp = styled.div`
   background-color: #293742;
@@ -73,6 +74,7 @@ function App() {
 
   return (
     <StyledApp className="bp3-dark">
+      <Search/>
       <ControllerPage
         resources={resources}
         updateSlideNumber={updateSlideNumber}
