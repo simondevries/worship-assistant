@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { Context } from '../../App';
 import ResourceManager from './resourceManager';
 import styled from 'styled-components/macro';
 import { Button, Icon } from '@blueprintjs/core';
@@ -28,7 +29,9 @@ const StyledControllerPage = styled.div`
   justify-content: center;
 `;
 
-export default function ({ resources, updateSlideNumber }) {
+export default function ({ updateSlideNumber }) {
+  const [state, dispatch] = useContext(Context);
+  const resources = state.schedule.resources;
   const updateSlideNumberLocal = (rInx) => (sInx) => {
     updateSlideNumber(rInx, sInx);
   };

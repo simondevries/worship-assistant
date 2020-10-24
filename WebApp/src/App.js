@@ -1,7 +1,7 @@
 /*global chrome*/
-import React, { useState, createContext, useEffect } from 'react';
+import React, { useState, createContext, useReducer } from 'react';
 import logo from './logo.svg';
-import { Classes } from '@blueprintjs/core';
+import { Classes, ContextMenu } from '@blueprintjs/core';
 import '@blueprintjs/core/lib/css/blueprint.css';
 import '@blueprintjs/icons/lib/css/blueprint-icons.css';
 import 'normalize.css/normalize.css';
@@ -26,12 +26,13 @@ const StyledApp = styled.div`
   height: 100%;
 `;
 
-const initialState = { resources: [] };
+const initialState = { schedule: { resources: [] } };
 
 function reducer(state, action) {
   switch (action.type) {
     case 'addResource':
-      return { resources: state.resources.concat(acton.payload) };
+      console.log('wow');
+      return { resources: state.resources.concat(action.payload) };
     case 'moveResource':
       return { count: state.count - 1 };
     case 'removeResource':
@@ -41,9 +42,20 @@ function reducer(state, action) {
   }
 }
 
+export const Store = ({ children }) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  return (
+    <Context.Provider value={[state, dispatch]}>
+      {children}
+    </Context.Provider>
+  );
+};
+
+export const Context = createContext(initialState);
+
 function App() {
   let bc = new BroadcastChannel('test_channel');
-  const [store, dispatch] = useReducer(reducer, initialState);
   const [currentSlideNumber, setCurrentSlideNumber] = useState({
     resourceIndex: 0,
     slideIndex: 0,
@@ -88,28 +100,28 @@ function App() {
 
   return (
     <StyledApp className="bp3-dark">
-      <Search />
-      <Router>
-        <Switch>
-          <Route path="/" exact>
-            <StyledControllerPageContainer>
-              <Sidebar />
+      <Store>
+        <Search />
+        <Router>
+          <Switch>
+            <Route path="/" exact>
+              <StyledControllerPageContainer>
+                <Sidebar />
 
-              <ControllerPage
-                resources={currentSchedule}
-                updateSlideNumber={updateSlideNumber}
+                <ControllerPage
+                  updateSlideNumber={updateSlideNumber}
+                />
+                <input type="button" onClick={onFocusTab} />
+              </StyledControllerPageContainer>
+            </Route>
+            <Route path="/project">
+              <ProjectorView
+                currentSlideNumber={currentSlideNumber}
               />
-              <input type="button" onClick={onFocusTab} />
-            </StyledControllerPageContainer>
-          </Route>
-          <Route path="/project">
-            <ProjectorView
-              resources={currentSchedule}
-              currentSlideNumber={currentSlideNumber}
-            />
-          </Route>
-        </Switch>
-      </Router>
+            </Route>
+          </Switch>
+        </Router>
+      </Store>
     </StyledApp>
   );
 }
