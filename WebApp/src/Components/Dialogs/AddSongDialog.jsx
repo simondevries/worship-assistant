@@ -52,6 +52,13 @@ export default (setAddSongModalOpen, addSongModalOpen) => {
 
   const saveSong = () => {
     addSong(songContent);
+    setAddSongModalOpen(false);
+  };
+
+  const saveSongAndAddToSet = () => {
+    // todo (Sdv)
+    addSong(songContent);
+    setAddSongModalOpen(false);
   };
 
   console.log(JSON.stringify(songContent));
@@ -79,11 +86,8 @@ export default (setAddSongModalOpen, addSongModalOpen) => {
               Close
             </Button>
             <Button onClick={saveSong}>Save</Button>{' '}
-            <Button
-              onClick={() => setAddSongModalOpen(false)}
-              intent="Primary"
-            >
-              Save and add to Schedule
+            <Button onClick={saveSongAndAddToSet} intent="Primary">
+              Save and add to Schedule (todo)
             </Button>
           </div>
         </div>
