@@ -31,13 +31,12 @@ export default ({ setAddSongModalOpen }) => {
   });
 
   const updateTitle = (event) => {
-    console.log(JSON.stringify(event));
     setSongContent({
+      ...songContent,
       properties: {
         ...songContent.properties,
         title: event,
       },
-      ...songContent,
     });
   };
 

@@ -1,6 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import {
+  Hotkey,
+  Hotkeys,
+  HotkeysTarget,
+  Classes,
+} from '@blueprintjs/core';
 import styled from 'styled-components/macro';
 import { Icon } from '@blueprintjs/core';
+import SearchQuery from './searchQuery';
+import { getAll as getAllSongs } from '../../Storage/songsRepository';
 
 const StyledOmnibarContainer = styled.div`
   -webkit-filter: blur(0);
@@ -75,24 +83,80 @@ const StyledSearchIcon = styled(Icon)``;
 // const StyledInput = styled
 
 export default function () {
-  return (
-    <StyledBackdrop>
-      <StyledOmnibarContainer>
-        <StyledOmnibarSearchboxContainer>
-          {/* <span class="bp3-icon bp3-icon-search"></span> */}
-          <StyledSearchIcon
-            icon="search"
-            color="#5c7080"
-            iconSize={16}
-          />
-          <StyledInput type="text" />
-          <StyledRightArrowIcon icon="arrow-right" color="#5c7080" />
-        </StyledOmnibarSearchboxContainer>
-        <StyledDropdownContainer>
-          <StyledDropdownItem>No Results</StyledDropdownItem>
-        </StyledDropdownContainer>
-        {/* <button class="bp3-button bp3-minimal bp3-intent-primary bp3-icon-arrow-right"></button> */}
-      </StyledOmnibarContainer>
-    </StyledBackdrop>
-  );
+  const [isVisible, setVisibility] = useState(false);
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown);
+  });
+  const handleKeyDown = (event) => {
+    if (event.isComposing || event.keyCode === 229) {
+      return;
+    }
+
+    if (event.keyCode === 27) {
+      setVisibility(false);
+    }
+
+    if (event.keyCode === 191) {
+      setVisibility(true);
+    }
+  };
+  if (!isVisible) return null;
+
+  return <Search setVisibility={setVisibility} />;
 }
+
+const Search = ({ setVisibility }) => {
+  const [searchValue, setSearchValue] = useState(false);
+  const [allSongs, setAllSongs] = useState([]);
+
+  const searchbox = useRef(null);
+
+  useEffect(() => {
+    searchbox.current.focus();
+    async function loadAllSongs() {
+      const songs = await getAllSongs();
+      setAllSongs(songs);
+    }
+    loadAllSongs();
+  }, []);
+
+  const searchResult = SearchQuery(searchValue, allSongs);
+  return (
+    <>
+      <StyledBackdrop onClick={() => setVisibility(false)}>
+        <StyledOmnibarContainer>
+          <StyledOmnibarSearchboxContainer>
+            {/* <span class="bp3-icon bp3-icon-search"></span> */}
+            <StyledSearchIcon
+              icon="search"
+              color="#5c7080"
+              iconSize={16}
+            />
+            <StyledInput
+              type="text"
+              placeholder="Add resource..."
+              ref={searchbox}
+              onChange={(e) => setSearchValue(e.target.value)}
+              value={searchValue}
+            />
+            <StyledRightArrowIcon
+              icon="arrow-right"
+              color="#5c7080"
+            />
+          </StyledOmnibarSearchboxContainer>
+          <StyledDropdownContainer>
+            {searchResult &&
+              searchResult.map((song) => {
+                return (
+                  <StyledDropdownItem>
+                    {song.properties.title}
+                  </StyledDropdownItem>
+                );
+              })}
+          </StyledDropdownContainer>
+          {/* <button class="bp3-button bp3-minimal bp3-intent-primary bp3-icon-arrow-right"></button> */}
+        </StyledOmnibarContainer>
+      </StyledBackdrop>
+    </>
+  );
+};

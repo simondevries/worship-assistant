@@ -29,10 +29,6 @@ const StyledApp = styled.div`
 function App() {
   let bc = new BroadcastChannel('test_channel');
 
-  useEffect(() => {
-    console.log('welcome papya');
-  }, []);
-
   const [currentSlideNumber, setCurrentSlideNumber] = useState({
     resourceIndex: 0,
     slideIndex: 0,
@@ -103,17 +99,7 @@ function App() {
 
   return (
     <StyledApp className="bp3-dark">
-<<<<<<< HEAD:src/App.js
-      <Search/>
-      <ControllerPage
-        resources={resources}
-        updateSlideNumber={updateSlideNumber}
-      />
-      <ProjectorView
-        resources={resources}
-        currentSlideNumber={currentSlideNumber}
-      />
-=======
+      <Search />
       <Router>
         <Switch>
           <Route path="/" exact>
@@ -135,7 +121,6 @@ function App() {
           </Route>
         </Switch>
       </Router>
->>>>>>> f9ce9c0cc44db15bf2819cc0c9554b567e1e2e23:WebApp/src/App.js
     </StyledApp>
   );
 }
