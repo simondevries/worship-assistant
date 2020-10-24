@@ -1,5 +1,5 @@
 /*global chrome*/
-import React, { useState, useEffect } from 'react';
+import React, { useState, createContext, useEffect } from 'react';
 import logo from './logo.svg';
 import { Classes } from '@blueprintjs/core';
 import '@blueprintjs/core/lib/css/blueprint.css';
@@ -26,39 +26,28 @@ const StyledApp = styled.div`
   height: 100%;
 `;
 
+const initialState = { resources: [] };
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'addResource':
+      return { resources: state.resources.concat(acton.payload) };
+    case 'moveResource':
+      return { count: state.count - 1 };
+    case 'removeResource':
+      return { count: state.count - 1 };
+    default:
+      throw new Error();
+  }
+}
+
 function App() {
   let bc = new BroadcastChannel('test_channel');
-
+  const [store, dispatch] = useReducer(reducer, initialState);
   const [currentSlideNumber, setCurrentSlideNumber] = useState({
     resourceIndex: 0,
     slideIndex: 0,
   });
-  const [resources, setResource] = useState([
-    {
-      title: 'How great thou art',
-      slides: [
-        { text: 'Slide 1' },
-        { text: 'Slide 2' },
-        { text: 'Slide 3' },
-      ],
-    },
-    {
-      title: 'How great thou art',
-      slides: [
-        { text: 'Slide 1' },
-        { text: 'Slide 2' },
-        { text: 'Slide 3' },
-      ],
-    },
-    {
-      title: 'How great thou art',
-      slides: [
-        { text: 'Slide 1' },
-        { text: 'Slide 2' },
-        { text: 'Slide 3' },
-      ],
-    },
-  ]);
 
   const onFocusTab = () => {
     // The ID of the extension we want to talk to.
@@ -107,7 +96,7 @@ function App() {
               <Sidebar />
 
               <ControllerPage
-                resources={resources}
+                resources={currentSchedule}
                 updateSlideNumber={updateSlideNumber}
               />
               <input type="button" onClick={onFocusTab} />
@@ -115,7 +104,7 @@ function App() {
           </Route>
           <Route path="/project">
             <ProjectorView
-              resources={resources}
+              resources={currentSchedule}
               currentSlideNumber={currentSlideNumber}
             />
           </Route>
