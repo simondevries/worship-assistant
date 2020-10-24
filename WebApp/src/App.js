@@ -8,6 +8,7 @@ import 'normalize.css/normalize.css';
 import styled from 'styled-components/macro';
 import ControllerPage from './Components/ControllerPage/ControllerPage';
 import ProjectorView from './Components/ProjectorView/ProjectorView';
+import Search from './Components/Search/Search';
 import {
   BrowserRouter as Router,
   Switch,
@@ -102,6 +103,17 @@ function App() {
 
   return (
     <StyledApp className="bp3-dark">
+<<<<<<< HEAD:src/App.js
+      <Search/>
+      <ControllerPage
+        resources={resources}
+        updateSlideNumber={updateSlideNumber}
+      />
+      <ProjectorView
+        resources={resources}
+        currentSlideNumber={currentSlideNumber}
+      />
+=======
       <Router>
         <Switch>
           <Route path="/" exact>
@@ -123,6 +135,7 @@ function App() {
           </Route>
         </Switch>
       </Router>
+>>>>>>> f9ce9c0cc44db15bf2819cc0c9554b567e1e2e23:WebApp/src/App.js
     </StyledApp>
   );
 }
