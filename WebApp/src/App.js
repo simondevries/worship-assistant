@@ -1,3 +1,4 @@
+/*global chrome*/
 import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import '@blueprintjs/core/lib/css/blueprint.css';
@@ -7,6 +8,12 @@ import styled from 'styled-components/macro';
 import ControllerPage from './Components/ControllerPage/ControllerPage';
 import ProjectorView from './Components/ProjectorView/ProjectorView';
 import Search from './Components/Search/Search';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+} from 'react-router-dom';
 
 const StyledApp = styled.div`
   background-color: #293742;
@@ -51,6 +58,22 @@ function App() {
     },
   ]);
 
+  const onFocusTab = () => {
+    // The ID of the extension we want to talk to.
+    var editorExtensionId = 'idellhgacokfnmoagafaafnndbahoajf';
+
+    // Make a simple request:
+    chrome.runtime.sendMessage(
+      editorExtensionId,
+      { focusUrl: 'https://reactrouter.com/web/guides/quick-start' },
+      function (response) {
+        // var result = await response();
+        // response.then((res) => console.log(JSON.stringify(res)));
+        // if (!result.success) console.log('failed to send');
+      },
+    );
+  };
+
   const updateSlideNumber = (resourceIndex, slideIndex) => {
     const currentSlide = {
       resourceIndex: resourceIndex,
@@ -74,6 +97,7 @@ function App() {
 
   return (
     <StyledApp className="bp3-dark">
+<<<<<<< HEAD:src/App.js
       <Search/>
       <ControllerPage
         resources={resources}
@@ -83,6 +107,27 @@ function App() {
         resources={resources}
         currentSlideNumber={currentSlideNumber}
       />
+=======
+      <Router>
+        <Switch>
+          <Route path="/" exact>
+            <div>
+              <ControllerPage
+                resources={resources}
+                updateSlideNumber={updateSlideNumber}
+              />
+              <input type="button" onClick={onFocusTab} />
+            </div>
+          </Route>
+          <Route path="/project">
+            <ProjectorView
+              resources={resources}
+              currentSlideNumber={currentSlideNumber}
+            />
+          </Route>
+        </Switch>
+      </Router>
+>>>>>>> f9ce9c0cc44db15bf2819cc0c9554b567e1e2e23:WebApp/src/App.js
     </StyledApp>
   );
 }
