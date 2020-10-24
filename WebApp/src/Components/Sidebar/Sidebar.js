@@ -2,7 +2,9 @@ import React from 'react';
 import { Button, Card, Elevation, Icon } from '@blueprintjs/core';
 import styled from 'styled-components/macro';
 import useModal from '../Dialogs/useModal';
-import addSongDialog from '../Dialogs/AddSongDialog';
+import AddSongDialog from '../Dialogs/AddSongDialog';
+import SettingsDialog from '../Dialogs/SettingsDialog';
+
 const StyledIconButton = styled(Button)`
   width: 100%;
   display: flex;
@@ -28,16 +30,22 @@ const StyledContainer = styled(Card)`
 `;
 
 const addIcon = <StyledIcon icon={'add'} iconSize="26"></StyledIcon>;
+const cogIcon = <StyledIcon icon={'cog'} iconSize="26"></StyledIcon>;
 
 export default function () {
   const [addSongModalOpen, setAddSongModalOpen] = useModal();
+  const [settingsModalOpen, setSettingsModalOpen] = useModal();
 
   return (
     <StyledContainer elevation={Elevation.FOUR}>
-      {addSongDialog(setAddSongModalOpen, addSongModalOpen)}
+      {addSongModalOpen && (
+        <AddSongDialog setAddSongModalOpen={setAddSongModalOpen} />
+      )}
+      {settingsModalOpen && (
+        <SettingsDialog setSettingsModalOpen={setSettingsModalOpen} />
+      )}
 
       <StyledIconButton
-        alignText="center"
         onClick={() => setAddSongModalOpen(true)}
         icon={addIcon}
         minimal
@@ -45,8 +53,12 @@ export default function () {
         <div>Add</div>
       </StyledIconButton>
 
-      <StyledIconButton alignText="center" icon={addIcon} minimal>
-        <div>Add</div>
+      <StyledIconButton
+        icon={cogIcon}
+        onClick={() => setSettingsModalOpen(true)}
+        minimal
+      >
+        <div>Settings</div>
       </StyledIconButton>
 
       <StyledIconButton alignText="center" icon={addIcon} minimal>

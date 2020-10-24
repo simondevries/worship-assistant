@@ -1,6 +1,6 @@
 import { db } from './indexDbGateway';
 
-export default function addSong(songContent) {
+export function add(songContent) {
   const xmlContent = `
     <song xmlns="http://openlyrics.info/namespace/2009/song"
       version="0.9">

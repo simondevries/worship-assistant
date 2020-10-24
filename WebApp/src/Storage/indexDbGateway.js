@@ -8,8 +8,10 @@ dbReq.onupgradeneeded = function (event) {
 
   // Create an object store named notes. Object stores
   // in databases are where data are stored.
-  let notes = db.createObjectStore('songs', { autoIncrement: true });
+  db.createObjectStore('songs', { autoIncrement: true });
+  db.createObjectStore('settings', { autoIncrement: true });
 };
+
 dbReq.onsuccess = function (event) {
   db = event.target.result;
 };

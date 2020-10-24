@@ -5,6 +5,7 @@ const StyledProjectorView = styled.div`
   font-size: 100pt;
   background: black;
   color: white;
+  height: 100%;
   text-align: center;
 `;
 

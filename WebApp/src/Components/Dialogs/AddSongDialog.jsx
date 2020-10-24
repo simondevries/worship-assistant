@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, EditableText } from '@blueprintjs/core';
 import { Dialog, Classes } from '@blueprintjs/core';
 import styled from 'styled-components/macro';
-import addSong from '../../Storage/addSong';
+import { add as addSong } from '../../Storage/songsRepository';
 
 const StyledEditableTextContent = styled(EditableText)`
   margin-bottom: 30px;
@@ -18,7 +18,7 @@ const StyledEditableTextTitle = styled(EditableText)`
   }
 `;
 
-export default (setAddSongModalOpen, addSongModalOpen) => {
+export default (setAddSongModalOpen) => {
   const [songContent, setSongContent] = useState({
     // lyrics: [{ type: 'verse', content: '' }],
     // properties: {
@@ -29,8 +29,6 @@ export default (setAddSongModalOpen, addSongModalOpen) => {
       title: '',
     },
   });
-
-  if (!addSongModalOpen) return;
 
   const updateTitle = (event) => {
     console.log(JSON.stringify(event));

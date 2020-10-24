@@ -16,11 +16,13 @@ import {
 } from 'react-router-dom';
 import Sidebar from './Components/Sidebar/Sidebar';
 
+const StyledControllerPageContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
 const StyledApp = styled.div`
   background-color: #293742;
   height: 100%;
-  display: flex;
-  flex-direction: row;
 `;
 
 function App() {
@@ -100,18 +102,18 @@ function App() {
 
   return (
     <StyledApp className="bp3-dark">
-      <Sidebar />
-
       <Router>
         <Switch>
           <Route path="/" exact>
-            <div>
+            <StyledControllerPageContainer>
+              <Sidebar />
+
               <ControllerPage
                 resources={resources}
                 updateSlideNumber={updateSlideNumber}
               />
               <input type="button" onClick={onFocusTab} />
-            </div>
+            </StyledControllerPageContainer>
           </Route>
           <Route path="/project">
             <ProjectorView
