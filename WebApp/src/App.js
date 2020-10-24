@@ -14,8 +14,7 @@ import {
   Route,
   Link,
 } from 'react-router-dom';
-import { addSongLyrics } from './indexDbGateway';
-import Sidebar from './Components/Sidebar';
+import Sidebar from './Components/Sidebar/Sidebar';
 
 const StyledApp = styled.div`
   background-color: #293742;
@@ -63,7 +62,6 @@ function App() {
   ]);
 
   const onFocusTab = () => {
-    addSongLyrics('asda');
     // The ID of the extension we want to talk to.
     var editorExtensionId = 'idellhgacokfnmoagafaafnndbahoajf';
 
@@ -103,6 +101,7 @@ function App() {
   return (
     <StyledApp className="bp3-dark">
       <Sidebar />
+
       <Router>
         <Switch>
           <Route path="/" exact>
