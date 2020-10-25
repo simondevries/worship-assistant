@@ -36,6 +36,13 @@ export default function ({ updateSlideNumber }) {
     updateSlideNumber(rInx, sInx);
   };
 
+  const openSearch = () => {
+    dispatch({
+      type: 'setSearchVisible',
+      payload: true,
+    });
+  };
+
   return (
     <StyledControllerPage>
       <StyledResourcesContainer>
@@ -46,9 +53,12 @@ export default function ({ updateSlideNumber }) {
                 resource={r}
                 updateSlideNumber={updateSlideNumberLocal(rInx)}
               ></ResourceManager>
-              <StyledAddButton icon={addIcon} minimal inline={false}>
-                asd
-              </StyledAddButton>
+              <StyledAddButton
+                icon={addIcon}
+                minimal
+                inline={false}
+                onClick={openSearch}
+              ></StyledAddButton>
             </StyledResourceContainer>
           ))}
       </StyledResourcesContainer>

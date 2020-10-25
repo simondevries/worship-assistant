@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button, Card, Elevation, Icon } from '@blueprintjs/core';
 import styled from 'styled-components/macro';
 import useModal from '../Dialogs/useModal';
 import AddSongDialog from '../Dialogs/AddSongDialog';
 import SettingsDialog from '../Dialogs/SettingsDialog';
+import { Context } from '../../App';
 
 const StyledIconButton = styled(Button)`
   width: 100%;
@@ -35,6 +36,14 @@ const cogIcon = <StyledIcon icon={'cog'} iconSize="26"></StyledIcon>;
 export default function () {
   const [addSongModalOpen, setAddSongModalOpen] = useModal();
   const [settingsModalOpen, setSettingsModalOpen] = useModal();
+  const [state, dispatch] = useContext(Context);
+
+  const openSearch = () => {
+    dispatch({
+      type: 'setSearchVisible',
+      payload: true,
+    });
+  };
 
   return (
     <StyledContainer elevation={Elevation.FOUR}>
@@ -45,11 +54,7 @@ export default function () {
         <SettingsDialog setSettingsModalOpen={setSettingsModalOpen} />
       )}
 
-      <StyledIconButton
-        onClick={() => setAddSongModalOpen(true)}
-        icon={addIcon}
-        minimal
-      >
+      <StyledIconButton onClick={openSearch} icon={addIcon} minimal>
         <div>Add</div>
       </StyledIconButton>
 

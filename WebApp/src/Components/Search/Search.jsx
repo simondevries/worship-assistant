@@ -4,6 +4,7 @@ import React, {
   useRef,
   useContext,
 } from 'react';
+import { Context } from '../../App';
 import {
   Hotkey,
   Hotkeys,
@@ -88,33 +89,22 @@ const StyledSearchIcon = styled(Icon)``;
 // const StyledInput = styled
 
 export default function () {
-  const [isVisible, setVisibility] = useState(false);
-  useEffect(() => {
-    document.addEventListener('keydown', handleKeyDown);
-  });
-  const handleKeyDown = (event) => {
-    if (event.isComposing || event.keyCode === 229) {
-      return;
-    }
-
-    if (event.keyCode === 27) {
-      setVisibility(false);
-    }
-
-    if (event.keyCode === 191) {
-      setVisibility(true);
-    }
-  };
-  if (!isVisible) return null;
-
-  return <Search setVisibility={setVisibility} />;
+  return <Search />;
 }
 
-const Search = ({ setVisibility }) => {
+const Search = () => {
   const [searchValue, setSearchValue] = useState(false);
   const [allSongs, setAllSongs] = useState([]);
+  const [state, dispatch] = useContext(Context);
 
   const searchbox = useRef(null);
+
+  const onClose = () => {
+    dispatch({
+      type: 'setSearchVisible',
+      payload: false,
+    });
+  };
 
   useEffect(() => {
     searchbox.current.focus();
@@ -128,7 +118,7 @@ const Search = ({ setVisibility }) => {
   const searchResult = SearchQuery(searchValue, allSongs);
   return (
     <>
-      <StyledBackdrop onClick={() => setVisibility(false)}>
+      <StyledBackdrop onClick={onClose}>
         <StyledOmnibarContainer>
           <StyledOmnibarSearchboxContainer>
             {/* <span class="bp3-icon bp3-icon-search"></span> */}
@@ -153,7 +143,20 @@ const Search = ({ setVisibility }) => {
             {searchResult &&
               searchResult.map((song) => {
                 return (
-                  <StyledDropdownItem>
+                  <StyledDropdownItem
+                    onClick={() => {
+                      onClose();
+                      dispatch({
+                        type: 'addResource',
+                        payload: {
+                          properties: {
+                            title: song.properties.title,
+                          },
+                          lyrics: [{ content: song.lyrics }],
+                        },
+                      });
+                    }}
+                  >
                     {song.properties.title}
                   </StyledDropdownItem>
                 );

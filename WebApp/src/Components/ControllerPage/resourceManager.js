@@ -18,16 +18,16 @@ const StyledResourceManager = styled.div`
 `;
 
 export default function ({ resource, updateSlideNumber }) {
+  console.log('res', JSON.stringify(resource));
   return (
     <StyledResourceManager>
       <H3>{resource.title}</H3>
       <StyedSlidesContainer>
         {resource &&
-          resource.slides &&
-          resource.slides.map((s, sInx) => (
+          resource.lyrics.map((verse, verseIndex) => (
             <Slide
-              onClick={() => updateSlideNumber(sInx)}
-              slideMetadata={s}
+              onClick={() => updateSlideNumber(verseIndex)}
+              verseMetadata={verse}
             ></Slide>
           ))}
       </StyedSlidesContainer>

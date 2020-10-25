@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components/macro';
+import { Context } from '../../App';
 
 const StyledProjectorView = styled.div`
   font-size: 100pt;
@@ -9,7 +10,9 @@ const StyledProjectorView = styled.div`
   text-align: center;
 `;
 
-export default function ({ currentSlideNumber, resources }) {
+export default function ({ currentSlideNumber }) {
+  const [state, dispatch] = useContext(Context);
+  const resources = state.schedule.resources;
   return (
     <StyledProjectorView>
       {
