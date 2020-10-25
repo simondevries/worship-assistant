@@ -23,7 +23,7 @@ const StyledControllerPageContainer = styled.div`
 
 export default function () {
   const [state, dispatch] = useContext(Context);
-  const press = hotkeyListenter();
+  hotkeyListenter();
 
   let bc = new BroadcastChannel('test_channel');
 
@@ -63,10 +63,10 @@ export default function () {
     });
   };
 
-  bc.onmessage = function (ev) {
-    const currentSlide = JSON.parse(ev.data);
-    setCurrentSlideNumber(currentSlide);
-  };
+  // bc.onmessage = function (ev) {
+  //   const currentSlide = JSON.parse(ev.data);
+  //   setCurrentSlideNumber(currentSlide);
+  // };
 
   return (
     <>

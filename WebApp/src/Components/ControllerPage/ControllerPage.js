@@ -31,7 +31,9 @@ const StyledControllerPage = styled.div`
 
 export default function ({ updateSlideNumber }) {
   const [state, dispatch] = useContext(Context);
-  const resources = state.schedule.resources;
+  const resources = state.schedule.resources.sort((a, b) =>
+    a.index < b.index ? -1 : 1,
+  );
   const updateSlideNumberLocal = (rInx) => (sInx) => {
     updateSlideNumber(rInx, sInx);
   };

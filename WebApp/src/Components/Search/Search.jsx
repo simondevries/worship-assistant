@@ -15,6 +15,7 @@ import styled from 'styled-components/macro';
 import { Icon } from '@blueprintjs/core';
 import SearchQuery from './searchQuery';
 import { getAll as getAllSongs } from '../../Storage/songsRepository';
+import NewId from '../../Helpers/newId';
 
 const StyledOmnibarContainer = styled.div`
   -webkit-filter: blur(0);
@@ -93,7 +94,7 @@ export default function () {
 }
 
 const Search = () => {
-  const [searchValue, setSearchValue] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
   const [allSongs, setAllSongs] = useState([]);
   const [state, dispatch] = useContext(Context);
 
@@ -149,6 +150,7 @@ const Search = () => {
                       dispatch({
                         type: 'addResource',
                         payload: {
+                          id: NewId(),
                           properties: {
                             title: song.properties.title,
                           },

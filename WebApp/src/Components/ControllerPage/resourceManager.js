@@ -18,10 +18,9 @@ const StyledResourceManager = styled.div`
 `;
 
 export default function ({ resource, updateSlideNumber }) {
-  console.log('res', JSON.stringify(resource));
   return (
     <StyledResourceManager>
-      <H3>{resource.title}</H3>
+      <H3>{resource.properties.title}</H3>
       <StyedSlidesContainer>
         {resource &&
           resource.lyrics.map((verse, verseIndex) => (

@@ -10,6 +10,7 @@ dbReq.onupgradeneeded = function (event) {
   // in databases are where data are stored.
   db.createObjectStore('songs', { autoIncrement: true });
   db.createObjectStore('settings', { autoIncrement: true });
+  db.createObjectStore('schedule', { autoIncrement: true });
 };
 
 dbReq.onsuccess = function (event) {

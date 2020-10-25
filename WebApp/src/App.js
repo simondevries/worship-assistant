@@ -2,9 +2,11 @@ import React, { createContext, useReducer, useEffect } from 'react';
 
 import '@blueprintjs/core/lib/css/blueprint.css';
 import '@blueprintjs/icons/lib/css/blueprint-icons.css';
+import '@blueprintjs/datetime/lib/css/blueprint-datetime.css';
 import 'normalize.css/normalize.css';
-import styled from 'styled-components/macro';
 
+import styled from 'styled-components/macro';
+import NewId from './Helpers/newId';
 import AppRouter from './AppRouter';
 import hotkeyListenter from './Components/Sidebar/hotkeyListenter';
 
@@ -17,6 +19,8 @@ const initialState = {
   schedule: {
     resources: [
       {
+        id: NewId(),
+        index: 0,
         properties: { title: 'How great thou art' },
         lyrics: [
           { content: 'Slide 1' },
@@ -25,6 +29,7 @@ const initialState = {
         ],
       },
     ],
+    active: {},
   },
   isSearchVisible: false,
 };
@@ -32,10 +37,15 @@ const initialState = {
 function reducer(state, action) {
   switch (action.type) {
     case 'addResource':
+      const updatedPayload = {
+        ...action.payload,
+        index: state.schedule.resources.length,
+      };
+
       return {
         schedule: {
           ...state.schedule,
-          resources: state.schedule.resources.concat(action.payload),
+          resources: state.schedule.resources.concat(updatedPayload),
         },
       };
     case 'moveResource':

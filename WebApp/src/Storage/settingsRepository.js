@@ -1,12 +1,9 @@
 import { db } from './indexDbGateway';
 
 export function set(settings) {
-  // Start a database transaction and get the notes object store
   let tx = db.transaction(['settings'], 'readwrite');
   let store = tx.objectStore('settings');
-  // Put the sticky note into the object store
   store.put(settings, 'settings');
-  // Wait for the database transaction to complete
   tx.oncomplete = function () {};
   tx.onerror = function (event) {
     alert('error storing note ' + event.target.errorCode);
@@ -15,12 +12,9 @@ export function set(settings) {
 
 export function get() {
   return new Promise((resolve, reject) => {
-    // Start a database transaction and get the notes object store
     let tx = db.transaction(['settings'], 'readwrite');
     let store = tx.objectStore('settings');
-    // Put the sticky note into the object store
     const objectStoreRequest = store.get('settings');
-    // Wait for the database transaction to complete
 
     tx.oncomplete = function (event) {
       resolve(objectStoreRequest.result);
@@ -29,4 +23,18 @@ export function get() {
       reject(tx.error);
     };
   });
+}
+
+export async function getCurrentService() {
+  const settings = await get();
+  return settings.currentServiceId;
+}
+
+export async function setCurrentService(currentServiceId) {
+  const settings = await get();
+  const nSettings = {
+    ...settings,
+    currentServiceId: currentServiceId,
+  };
+  await set(nSettings);
 }

@@ -14,15 +14,18 @@ const StyledInput = styled.input`
 
 export default ({ setSettingsModalOpen }) => {
   const { handleSubmit, register, errors, setValue } = useForm();
+  const [settings, setSettings] = useState({});
 
   useEffect(() => {
     async function fetchData() {
+      console.log('fsdf');
       const res = await getSettings();
       setValue('fontSize', res.fontSize);
       setValue('textAlign', res.textAlign);
+      setSettings(res);
     }
     fetchData();
-  });
+  }, []);
 
   const StyledBody = styled.div`
     display: flex;
@@ -31,7 +34,12 @@ export default ({ setSettingsModalOpen }) => {
 
   const onSubmit = (values) => {
     setSettingsModalOpen(false);
-    setSettings(values);
+    const newSetting = {
+      ...settings,
+      ...values,
+    };
+
+    setSettings(newSetting);
   };
 
   return (
