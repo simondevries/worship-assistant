@@ -18,7 +18,6 @@ export default ({ setSettingsModalOpen }) => {
 
   useEffect(() => {
     async function fetchData() {
-      console.log('fsdf');
       const res = await getSettings();
       setValue('fontSize', res.fontSize);
       setValue('textAlign', res.textAlign);

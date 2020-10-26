@@ -16,6 +16,7 @@ import { Icon } from '@blueprintjs/core';
 import SearchQuery from './searchQuery';
 import { getAll as getAllSongs } from '../../Storage/songsRepository';
 import NewId from '../../Helpers/newId';
+import { set as setSchedule } from '../../Storage/scheduleRepository';
 
 const StyledOmnibarContainer = styled.div`
   -webkit-filter: blur(0);
@@ -107,6 +108,35 @@ const Search = () => {
     });
   };
 
+  const addResource = (song) => {
+    // todo (sdv).... ummm.... yuck too much going on here. Forced to do this becuase useReducer dowes not allow async await... maybe use redux oneday?
+
+    const newResource = {
+      id: NewId(),
+      properties: {
+        title: song.properties.title,
+      },
+      lyrics: [{ content: song.lyrics }],
+    };
+
+    const updatedSchedule = {
+      ...state.currentSchedule,
+      resources: state.currentSchedule.resources.concat({
+        ...newResource,
+        index: state.currentSchedule.resources.length,
+      }),
+    };
+
+    dispatch({
+      type: 'setCurrentSchedule',
+      payload: updatedSchedule,
+    });
+
+    setSchedule(updatedSchedule);
+
+    onClose();
+  };
+
   useEffect(() => {
     searchbox.current.focus();
     async function loadAllSongs() {
@@ -142,24 +172,12 @@ const Search = () => {
           </StyledOmnibarSearchboxContainer>
           <StyledDropdownContainer>
             {searchResult &&
-              searchResult.map((song) => {
+              searchResult.map((resource) => {
                 return (
                   <StyledDropdownItem
-                    onClick={() => {
-                      onClose();
-                      dispatch({
-                        type: 'addResource',
-                        payload: {
-                          id: NewId(),
-                          properties: {
-                            title: song.properties.title,
-                          },
-                          lyrics: [{ content: song.lyrics }],
-                        },
-                      });
-                    }}
+                    onClick={() => addResource(resource)}
                   >
-                    {song.properties.title}
+                    {resource.properties.title}
                   </StyledDropdownItem>
                 );
               })}

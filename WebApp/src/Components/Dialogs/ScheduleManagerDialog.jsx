@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { Context } from '../../App';
 import { Button, Card, H5 } from '@blueprintjs/core';
 import { Dialog, Classes } from '@blueprintjs/core';
 import styled, { css } from 'styled-components/macro';
 import { DateInput } from '@blueprintjs/datetime';
 import {
   getAll as getAllSchedules,
+  set as setScheduleRepo,
   add as addScheduleRepo,
-  set as setSchedule,
 } from '../../Storage/scheduleRepository';
 import { setCurrentService } from '../../Storage/settingsRepository';
 import NewId from '../../Helpers/newId';
@@ -32,7 +33,7 @@ const StyledAddSchedule = styled(Card)`
 
 const StyledTableScroller = styled.div`
   height: 300px;
-  overflow: scroll;
+  overflow-y: auto;
 `;
 
 const StyledTable = styled.table`
@@ -51,6 +52,7 @@ export default ({ setOpen }) => {
   const [showOpenConfirm, setShowOpenConfirm] = useState(false);
   const [scheduleDateTime, setScheduleDateTime] = useState();
   const [schedules, setSchedules] = useState([]);
+  const [state, dispatch] = useContext(Context);
 
   useEffect(() => {
     async function fetchData() {
@@ -71,6 +73,10 @@ export default ({ setOpen }) => {
       resources: [{}],
       date: new Date(),
       title: scheduleTitle,
+      activeResourcePointer: {
+        slideIndex: 0,
+        resourceIndex: 0,
+      },
     };
 
     setScheduleTitle('');
@@ -87,12 +93,16 @@ export default ({ setOpen }) => {
     setOpen(false);
   };
 
-  const openSchedule = (scheduleId) => {
+  const openSchedule = (schedule) => {
     if (!showOpenConfirm) {
-      setShowOpenConfirm(scheduleId);
+      setShowOpenConfirm(schedule.id);
       return;
     }
-    setCurrentService(scheduleId);
+    dispatch({
+      type: 'setCurrentSchedule',
+      payload: schedule,
+    });
+    setCurrentService(schedule.id);
     onClose();
   };
 
@@ -101,7 +111,7 @@ export default ({ setOpen }) => {
       <Dialog
         className={Classes.DARK}
         isOpen
-        title="Settings"
+        title="Schedules"
         isCloseButtonShown={true}
         onClose={onClose}
       >
@@ -149,7 +159,7 @@ export default ({ setOpen }) => {
                               : 'None'
                           }
                           onBlur={() => setShowOpenConfirm(false)}
-                          onClick={() => openSchedule(s.id)}
+                          onClick={() => openSchedule(s)}
                           icon="folder-open"
                         >
                           {showOpenConfirm === s.id ? 'Confirm' : ''}

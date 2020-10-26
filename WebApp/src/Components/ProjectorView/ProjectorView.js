@@ -3,23 +3,32 @@ import styled from 'styled-components/macro';
 import { Context } from '../../App';
 
 const StyledProjectorView = styled.div`
-  font-size: 100pt;
+  ${(props) => [!props.previewMode ? 'font-size: 100pt;' : '']}
   background: black;
   color: white;
   height: 100%;
   text-align: center;
 `;
 
-export default function ({ currentSlideNumber }) {
+export default function ({ activeResourcePointer, previewMode }) {
   const [state, dispatch] = useContext(Context);
-  const resources = state.schedule.resources;
+  const activeResource =
+    state.currentSchedule.resources[
+      activeResourcePointer.resourceIndex
+    ];
+
+  // todo (Sdv) need a generic name for lyrics
+  // Maybe a different projector view for each type of resource
+  const activeSlide =
+    activeResource.lyrics[activeResourcePointer.slideIndex];
+
+  console.log('activeResourcePointer', activeResourcePointer);
+  console.log('activeSlide', activeSlide);
+
   return (
-    <StyledProjectorView>
-      {
-        resources[currentSlideNumber.resourceIndex].slides[
-          currentSlideNumber.slideIndex
-        ].text
-      }
+    <StyledProjectorView previewMode={previewMode}>
+      {activeSlide.content}
+      {/* <img src={resources.image}></img> */}
     </StyledProjectorView>
   );
 }

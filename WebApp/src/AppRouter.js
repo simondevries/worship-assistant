@@ -1,5 +1,5 @@
 /*global chrome*/
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Context } from './App';
 import ControllerPage from './Components/ControllerPage/ControllerPage';
 import ProjectorView from './Components/ProjectorView/ProjectorView';
@@ -12,22 +12,28 @@ import {
 } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import logo from './logo.svg';
-import { Classes, ContextMenu } from '@blueprintjs/core';
+import { Classes, ContextMenu, Intent } from '@blueprintjs/core';
 import Sidebar from './Components/Sidebar/Sidebar';
 import hotkeyListenter from './Components/Sidebar/hotkeyListenter';
+import { get as getSettings } from './Storage/settingsRepository';
+import { getAll as getAllSchedules } from './Storage/scheduleRepository';
+import { AppToaster } from './Toaster';
 
 const StyledControllerPageContainer = styled.div`
   display: flex;
   flex-direction: row;
+  height: 100vh;
 `;
 
 export default function () {
+  //todo (sdv) too much going on here
+
   const [state, dispatch] = useContext(Context);
   hotkeyListenter();
 
   let bc = new BroadcastChannel('test_channel');
 
-  const [currentSlideNumber, setCurrentSlideNumber] = useState({
+  const [activeResourcePointer, setactiveResourcePointer] = useState({
     resourceIndex: 0,
     slideIndex: 0,
   });
@@ -54,18 +60,66 @@ export default function () {
       slideIndex: slideIndex,
     };
 
+    dispatch({
+      type: 'setActiveResourcePointer',
+      payload: {
+        resourceIndex: resourceIndex,
+        slideIndex: slideIndex,
+      },
+    });
+
     bc.postMessage(JSON.stringify(currentSlide));
 
     // broadcase
-    setCurrentSlideNumber({
+    setactiveResourcePointer({
       resourceIndex: resourceIndex,
       slideIndex: slideIndex,
     });
   };
 
+  useEffect(() => {
+    // wait for db to initialize... not pretty
+    setTimeout(() => {
+      async function initState() {
+        const settings = await getSettings();
+        console.log('settings', JSON.stringify(settings));
+        dispatch({
+          type: 'setSettings',
+          payload: settings,
+        });
+
+        const schedules = await getAllSchedules();
+        const currentSchedule =
+          schedules &&
+          settings &&
+          schedules.find((s) => s.id === settings.currentScheduleId);
+        if (!currentSchedule) {
+          AppToaster.show({
+            intent: Intent.DANGER,
+            message:
+              'Could not find an active service. Go to the schedule dialog and create a new schedule.',
+          });
+          return;
+        }
+        dispatch({
+          type: 'setCurrentSchedule',
+          payload: {
+            // todo (sdv) code split across two parts of the app here and scheduleManageDialog create
+            ...currentSchedule,
+            activeResourcePointer: {
+              slideIndex: 0,
+              resourceIndex: 0,
+            },
+          },
+        });
+      }
+      initState();
+    }, 500);
+  }, []);
+
   // bc.onmessage = function (ev) {
   //   const currentSlide = JSON.parse(ev.data);
-  //   setCurrentSlideNumber(currentSlide);
+  //   setactiveResourcePointer(currentSlide);
   // };
 
   return (
@@ -78,11 +132,13 @@ export default function () {
               <Sidebar />
 
               <ControllerPage updateSlideNumber={updateSlideNumber} />
-              <input type="button" onClick={onFocusTab} />
+              {/* <input type="button" onClick={onFocusTab} /> */}
             </StyledControllerPageContainer>
           </Route>
           <Route path="/project">
-            <ProjectorView currentSlideNumber={currentSlideNumber} />
+            <ProjectorView
+              activeResourcePointer={activeResourcePointer}
+            />
           </Route>
         </Switch>
       </Router>

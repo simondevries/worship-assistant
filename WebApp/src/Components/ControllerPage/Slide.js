@@ -7,8 +7,7 @@ const StyledCard = styled(Card)`
   margin-bottom: 10px;
 `;
 
-export default function ({ verseMetadata, onClick }) {
-  console.log(JSON.stringify(verseMetadata));
+export default function ({ slideMetadata, onClick }) {
   return (
     <StyledCard
       onClick={onClick}
@@ -18,7 +17,7 @@ export default function ({ verseMetadata, onClick }) {
       <h5>
         <a href="#">Verse</a>
       </h5>
-      <p>{verseMetadata.content}</p>
+      <p>{slideMetadata.content}</p>
     </StyledCard>
   );
 }

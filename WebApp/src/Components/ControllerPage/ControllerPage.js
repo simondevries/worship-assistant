@@ -31,7 +31,11 @@ const StyledControllerPage = styled.div`
 
 export default function ({ updateSlideNumber }) {
   const [state, dispatch] = useContext(Context);
-  const resources = state.schedule.resources.sort((a, b) =>
+
+  if (!state || !state.settings || !state.currentSchedule)
+    return null;
+
+  const resources = state.currentSchedule.resources.sort((a, b) =>
     a.index < b.index ? -1 : 1,
   );
   const updateSlideNumberLocal = (rInx) => (sInx) => {
@@ -44,7 +48,8 @@ export default function ({ updateSlideNumber }) {
       payload: true,
     });
   };
-
+  const activeResourcePointer =
+    state.currentSchedule.activeResourcePointer;
   return (
     <StyledControllerPage>
       <StyledResourcesContainer>
@@ -53,14 +58,20 @@ export default function ({ updateSlideNumber }) {
             <StyledResourceContainer>
               <ResourceManager
                 resource={r}
+                isActiveResource={
+                  activeResourcePointer.resourceIndex === rInx
+                }
                 updateSlideNumber={updateSlideNumberLocal(rInx)}
+                activeResourcePointer={activeResourcePointer}
               ></ResourceManager>
-              <StyledAddButton
-                icon={addIcon}
-                minimal
-                inline={false}
-                onClick={openSearch}
-              ></StyledAddButton>
+              {rInx < resources.length && (
+                <StyledAddButton
+                  icon={addIcon}
+                  minimal
+                  inline={false}
+                  onClick={openSearch}
+                ></StyledAddButton>
+              )}
             </StyledResourceContainer>
           ))}
       </StyledResourcesContainer>

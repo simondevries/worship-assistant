@@ -11,7 +11,6 @@ export default function () {
 
   // If released key is our target key then set to false
   const upHandler = ({ key }) => {
-    console.log('key', key);
     if (key && key.toLowerCase() === 'escape') {
       dispatch({
         type: 'setSearchVisible',

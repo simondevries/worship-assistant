@@ -27,14 +27,14 @@ export function get() {
 
 export async function getCurrentService() {
   const settings = await get();
-  return settings.currentServiceId;
+  return settings.currentScheduleId;
 }
 
-export async function setCurrentService(currentServiceId) {
+export async function setCurrentService(currentScheduleId) {
   const settings = await get();
   const nSettings = {
     ...settings,
-    currentServiceId: currentServiceId,
+    currentScheduleId: currentScheduleId,
   };
   await set(nSettings);
 }
