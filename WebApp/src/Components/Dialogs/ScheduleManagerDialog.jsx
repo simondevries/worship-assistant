@@ -70,7 +70,7 @@ export default ({ setOpen }) => {
   const addSchedule = () => {
     const newSched = {
       id: NewId(),
-      resources: [{}],
+      resources: [],
       date: new Date(),
       title: scheduleTitle,
       activeResourcePointer: {
