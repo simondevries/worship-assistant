@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
-import { Button, EditableText } from '@blueprintjs/core';
+import {
+  Button,
+  EditableText,
+  Popover,
+  Position,
+  Tooltip,
+} from '@blueprintjs/core';
 import { Dialog, Classes } from '@blueprintjs/core';
 import styled from 'styled-components/macro';
 import { add as addSong } from '../../Storage/songsRepository';
+import HelpText from './HelpText';
 
 const StyledEditableTextContent = styled(EditableText)`
   margin-bottom: 30px;
@@ -47,14 +54,37 @@ export default ({ setAddSongModalOpen }) => {
     });
   };
 
+  const parseAndSaveSong = () => {
+    const verses = songContent.lyrics.split('[').filter((v) => !!v);
+
+    const versesMapped = verses.map((v) => {
+      const sections = v.split(']');
+      const name = sections[0];
+      const content = sections[1];
+
+      return {
+        name,
+        content,
+      };
+    });
+
+    const updatedSongContent = {
+      ...songContent,
+      lyrics: versesMapped,
+    };
+
+    console.log('result', updatedSongContent);
+
+    addSong(updatedSongContent);
+  };
+
   const saveSong = () => {
-    addSong(songContent);
+    parseAndSaveSong();
     setAddSongModalOpen(false);
   };
 
   const saveSongAndAddToSet = () => {
-    // todo (Sdv)
-    addSong(songContent);
+    parseAndSaveSong();
     setAddSongModalOpen(false);
   };
 
@@ -77,6 +107,10 @@ export default ({ setAddSongModalOpen }) => {
             minLines="20"
             onConfirm={updateLyrics}
           />
+
+          <Popover content={<HelpText />} position={Position.TOP}>
+            <Button>?</Button>
+          </Popover>
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
             <Button onClick={() => setAddSongModalOpen(false)}>
               Close
