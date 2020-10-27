@@ -116,7 +116,7 @@ const Search = () => {
       properties: {
         title: song.properties.title,
       },
-      lyrics: [{ content: song.lyrics }],
+      lyrics: song.lyrics,
     };
 
     const updatedSchedule = {

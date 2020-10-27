@@ -73,8 +73,6 @@ export default ({ setAddSongModalOpen }) => {
       lyrics: versesMapped,
     };
 
-    console.log('result', updatedSongContent);
-
     addSong(updatedSongContent);
   };
 
