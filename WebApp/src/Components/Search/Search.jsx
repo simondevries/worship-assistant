@@ -14,9 +14,9 @@ import {
 import styled from 'styled-components/macro';
 import { Icon } from '@blueprintjs/core';
 import SearchQuery from './searchQuery';
-import { getAll as getAllSongs } from '../../Storage/songsRepository';
+import { songsRepo } from '../../Storage/songsRepository';
 import NewId from '../../Helpers/newId';
-import { set as setSchedule } from '../../Storage/scheduleRepository';
+import { scheduleRepo } from '../../Storage/scheduleRepository';
 
 const StyledOmnibarContainer = styled.div`
   -webkit-filter: blur(0);
@@ -132,7 +132,7 @@ const Search = () => {
       payload: updatedSchedule,
     });
 
-    setSchedule(updatedSchedule);
+    scheduleRepo.set(updatedSchedule, state.currentSchedule.id);
 
     onClose();
   };
@@ -140,7 +140,7 @@ const Search = () => {
   useEffect(() => {
     searchbox.current.focus();
     async function loadAllSongs() {
-      const songs = await getAllSongs();
+      const songs = await songsRepo.getAll();
       setAllSongs(songs);
     }
     loadAllSongs();

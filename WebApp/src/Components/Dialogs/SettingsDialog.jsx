@@ -2,10 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@blueprintjs/core';
 import { Dialog, Classes } from '@blueprintjs/core';
 import styled, { css } from 'styled-components/macro';
-import {
-  get as getSettings,
-  set as setSettings,
-} from '../../Storage/settingsRepository';
+import { settingsRepo } from '../../Storage/settingsRepository';
 import { useForm } from 'react-hook-form';
 
 const StyledInput = styled.input`
@@ -18,9 +15,10 @@ export default ({ setSettingsModalOpen }) => {
 
   useEffect(() => {
     async function fetchData() {
-      const res = await getSettings();
+      const res = await settingsRepo.get();
       setValue('fontSize', res.fontSize);
       setValue('textAlign', res.textAlign);
+      settingsRepo.set(res);
       setSettings(res);
     }
     fetchData();
@@ -38,6 +36,7 @@ export default ({ setSettingsModalOpen }) => {
       ...values,
     };
 
+    settingsRepo.set(newSetting);
     setSettings(newSetting);
   };
 

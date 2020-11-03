@@ -1,40 +1,42 @@
-import { db } from './indexDbGateway';
+import { getAller, getByKeyer, setter, deleter, adder } from './Repository'
 
-export function set(settings) {
-  let tx = db.transaction(['settings'], 'readwrite');
-  let store = tx.objectStore('settings');
-  store.put(settings, 'settings');
-  tx.oncomplete = function () {};
-  tx.onerror = function (event) {
-    alert('error storing note ' + event.target.errorCode);
-  };
+const commonRepositoryBehaviour = self => Object.assign(
+  {},
+  getByKeyer(self),
+  getAller(self),
+  deleter(self),
+  setter(self),
+  adder(self),
+)
+
+
+function settingsRepository(objectStoreType, permissions){
+    let settingsRepo = {
+        objectStoreType,
+        permissions,
+    }
+    const settingsRepositoryBehaviour = self => ({
+      setCurrentService: async function (currentScheduleId) {
+        let _getter = Object.create(getByKeyer(self));
+        let _setter = Object.create(setter(self));
+        const settings = await _getter.getByKey(currentScheduleId);
+        const nSettings = {
+          ...settings,
+          currentScheduleId: currentScheduleId,
+        };
+        await _setter.set(nSettings, 'settings'); //todo (wp) not sure we want key to be just 'settings' 
+      },
+
+      get: function () {
+        let _getter = Object.create(getByKeyer(self));
+        return _getter.getByKey('settings'); //todo (wp) not sure we want key to be just 'settings'
+      }
+    })
+    return Object.assign(
+        settingsRepo,
+        commonRepositoryBehaviour(settingsRepo),
+        settingsRepositoryBehaviour(settingsRepo),
+    )
 }
 
-export function get() {
-  return new Promise((resolve, reject) => {
-    let tx = db.transaction(['settings'], 'readwrite');
-    let store = tx.objectStore('settings');
-    const objectStoreRequest = store.get('settings');
-
-    tx.oncomplete = function (event) {
-      resolve(objectStoreRequest.result);
-    };
-    tx.onerror = function (event) {
-      reject(tx.error);
-    };
-  });
-}
-
-export async function getCurrentService() {
-  const settings = await get();
-  return settings.currentScheduleId;
-}
-
-export async function setCurrentService(currentScheduleId) {
-  const settings = await get();
-  const nSettings = {
-    ...settings,
-    currentScheduleId: currentScheduleId,
-  };
-  await set(nSettings);
-}
+export const settingsRepo = settingsRepository('settings', 'readwrite');

@@ -8,7 +8,7 @@ import {
 } from '@blueprintjs/core';
 import { Dialog, Classes } from '@blueprintjs/core';
 import styled from 'styled-components/macro';
-import { add as addSong } from '../../Storage/songsRepository';
+import { songsRepo } from '../../Storage/songsRepository';
 import HelpText from './HelpText';
 
 const StyledEditableTextContent = styled(EditableText)`
@@ -72,8 +72,7 @@ export default ({ setAddSongModalOpen }) => {
       ...songContent,
       lyrics: versesMapped,
     };
-
-    addSong(updatedSongContent);
+    songsRepo.add(updatedSongContent, songContent.id);
   };
 
   const saveSong = () => {

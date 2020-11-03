@@ -4,12 +4,8 @@ import { Button, Card, H5 } from '@blueprintjs/core';
 import { Dialog, Classes } from '@blueprintjs/core';
 import styled, { css } from 'styled-components/macro';
 import { DateInput } from '@blueprintjs/datetime';
-import {
-  getAll as getAllSchedules,
-  set as setScheduleRepo,
-  add as addScheduleRepo,
-} from '../../Storage/scheduleRepository';
-import { setCurrentService } from '../../Storage/settingsRepository';
+import { scheduleRepo } from '../../Storage/scheduleRepository';
+import { settingsRepo } from '../../Storage/settingsRepository';
 import NewId from '../../Helpers/newId';
 
 const StyledDateInput = styled(DateInput)`
@@ -56,7 +52,7 @@ export default ({ setOpen }) => {
 
   useEffect(() => {
     async function fetchData() {
-      const schedules = await getAllSchedules();
+      const schedules = await scheduleRepo.getAll();
       setSchedules(schedules);
     }
     fetchData();
@@ -81,11 +77,11 @@ export default ({ setOpen }) => {
 
     setScheduleTitle('');
     setScheduleDateTime(null);
-    addScheduleRepo(newSched);
+    scheduleRepo.add(newSched);
 
     const updatedSchedules = schedules.concat(newSched);
     setSchedules(updatedSchedules);
-    setCurrentService(newSched.id);
+    settingsRepo.setCurrentService(newSched.id);
   };
 
   const onClose = () => {
@@ -102,7 +98,7 @@ export default ({ setOpen }) => {
       type: 'setCurrentSchedule',
       payload: schedule,
     });
-    setCurrentService(schedule.id);
+    settingsRepo.setCurrentService(schedule.id);
     onClose();
   };
 

@@ -15,8 +15,8 @@ import logo from './logo.svg';
 import { Classes, ContextMenu, Intent } from '@blueprintjs/core';
 import Sidebar from './Components/Sidebar/Sidebar';
 import hotkeyListenter from './Components/Sidebar/hotkeyListenter';
-import { get as getSettings } from './Storage/settingsRepository';
-import { getAll as getAllSchedules } from './Storage/scheduleRepository';
+import { settingsRepo } from './Storage/settingsRepository';
+import { scheduleRepo } from './Storage/scheduleRepository';
 import { AppToaster } from './Toaster';
 
 const StyledControllerPageContainer = styled.div`
@@ -81,14 +81,14 @@ export default function () {
     // wait for db to initialize... not pretty
     setTimeout(() => {
       async function initState() {
-        const settings = await getSettings();
+        const settings = await settingsRepo.get();
         console.log('settings', JSON.stringify(settings));
         dispatch({
           type: 'setSettings',
           payload: settings,
         });
 
-        const schedules = await getAllSchedules();
+        const schedules = await scheduleRepo.getAll();
         const currentSchedule =
           schedules &&
           settings &&
