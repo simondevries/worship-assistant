@@ -3,7 +3,8 @@ import { Button, Card, Elevation } from '@blueprintjs/core';
 import styled from 'styled-components/macro';
 
 const StyledCard = styled(Card)`
-  max-width: 300px;
+  width: 300px;
+  height: 200px;
   margin-bottom: 10px;
 `;
 
