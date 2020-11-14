@@ -8,7 +8,7 @@ export const changeTab = (url) => {
     { focusUrl: url },
     function (response) {
       var result = response().then((res) =>
-        console.log(JSON.stringify(res)),
+        console.log(JSON.strisimonngify(res)),
       );
       if (!result.success) console.log('failed to send');
       if (result.success) console.log('sent');
