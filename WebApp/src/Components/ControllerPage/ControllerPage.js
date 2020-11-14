@@ -63,6 +63,7 @@ export default function ({ updateSlideNumber }) {
                 }
                 updateSlideNumber={updateSlideNumberLocal(rInx)}
                 activeResourcePointer={activeResourcePointer}
+                resourceIndex={rInx}
               ></ResourceManager>
               {rInx < resources.length && (
                 <StyledAddButton

@@ -11,7 +11,12 @@ import {
 } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import logo from './logo.svg';
-import { Classes, ContextMenu, Intent } from '@blueprintjs/core';
+import {
+  Classes,
+  ContextMenu,
+  Intent,
+  Spinner,
+} from '@blueprintjs/core';
 import Sidebar from './Components/Sidebar/Sidebar';
 import hotkeyListenter from './Components/Sidebar/hotkeyListenter';
 import { settingsRepo } from './Storage/settingsRepository';
@@ -28,18 +33,20 @@ const StyledControllerPageContainer = styled.div`
   height: 100vh;
 `;
 
+const StyledSpinner = styled(Spinner)`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+`;
+
 export default function () {
   //todo (sdv) too much going on here
 
+  const [isLoadingFromDb, setIsLoadingFromDb] = useState(true);
   const [state, dispatch] = useContext(Context);
   hotkeyListenter();
 
   let bc = new BroadcastChannel('test_channel');
-
-  const [activeResourcePointer, setactiveResourcePointer] = useState({
-    resourceIndex: 0,
-    slideIndex: 0,
-  });
 
   const updateSlideNumber = async (resourceIndex, slideIndex) => {
     const currentSlide = {
@@ -57,25 +64,22 @@ export default function () {
 
     bc.postMessage(JSON.stringify(currentSlide));
 
-    // broadcast
-    setactiveResourcePointer({
-      resourceIndex: resourceIndex,
-      slideIndex: slideIndex,
-    });
-
     const activeResource =
-      state.currentSchedule.resources[
-        activeResourcePointer.resourceIndex
-      ];
+      state.currentSchedule.resources[resourceIndex];
 
-    console.log('v', JSON.stringify(activeResource));
     if (
       activeResource.resourceType &&
       activeResource.resourceType.toUpperCase() === 'VIDEO' &&
       activeResource.filePath
     ) {
-      console.log('v', activeResource.filePath);
       changeTab(activeResource.filePath);
+    }
+
+    if (
+      activeResource.resourceType &&
+      activeResource.resourceType.toUpperCase() === 'SONG'
+    ) {
+      changeTab('/project');
     }
   };
   // todo (Sdv) need a generic name for lyrics
@@ -121,15 +125,33 @@ export default function () {
             resources: currentSchedule.resources,
           },
         });
+        setIsLoadingFromDb(false);
       }
       initState();
     }, 500);
+
+    bc.onmessage = function (ev) {
+      console.log('rece', JSON.stringify(ev.data));
+      const currentSlide = JSON.parse(ev.data);
+
+      dispatch({
+        type: 'setActiveResourcePointer',
+        payload: {
+          resourceIndex: currentSlide.resourceIndex,
+          slideIndex: currentSlide.slideIndex,
+        },
+      });
+    };
   }, []);
 
-  // bc.onmessage = function (ev) {
-  //   const currentSlide = JSON.parse(ev.data);
-  //   setactiveResourcePointer(currentSlide);
-  // };
+  if (isLoadingFromDb) {
+    return <StyledSpinner />;
+  }
+
+  const activeResourcePointer =
+    state &&
+    state.currentSchedule &&
+    state.currentSchedule.activeResourcePointer;
 
   return (
     <>
@@ -137,6 +159,9 @@ export default function () {
       <Router>
         <Switch>
           <Route path="/" exact>
+            <div>Go to /operator</div>
+          </Route>
+          <Route path="/operator" exact>
             <StyledControllerPageContainer>
               <Sidebar />
 

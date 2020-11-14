@@ -10,8 +10,13 @@ const StyledProjectorView = styled.div`
   text-align: center;
 `;
 
+/**
+ * Projects the lyrics in a tab
+ */
 export default function ({ activeResourcePointer, previewMode }) {
   const [state, dispatch] = useContext(Context);
+  if (!state || !state.currentSchedule) return null;
+
   const activeResource =
     state.currentSchedule.resources[
       activeResourcePointer.resourceIndex
@@ -19,11 +24,14 @@ export default function ({ activeResourcePointer, previewMode }) {
 
   // todo (Sdv) need a generic name for lyrics
   // Maybe a different projector view for each type of resource
+
+  if (activeResource.resourceType.toLowerCase() !== 'song')
+    return null;
+
   const activeSlide =
     activeResource.lyrics[activeResourcePointer.slideIndex];
 
   console.log('activeResourcePointer', activeResourcePointer);
-  console.log('activeSlide', activeSlide);
 
   return (
     <StyledProjectorView previewMode={previewMode}>

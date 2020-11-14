@@ -5,18 +5,29 @@ import SongResourceManager from './Song/SongResourceManager';
 import VideoResourceManager from './Video/VideoResourceManager';
 import ImageResourceManager from './Image/ImageResourceManager';
 
-export default function ({ resource, updateSlideNumber }) {
+export default function ({
+  resource,
+  resourceIndex,
+  updateSlideNumber,
+  activeResourcePointer,
+}) {
+  const isActive =
+    resourceIndex === activeResourcePointer.resourceIndex;
+
   switch (resource.resourceType) {
     case 'SONG':
       return (
         <SongResourceManager
           resource={resource}
+          resourceIndex={resourceIndex}
           updateSlideNumber={updateSlideNumber}
+          activeResourcePointer={activeResourcePointer}
         />
       );
     case 'VIDEO':
       return (
         <VideoResourceManager
+          isActive={isActive}
           resource={resource}
           updateSlideNumber={updateSlideNumber}
         />
@@ -24,6 +35,7 @@ export default function ({ resource, updateSlideNumber }) {
     case 'IMAGE':
       return (
         <ImageResourceManager
+          isActive={isActive}
           resource={resource}
           updateSlideNumber={updateSlideNumber}
         />

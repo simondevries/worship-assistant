@@ -155,7 +155,7 @@ const Search = () => {
             />
             <StyledInput
               type="text"
-              placeholder="Add resource..."
+              placeholder="Add resource... (use '/' to open)"
               ref={searchbox}
               onChange={(e) => setSearchValue(e.target.value)}
               value={searchValue}
@@ -171,7 +171,7 @@ const Search = () => {
                 addResource(
                   new Video(
                     'My south island trip',
-                    'file:///C:/Users/simon/Videos/South Island.mp4',
+                    'file:///C:/Users/simon/Videos/South%20Island.mp4',
                   ),
                 )
               }

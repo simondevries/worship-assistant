@@ -2,7 +2,7 @@ import React from 'react';
 import Slide from '../Slides/NonActiveSlide/SlideResolver';
 import styled from 'styled-components/macro';
 import { H3 } from '@blueprintjs/core';
-import ActiveSlide from '../Slides/ActiveSlide/ActiveSlide';
+import ActiveSlide from '../Slides/ActiveSlide/ActiveSongSlide';
 import SlideResolver from '../Slides/NonActiveSlide/SlideResolver';
 
 const StyedSlidesContainer = styled.div`
@@ -25,6 +25,7 @@ const StyledResourceManager = styled.div`
 
 export default function ({
   resource,
+  resourceIndex,
   isActiveResource,
   updateSlideNumber,
   activeResourcePointer,
@@ -36,6 +37,8 @@ export default function ({
       </StyledHeader>
       <StyedSlidesContainer>
         <SlideResolver
+          resourceIndex={resourceIndex}
+          activeResourcePointer={activeResourcePointer}
           resource={resource}
           updateSlideNumber={updateSlideNumber}
         />

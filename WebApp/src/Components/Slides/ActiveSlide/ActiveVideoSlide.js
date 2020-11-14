@@ -4,6 +4,7 @@ import { Context } from '../../../App';
 import styled from 'styled-components';
 import ProjectorView from '../../ProjectorView/ProjectorView';
 import { Button } from '@blueprintjs/core';
+import { playVideo } from '../../../ChromeExtensionGateway/gateway';
 
 const StyledButtonContainer = styled.div`
   display: flex;
@@ -20,7 +21,7 @@ const StyledContainer = styled.div`
   font-size: 15pt;
 `;
 
-export default function ({ slideMetadata }) {
+export default function ({ resource }) {
   const [state, dispatch] = useContext(Context);
 
   const activeResourcePointer =
@@ -28,15 +29,10 @@ export default function ({ slideMetadata }) {
 
   return (
     <StyledContainer>
-      <StyledProjectorView
-        previewMode={true}
-        activeResourcePointer={activeResourcePointer}
-      />
       <StyledButtonContainer>
-        <img src="file://C:/img.jpg" />
+        {resource.title}
         <Button>Slide Settings</Button>
-        <Button>White</Button>
-        <Button>Blank</Button>
+        <Button onClick={playVideo}>Play</Button>
       </StyledButtonContainer>
     </StyledContainer>
   );
