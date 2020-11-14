@@ -17,6 +17,7 @@ import SearchQuery from './searchQuery';
 import { songsRepo } from '../../Storage/songsRepository';
 import NewId from '../../Helpers/newId';
 import { scheduleRepo } from '../../Storage/scheduleRepository';
+import { Song, Image, Video } from '../../Domain/resource';
 
 const StyledOmnibarContainer = styled.div`
   -webkit-filter: blur(0);
@@ -108,21 +109,13 @@ const Search = () => {
     });
   };
 
-  const addResource = (song) => {
+  const addResource = (resource) => {
     // todo (sdv).... ummm.... yuck too much going on here. Forced to do this becuase useReducer dowes not allow async await... maybe use redux oneday?
-
-    const newResource = {
-      id: NewId(),
-      properties: {
-        title: song.properties.title,
-      },
-      lyrics: song.lyrics,
-    };
 
     const updatedSchedule = {
       ...state.currentSchedule,
       resources: state.currentSchedule.resources.concat({
-        ...newResource,
+        ...resource,
         index: state.currentSchedule.resources.length,
       }),
     };
@@ -171,11 +164,40 @@ const Search = () => {
             />
           </StyledOmnibarSearchboxContainer>
           <StyledDropdownContainer>
+            <StyledDropdownItem
+              onClick={() =>
+                addResource(
+                  new Video(
+                    'My south island trip',
+                    'file:///C:/Users/simon/Videos/South Island.mp4',
+                  ),
+                )
+              }
+            >
+              🎥 Add Video
+            </StyledDropdownItem>
+            <StyledDropdownItem
+              onClick={() =>
+                addResource(
+                  new Image(
+                    'Jesse taking a photo of reuel taking a photo',
+                    'file:///C:/Users/simon/Pictures/2018/Camera/IMG_20181005_154404.jpg',
+                  ),
+                )
+              }
+            >
+              📷 Add Photo
+            </StyledDropdownItem>
+
             {searchResult &&
               searchResult.map((resource) => {
                 return (
                   <StyledDropdownItem
-                    onClick={() => addResource(resource)}
+                    onClick={() =>
+                      addResource(
+                        new Song(resource.title, resource.lyrics),
+                      )
+                    }
                   >
                     {resource.properties.title}
                   </StyledDropdownItem>

@@ -1,4 +1,3 @@
-/*global chrome*/
 import React, { useContext, useState, useEffect } from 'react';
 import { Context } from './App';
 import ControllerPage from './Components/ControllerPage/ControllerPage';
@@ -18,6 +17,7 @@ import hotkeyListenter from './Components/Sidebar/hotkeyListenter';
 import { settingsRepo } from './Storage/settingsRepository';
 import { scheduleRepo } from './Storage/scheduleRepository';
 import { AppToaster } from './Toaster';
+import { startVideo } from './ChromeExtensionGateway/gateway';
 
 const StyledControllerPageContainer = styled.div`
   display: flex;
@@ -38,22 +38,6 @@ export default function () {
     slideIndex: 0,
   });
 
-  const onFocusTab = () => {
-    // The ID of the extension we want to talk to.
-    var editorExtensionId = 'idellhgacokfnmoagafaafnndbahoajf';
-
-    // Make a simple request:
-    chrome.runtime.sendMessage(
-      editorExtensionId,
-      { focusUrl: 'https://reactrouter.com/web/guides/quick-start' },
-      function (response) {
-        // var result = await response();
-        // response.then((res) => console.log(JSON.stringify(res)));
-        // if (!result.success) console.log('failed to send');
-      },
-    );
-  };
-
   const updateSlideNumber = (resourceIndex, slideIndex) => {
     const currentSlide = {
       resourceIndex: resourceIndex,
@@ -70,12 +54,29 @@ export default function () {
 
     bc.postMessage(JSON.stringify(currentSlide));
 
-    // broadcase
+    // broadcast
     setactiveResourcePointer({
       resourceIndex: resourceIndex,
       slideIndex: slideIndex,
     });
+
+    const activeResource =
+      state.currentSchedule.resources[
+        activeResourcePointer.resourceIndex
+      ];
+
+    if (
+      activeResource.fileType === 'video' &&
+      activeResource.filePath
+    ) {
+      startVideo(activeResource.filePath);
+    }
   };
+  // todo (Sdv) need a generic name for lyrics
+  // Maybe a different projector view for each type of resource
+  // const activeResource =
+  //   activeResource.lyrics[activeResourcePointer.slideIndex];
+  // };
 
   useEffect(() => {
     // wait for db to initialize... not pretty

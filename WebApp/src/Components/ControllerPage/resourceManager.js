@@ -1,8 +1,9 @@
 import React from 'react';
-import Slide from './Slide';
+import Slide from '../Slides/NonActiveSlide/SlideResolver';
 import styled from 'styled-components/macro';
 import { H3 } from '@blueprintjs/core';
-import ActiveSlide from '../ActiveSlide/ActiveSlide';
+import ActiveSlide from '../Slides/ActiveSlide/ActiveSlide';
+import SlideResolver from '../Slides/NonActiveSlide/SlideResolver';
 
 const StyedSlidesContainer = styled.div`
   height: 100%;
@@ -34,19 +35,10 @@ export default function ({
         {resource && resource.properties && resource.properties.title}
       </StyledHeader>
       <StyedSlidesContainer>
-        {resource &&
-          resource.lyrics &&
-          resource.lyrics.map((verse, slideIndex) => {
-            return isActiveResource &&
-              slideIndex === activeResourcePointer.slideIndex ? (
-              <ActiveSlide slideMetadata={verse}></ActiveSlide>
-            ) : (
-              <Slide
-                onClick={() => updateSlideNumber(slideIndex)}
-                slideMetadata={verse}
-              ></Slide>
-            );
-          })}
+        <SlideResolver
+          resource={resource}
+          updateSlideNumber={updateSlideNumber}
+        />
       </StyedSlidesContainer>
     </StyledResourceManager>
   );

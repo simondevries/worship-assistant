@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
-import { Context } from '../../App';
+import { Context } from '../../../App';
 
 import styled from 'styled-components';
-import ProjectorView from '../ProjectorView/ProjectorView';
+import ProjectorView from '../../ProjectorView/ProjectorView';
 import { Button } from '@blueprintjs/core';
 
 const StyledButtonContainer = styled.div`
@@ -33,6 +33,7 @@ export default function ({ slideMetadata }) {
         activeResourcePointer={activeResourcePointer}
       />
       <StyledButtonContainer>
+        <img src="file://C:/img.jpg" />
         <Button>Slide Settings</Button>
         <Button>White</Button>
         <Button>Blank</Button>
