@@ -77,7 +77,7 @@ export default ({ setOpen }) => {
 
     setScheduleTitle('');
     setScheduleDateTime(null);
-    scheduleRepo.add(newSched);
+    scheduleRepo.add(newSched, newSched.id);
 
     const updatedSchedules = schedules.concat(newSched);
     setSchedules(updatedSchedules);

@@ -17,7 +17,10 @@ import hotkeyListenter from './Components/Sidebar/hotkeyListenter';
 import { settingsRepo } from './Storage/settingsRepository';
 import { scheduleRepo } from './Storage/scheduleRepository';
 import { AppToaster } from './Toaster';
-import { startVideo } from './ChromeExtensionGateway/gateway';
+import {
+  startVideo,
+  changeTab,
+} from './ChromeExtensionGateway/gateway';
 
 const StyledControllerPageContainer = styled.div`
   display: flex;
@@ -38,7 +41,7 @@ export default function () {
     slideIndex: 0,
   });
 
-  const updateSlideNumber = (resourceIndex, slideIndex) => {
+  const updateSlideNumber = async (resourceIndex, slideIndex) => {
     const currentSlide = {
       resourceIndex: resourceIndex,
       slideIndex: slideIndex,
@@ -65,11 +68,14 @@ export default function () {
         activeResourcePointer.resourceIndex
       ];
 
+    console.log('v', JSON.stringify(activeResource));
     if (
-      activeResource.fileType === 'video' &&
+      activeResource.resourceType &&
+      activeResource.resourceType.toUpperCase() === 'VIDEO' &&
       activeResource.filePath
     ) {
-      startVideo(activeResource.filePath);
+      console.log('v', activeResource.filePath);
+      changeTab(activeResource.filePath);
     }
   };
   // todo (Sdv) need a generic name for lyrics
@@ -83,7 +89,7 @@ export default function () {
     setTimeout(() => {
       async function initState() {
         const settings = await settingsRepo.get();
-        console.log('settings', JSON.stringify(settings));
+
         dispatch({
           type: 'setSettings',
           payload: settings,
@@ -102,6 +108,7 @@ export default function () {
           });
           return;
         }
+        console.log(JSON.stringify(currentSchedule));
         dispatch({
           type: 'setCurrentSchedule',
           payload: {
@@ -111,6 +118,7 @@ export default function () {
               slideIndex: 0,
               resourceIndex: 0,
             },
+            resources: currentSchedule.resources,
           },
         });
       }

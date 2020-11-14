@@ -109,7 +109,7 @@ const Search = () => {
     });
   };
 
-  const addResource = (resource) => {
+  const addResource = async (resource) => {
     // todo (sdv).... ummm.... yuck too much going on here. Forced to do this becuase useReducer dowes not allow async await... maybe use redux oneday?
 
     const updatedSchedule = {
@@ -125,7 +125,9 @@ const Search = () => {
       payload: updatedSchedule,
     });
 
-    scheduleRepo.set(updatedSchedule, state.currentSchedule.id);
+    console.log('sched', JSON.stringify(state.currentSchedule.id));
+
+    await scheduleRepo.set(updatedSchedule, state.currentSchedule.id);
 
     onClose();
   };
