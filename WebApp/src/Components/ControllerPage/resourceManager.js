@@ -1,15 +1,19 @@
 import React from 'react';
 import Slide from '../Slides/NonActiveSlide/SlideResolver';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import { H3 } from '@blueprintjs/core';
-import ActiveSlide from '../Slides/ActiveSlide/ActiveSongSlide';
+import ActiveSlide, {
+  slideWidth,
+} from '../Slides/ActiveSlide/ActiveSongSlide';
 import SlideResolver from '../Slides/NonActiveSlide/SlideResolver';
+import Scrollbar from '../../Common/Scrollbar/Scrollbar';
 
-const StyedSlidesContainer = styled.div`
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
+const StyledSlidesContainer = styled.div`
+  ${Scrollbar}
+  padding-top: calc(50vh - 200px);
+  padding-bottom: calc(50vh - 140px);
+  overflow-y: auto;
+  padding-right: 10px;
 `;
 
 const StyledHeader = styled(H3)`
@@ -35,14 +39,14 @@ export default function ({
       <StyledHeader>
         {resource && resource.properties && resource.properties.title}
       </StyledHeader>
-      <StyedSlidesContainer>
+      <StyledSlidesContainer>
         <SlideResolver
           resourceIndex={resourceIndex}
           activeResourcePointer={activeResourcePointer}
           resource={resource}
           updateSlideNumber={updateSlideNumber}
         />
-      </StyedSlidesContainer>
+      </StyledSlidesContainer>
     </StyledResourceManager>
   );
 }

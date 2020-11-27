@@ -10,14 +10,20 @@ const StyledButtonContainer = styled.div`
   flex-direction: row;
 `;
 
-const StyledProjectorView = styled(ProjectorView)``;
+const StyledProjectorView = styled(ProjectorView)`
+  height: 100%;
+`;
+
+export const slideWidth = 300;
 
 const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
   border: 2px solid red;
-  width: 300px;
+  width: ${slideWidth + 'px'};
   font-size: 15pt;
+  min-height: 250px;
+  margin-bottom: 10px;
 `;
 
 export default function () {

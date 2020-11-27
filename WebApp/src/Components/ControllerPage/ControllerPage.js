@@ -3,6 +3,8 @@ import { Context } from '../../App';
 import ResourceManager from './resourceManager';
 import styled from 'styled-components/macro';
 import { Button, Icon } from '@blueprintjs/core';
+import { slideWidth } from '../Slides/ActiveSlide/ActiveSongSlide';
+import { sidebarWidth, sidebarMargin } from '../Sidebar/Sidebar';
 
 const StyledAddButton = styled(Button)`
   margin-left: 10px;
@@ -20,13 +22,31 @@ const StyledResourcesContainer = styled.div`
   display: flex;
   flex-direction: row;
   height: 100%;
+
+  margin-left: calc(50vw - ${slideWidth / 2}px);
+  margin-right: calc(50vw + ${slideWidth / 2}px);
 `;
+// todo (sdv) experimental expires 05/21
+
+// const StyledActiveResource = styled.div`
+//   width: ${slideWidth}px;
+//   height: 300px;
+//   background: red;
+//   position: absolute;
+//   left: calc(
+//     (
+//         100vw - (${sidebarWidth}px + ${sidebarMargin}px) -
+//           ${slideWidth / 2}px
+//       ) / 2
+//   );
+// `;
 
 const StyledControllerPage = styled.div`
   height: 100%;
+  width: 100%;
+  overflow-x: auto;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  justify-content: stretch;
 `;
 
 export default function ({ updateSlideNumber }) {
@@ -55,7 +75,7 @@ export default function ({ updateSlideNumber }) {
       <StyledResourcesContainer>
         {resources &&
           resources.map((r, rInx) => (
-            <StyledResourceContainer>
+            <StyledResourceContainer id={'resource' + rInx}>
               <ResourceManager
                 resource={r}
                 isActiveResource={
@@ -76,6 +96,7 @@ export default function ({ updateSlideNumber }) {
             </StyledResourceContainer>
           ))}
       </StyledResourcesContainer>
+      <div>yolo</div>
     </StyledControllerPage>
   );
 }

@@ -8,9 +8,15 @@ const StyledCard = styled(Card)`
   margin-bottom: 10px;
 `;
 
-export default function ({ verse, onClick }) {
+export default function ({
+  verse,
+  onClick,
+  slideIndex,
+  resourceIndex,
+}) {
   return (
     <StyledCard
+      id={`slide${slideIndex}resource${resourceIndex}`}
       onClick={onClick}
       interactive={true}
       elevation={Elevation.TWO}

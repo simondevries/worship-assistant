@@ -7,6 +7,9 @@ import SettingsDialog from '../Dialogs/SettingsDialog';
 import { Context } from '../../App';
 import ScheduleManagerDialog from '../Dialogs/ScheduleManagerDialog';
 
+export const sidebarWidth = 70;
+export const sidebarMargin = 15;
+
 const StyledIconButton = styled(Button)`
   width: 100%;
   display: flex;
@@ -23,10 +26,10 @@ const StyledIcon = styled(Icon)`
 const StyledContainer = styled(Card)`
   display: flex;
   flex-direction: column;
-  width: 70px;
+  width: ${sidebarWidth}px;
   height: 100%;
-  margin-right: 15px;
-  align-item: center;
+  margin-right: ${sidebarMargin}px;
+  align-items: center;
   padding: 0px;
   padding-top: 20px;
 `;
