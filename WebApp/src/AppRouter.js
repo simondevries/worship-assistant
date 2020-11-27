@@ -18,7 +18,9 @@ import {
   changeTab,
 } from './ChromeExtensionGateway/gateway';
 import fetchStatus from './Common/FetchStatus/fetchStatus';
-import useInitializeApp from './useInitializeApp';
+import useIntialize from './useInitialize';
+import ScheduleManagerDialog from './Components/Dialogs/ScheduleManagerDialog';
+import useModal from './Components/Dialogs/useModal';
 
 const StyledControllerPageContainer = styled.div`
   display: flex;
@@ -35,7 +37,8 @@ const StyledSpinner = styled(Spinner)`
 export default function () {
   //todo (sdv) too much going on here
   const [state, dispatch] = useContext(Context);
-  const [loadingState] = useInitializeApp(dispatch);
+  const [scheduleModalOpen, setScheduleModalOpen] = useModal(true);
+  const [loadingState] = useIntialize(dispatch);
   hotkeyListenter();
 
   let bc = new BroadcastChannel('test_channel');
@@ -106,6 +109,9 @@ export default function () {
 
   return (
     <>
+      {scheduleModalOpen && (
+        <ScheduleManagerDialog setOpen={setScheduleModalOpen} />
+      )}
       {state.isSearchVisible && <Search />}
       <Router>
         <Switch>

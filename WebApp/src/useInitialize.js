@@ -4,11 +4,13 @@ import { AppToaster } from './Toaster';
 import React, { useContext, useState, useEffect } from 'react';
 import fetchStatus from './Common/FetchStatus/fetchStatus';
 import { Intent } from '@blueprintjs/core';
+import useModal from './Components/Dialogs/useModal';
 
-function useInitializeApp(dispatch) {
+function useIntialize(dispatch) {
   const [loadingState, setLoadingState] = useState(
     fetchStatus.Loading,
   );
+
   useEffect(() => {
     // wait for db to initialize... not pretty
     setTimeout(() => {
@@ -29,11 +31,11 @@ function useInitializeApp(dispatch) {
               (s) => s.id === settings.currentScheduleId,
             );
           if (!currentSchedule) {
-            AppToaster.show({
-              intent: Intent.DANGER,
-              message:
-                'Could not find an active service. Go to the schedule dialog and create a new schedule.',
-            });
+            // AppToaster.show({
+            //   intent: Intent.DANGER,
+            //   message:
+            //     'Could not find an active service. Go to the schedule dialog and create a new schedule.',
+            // });
             throw Error();
           }
           dispatch({
@@ -59,4 +61,4 @@ function useInitializeApp(dispatch) {
   return [loadingState];
 }
 
-export default useInitializeApp;
+export default useIntialize;

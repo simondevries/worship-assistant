@@ -115,7 +115,7 @@ const Search = () => {
     const updatedSchedule = {
       ...state.currentSchedule,
       resources: state.currentSchedule.resources.concat({
-        ...resource,
+        id: resource.id,
         index: state.currentSchedule.resources.length,
       }),
     };
@@ -124,8 +124,6 @@ const Search = () => {
       type: 'setCurrentSchedule',
       payload: updatedSchedule,
     });
-
-    console.log('sched', JSON.stringify(state.currentSchedule.id));
 
     await scheduleRepo.set(updatedSchedule, state.currentSchedule.id);
 

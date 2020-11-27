@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Context } from '../../App';
-import { Button, Card, H5 } from '@blueprintjs/core';
+import { Button, Card, H5, H3 } from '@blueprintjs/core';
 import { Dialog, Classes } from '@blueprintjs/core';
 import styled, { css } from 'styled-components/macro';
 import { DateInput } from '@blueprintjs/datetime';
@@ -12,7 +12,10 @@ const StyledDateInput = styled(DateInput)`
   margin-left: 30px;
 `;
 
-const StyledActionButton = styled(Button)``;
+const StyledActionButton = styled(Button)`
+  margin-left: 30px;
+`;
+
 const StyledAddButton = styled(Button)`
   margin-top: 33px;
   width: 130px;
@@ -23,8 +26,15 @@ const SpacerTr = styled.tr`
 `;
 const StyledInput = styled.input``;
 
-const StyledAddSchedule = styled(Card)`
+const StyledNewButton = styled(Button)`
+  padding: 14px 20px;
   margin-bottom: 30px;
+  margin-top: 7px;
+`;
+
+const StyledPastSchedules = styled(Card)`
+  margin-bottom: 30px;
+  margin-top: 20px;
 `;
 
 const StyledTableScroller = styled.div`
@@ -34,6 +44,8 @@ const StyledTableScroller = styled.div`
 
 const StyledTable = styled.table`
   width: 100%;
+  padding-left: 30px;
+  padding-right: 10px;
 
   th {
     width: 100px;
@@ -82,6 +94,7 @@ export default ({ setOpen }) => {
     const updatedSchedules = schedules.concat(newSched);
     setSchedules(updatedSchedules);
     settingsRepo.setCurrentService(newSched.id);
+    onClose();
   };
 
   const onClose = () => {
@@ -107,73 +120,56 @@ export default ({ setOpen }) => {
       <Dialog
         className={Classes.DARK}
         isOpen
-        title="Schedules"
+        title="Welcome"
         isCloseButtonShown={true}
         onClose={onClose}
       >
         <div className={Classes.DIALOG_BODY}>
-          <StyledAddSchedule>
-            <H5>Current Schedule</H5>
-            <StyledInput
-              className={Classes.INPUT}
-              placeholder="Service Name"
-              onChange={(e) =>
-                e.target.value &&
-                e.target.value.length < 100 &&
-                setScheduleTitle(e.target.value)
-              }
-              value={scheduleTitle}
-            />
-            <StyledDateInput
-              className={Classes.ELEVATION_1}
-              formatDate={(date) => date.toLocaleDateString('en-gb')}
-              onChange={(e) => setScheduleDateTime(e)}
-              placeholder={'Service Date'}
-              parseDate={(str) => new Date(str)}
-              value={scheduleDateTime}
-            />
-          </StyledAddSchedule>
-          <StyledTableScroller>
-            <StyledTable>
-              <tr>
-                <th>Title</th>
-                <th>Date</th>
-                <th>Action</th>
-              </tr>
-              {schedules &&
-                schedules.map((s) => (
-                  <>
-                    <tr>
-                      <td>{s.title}</td>
-                      <td>{s.date.toLocaleDateString('en-gb')}</td>
-                      <td>
-                        <StyledActionButton
-                          miminal
-                          intent={
-                            showOpenConfirm === s.id
-                              ? 'Success'
-                              : 'None'
-                          }
-                          onBlur={() => setShowOpenConfirm(false)}
-                          onClick={() => openSchedule(s)}
-                          icon="folder-open"
-                        >
-                          {showOpenConfirm === s.id ? 'Confirm' : ''}
-                        </StyledActionButton>
-                      </td>
-                    </tr>
-                    <SpacerTr />
-                  </>
-                ))}
-            </StyledTable>
-          </StyledTableScroller>
-          <StyledAddButton
+          <StyledNewButton
             icon="add"
-            intent="Success"
+            large
             onClick={addSchedule}
+            intent="success"
           >
-            Create new schedule
-          </StyledAddButton>
+            Start New Session
+          </StyledNewButton>
+          <H3>Previous Sessions</H3>
+          {/* </StyledAddSchedule> */}
+          <StyledPastSchedules>
+            <StyledTableScroller>
+              <StyledTable>
+                <tr></tr>
+                {schedules &&
+                  schedules.map((s) => (
+                    <>
+                      <tr>
+                        <H5 style={{ 'padding-top': '10px' }}>
+                          {s.date.toLocaleDateString('en-gb')}
+                        </H5>
+                        <td>
+                          <StyledActionButton
+                            miminal
+                            intent={
+                              showOpenConfirm === s.id
+                                ? 'Success'
+                                : 'None'
+                            }
+                            onBlur={() => setShowOpenConfirm(false)}
+                            onClick={() => openSchedule(s)}
+                            icon="folder-open"
+                          >
+                            {showOpenConfirm === s.id
+                              ? 'Confirm'
+                              : ''}
+                          </StyledActionButton>
+                        </td>
+                      </tr>
+                      <SpacerTr />
+                    </>
+                  ))}
+              </StyledTable>
+            </StyledTableScroller>
+          </StyledPastSchedules>
         </div>
       </Dialog>
     </>

@@ -41,6 +41,13 @@ const StyledResourcesContainer = styled.div`
 //   );
 // `;
 
+const StyledNoResourcesButton = styled(Button)`
+  height: 50px;
+  position: absolute;
+  top: 50vh;
+  left: 47vw;
+`;
+
 const StyledControllerPage = styled.div`
   height: 100%;
   width: 100%;
@@ -70,6 +77,15 @@ export default function ({ updateSlideNumber }) {
   };
   const activeResourcePointer =
     state.currentSchedule.activeResourcePointer;
+
+  if (!resources || !resources.length) {
+    return (
+      <StyledNoResourcesButton onClick={openSearch} icon="add" large>
+        Click here to add your first resource
+      </StyledNoResourcesButton>
+    );
+  }
+
   return (
     <StyledControllerPage>
       <StyledResourcesContainer>

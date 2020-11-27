@@ -10,6 +10,7 @@ import { Dialog, Classes } from '@blueprintjs/core';
 import styled from 'styled-components/macro';
 import { songsRepo } from '../../Storage/songsRepository';
 import HelpText from './HelpText';
+import newId from '../../Helpers/newId';
 
 const StyledEditableTextContent = styled(EditableText)`
   margin-bottom: 30px;
@@ -31,6 +32,7 @@ export default ({ setAddSongModalOpen }) => {
     // properties: {
     //   title: '',
     // },
+    id: newId(),
     lyrics: '',
     properties: {
       title: '',

@@ -47,16 +47,6 @@ export default function ({
                       block: 'center',
                       inline: 'center',
                     });
-
-                  {
-                    /* document
-                    .getElementById('resource' + resourceIndex)
-                    .scrollIntoView({
-                      behavior: 'smooth',
-                      block: 'center',
-                      inline: 'center',
-                    }); */
-                  }
                 }}
                 verse={verse}
               />
