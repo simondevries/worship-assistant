@@ -13,7 +13,11 @@ const StyledProjectorView = styled.div`
 /**
  * Projects the lyrics in a tab
  */
-export default function ({ activeResourcePointer, previewMode }) {
+export default function ({
+  activeResourcePointer,
+  previewMode,
+  className,
+}) {
   const [state, dispatch] = useContext(Context);
   if (!state || !state.currentSchedule) return null;
 
@@ -34,7 +38,10 @@ export default function ({ activeResourcePointer, previewMode }) {
   console.log('activeResourcePointer', activeResourcePointer);
 
   return (
-    <StyledProjectorView previewMode={previewMode}>
+    <StyledProjectorView
+      previewMode={previewMode}
+      className={className}
+    >
       {activeSlide.content}
       {/* <img src={resources.image}></img> */}
     </StyledProjectorView>

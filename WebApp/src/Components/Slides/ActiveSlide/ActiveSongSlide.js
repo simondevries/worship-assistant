@@ -3,7 +3,7 @@ import { Context } from '../../../App';
 
 import styled from 'styled-components';
 import ProjectorView from '../../ProjectorView/ProjectorView';
-import { Button } from '@blueprintjs/core';
+import { Button, Card } from '@blueprintjs/core';
 
 const StyledButtonContainer = styled.div`
   display: flex;
@@ -11,15 +11,16 @@ const StyledButtonContainer = styled.div`
 `;
 
 const StyledProjectorView = styled(ProjectorView)`
-  height: 100%;
+  height: 150px;
 `;
 
 export const slideWidth = 300;
 
-const StyledContainer = styled.div`
+const StyledContainer = styled(Card)`
+  background: #666f76 !important;
+  justify-content: space-between;
   display: flex;
   flex-direction: column;
-  border: 2px solid red;
   width: ${slideWidth + 'px'};
   font-size: 15pt;
   min-height: 250px;

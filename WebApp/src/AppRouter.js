@@ -10,22 +10,15 @@ import {
   Link,
 } from 'react-router-dom';
 import styled from 'styled-components/macro';
-import logo from './logo.svg';
-import {
-  Classes,
-  ContextMenu,
-  Intent,
-  Spinner,
-} from '@blueprintjs/core';
+import { Spinner } from '@blueprintjs/core';
 import Sidebar from './Components/Sidebar/Sidebar';
 import hotkeyListenter from './Components/Sidebar/hotkeyListenter';
-import { settingsRepo } from './Storage/settingsRepository';
-import { scheduleRepo } from './Storage/scheduleRepository';
-import { AppToaster } from './Toaster';
 import {
   startVideo,
   changeTab,
 } from './ChromeExtensionGateway/gateway';
+import fetchStatus from './Common/FetchStatus/fetchStatus';
+import useInitializeApp from './useInitializeApp';
 
 const StyledControllerPageContainer = styled.div`
   display: flex;
@@ -41,9 +34,8 @@ const StyledSpinner = styled(Spinner)`
 
 export default function () {
   //todo (sdv) too much going on here
-
-  const [isLoadingFromDb, setIsLoadingFromDb] = useState(true);
   const [state, dispatch] = useContext(Context);
+  const [loadingState] = useInitializeApp(dispatch);
   hotkeyListenter();
 
   let bc = new BroadcastChannel('test_channel');
@@ -89,47 +81,6 @@ export default function () {
   // };
 
   useEffect(() => {
-    // wait for db to initialize... not pretty
-    setTimeout(() => {
-      async function initState() {
-        const settings = await settingsRepo.get();
-
-        dispatch({
-          type: 'setSettings',
-          payload: settings,
-        });
-
-        const schedules = await scheduleRepo.getAll();
-        const currentSchedule =
-          schedules &&
-          settings &&
-          schedules.find((s) => s.id === settings.currentScheduleId);
-        if (!currentSchedule) {
-          AppToaster.show({
-            intent: Intent.DANGER,
-            message:
-              'Could not find an active service. Go to the schedule dialog and create a new schedule.',
-          });
-          return;
-        }
-        console.log(JSON.stringify(currentSchedule));
-        dispatch({
-          type: 'setCurrentSchedule',
-          payload: {
-            // todo (sdv) code split across two parts of the app here and scheduleManageDialog create
-            ...currentSchedule,
-            activeResourcePointer: {
-              slideIndex: 0,
-              resourceIndex: 0,
-            },
-            resources: currentSchedule.resources,
-          },
-        });
-        setIsLoadingFromDb(false);
-      }
-      initState();
-    }, 500);
-
     bc.onmessage = function (ev) {
       console.log('rece', JSON.stringify(ev.data));
       const currentSlide = JSON.parse(ev.data);
@@ -144,7 +95,7 @@ export default function () {
     };
   }, []);
 
-  if (isLoadingFromDb) {
+  if (loadingState === fetchStatus.Loading) {
     return <StyledSpinner />;
   }
 
