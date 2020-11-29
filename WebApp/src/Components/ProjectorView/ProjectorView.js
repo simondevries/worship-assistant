@@ -18,6 +18,7 @@ export default function ({
   previewMode,
   className,
 }) {
+  return null;
   const [state, dispatch] = useContext(Context);
   if (!state || !state.currentSchedule) return null;
 

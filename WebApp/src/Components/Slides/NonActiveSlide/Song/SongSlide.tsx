@@ -1,6 +1,7 @@
 import React from 'react';
-import { Button, Card, Elevation } from '@blueprintjs/core';
+import { Button, Card, Elevation, H5 } from '@blueprintjs/core';
 import styled from 'styled-components/macro';
+import Verse from '../../../../Interfaces/Verse';
 
 const StyledCard = styled(Card)`
   width: 300px;
@@ -8,12 +9,19 @@ const StyledCard = styled(Card)`
   margin-bottom: 10px;
 `;
 
+interface Props {
+  verse: Verse;
+  onClick: any;
+  slideIndex: number;
+  resourceIndex: number;
+}
+
 export default function ({
   verse,
   onClick,
   slideIndex,
   resourceIndex,
-}) {
+}: Props) {
   return (
     <StyledCard
       id={`slide${slideIndex}resource${resourceIndex}`}
@@ -21,9 +29,9 @@ export default function ({
       interactive={true}
       elevation={Elevation.TWO}
     >
-      <h5>
+      <H5>
         <a href="#">Verse</a>
-      </h5>
+      </H5>
       {verse.content}
     </StyledCard>
   );
