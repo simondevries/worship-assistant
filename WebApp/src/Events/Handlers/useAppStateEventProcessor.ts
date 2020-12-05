@@ -5,6 +5,10 @@ import SongCreatedEvent, {
   SongCreated,
 } from '../Domain/songCreatedEvent';
 import { Context } from '../../App';
+import SongAddedToSchedule, {
+  SongAddedToScheduleEventName,
+} from '../Domain/songAddedToSchedule';
+import SongResourceReference from '../../Interfaces/SongResourceReference';
 
 const Channel_Name = 'Controller';
 let bc = new BroadcastChannel('Channel_Name');
@@ -22,7 +26,7 @@ const useAppStateEventProcessors = () => {
         id: event.song.id,
         index: state.currentSchedule.resources.length,
         resourceType: 'SONG',
-      }),
+      } as SongResourceReference),
       activeSongs: [event.song],
     };
 
@@ -30,9 +34,33 @@ const useAppStateEventProcessors = () => {
       type: 'setCurrentSchedule',
       payload: updatedSchedule,
     });
+
+    dispatch({
+      type: 'addActiveSong',
+      payload: event.song,
+    });
   };
 
-  const arr = [SongCreatedEventHandler];
+  const SongAddedToScheduleEventHandler = (
+    event: SongAddedToSchedule,
+  ) => {
+    if (event.eventType !== SongAddedToScheduleEventName) return;
+
+    dispatch({
+      type: 'addResourceToSchedule',
+      payload: { id: event.song.id, index: event.index },
+    });
+
+    dispatch({
+      type: 'addActiveSong',
+      payload: event.song,
+    });
+  };
+
+  const arr = [
+    SongCreatedEventHandler,
+    SongAddedToScheduleEventHandler,
+  ];
   return [arr];
 };
 

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/accessible-emoji */
 import React, {
   useState,
   useEffect,
@@ -15,9 +16,12 @@ import styled from 'styled-components/macro';
 import { Icon } from '@blueprintjs/core';
 import SearchQuery from './searchQuery';
 import { songsRepo } from '../../Storage/songsRepository';
-import NewId from '../../Helpers/newId';
 import { scheduleRepo } from '../../Storage/scheduleRepository';
-import { Song, Image, Video } from '../../Domain/resource';
+import useEventHandler from '../../Events/Handlers/useEventHandler';
+import SongAddedToSchedule from '../../Events/Domain/songAddedToSchedule';
+import Video from '../../Interfaces/Video';
+import Image from '../../Interfaces/Image';
+import Song from '../../Interfaces/Song';
 
 const StyledOmnibarContainer = styled.div`
   -webkit-filter: blur(0);
@@ -99,6 +103,7 @@ const Search = () => {
   const [searchValue, setSearchValue] = useState('');
   const [allSongs, setAllSongs] = useState([]);
   const [state, dispatch] = useContext(Context);
+  const [raiseEvent] = useEventHandler();
 
   const searchbox = useRef(null);
 
@@ -130,8 +135,38 @@ const Search = () => {
     onClose();
   };
 
+  const addSong = async (song: Song) => {
+    // todo (sdv).... ummm.... yuck too much going on here. Forced to do this becuase useReducer dowes not allow async await... maybe use redux oneday?
+
+    // const updatedSchedule = {
+    //   ...state.currentSchedule,
+    //   resources: state.currentSchedule.resources.concat({
+    //     id: resource.id,
+    //     index: state.currentSchedule.resources.length,
+    //     resourceType: 'SONG',
+    //   }),
+    // };
+
+    // dispatch({
+    //   type: 'setCurrentSchedule',
+    //   payload: updatedSchedule,
+    // });
+
+    // await scheduleRepo.set(updatedSchedule, state.currentSchedule.id);
+
+    raiseEvent(
+      new SongAddedToSchedule(
+        state.currentSchedule.resources.length,
+        false,
+        song,
+      ),
+    );
+
+    onClose();
+  };
+
   useEffect(() => {
-    searchbox.current.focus();
+    // searchbox.current.focus();
     async function loadAllSongs() {
       const songs = await songsRepo.getAll();
       setAllSongs(songs);
@@ -166,24 +201,25 @@ const Search = () => {
           <StyledDropdownContainer>
             <StyledDropdownItem
               onClick={() =>
-                addResource(
-                  new Video(
-                    'My south island trip',
+                addResource({
+                  title: 'My south island trip',
+                  filePath:
                     'file:///C:/Users/simon/Videos/South%20Island.mp4',
-                  ),
-                )
+                  resourceType: 'VIDEO',
+                } as Video)
               }
             >
               🎥 Add Video
             </StyledDropdownItem>
             <StyledDropdownItem
               onClick={() =>
-                addResource(
-                  new Image(
+                addResource({
+                  title:
                     'Jesse taking a photo of reuel taking a photo',
+                  filePath:
                     'file:///C:/Users/simon/Pictures/2018/Camera/IMG_20181005_154404.jpg',
-                  ),
-                )
+                  resourceType: 'IMAGE',
+                } as Image)
               }
             >
               📷 Add Photo
@@ -193,11 +229,7 @@ const Search = () => {
               searchResult.map((resource) => {
                 return (
                   <StyledDropdownItem
-                    onClick={() =>
-                      addResource(
-                        new Song(resource.title, resource.lyrics),
-                      )
-                    }
+                    onClick={() => addSong(resource)}
                   >
                     {resource.properties.title}
                   </StyledDropdownItem>

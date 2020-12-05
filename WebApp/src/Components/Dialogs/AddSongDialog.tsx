@@ -74,7 +74,7 @@ export default ({ setAddSongModalOpen }) => {
       };
     });
 
-    const song: Song = {
+    const song = {
       ...songContent,
       lyrics: versesMapped,
     };

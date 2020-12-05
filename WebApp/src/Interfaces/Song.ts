@@ -1,11 +1,5 @@
-import Verse from './Verse';
-
-export default interface Song {
-  id: string;
-  lyrics: Verse[];
-  properties: SongProperties;
-}
-
-export interface SongProperties {
+import Resource from './resource';
+export default interface Song extends Resource {
   title: string;
+  lyrics: any;
 }

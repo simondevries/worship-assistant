@@ -5,6 +5,10 @@ import React, { useContext, useState, useEffect } from 'react';
 import fetchStatus from './Common/FetchStatus/fetchStatus';
 import { Intent } from '@blueprintjs/core';
 import useModal from './Components/Dialogs/useModal';
+import Schedule from './Interfaces/Schedule';
+import { songsRepo } from './Storage/songsRepository';
+import SongResourceReference from './Interfaces/SongResourceReference';
+import Song from './Interfaces/Song';
 
 function useIntialize(dispatch) {
   const [loadingState, setLoadingState] = useState(
@@ -24,7 +28,7 @@ function useIntialize(dispatch) {
           });
 
           const schedules = await scheduleRepo.getAll();
-          const currentSchedule =
+          const currentSchedule: Schedule =
             schedules &&
             settings &&
             schedules.find(
@@ -38,6 +42,21 @@ function useIntialize(dispatch) {
             // });
             throw Error();
           }
+
+          let activeSongs = [] as Array<Song>;
+          await currentSchedule.resources.forEach(
+            async (resource) => {
+              if (resource.resourceType !== 'SONG') {
+                return null;
+              }
+              activeSongs = activeSongs.concat([
+                await songsRepo.get(
+                  (resource as SongResourceReference).id,
+                ),
+              ]);
+            },
+          );
+
           dispatch({
             type: 'setCurrentSchedule',
             payload: {
@@ -48,7 +67,8 @@ function useIntialize(dispatch) {
                 resourceIndex: 0,
               },
               resources: currentSchedule.resources,
-            },
+              activeSongs: activeSongs,
+            } as Schedule,
           });
           setLoadingState(fetchStatus.Loaded);
         } catch (e) {

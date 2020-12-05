@@ -7,26 +7,19 @@ import songCreatedEvent, {
 import { Context } from '../../App';
 import useBroadcastMessageEventProcessor from './useBroadcastMessageEventProcessor';
 import useAppStateEventProcessors from './useAppStateEventProcessor';
+import useIndexDbEventProcessor from './useIndexDbEventProcessor';
 
 export default () => {
   const [
     broadCastEventProcessors,
   ] = useBroadcastMessageEventProcessor();
   const [appStateEventProcessors] = useAppStateEventProcessors();
+  const [indexDbEventProcessors] = useIndexDbEventProcessor();
+
   const raiseEvent = (event) => {
     broadCastEventProcessors.forEach((handler) => handler(event));
     appStateEventProcessors.forEach((handler) => handler(event));
-
-    // switch (event.eventType) {
-    //   case SongCreatedEvent:
-    //     songsRepo.add(event.song, event.song.id);
-    //     if (event.addToSchedule) {
-    //       // broad
-    //     }
-
-    //   default:
-    //     throw new Error('no event handler found');
-    // }
+    indexDbEventProcessors.forEach((handler) => handler(event));
   };
 
   return [raiseEvent];

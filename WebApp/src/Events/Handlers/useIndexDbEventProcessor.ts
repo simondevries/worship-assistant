@@ -6,18 +6,22 @@ import SongCreatedEvent, {
 } from '../Domain/songCreatedEvent';
 import { Context } from '../../App';
 
-const Channel_Name = 'Controller';
-let bc = new BroadcastChannel('Channel_Name');
+const useIndexDbEventProcessor = () => {
+  const [state, dispatch] = useContext(Context);
 
-const SongCreatedEventHandler = (event: SongCreatedEvent) => {
-  if (
-    event.eventType !== SongCreated ||
-    !event.addToSchedule ||
-    event.isExternalEvent
-  )
-    return;
+  const SongCreatedEventHandler = (event: SongCreatedEvent) => {
+    if (
+      event.eventType !== SongCreated ||
+      !event.addToSchedule ||
+      event.isExternalEvent
+    )
+      return;
 
-  bc.postMessage(JSON.stringify(event));
+    songsRepo.add(event.song, event.song.id);
+  };
+
+  const arr = [SongCreatedEventHandler];
+  return [arr];
 };
 
-export default [SongCreatedEventHandler];
+export default useIndexDbEventProcessor;
