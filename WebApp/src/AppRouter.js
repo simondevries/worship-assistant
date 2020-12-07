@@ -24,6 +24,7 @@ import useModal from './Components/Dialogs/useModal';
 import SlideChangeEvent from './Events/Domain/slideChangeEvent';
 import useEventHandler from './Events/Handlers/useEventHandler';
 import { useLocation } from 'react-router-dom';
+import { Redirect } from 'react-router-dom/cjs/react-router-dom.min';
 
 const StyledControllerPageContainer = styled.div`
   display: flex;
@@ -109,7 +110,8 @@ export default function () {
       <Router>
         <Switch>
           <Route path="/" exact>
-            <div>Go to /operator</div>
+            <Redirect to="/operator" />
+            {/* <div>Go to /operator</div> */}
           </Route>
           <Route path="/operator" exact>
             <StyledControllerPageContainer>

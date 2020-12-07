@@ -6,10 +6,11 @@ import SongResourceReference from '../../Interfaces/SongResourceReference';
 
 const StyledProjectorView = styled.div<any>`
   ${(props) => [!props.previewMode ? 'font-size: 100pt;' : '']}
-  background: black;
-  color: white;
+  background: ${(props) =>props.theme.backgroundColor};
+  color: ${(props) =>props.theme.primary};
+  font-size: ${(props) =>props.theme.fontSize};
   height: 100%;
-  text-align: center;
+  text-align: ${(props) =>props.theme.textAlign};
 `;
 
 /**
