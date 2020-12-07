@@ -4,7 +4,7 @@ import styled from 'styled-components/macro';
 import SongSlide from './SongSlide';
 import ActiveSlide from '../../ActiveSlide/ActiveSongSlide';
 import { Context } from '../../../../App';
-import { State } from '../../../../Interfaces/State';
+import State from '../../../../Interfaces/State';
 
 const StyledSongSlide = styled(SongSlide)`
   width: 300px;

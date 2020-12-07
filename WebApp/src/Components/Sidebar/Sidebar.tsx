@@ -6,6 +6,7 @@ import AddSongDialog from '../Dialogs/AddSongDialog';
 import SettingsDialog from '../Dialogs/SettingsDialog';
 import { Context } from '../../App';
 import ScheduleManagerDialog from '../Dialogs/ScheduleManagerDialog';
+import State from '../../Interfaces/State';
 
 export const sidebarWidth = 70;
 export const sidebarMargin = 15;
@@ -34,29 +35,29 @@ const StyledContainer = styled(Card)`
   padding-top: 20px;
 `;
 
-const addIcon = <StyledIcon icon={'add'} iconSize="26"></StyledIcon>;
+const addIcon = <StyledIcon icon={'add'} iconSize={26}></StyledIcon>;
 const eventIcon = (
-  <StyledIcon icon={'timeline-events'} iconSize="26"></StyledIcon>
+  <StyledIcon icon={'timeline-events'} iconSize={26}></StyledIcon>
 );
-const cogIcon = <StyledIcon icon={'cog'} iconSize="26"></StyledIcon>;
+const cogIcon = <StyledIcon icon={'cog'} iconSize={26}></StyledIcon>;
 
 export default function () {
   const [addSongModalOpen, setAddSongModalOpen] = useModal();
   const [settingsModalOpen, setSettingsModalOpen] = useModal();
-  const [scheduleModalOpen, setScheduleModalOpen] = useModal();
-  const [state, dispatch] = useContext(Context);
+  const [scheduleModalOpen, setScheduleModalOpen] = useModal(false);
+  const [state, dispatch] = useContext<Array<State>>(Context);
 
-  const openSearch = () => {
-    dispatch({
-      type: 'setSearchVisible',
-      payload: true,
-    });
-  };
+  const setScheduleModalOpenHacks = setScheduleModalOpen as Function;
+  const setSettingsModalOpenHacks = setSettingsModalOpen as Function;
+  const setAddSongModalOpenHacks = setAddSongModalOpen as Function;
 
   return (
     <StyledContainer elevation={Elevation.FOUR}>
       {addSongModalOpen && (
-        <AddSongDialog setAddSongModalOpen={setAddSongModalOpen} />
+        <AddSongDialog
+          setAddSongModalOpen={setAddSongModalOpen}
+          createSongAtIndex={state.currentSchedule.resources.length}
+        />
       )}
       {settingsModalOpen && (
         <SettingsDialog setSettingsModalOpen={setSettingsModalOpen} />
@@ -65,14 +66,14 @@ export default function () {
         <ScheduleManagerDialog setOpen={setScheduleModalOpen} />
       )}
       <StyledIconButton
-        onClick={setScheduleModalOpen}
+        onClick={() => setScheduleModalOpenHacks(true)}
         icon={eventIcon}
         minimal
       >
         <div>Schedules</div>
       </StyledIconButton>
       <StyledIconButton
-        onClick={() => setAddSongModalOpen(true)}
+        onClick={() => setAddSongModalOpenHacks(true)}
         icon={addIcon}
         minimal
       >
@@ -80,7 +81,7 @@ export default function () {
       </StyledIconButton>
       <StyledIconButton
         icon={cogIcon}
-        onClick={() => setSettingsModalOpen(true)}
+        onClick={() => setSettingsModalOpenHacks(true)}
         minimal
       >
         <div>Settings</div>

@@ -1,10 +1,3 @@
-import { songsRepo } from '../../Storage/songsRepository';
-import { useContext } from 'react';
-import AppEvent from '../Domain/appEvent';
-import songCreatedEvent, {
-  SongCreated as SongCreatedEvent,
-} from '../Domain/songCreatedEvent';
-import { Context } from '../../App';
 import useBroadcastMessageEventProcessor from './useBroadcastMessageEventProcessor';
 import useAppStateEventProcessors from './useAppStateEventProcessor';
 import useIndexDbEventProcessor from './useIndexDbEventProcessor';

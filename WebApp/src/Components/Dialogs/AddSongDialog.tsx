@@ -13,6 +13,7 @@ import newId from '../../Helpers/newId';
 import SongCreatedEvent from '../../Events/Domain/songCreatedEvent';
 import type Song from '../../Interfaces/Song';
 import useEventHandler from '../../Events/Handlers/useEventHandler';
+import SongAddedToScheduleEvent from '../../Events/Domain/songAddedToScheduleEvent';
 
 const StyledEditableTextContent = styled(EditableText)`
   margin-bottom: 30px;
@@ -28,7 +29,7 @@ const StyledEditableTextTitle = styled(EditableText)`
   }
 `;
 
-export default ({ setAddSongModalOpen }) => {
+export default ({ setAddSongModalOpen, createSongAtIndex }) => {
   const [raiseEvent] = useEventHandler();
 
   const [songContent, setSongContent] = useState({
@@ -78,7 +79,15 @@ export default ({ setAddSongModalOpen }) => {
       ...songContent,
       lyrics: versesMapped,
     };
-    raiseEvent(new SongCreatedEvent(false, song, addToSchedule));
+    raiseEvent(new SongCreatedEvent(false, song));
+
+    if (addToSchedule) {
+      // todo (Sdv) make this raise an event to  add to schedule
+      console.log({ createSongAtIndex });
+      raiseEvent(
+        new SongAddedToScheduleEvent(createSongAtIndex, false, song),
+      );
+    }
   };
 
   const saveSong = () => {

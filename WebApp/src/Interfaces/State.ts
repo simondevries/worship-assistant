@@ -1,7 +1,7 @@
 import Schedule from './Schedule';
 import { Settings } from './Settings';
 
-export interface State {
+export default interface State {
   currentSchedule: Schedule;
   settings: Settings;
 }

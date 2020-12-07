@@ -1,15 +1,13 @@
 import AppEvent from './appEvent';
 import Song from '../../Interfaces/Song';
 
-export const SongCreated = 'SongCreated';
+export const SongCreatedEventName = 'SongCreated';
 
 export default class extends AppEvent {
   song: Song;
-  addToSchedule: any;
   source: any;
-  constructor(isExternalEvent, song, addToSchedule) {
-    super(SongCreated, isExternalEvent);
+  constructor(isExternalEvent, song) {
+    super(SongCreatedEventName, isExternalEvent);
     this.song = song;
-    this.addToSchedule = addToSchedule;
   }
 }

@@ -7,6 +7,8 @@ import { DateInput } from '@blueprintjs/datetime';
 import { scheduleRepo } from '../../Storage/scheduleRepository';
 import { settingsRepo } from '../../Storage/settingsRepository';
 import NewId from '../../Helpers/newId';
+import useEventHandler from '../../Events/Handlers/useEventHandler';
+import NewScheduleCreatedEvent from '../../Events/Domain/newScheduleCreatedEvent';
 
 const StyledDateInput = styled(DateInput)`
   margin-left: 30px;
@@ -61,6 +63,7 @@ export default ({ setOpen }) => {
   const [scheduleDateTime, setScheduleDateTime] = useState();
   const [schedules, setSchedules] = useState([]);
   const [state, dispatch] = useContext(Context);
+  const [raiseEvent] = useEventHandler();
 
   useEffect(() => {
     async function fetchData() {
@@ -85,15 +88,11 @@ export default ({ setOpen }) => {
         slideIndex: 0,
         resourceIndex: 0,
       },
+      activeSongs: [],
     };
 
-    setScheduleTitle('');
-    setScheduleDateTime(null);
-    scheduleRepo.add(newSched, newSched.id);
+    raiseEvent(new NewScheduleCreatedEvent(false, newSched));
 
-    const updatedSchedules = schedules.concat(newSched);
-    setSchedules(updatedSchedules);
-    settingsRepo.setCurrentService(newSched.id);
     onClose();
   };
 

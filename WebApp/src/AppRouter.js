@@ -21,11 +21,22 @@ import fetchStatus from './Common/FetchStatus/fetchStatus';
 import useIntialize from './useInitialize';
 import ScheduleManagerDialog from './Components/Dialogs/ScheduleManagerDialog';
 import useModal from './Components/Dialogs/useModal';
+import SlideChangeEvent from './Events/Domain/slideChangeEvent';
+import useEventHandler from './Events/Handlers/useEventHandler';
+import { useLocation } from 'react-router-dom';
 
 const StyledControllerPageContainer = styled.div`
   display: flex;
   flex-direction: row;
   height: 100vh;
+`;
+
+const StyledEventsReceived = styled.div`
+  position: absolute;
+  right: 0;
+  width: 300px;
+  background: red;
+  word-break: break-all;
 `;
 
 const StyledSpinner = styled(Spinner)`
@@ -37,64 +48,34 @@ const StyledSpinner = styled(Spinner)`
 export default function () {
   //todo (sdv) too much going on here
   const [state, dispatch] = useContext(Context);
-  const [scheduleModalOpen, setScheduleModalOpen] = useModal(true);
+  const [scheduleModalOpen, setScheduleModalOpen] = useModal(false);
   const [loadingState] = useIntialize(dispatch);
+  const [raiseEvent] = useEventHandler();
+  const [eventsReceived, setEventsRecieved] = useState([]);
   hotkeyListenter();
 
-  let bc = new BroadcastChannel('test_channel');
-
-  const updateSlideNumber = async (resourceIndex, slideIndex) => {
-    const currentSlide = {
-      resourceIndex: resourceIndex,
-      slideIndex: slideIndex,
-    };
-
-    dispatch({
-      type: 'setActiveResourcePointer',
-      payload: {
-        resourceIndex: resourceIndex,
-        slideIndex: slideIndex,
-      },
-    });
-
-    bc.postMessage(JSON.stringify(currentSlide));
-
-    const activeResource =
-      state.currentSchedule.resources[resourceIndex];
-
-    if (
-      activeResource.resourceType &&
-      activeResource.resourceType.toUpperCase() === 'VIDEO' &&
-      activeResource.filePath
-    ) {
-      changeTab(activeResource.filePath);
+  /** Only open welcome modal if hasn't come to site recently */
+  useEffect(() => {
+    var ONE_HOUR = 60 * 60 * 1000; /* ms */
+    const lastOpened = Date.parse(localStorage.getItem('lastOpened'));
+    if (new Date() - lastOpened > ONE_HOUR) {
+      setScheduleModalOpen(true);
     }
+    localStorage.setItem('lastOpened', new Date().toISOString());
+  }, []);
 
-    if (
-      activeResource.resourceType &&
-      activeResource.resourceType.toUpperCase() === 'SONG'
-    ) {
-      changeTab('/project');
-    }
-  };
-  // todo (Sdv) need a generic name for lyrics
-  // Maybe a different projector view for each type of resource
-  // const activeResource =
-  //   activeResource.lyrics[activeResourcePointer.slideIndex];
-  // };
+  let bc = new BroadcastChannel('worshipAssistApp');
 
   useEffect(() => {
     bc.onmessage = function (ev) {
-      console.log('rece', JSON.stringify(ev.data));
-      const currentSlide = JSON.parse(ev.data);
+      console.log('pn', window.location.pathname);
+      if (window.location.pathname.indexOf('project') === -1) return;
 
-      dispatch({
-        type: 'setActiveResourcePointer',
-        payload: {
-          resourceIndex: currentSlide.resourceIndex,
-          slideIndex: currentSlide.slideIndex,
-        },
-      });
+      const res = JSON.parse(ev.data);
+      res.isExternalEvent = true;
+      raiseEvent(res);
+
+      setEventsRecieved(eventsReceived.concat([res]));
     };
   }, []);
 
@@ -113,6 +94,18 @@ export default function () {
         <ScheduleManagerDialog setOpen={setScheduleModalOpen} />
       )}
       {state.isSearchVisible && <Search />}
+      {!process.env.NODE_ENV ||
+        (process.env.NODE_ENV === 'development' && (
+          <StyledEventsReceived>
+            {eventsReceived.map((e) => (
+              <>
+                {JSON.stringify(e)}
+                {eventsReceived.length}
+                <br />
+              </>
+            ))}
+          </StyledEventsReceived>
+        ))}
       <Router>
         <Switch>
           <Route path="/" exact>
@@ -122,7 +115,7 @@ export default function () {
             <StyledControllerPageContainer>
               <Sidebar />
 
-              <ControllerPage updateSlideNumber={updateSlideNumber} />
+              <ControllerPage />
               {/* <input type="button" onClick={onFocusTab} /> */}
             </StyledControllerPageContainer>
           </Route>

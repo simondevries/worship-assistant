@@ -5,6 +5,8 @@ import styled from 'styled-components/macro';
 import { Button, Icon } from '@blueprintjs/core';
 import { slideWidth } from '../Slides/ActiveSlide/ActiveSongSlide';
 import { sidebarWidth, sidebarMargin } from '../Sidebar/Sidebar';
+import SlideChangeEvent from '../../Events/Domain/slideChangeEvent';
+import useEventHandler from '../../Events/Handlers/useEventHandler';
 
 const StyledAddButton = styled(Button)`
   margin-left: 10px;
@@ -58,6 +60,7 @@ const StyledControllerPage = styled.div`
 
 export default function ({ updateSlideNumber }) {
   const [state, dispatch] = useContext(Context);
+  const [raiseEvent] = useEventHandler();
 
   if (!state || !state.settings || !state.currentSchedule)
     return null;
@@ -66,7 +69,7 @@ export default function ({ updateSlideNumber }) {
     a.index < b.index ? -1 : 1,
   );
   const updateSlideNumberLocal = (rInx) => (sInx) => {
-    updateSlideNumber(rInx, sInx);
+    raiseEvent(new SlideChangeEvent(false, rInx, sInx));
   };
 
   const openSearch = () => {

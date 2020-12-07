@@ -18,7 +18,7 @@ import SearchQuery from './searchQuery';
 import { songsRepo } from '../../Storage/songsRepository';
 import { scheduleRepo } from '../../Storage/scheduleRepository';
 import useEventHandler from '../../Events/Handlers/useEventHandler';
-import SongAddedToSchedule from '../../Events/Domain/songAddedToSchedule';
+import SongAddedToSchedule from '../../Events/Domain/songAddedToScheduleEvent';
 import Video from '../../Interfaces/Video';
 import Image from '../../Interfaces/Image';
 import Song from '../../Interfaces/Song';

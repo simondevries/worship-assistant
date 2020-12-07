@@ -2,13 +2,19 @@ import { songsRepo } from '../../Storage/songsRepository';
 import { useContext } from 'react';
 import AppEvent from '../Domain/appEvent';
 import SongCreatedEvent, {
-  SongCreated,
+  SongCreatedEventName,
 } from '../Domain/songCreatedEvent';
 import { Context } from '../../App';
 import SongAddedToSchedule, {
   SongAddedToScheduleEventName,
-} from '../Domain/songAddedToSchedule';
+} from '../Domain/songAddedToScheduleEvent';
 import SongResourceReference from '../../Interfaces/SongResourceReference';
+import SlideChangeEvent, {
+  SlideChangedEventName,
+} from '../Domain/slideChangeEvent';
+import NewScheduleCreatedEvent, {
+  NewScheduleCreatedEventName,
+} from '../Domain/newScheduleCreatedEvent';
 
 const Channel_Name = 'Controller';
 let bc = new BroadcastChannel('Channel_Name');
@@ -17,23 +23,7 @@ const useAppStateEventProcessors = () => {
   const [state, dispatch] = useContext(Context);
 
   const SongCreatedEventHandler = (event: SongCreatedEvent) => {
-    if (event.eventType !== SongCreated || !event.addToSchedule)
-      return;
-
-    const updatedSchedule = {
-      ...state.currentSchedule,
-      resources: state.currentSchedule.resources.concat({
-        id: event.song.id,
-        index: state.currentSchedule.resources.length,
-        resourceType: 'SONG',
-      } as SongResourceReference),
-      activeSongs: [event.song],
-    };
-
-    dispatch({
-      type: 'setCurrentSchedule',
-      payload: updatedSchedule,
-    });
+    if (event.eventType !== SongCreatedEventName) return;
 
     dispatch({
       type: 'addActiveSong',
@@ -57,9 +47,33 @@ const useAppStateEventProcessors = () => {
     });
   };
 
+  const SlideChangeEventHandler = (event: SlideChangeEvent) => {
+    if (event.eventType !== SlideChangedEventName) return;
+
+    dispatch({
+      type: 'setActiveResourcePointer',
+      payload: {
+        resourceIndex: event.resourceIndex,
+        slideIndex: event.slideIndex,
+      },
+    });
+  };
+
+  const NewScheduleCreatedEventHandler = (
+    event: NewScheduleCreatedEvent,
+  ) => {
+    if (event.eventType !== NewScheduleCreatedEventName) return;
+
+    dispatch({ type: 'setCurrentSchedule', payload: event.schedule });
+
+    dispatch({ type: 'clearActiveSongs' });
+  };
+
   const arr = [
     SongCreatedEventHandler,
     SongAddedToScheduleEventHandler,
+    SlideChangeEventHandler,
+    NewScheduleCreatedEventHandler,
   ];
   return [arr];
 };

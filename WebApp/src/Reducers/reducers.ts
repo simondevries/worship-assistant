@@ -1,4 +1,4 @@
-import { State } from '../Interfaces/State';
+import State from '../Interfaces/State';
 import SongResourceReference from '../Interfaces/SongResourceReference';
 
 function reducers(state: State, action) {
@@ -77,6 +77,15 @@ function reducers(state: State, action) {
         currentSchedule: {
           ...state.currentSchedule,
           activeSongs: songs.concat(action.payload),
+        },
+      };
+
+    case 'clearActiveSongs':
+      return {
+        ...state,
+        currentSchedule: {
+          ...state.currentSchedule,
+          activeSongs: [],
         },
       };
 

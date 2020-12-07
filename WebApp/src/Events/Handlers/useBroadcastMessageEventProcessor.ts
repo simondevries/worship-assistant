@@ -2,26 +2,35 @@ import { songsRepo } from '../../Storage/songsRepository';
 import { useContext } from 'react';
 import AppEvent from '../Domain/appEvent';
 import SongCreatedEvent, {
-  SongCreated,
+  SongCreatedEventName,
 } from '../Domain/songCreatedEvent';
 import { Context } from '../../App';
 import SongAddedToSchedule, {
   SongAddedToScheduleEventName,
-} from '../Domain/songAddedToSchedule';
+} from '../Domain/songAddedToScheduleEvent';
+import SlideChangeEvent, {
+  SlideChangedEventName,
+} from '../Domain/slideChangeEvent';
+import newScheduleCreatedEvent, {
+  NewScheduleCreatedEventName,
+} from '../Domain/newScheduleCreatedEvent';
+import RemoveSongFromScheduleEvent, {
+  RemoveSongFromScheduleEventName,
+} from '../Domain/removeSongFromScheduleEvent';
 
-const Channel_Name = 'Controller';
-let bc = new BroadcastChannel('Channel_Name');
+let bc = new BroadcastChannel('worshipAssistApp');
 
 export default () => {
   const SongCreatedEventHandler = (event: SongCreatedEvent) => {
     if (
-      event.eventType !== SongCreated ||
-      !event.addToSchedule ||
+      event.eventType !== SongCreatedEventName ||
       event.isExternalEvent
     )
       return;
 
-    bc.postMessage(JSON.stringify(event));
+    bc.postMessage(
+      JSON.stringify({ ...event, isExternalEvent: true }),
+    );
   };
 
   const SongAddedToScheduleEventHandler = (
@@ -33,12 +42,76 @@ export default () => {
     )
       return;
 
-    bc.postMessage(JSON.stringify(event));
+    bc.postMessage(
+      JSON.stringify({ ...event, isExternalEvent: true }),
+    );
   };
+
+  const SlideChangeEventHandler = (event: SlideChangeEvent) => {
+    if (
+      event.eventType !== SlideChangedEventName ||
+      event.isExternalEvent
+    )
+      return;
+
+    bc.postMessage(
+      JSON.stringify({ ...event, isExternalEvent: true }),
+    );
+  };
+
+  const NewScheduleCreatedEventHandler = (
+    event: newScheduleCreatedEvent,
+  ) => {
+    if (
+      event.eventType !== NewScheduleCreatedEventName ||
+      event.isExternalEvent
+    )
+      return;
+
+    bc.postMessage(
+      JSON.stringify({ ...event, isExternalEvent: true }),
+    );
+  };
+
+  const RemoveSongFromScheduleEventHandler = (
+    event: RemoveSongFromScheduleEvent,
+  ) => {
+    if (
+      event.eventType !== RemoveSongFromScheduleEventName ||
+      event.isExternalEvent
+    )
+      return;
+    // todo remoev song
+    bc.postMessage(
+      JSON.stringify({ ...event, isExternalEvent: true }),
+    );
+  };
+
+  // Chrome extension
+  // const activeResource =
+  //   state.currentSchedule.resources[resourceIndex];
+
+  // if (
+  //   activeResource.resourceType &&
+  //   activeResource.resourceType.toUpperCase() === 'VIDEO' &&
+  //   activeResource.filePath
+  // ) {
+  //   changeTab(activeResource.filePath);
+  // }
+
+  // if (
+  //   activeResource.resourceType &&
+  //   activeResource.resourceType.toUpperCase() === 'SONG'
+  // ) {
+  //   changeTab('/project');
+  // }
 
   const arr: Function[] = [
     SongCreatedEventHandler,
     SongAddedToScheduleEventHandler,
+    SlideChangeEventHandler,
+    NewScheduleCreatedEventHandler,
+    RemoveSongFromScheduleEventHandler,
   ];
   return [arr];
 };
