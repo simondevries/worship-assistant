@@ -3,7 +3,7 @@ import { Button, Card, Elevation, Icon } from '@blueprintjs/core';
 import styled from 'styled-components/macro';
 import useModal from '../Dialogs/useModal';
 import AddSongDialog from '../Dialogs/AddSongDialog';
-import SettingsDialog from '../Dialogs/SettingsDialog';
+import SlideSettingsDialog from '../Dialogs/SlideSettingsDialog/SlideSettingsDialog';
 import { Context } from '../../App';
 import ScheduleManagerDialog from '../Dialogs/ScheduleManagerDialog';
 
@@ -59,7 +59,9 @@ export default function () {
         <AddSongDialog setAddSongModalOpen={setAddSongModalOpen} />
       )}
       {settingsModalOpen && (
-        <SettingsDialog setSettingsModalOpen={setSettingsModalOpen} />
+        <SlideSettingsDialog 
+        setSettingsModalOpen={setSettingsModalOpen} 
+        activeResourcePointer={state.currentSchedule.activeResourcePointer} />
       )}
       {scheduleModalOpen && (
         <ScheduleManagerDialog setOpen={setScheduleModalOpen} />
