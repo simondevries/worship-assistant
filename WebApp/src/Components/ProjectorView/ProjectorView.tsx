@@ -3,14 +3,15 @@ import styled from 'styled-components/macro';
 import { Context } from '../../App';
 import State from '../../Interfaces/State';
 import SongResourceReference from '../../Interfaces/SongResourceReference';
+import { fileSystemApp } from '../../FileSystem/fileSystemTools';
 
 const StyledProjectorView = styled.div<any>`
   ${(props) => [!props.previewMode ? 'font-size: 100pt;' : '']}
-  background: ${(props) =>props.theme.backgroundColor};
-  color: ${(props) =>props.theme.primary};
-  font-size: ${(props) =>props.theme.fontSize};
+  background: ${(props) => props.theme.backgroundColor};
+  color: ${(props) => props.theme.primary};
+  font-size: ${(props) => props.theme.fontSize};
   height: 100%;
-  text-align: ${(props) =>props.theme.textAlign};
+  text-align: ${(props) => props.theme.textAlign};
 `;
 
 /**
@@ -63,6 +64,44 @@ export default function ({
       {previewMode === true ? errorMessage : null}
       {!errorMessage && activeSlide && activeSlide.content}
       {/* <img src={resources.image}></img> */}
+
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <button
+        onClick={() => {
+          fileSystemApp.openFile();
+        }}
+      >
+        Click me
+      </button>
+
+      <video id="videoPlayer" src="" controls />
     </StyledProjectorView>
   );
 }

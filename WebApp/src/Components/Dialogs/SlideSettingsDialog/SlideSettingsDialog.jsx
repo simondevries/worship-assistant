@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Button, Dialog, Classes } from '@blueprintjs/core';
+import { Button, Dialog, Classes, MenuItem } from '@blueprintjs/core';
 import styled, { ThemeProvider } from 'styled-components';
 import { settingsRepo } from '../../../Storage/settingsRepository';
 import { useForm } from 'react-hook-form';
-import ProjectorView from '../../ProjectorView/ProjectorView'
-import { themes } from './themes'
-
+import ProjectorView from '../../ProjectorView/ProjectorView';
+import { themes, defaultSongTheme } from './themes';
+import { Select } from '@blueprintjs/select';
 
 const StyledInput = styled.input`
   margin-bottom: 10px;
@@ -13,7 +13,7 @@ const StyledInput = styled.input`
 
 const StyledSelect = styled.select`
   margin-bottom: 10px;
-  `;
+`;
 
 const StyledInputsContainer = styled.div`
   display: flex;
@@ -22,10 +22,9 @@ const StyledInputsContainer = styled.div`
 `;
 
 const StyledPreviewContainer = styled.div`
-display: flex;
-width: 100%;
+  display: flex;
+  width: 100%;
 `;
-
 
 // const StyledProjectorView = styled(ProjectorView)`
 //   height: 100%;
@@ -33,15 +32,18 @@ width: 100%;
 
 // `;
 
-
 export default ({ setSettingsModalOpen, activeResourcePointer }) => {
   const { handleSubmit, register, errors, setValue } = useForm();
   const [settings, setSettings] = useState({});
-  const [chosenThemeIndex, setChosenThemeIndex] = useState("0");
-  const handleThemeChange = (event) => {
-    // let themeIndex = Number(event.currentTarget.value);
-    setChosenThemeIndex(event.currentTarget.value);
-  } 
+  const [chosenThemeName, setChosenThemeName] = useState(
+    defaultSongTheme.name,
+  );
+
+  const ThemeSelect = Select.ofType();
+
+  const handleThemeChange = (item) => {
+    console.log({ item });
+  };
 
   useEffect(() => {
     async function fetchData() {
@@ -83,13 +85,30 @@ export default ({ setSettingsModalOpen, activeResourcePointer }) => {
           <div className={Classes.DIALOG_BODY}>
             <StyledBody>
               <StyledInputsContainer>
-                <div className={Classes.SELECT}>
-                  <label for="slidetheme">Slide theme:</label>
-
-                    <StyledSelect value={chosenThemeIndex} name="slidetheme" onChange={handleThemeChange}>
-                      <option value="0">defaultTheme</option>
-                      <option value="1">lightTheme</option>
-                    </StyledSelect>
+                <div>
+                  <ThemeSelect
+                    items={themes}
+                    itemRenderer={(i) => (
+                      <MenuItem text={i.name}></MenuItem>
+                    )}
+                    itemPredicate={(query, item) =>
+                      item.name
+                        .toLowerCase()
+                        .includes(query.toLowerCase())
+                    }
+                    noResults={
+                      <MenuItem disabled={true} text="No results." />
+                    }
+                    // todo (sdv) why this borked
+                    onItemSelect={() => {
+                      console.log('I love chocolate');
+                    }}
+                  >
+                    <Button
+                      text={chosenThemeName}
+                      rightIcon="double-caret-vertical"
+                    />
+                  </ThemeSelect>
                 </div>
                 <StyledInput
                   className={Classes.INPUT}
@@ -106,14 +125,17 @@ export default ({ setSettingsModalOpen, activeResourcePointer }) => {
                 />
               </StyledInputsContainer>
               <StyledPreviewContainer>
-                <ThemeProvider theme={themes[Number(chosenThemeIndex)]}>
+                <ThemeProvider
+                  theme={themes.find(
+                    (theme) => theme.name === chosenThemeName,
+                  )}
+                >
                   <ProjectorView
                     previewMode={true}
                     activeResourcePointer={activeResourcePointer}
                     className={''}
                   />
                 </ThemeProvider>
-              
               </StyledPreviewContainer>
               {/* errors will return when field validation fails  */}
               {errors.exampleRequired && (
