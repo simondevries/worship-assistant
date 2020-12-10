@@ -22,6 +22,8 @@ import SongAddedToSchedule from '../../Events/Domain/songAddedToScheduleEvent';
 import Video from '../../Interfaces/Video';
 import Image from '../../Interfaces/Image';
 import Song from '../../Interfaces/Song';
+import { fileSystemApp } from '../../FileSystem/fileSystemTools';
+import VideoCreatedEvent from '../../Events/Domain/videoCreatedEvent';
 
 const StyledOmnibarContainer = styled.div`
   -webkit-filter: blur(0);
@@ -114,6 +116,11 @@ const Search = () => {
     });
   };
 
+  const addVideo = async () => {
+    const blobUrl = await fileSystemApp.openFile();
+    raiseEvent(new VideoCreatedEvent(false, blobUrl));
+  };
+
   const addResource = async (resource) => {
     // todo (sdv).... ummm.... yuck too much going on here. Forced to do this becuase useReducer dowes not allow async await... maybe use redux oneday?
 
@@ -143,7 +150,7 @@ const Search = () => {
     //   resources: state.currentSchedule.resources.concat({
     //     id: resource.id,
     //     index: state.currentSchedule.resources.length,
-    //     resourceType: 'SONG',
+    //     resourceType:a 'SONG',
     //   }),
     // };
 
@@ -199,16 +206,7 @@ const Search = () => {
             />
           </StyledOmnibarSearchboxContainer>
           <StyledDropdownContainer>
-            <StyledDropdownItem
-              onClick={() =>
-                addResource({
-                  title: 'My south island trip',
-                  filePath:
-                    'file:///C:/Users/simon/Videos/South%20Island.mp4',
-                  resourceType: 'VIDEO',
-                } as Video)
-              }
-            >
+            <StyledDropdownItem onClick={() => addVideo()}>
               🎥 Add Video
             </StyledDropdownItem>
             <StyledDropdownItem

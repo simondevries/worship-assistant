@@ -5,6 +5,8 @@ import State from '../../Interfaces/State';
 import SongResourceReference from '../../Interfaces/SongResourceReference';
 import { fileSystemApp } from '../../FileSystem/fileSystemTools';
 
+const StyledVideo = styled.video``;
+
 const StyledProjectorView = styled.div<any>`
   ${(props) => [!props.previewMode ? 'font-size: 100pt;' : '']}
   background: ${(props) => props.theme.backgroundColor};
@@ -61,47 +63,17 @@ export default function ({
       previewMode={previewMode}
       className={className}
     >
+      <iframe
+        id="ytplayer"
+        title="youtube"
+        width="640"
+        height="360"
+        src="https://www.youtube.com/embed/M7lc1UVf-VE?autoplay=1&origin=http://example.com"
+        frameBorder={0}
+      ></iframe>
       {previewMode === true ? errorMessage : null}
       {!errorMessage && activeSlide && activeSlide.content}
-      {/* <img src={resources.image}></img> */}
-
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <button
-        onClick={() => {
-          fileSystemApp.openFile();
-        }}
-      >
-        Click me
-      </button>
-
-      <video id="videoPlayer" src="" controls />
+      <StyledVideo id="videoPlayer" controls />
     </StyledProjectorView>
   );
 }

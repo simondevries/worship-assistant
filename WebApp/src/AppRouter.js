@@ -53,6 +53,7 @@ export default function () {
   const [loadingState] = useIntialize(dispatch);
   const [raiseEvent] = useEventHandler();
   const [eventsReceived, setEventsRecieved] = useState([]);
+  const [fullScreenVideo, setFullScreenVideo] = useState(false);
   hotkeyListenter();
 
   /** Only open welcome modal if hasn't come to site recently */
@@ -68,15 +69,39 @@ export default function () {
   let bc = new BroadcastChannel('worshipAssistApp');
 
   useEffect(() => {
-    bc.onmessage = function (ev) {
-      console.log('pn', window.location.pathname);
+    bc.onmessage = function (channel) {
       if (window.location.pathname.indexOf('project') === -1) return;
 
-      const res = JSON.parse(ev.data);
-      res.isExternalEvent = true;
-      raiseEvent(res);
+      const event = JSON.parse(channel.data);
+      event.isExternalEvent = true;
+      raiseEvent(event);
 
-      setEventsRecieved(eventsReceived.concat([res]));
+      ///  START TEMPORARY
+
+      if (event.blobUrl) {
+        const videoPlayer = document.getElementById('videoPlayer');
+        videoPlayer.src = event.blobUrl;
+        videoPlayer.play();
+        document.getElementById('videoPlayer').style.display =
+          'block';
+
+        // document.getElementById('videoPlayer').requestFullscreen();
+        // if (videoPlayer.requestFullscreen)
+        // videoPlayer.requestFullscreen();
+        // else if (videoPlayer.webkitRequestFullscreen)
+        //   videoPlayer.webkitRequestFullscreen();
+        // else if (videoPlayer.msRequestFullScreen)
+        //   videoPlayer.msRequestFullScreen();
+      } else {
+        document.getElementById('videoPlayer').style.display = 'none';
+      }
+
+      // const videoPlayer = document.getElementById('videoPlayer');
+      // videoPlayer.src = uzz;
+
+      /// END TEMPORARY
+
+      setEventsRecieved(eventsReceived.concat([event]));
     };
   }, []);
 

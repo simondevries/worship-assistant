@@ -96,7 +96,7 @@ fileSystemApp.openFile = async (fileHandle) => {
   }
   const file = await fileHandle.getFile();
 
-  fileSystemApp.readFile(file, fileHandle);
+  return fileSystemApp.readFile(file, fileHandle);
 };
 
 /**
@@ -107,15 +107,16 @@ fileSystemApp.openFile = async (fileHandle) => {
  */
 fileSystemApp.readFile = async (file, fileHandle) => {
   try {
-    let blob = new Blob([file], { type: 'video/mo4' });
+    let blob = new Blob([file], { type: 'video/avi' });
 
-    const uzz = URL.createObjectURL(blob);
-    console.log('asd', uzz);
+    return URL.createObjectURL(blob);
 
-    const videoPlayer = document.getElementById('videoPlayer');
-    videoPlayer.src = uzz;
+    // console.log('This is the blob url', uzz);
+
+    // const videoPlayer = document.getElementById('videoPlayer');
+    // videoPlayer.src = uzz;
     // fileSystemApp.setText(res);
-    fileSystemApp.setFile(fileHandle || file.name);
+    // fileSystemApp.setFile(fileHandle || file.name);
     // fileSystemApp.setModified(false);
     // fileSystemApp.setFocus(true);
   } catch (ex) {
