@@ -4,7 +4,7 @@ import styled, { ThemeProvider } from 'styled-components';
 import { settingsRepo } from '../../../Storage/settingsRepository';
 import { useForm } from 'react-hook-form';
 import ProjectorView from '../../ProjectorView/ProjectorView';
-import { themes, defaultSongTheme } from './themes';
+import { themes, ITheme, defaultSongTheme } from './themes';
 import { Select } from '@blueprintjs/select';
 
 const StyledInput = styled.input`
@@ -39,10 +39,10 @@ export default ({ setSettingsModalOpen, activeResourcePointer }) => {
     defaultSongTheme.name,
   );
 
-  const ThemeSelect = Select.ofType();
+  const ThemeSelect = Select.ofType<ITheme>();
 
-  const handleThemeChange = (item) => {
-    console.log({ item });
+  const handleThemeChange = (item: ITheme) => {
+    setChosenThemeName(item.name);
   };
 
   useEffect(() => {
@@ -88,8 +88,8 @@ export default ({ setSettingsModalOpen, activeResourcePointer }) => {
                 <div>
                   <ThemeSelect
                     items={themes}
-                    itemRenderer={(i) => (
-                      <MenuItem text={i.name}></MenuItem>
+                    itemRenderer={(i, {handleClick}) => (
+                      <MenuItem text={i.name} onClick={handleClick}></MenuItem>
                     )}
                     itemPredicate={(query, item) =>
                       item.name
@@ -99,10 +99,7 @@ export default ({ setSettingsModalOpen, activeResourcePointer }) => {
                     noResults={
                       <MenuItem disabled={true} text="No results." />
                     }
-                    // todo (sdv) why this borked
-                    onItemSelect={() => {
-                      console.log('I love chocolate');
-                    }}
+                    onItemSelect={handleThemeChange}
                   >
                     <Button
                       text={chosenThemeName}
@@ -126,9 +123,7 @@ export default ({ setSettingsModalOpen, activeResourcePointer }) => {
               </StyledInputsContainer>
               <StyledPreviewContainer>
                 <ThemeProvider
-                  theme={themes.find(
-                    (theme) => theme.name === chosenThemeName,
-                  )}
+                  theme={themes.find((theme) => theme.name === chosenThemeName)}
                 >
                   <ProjectorView
                     previewMode={true}
@@ -149,7 +144,7 @@ export default ({ setSettingsModalOpen, activeResourcePointer }) => {
               <Button
                 icon="floppy-disk"
                 type="submit"
-                intent="Primary"
+                intent="primary"
               >
                 Save
               </Button>
