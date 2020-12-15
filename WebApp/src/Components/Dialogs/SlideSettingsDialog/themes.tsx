@@ -2,6 +2,7 @@ export interface ITheme {
     backgroundColor: string,
     textColor: string,
     primary: string,
+    lineHeight: string,
     textAlign: string,
     fontSize: string,
     name: string,
