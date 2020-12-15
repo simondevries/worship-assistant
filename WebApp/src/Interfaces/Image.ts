@@ -1,5 +1,5 @@
-import Resource from './resource';
-export default interface Image extends Resource {
+import IResource from './resource';
+export default interface IImage extends IResource {
   title: string;
   filePath: string;
 }

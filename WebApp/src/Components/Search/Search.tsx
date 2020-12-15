@@ -19,9 +19,9 @@ import { songsRepo } from '../../Storage/songsRepository';
 import { scheduleRepo } from '../../Storage/scheduleRepository';
 import useEventHandler from '../../Events/Handlers/useEventHandler';
 import SongAddedToSchedule from '../../Events/Domain/songAddedToScheduleEvent';
-import Video from '../../Interfaces/Video';
-import Image from '../../Interfaces/Image';
-import Song from '../../Interfaces/Song';
+import IVideo from '../../Interfaces/Video';
+import IImage from '../../Interfaces/Image';
+import ISong from '../../Interfaces/Song';
 import { fileSystemApp } from '../../FileSystem/fileSystemTools';
 import VideoCreatedEvent from '../../Events/Domain/videoCreatedEvent';
 
@@ -142,7 +142,7 @@ const Search = () => {
     onClose();
   };
 
-  const addSong = async (song: Song) => {
+  const addSong = async (song: ISong) => {
     // todo (sdv).... ummm.... yuck too much going on here. Forced to do this becuase useReducer dowes not allow async await... maybe use redux oneday?
 
     // const updatedSchedule = {
@@ -217,7 +217,7 @@ const Search = () => {
                   filePath:
                     'file:///C:/Users/simon/Pictures/2018/Camera/IMG_20181005_154404.jpg',
                   resourceType: 'IMAGE',
-                } as Image)
+                } as IImage)
               }
             >
               📷 Add Photo

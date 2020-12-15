@@ -1,9 +1,10 @@
-import React, { useContext } from 'react';
-import styled from 'styled-components/macro';
+import React, { useContext, useState } from 'react';
+import styled, { ThemeProvider } from 'styled-components/macro';
 import { Context } from '../../App';
-import State from '../../Interfaces/State';
-import SongResourceReference from '../../Interfaces/SongResourceReference';
+import IState from '../../Interfaces/State';
+import ISongResourceReference from '../../Interfaces/SongResourceReference';
 import { fileSystemApp } from '../../FileSystem/fileSystemTools';
+import { defaultSongTheme } from '../../Interfaces/themes';
 
 const StyledVideo = styled.video``;
 
@@ -24,7 +25,7 @@ export default function ({
   previewMode,
   className,
 }) {
-  const [state] = useContext<Array<State>>(Context);
+  const [state] = useContext<Array<IState>>(Context);
   if (!state || !state.currentSchedule) return null;
 
   const resourceReference =
@@ -45,7 +46,7 @@ export default function ({
       !resourceReference ? 'unknown ' : resourceReference.resourceType
     } is not supported yet`;
 
-  const songReference = resourceReference as SongResourceReference;
+  const songReference = resourceReference as ISongResourceReference;
 
   const activeResource =
     state &&
@@ -56,24 +57,27 @@ export default function ({
 
   const activeSlide =
     activeResource &&
+    activeResource.theme &&
     activeResource.lyrics[activeResourcePointer.slideIndex];
 
   return (
-    <StyledProjectorView
-      previewMode={previewMode}
-      className={className}
-    >
-      {/* <iframe
-        id="ytplayer"
-        title="youtube"
-        width="640"
-        height="360"
-        src="https://www.youtube.com/embed/M7lc1UVf-VE?autoplay=1&origin=http://example.com"
-        frameBorder={0}
-      ></iframe> */}
-      {previewMode === true ? errorMessage : null}
-      {!errorMessage && activeSlide && activeSlide.content}
-      {/* <StyledVideo id="videoPlayer" controls /> */}
-    </StyledProjectorView>
+    <ThemeProvider theme={activeResource && activeResource.theme || defaultSongTheme}>
+      <StyledProjectorView
+        previewMode={previewMode}
+        className={className}
+      >
+        {/* <iframe
+          id="ytplayer"
+          title="youtube"
+          width="640"
+          height="360"
+          src="https://www.youtube.com/embed/M7lc1UVf-VE?autoplay=1&origin=http://example.com"
+          frameBorder={0}
+        ></iframe> */}
+        {previewMode === true ? errorMessage : null}
+        {!errorMessage && activeSlide && activeSlide.content}
+        {/* <StyledVideo id="videoPlayer" controls /> */}
+      </StyledProjectorView>
+    </ThemeProvider>
   );
 }

@@ -1,6 +1,6 @@
-import ResourceReference from './ResourceReference';
+import IResourceReference from './ResourceReference';
 
-export default interface SongResourceReference
-  extends ResourceReference {
+export default interface ISongResourceReference
+  extends IResourceReference {
   id: string;
 }

@@ -4,7 +4,7 @@ import styled, { ThemeProvider } from 'styled-components';
 import { settingsRepo } from '../../../Storage/settingsRepository';
 import { useForm } from 'react-hook-form';
 import ProjectorView from '../../ProjectorView/ProjectorView';
-import { themes, ITheme, defaultSongTheme } from './themes';
+import { themes, ITheme, defaultSongTheme } from '../../../Interfaces/themes';
 import { Select } from '@blueprintjs/select';
 
 const StyledInput = styled.input`
@@ -122,15 +122,15 @@ export default ({ setSettingsModalOpen, activeResourcePointer }) => {
                 />
               </StyledInputsContainer>
               <StyledPreviewContainer>
-                <ThemeProvider
+                {/* <ThemeProvider
                   theme={themes.find((theme) => theme.name === chosenThemeName)}
-                >
+                > */}
                   <ProjectorView
                     previewMode={true}
                     activeResourcePointer={activeResourcePointer}
                     className={''}
                   />
-                </ThemeProvider>
+                {/* </ThemeProvider> */}
               </StyledPreviewContainer>
               {/* errors will return when field validation fails  */}
               {errors.exampleRequired && (

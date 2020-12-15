@@ -1,11 +1,11 @@
-import Song from './Song';
-import ResourceReference from './ResourceReference';
+import ISong from './Song';
+import IResourceReference from './ResourceReference';
 
-export default interface Schedule {
+export default interface ISchedule {
   id: string;
   date: string;
   activeResourcePointer: any;
-  resources: ResourceReference[];
-  activeSongs: Song[];
+  resources: IResourceReference[];
+  activeSongs: ISong[];
   title: string;
 }

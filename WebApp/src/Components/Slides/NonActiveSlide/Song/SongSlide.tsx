@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Card, Elevation, H5 } from '@blueprintjs/core';
 import styled from 'styled-components/macro';
-import Verse from '../../../../Interfaces/Verse';
+import IVerse from '../../../../Interfaces/Verse';
 
 const StyledCard = styled(Card)`
   width: 300px;
@@ -10,7 +10,7 @@ const StyledCard = styled(Card)`
 `;
 
 interface Props {
-  verse: Verse;
+  verse: IVerse;
   onClick: any;
   slideIndex: number;
   resourceIndex: number;

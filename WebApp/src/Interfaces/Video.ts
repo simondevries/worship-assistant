@@ -1,5 +1,5 @@
-import Resource from './resource';
-export default interface Video extends Resource {
+import IResource from './resource';
+export default interface IVideo extends IResource {
   title: string;
   filePath: string;
 }
