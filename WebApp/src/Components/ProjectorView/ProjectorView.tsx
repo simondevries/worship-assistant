@@ -63,14 +63,14 @@ export default function ({
       previewMode={previewMode}
       className={className}
     >
-      <iframe
+      {/* <iframe
         id="ytplayer"
         title="youtube"
         width="640"
         height="360"
         src="https://www.youtube.com/embed/M7lc1UVf-VE?autoplay=1&origin=http://example.com"
         frameBorder={0}
-      ></iframe>
+      ></iframe> */}
       {previewMode === true ? errorMessage : null}
       {!errorMessage && activeSlide && activeSlide.content}
       <StyledVideo id="videoPlayer" controls />
