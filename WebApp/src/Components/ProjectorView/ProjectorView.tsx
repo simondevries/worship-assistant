@@ -61,7 +61,8 @@ export default function ({
     activeResource.lyrics[activeResourcePointer.slideIndex];
 
   return (
-    <ThemeProvider theme={activeResource && activeResource.theme || defaultSongTheme}>
+    <ThemeProvider theme={
+      (activeResource && activeResource.theme) ? activeResource.theme: defaultSongTheme}>
       <StyledProjectorView
         previewMode={previewMode}
         className={className}
