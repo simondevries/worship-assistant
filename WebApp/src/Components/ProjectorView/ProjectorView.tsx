@@ -73,7 +73,7 @@ export default function ({
       ></iframe> */}
       {previewMode === true ? errorMessage : null}
       {!errorMessage && activeSlide && activeSlide.content}
-      <StyledVideo id="videoPlayer" controls />
+      {/* <StyledVideo id="videoPlayer" controls /> */}
     </StyledProjectorView>
   );
 }
