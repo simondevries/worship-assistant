@@ -1,5 +1,5 @@
 import AppEvent from './appEvent';
-import Song from '../../Interfaces/Song';
+import ISong from '../../Interfaces/Song';
 
 export const RemoveSongFromScheduleEventName =
   'removeSongFromScheduleEventName';

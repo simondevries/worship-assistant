@@ -4,7 +4,7 @@ import styled from 'styled-components/macro';
 import SongSlide from './SongSlide';
 import ActiveSlide from '../../ActiveSlide/ActiveSongSlide';
 import { Context } from '../../../../App';
-import State from '../../../../Interfaces/State';
+import IState from '../../../../Interfaces/State';
 
 const StyledSongSlide = styled(SongSlide)`
   width: 300px;
@@ -18,7 +18,7 @@ export default function ({
   updateSlideNumber,
   activeResourcePointer,
 }) {
-  const [state]: Array<State> = useContext(Context);
+  const [state]: Array<IState> = useContext(Context);
   if (
     !(
       state &&

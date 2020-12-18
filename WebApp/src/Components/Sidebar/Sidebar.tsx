@@ -6,7 +6,7 @@ import AddSongDialog from '../Dialogs/AddSongDialog';
 import SlideSettingsDialog from '../Dialogs/SlideSettingsDialog/SlideSettingsDialog';
 import { Context } from '../../App';
 import ScheduleManagerDialog from '../Dialogs/ScheduleManagerDialog';
-import State from '../../Interfaces/State';
+import IState from '../../Interfaces/State';
 
 export const sidebarWidth = 70;
 export const sidebarMargin = 15;
@@ -45,7 +45,7 @@ export default function () {
   const [addSongModalOpen, setAddSongModalOpen] = useModal();
   const [settingsModalOpen, setSettingsModalOpen] = useModal();
   const [scheduleModalOpen, setScheduleModalOpen] = useModal(false);
-  const [state, dispatch] = useContext<Array<State>>(Context);
+  const [state, dispatch] = useContext<Array<IState>>(Context);
 
   const setScheduleModalOpenHacks = setScheduleModalOpen as Function;
   const setSettingsModalOpenHacks = setSettingsModalOpen as Function;

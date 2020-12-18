@@ -1,3 +1,5 @@
+import { ISettings } from '../Interfaces/Settings';
+import { defaultSongTheme } from '../Interfaces/themes';
 import { getAller, getByKeyer, setter, deleter, adder } from './Repository'
 
 const commonRepositoryBehaviour = self => Object.assign(
@@ -23,13 +25,14 @@ function settingsRepository(objectStoreType, permissions){
         const nSettings = {
           ...settings,
           currentScheduleId: currentScheduleId,
-        };
+          globalSlideTheme: defaultSongTheme,
+        } as ISettings;
         await _setter.set(nSettings, 'settings'); //todo (wp) not sure we want key to be just 'settings' 
       },
 
       get: function () {
         let _getter = Object.create(getByKeyer(self));
-        return _getter.getByKey('settings'); //todo (wp) not sure we want key to be just 'settings'
+        return _getter.getByKey('settings') || {}; //todo (wp) not sure we want key to be just 'settings'
       }
     })
     return Object.assign(

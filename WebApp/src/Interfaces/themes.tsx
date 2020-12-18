@@ -18,7 +18,7 @@ export const defaultSongTheme = {
   name: 'Default',
 };
 
-const lightSongTheme = {
+export const lightSongTheme = {
   backgroundColor: '#e0e0e0',
   textColor: '#000000',
   primary: '#333333',

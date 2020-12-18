@@ -1,7 +1,7 @@
-import Verse from './Verse';
-import Song from './Song';
+import IVerse from './Verse';
+import ISong from './Song';
 
-export default interface ResourceReference {
+export default interface IResourceReference {
   index: number;
   resourceType: string;
 }

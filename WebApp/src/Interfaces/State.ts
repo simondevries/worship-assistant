@@ -1,7 +1,7 @@
-import Schedule from './Schedule';
-import { Settings } from './Settings';
+import ISchedule from './Schedule';
+import { ISettings } from './Settings';
 
-export default interface State {
-  currentSchedule: Schedule;
-  settings: Settings;
+export default interface IState {
+  currentSchedule: ISchedule;
+  settings: ISettings;
 }
