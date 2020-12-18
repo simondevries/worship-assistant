@@ -1,15 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Button, Dialog, Classes, MenuItem, Menu } from '@blueprintjs/core';
-import styled from 'styled-components';
+import { Button, Dialog, Classes, MenuItem } from '@blueprintjs/core';
+import styled, { ThemeProvider } from 'styled-components';
 import { settingsRepo } from '../../../Storage/settingsRepository';
-import { songsRepo } from '../../../Storage/songsRepository';
 import { useForm } from 'react-hook-form';
 import ProjectorView from '../../ProjectorView/ProjectorView';
-import { themes, ITheme, defaultSongTheme } from '../../../Interfaces/themes';
-import { ItemListRenderer, ItemRenderer, Select } from '@blueprintjs/select';
-import IState from '../../../Interfaces/State';
-import { Context } from '../../../App';
-import ISongResourceReference from '../../../Interfaces/SongResourceReference';
+import { themes, ITheme, defaultSongTheme } from './themes';
+import { Select } from '@blueprintjs/select';
 
 const StyledInput = styled.input`
   margin-bottom: 10px;
@@ -30,91 +26,30 @@ const StyledPreviewContainer = styled.div`
   width: 100%;
 `;
 
+// const StyledProjectorView = styled(ProjectorView)`
+//   height: 100%;
+//   width: 100%;
+
+// `;
+
 export default ({ setSettingsModalOpen, activeResourcePointer }) => {
-  const [state] = useContext<Array<IState>>(Context);
-  if (!state || !state.currentSchedule) return null;
-
-  const resourceReference =
-    state &&
-    state.currentSchedule &&
-    state.currentSchedule.resources.find(
-      (r) => r.index === activeResourcePointer.resourceIndex,
-    );
-
-  const songReference = resourceReference as ISongResourceReference;
-
-  const activeResource =
-    state &&
-    state.currentSchedule &&
-    state.currentSchedule.activeSongs.find(
-      (s) => s.id === songReference.id,
-    );
   const { handleSubmit, register, errors, setValue } = useForm();
-  const [settings, setSettings] = useState(settingsRepo.get());
-  const oldSettings = settings;
-  const [chosenTheme, setChosenTheme] = useState(
-    (activeResource && activeResource.theme)? activeResource.theme: defaultSongTheme,
+  const [settings, setSettings] = useState({});
+  const [chosenThemeName, setChosenThemeName] = useState(
+    defaultSongTheme.name,
   );
 
   const ThemeSelect = Select.ofType<ITheme>();
 
-  const renderThemeMenu: ItemListRenderer<ITheme> = ({ items, itemsParentRef, query, renderItem }) => {
-    const renderedItems = items.map(renderItem).filter(item => item != null);
-    return (
-        <Menu ulRef={itemsParentRef}>
-            {renderedItems}
-        </Menu>
-    );
-  };
-
-  const renderThemeItem: ItemRenderer<ITheme> = (theme, { handleClick, modifiers }) => {
-    if (!modifiers.matchesPredicate) {
-      return null;
-    }
-    return (
-      <MenuItem
-        active={modifiers.active}
-        text={theme.name}
-        onClick={handleClick}
-      />
-    );
-  };
-
   const handleThemeChange = (item: ITheme) => {
-    setValue("blueprintSelect", item)
-    setChosenTheme(item);
-    if (activeResource && activeResource.theme) {
-      activeResource.theme = item;
-    } else {
-      throw Error('activeResource is undefined!')
-    }
+    setChosenThemeName(item.name);
   };
-
-  const handleClose = () => {
-    setSettings(oldSettings);
-    setSettingsModalOpen(false)
-  }
-
-  const handleSave = () => {
-    // setSettingsModalOpen(false);
-    // const newSetting = {
-    //   ...settings,
-    //   ...values,
-    // };
-
-    // settingsRepo.set(newSetting);
-    // setSettings(newSetting);
-  };
-
-  useEffect(() => {
-    register({ name: "blueprintSelect" });
-  },[register]);
 
   useEffect(() => {
     async function fetchData() {
       const res = await settingsRepo.get();
-      setValue('fontSize', res.globalSlideTheme.fontSize);
-      setValue('textAlign', res.globalSlideTheme.textAlign);
+      setValue('fontSize', res.fontSize);
+      setValue('textAlign', res.textAlign);
       settingsRepo.set(res);
       setSettings(res);
     }
@@ -153,8 +88,9 @@ export default ({ setSettingsModalOpen, activeResourcePointer }) => {
                 <div>
                   <ThemeSelect
                     items={themes}
-                    itemRenderer={renderThemeItem}
-                    itemListRenderer={renderThemeMenu}
+                    itemRenderer={(i, {handleClick}) => (
+                      <MenuItem text={i.name} onClick={handleClick}></MenuItem>
+                    )}
                     itemPredicate={(query, item) =>
                       item.name
                         .toLowerCase()
@@ -166,7 +102,7 @@ export default ({ setSettingsModalOpen, activeResourcePointer }) => {
                     onItemSelect={handleThemeChange}
                   >
                     <Button
-                      text={chosenTheme.name}
+                      text={chosenThemeName}
                       rightIcon="double-caret-vertical"
                     />
                   </ThemeSelect>
@@ -186,11 +122,15 @@ export default ({ setSettingsModalOpen, activeResourcePointer }) => {
                 />
               </StyledInputsContainer>
               <StyledPreviewContainer>
-                <ProjectorView
-                  previewMode={true}
-                  activeResourcePointer={activeResourcePointer}
-                  className={''}
-                />
+                <ThemeProvider
+                  theme={themes.find((theme) => theme.name === chosenThemeName)}
+                >
+                  <ProjectorView
+                    previewMode={true}
+                    activeResourcePointer={activeResourcePointer}
+                    className={''}
+                  />
+                </ThemeProvider>
               </StyledPreviewContainer>
               {/* errors will return when field validation fails  */}
               {errors.exampleRequired && (
@@ -198,14 +138,13 @@ export default ({ setSettingsModalOpen, activeResourcePointer }) => {
               )}
             </StyledBody>
             <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-              <Button onClick={handleClose}>
+              <Button onClick={() => setSettingsModalOpen(false)}>
                 Close
               </Button>
               <Button
                 icon="floppy-disk"
                 type="submit"
                 intent="primary"
-                onClick={handleSubmit(onSubmit)}
               >
                 Save
               </Button>

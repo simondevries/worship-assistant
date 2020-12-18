@@ -60,7 +60,6 @@ export default function ({
 
   const activeSlide =
     activeResource &&
-    activeResource.theme &&
     activeResource.lyrics[activeResourcePointer.slideIndex];
 
   return (
