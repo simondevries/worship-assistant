@@ -31,7 +31,7 @@ export default function ({
     state &&
     state.currentSchedule &&
     state.currentSchedule.resources.find(
-      (r) => r.index === activeResourcePointer.resourceIndex,
+      (r) => r.id === activeResourcePointer.resourceId,
     );
 
   // todo (Sdv) need a generic name for lyrics

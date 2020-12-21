@@ -63,7 +63,7 @@ function useIntialize(dispatch) {
         ...currentSchedule,
         activeResourcePointer: {
           slideIndex: 0,
-          resourceIndex: 0,
+          resourceId: null,
         },
         resources: currentSchedule.resources,
         activeSongs: activeSongs,

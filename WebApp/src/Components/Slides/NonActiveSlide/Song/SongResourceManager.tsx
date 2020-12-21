@@ -5,6 +5,8 @@ import SongSlide from './SongSlide';
 import ActiveSlide from '../../ActiveSlide/ActiveSongSlide';
 import { Context } from '../../../../App';
 import State from '../../../../Interfaces/State';
+import ActiveResourcePointer from '../../../../Interfaces/ActiveResourcePointer';
+import Resource from '../../../../Interfaces/resource';
 
 const StyledSongSlide = styled(SongSlide)`
   width: 300px;
@@ -12,12 +14,19 @@ const StyledSongSlide = styled(SongSlide)`
   margin-bottom: 10px;
 `;
 
+interface Props {
+  activeResourcePointer: ActiveResourcePointer;
+  isActiveResource: boolean;
+  updateSlideNumber: Function;
+  resource: Resource;
+}
+
 export default function ({
-  resourceIndex,
+  isActiveResource,
   resource,
   updateSlideNumber,
   activeResourcePointer,
-}) {
+}: Props) {
   const [state]: Array<State> = useContext(Context);
   if (
     !(
@@ -27,8 +36,9 @@ export default function ({
     )
   )
     return null;
+
   const song = state.currentSchedule.activeSongs.find(
-    (s) => s.id === resource.id,
+    (s) => s && resource && s.id === resource.id,
   );
 
   if (!song)
@@ -39,7 +49,7 @@ export default function ({
     // todo (Sdv) make generic for all slides
 
     const element = document.getElementById(
-      'slide' + slideIndex + 'resource' + resourceIndex,
+      'slide' + slideIndex + 'resource' + resource.id,
     );
     if (element) {
       element.scrollIntoView({
@@ -58,17 +68,17 @@ export default function ({
         song.lyrics &&
         song.lyrics.map((verse, slideIndex) => {
           if (
-            slideIndex === activeResourcePointer.slideIndex &&
-            resourceIndex === activeResourcePointer.resourceIndex
+            isActiveResource &&
+            slideIndex === activeResourcePointer.slideIndex
           ) {
             return <ActiveSlide />;
           } else {
             return (
               <StyledSongSlide
                 slideIndex={slideIndex}
-                resourceIndex={resourceIndex}
                 onClick={() => onSlideClick(slideIndex)}
                 verse={verse}
+                resourceId={resource.id}
               />
             );
           }

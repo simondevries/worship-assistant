@@ -9,6 +9,7 @@ import { settingsRepo } from '../../Storage/settingsRepository';
 import NewId from '../../Helpers/newId';
 import useEventHandler from '../../Events/Handlers/useEventHandler';
 import NewScheduleCreatedEvent from '../../Events/Domain/newScheduleCreatedEvent';
+import { empty as emptyResource } from '../../Interfaces/Schedule';
 
 const StyledDateInput = styled(DateInput)`
   margin-left: 30px;
@@ -79,19 +80,12 @@ export default ({ setOpen }) => {
   `;
 
   const addSchedule = () => {
-    const newSched = {
-      id: NewId(),
-      resources: [],
-      date: new Date(),
-      title: scheduleTitle,
-      activeResourcePointer: {
-        slideIndex: 0,
-        resourceIndex: 0,
-      },
-      activeSongs: [],
-    };
-
-    raiseEvent(new NewScheduleCreatedEvent(false, newSched));
+    raiseEvent(
+      new NewScheduleCreatedEvent(
+        false,
+        emptyResource(scheduleTitle),
+      ),
+    );
 
     onClose();
   };

@@ -62,7 +62,7 @@ const useIndexDbEventProcessor = () => {
       event.isExternalEvent
     )
       return;
-
+    console.log('event.schedule', event.schedule.id);
     scheduleRepo.add(event.schedule, event.schedule.id);
 
     settingsRepo.setCurrentService(event.schedule.id);

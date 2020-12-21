@@ -13,18 +13,18 @@ interface Props {
   verse: Verse;
   onClick: any;
   slideIndex: number;
-  resourceIndex: number;
+  resourceId: string;
 }
 
 export default function ({
   verse,
   onClick,
   slideIndex,
-  resourceIndex,
+  resourceId,
 }: Props) {
   return (
     <StyledCard
-      id={`slide${slideIndex}resource${resourceIndex}`}
+      id={`slide${slideIndex}resource${resourceId}`}
       onClick={onClick}
       interactive={true}
       elevation={Elevation.TWO}

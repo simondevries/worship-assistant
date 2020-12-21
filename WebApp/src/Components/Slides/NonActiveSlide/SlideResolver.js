@@ -7,27 +7,26 @@ import ImageResourceManager from './Image/ImageResourceManager';
 
 export default function ({
   resource,
-  resourceIndex,
+  isActiveResource,
   updateSlideNumber,
   activeResourcePointer,
 }) {
-  const isActive =
-    resourceIndex === activeResourcePointer.resourceIndex;
-
   switch (resource.resourceType) {
     case 'SONG':
       return (
         <SongResourceManager
           resource={resource}
-          resourceIndex={resourceIndex}
+          isActiveResource={isActiveResource}
           updateSlideNumber={updateSlideNumber}
           activeResourcePointer={activeResourcePointer}
         />
       );
+    case 'BIBLEVERSE':
+      return <div>BIBLE VERSE</div>;
     case 'VIDEO':
       return (
         <VideoResourceManager
-          isActive={isActive}
+          isActive={isActiveResource}
           resource={resource}
           updateSlideNumber={updateSlideNumber}
         />
@@ -35,7 +34,7 @@ export default function ({
     case 'IMAGE':
       return (
         <ImageResourceManager
-          isActive={isActive}
+          isActive={isActiveResource}
           resource={resource}
           updateSlideNumber={updateSlideNumber}
         />
