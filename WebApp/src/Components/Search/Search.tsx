@@ -24,6 +24,10 @@ import Image from '../../Interfaces/Image';
 import Song from '../../Interfaces/Song';
 import { fileSystemApp } from '../../FileSystem/fileSystemTools';
 import VideoCreatedEvent from '../../Events/Domain/videoCreatedEvent';
+import { initNewBibleVerse } from '../../Interfaces/BibleVerse';
+import BibleVerseAddedToScheduleEvent from '../../Events/Domain/bibleVerseAddedToScheduleEvent';
+import { isValidBibleVerse } from '../../BibleVerse/utils';
+import newId from '../../Helpers/newId';
 
 const StyledOmnibarContainer = styled.div`
   -webkit-filter: blur(0);
@@ -107,7 +111,7 @@ const Search = () => {
   const [state, dispatch] = useContext(Context);
   const [raiseEvent] = useEventHandler();
 
-  const searchbox = useRef(null);
+  const searchbox = useRef<HTMLInputElement>(null);
 
   const onClose = () => {
     dispatch({
@@ -121,46 +125,29 @@ const Search = () => {
     raiseEvent(new VideoCreatedEvent(false, blobUrl));
   };
 
-  const addResource = async (resource) => {
-    // todo (sdv).... ummm.... yuck too much going on here. Forced to do this becuase useReducer dowes not allow async await... maybe use redux oneday?
+  const addBibleVerse = async () => {
+    if (!searchbox)
+      alert('Please enter a bible verse in the format John 3:16');
 
-    const updatedSchedule = {
-      ...state.currentSchedule,
-      resources: state.currentSchedule.resources.concat({
-        id: resource.id,
-        index: state.currentSchedule.resources.length,
-      }),
-    };
+    const book = searchValue.split(' ')[0];
+    const chapter = searchValue.split(' ')[1].split(':')[0];
+    const verse = searchValue.split(' ')[1].split(':')[1];
 
-    dispatch({
-      type: 'setCurrentSchedule',
-      payload: updatedSchedule,
-    });
+    const bibleVerse = initNewBibleVerse(
+      newId(),
+      book,
+      chapter,
+      verse,
+      'kjv',
+      'bible-api.com',
+    );
 
-    await scheduleRepo.set(updatedSchedule, state.currentSchedule.id);
+    raiseEvent(new BibleVerseAddedToScheduleEvent(false, bibleVerse));
 
     onClose();
   };
 
   const addSong = async (song: Song) => {
-    // todo (sdv).... ummm.... yuck too much going on here. Forced to do this becuase useReducer dowes not allow async await... maybe use redux oneday?
-
-    // const updatedSchedule = {
-    //   ...state.currentSchedule,
-    //   resources: state.currentSchedule.resources.concat({
-    //     id: resource.id,
-    //     index: state.currentSchedule.resources.length,
-    //     resourceType:a 'SONG',
-    //   }),
-    // };
-
-    // dispatch({
-    //   type: 'setCurrentSchedule',
-    //   payload: updatedSchedule,
-    // });
-
-    // await scheduleRepo.set(updatedSchedule, state.currentSchedule.id);
-
     raiseEvent(
       new SongAddedToSchedule(
         state.currentSchedule.resources.length,
@@ -173,7 +160,13 @@ const Search = () => {
   };
 
   useEffect(() => {
-    // searchbox.current.focus();
+    if (
+      searchbox != null &&
+      searchbox.current !== null &&
+      searchbox.current.focus !== null
+    ) {
+      searchbox.current.focus();
+    }
     async function loadAllSongs() {
       const songs = await songsRepo.getAll();
       setAllSongs(songs);
@@ -184,32 +177,39 @@ const Search = () => {
   const searchResult = SearchQuery(searchValue, allSongs);
   return (
     <>
-      <StyledBackdrop onClick={onClose}>
-        <StyledOmnibarContainer>
-          <StyledOmnibarSearchboxContainer>
-            {/* <span class="bp3-icon bp3-icon-search"></span> */}
-            <StyledSearchIcon
-              icon="search"
-              color="#5c7080"
-              iconSize={16}
-            />
-            <StyledInput
-              type="text"
-              placeholder="Add resource... (use '/' to open)"
-              ref={searchbox}
-              onChange={(e) => setSearchValue(e.target.value)}
-              value={searchValue}
-            />
-            <StyledRightArrowIcon
-              icon="arrow-right"
-              color="#5c7080"
-            />
-          </StyledOmnibarSearchboxContainer>
-          <StyledDropdownContainer>
-            <StyledDropdownItem onClick={() => addVideo()}>
-              🎥 Add Video
-            </StyledDropdownItem>
-            <StyledDropdownItem
+      <StyledBackdrop onClick={onClose} />
+      <StyledOmnibarContainer>
+        <StyledOmnibarSearchboxContainer>
+          {/* <span class="bp3-icon bp3-icon-search"></span> */}
+          <StyledSearchIcon
+            icon="search"
+            color="#5c7080"
+            iconSize={16}
+          />
+          <StyledInput
+            type="text"
+            placeholder="Add resource... (use '/' to open)"
+            ref={searchbox}
+            onChange={(e) => setSearchValue(e.target.value)}
+            value={searchValue}
+          />
+          <StyledRightArrowIcon icon="arrow-right" color="#5c7080" />
+        </StyledOmnibarSearchboxContainer>
+        <StyledDropdownContainer>
+          <StyledDropdownItem onClick={() => addVideo()}>
+            🎥 Add Video
+          </StyledDropdownItem>
+          {!searchValue ||
+            searchValue === '' ||
+            (isValidBibleVerse(searchValue) && (
+              <StyledDropdownItem onClick={() => addBibleVerse()}>
+                🎥 Add Bible Verse
+              </StyledDropdownItem>
+            ))}
+          <StyledDropdownItem onClick={() => alert('todo')}>
+            🎥 Add Image
+          </StyledDropdownItem>
+          {/* <StyledDropdownItem
               onClick={() =>
                 addResource({
                   title:
@@ -221,22 +221,19 @@ const Search = () => {
               }
             >
               📷 Add Photo
-            </StyledDropdownItem>
+            </StyledDropdownItem> */}
 
-            {searchResult &&
-              searchResult.map((resource) => {
-                return (
-                  <StyledDropdownItem
-                    onClick={() => addSong(resource)}
-                  >
-                    {resource.properties.title}
-                  </StyledDropdownItem>
-                );
-              })}
-          </StyledDropdownContainer>
-          {/* <button class="bp3-button bp3-minimal bp3-intent-primary bp3-icon-arrow-right"></button> */}
-        </StyledOmnibarContainer>
-      </StyledBackdrop>
+          {searchResult &&
+            searchResult.map((resource) => {
+              return (
+                <StyledDropdownItem onClick={() => addSong(resource)}>
+                  {resource.properties.title}
+                </StyledDropdownItem>
+              );
+            })}
+        </StyledDropdownContainer>
+        {/* <button class="bp3-button bp3-minimal bp3-intent-primary bp3-icon-arrow-right"></button> */}
+      </StyledOmnibarContainer>
     </>
   );
 };

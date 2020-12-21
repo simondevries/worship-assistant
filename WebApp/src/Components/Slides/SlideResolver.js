@@ -1,14 +1,14 @@
 import React from 'react';
 import { Button, Card, Elevation } from '@blueprintjs/core';
 import styled from 'styled-components/macro';
-import SongResourceManager from './Song/SongResourceManager';
-import VideoResourceManager from './Video/VideoResourceManager';
-import ImageResourceManager from './Image/ImageResourceManager';
+import SongResourceManager from './SongResourceManager';
+import VideoResourceManager from './NonActiveSlide/Video/VideoResourceManager';
+import ImageResourceManager from './NonActiveSlide/Image/ImageResourceManager';
+import BibleVerseResourceManager from './BibleVerseResourceManager';
 
 export default function ({
   resource,
   isActiveResource,
-  updateSlideNumber,
   activeResourcePointer,
 }) {
   switch (resource.resourceType) {
@@ -17,18 +17,22 @@ export default function ({
         <SongResourceManager
           resource={resource}
           isActiveResource={isActiveResource}
-          updateSlideNumber={updateSlideNumber}
           activeResourcePointer={activeResourcePointer}
         />
       );
     case 'BIBLEVERSE':
-      return <div>BIBLE VERSE</div>;
+      return (
+        <BibleVerseResourceManager
+          resource={resource}
+          isActiveResource={isActiveResource}
+          activeResourcePointer={activeResourcePointer}
+        />
+      );
     case 'VIDEO':
       return (
         <VideoResourceManager
           isActive={isActiveResource}
           resource={resource}
-          updateSlideNumber={updateSlideNumber}
         />
       );
     case 'IMAGE':
@@ -36,7 +40,6 @@ export default function ({
         <ImageResourceManager
           isActive={isActiveResource}
           resource={resource}
-          updateSlideNumber={updateSlideNumber}
         />
       );
     default:

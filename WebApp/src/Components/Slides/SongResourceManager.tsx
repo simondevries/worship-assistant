@@ -1,18 +1,10 @@
 import React, { useContext } from 'react';
-import { Button, Card, Elevation } from '@blueprintjs/core';
-import styled from 'styled-components/macro';
-import SongSlide from './SongSlide';
-import ActiveSlide from '../../ActiveSlide/ActiveSongSlide';
-import { Context } from '../../../../App';
-import State from '../../../../Interfaces/State';
-import ActiveResourcePointer from '../../../../Interfaces/ActiveResourcePointer';
-import Resource from '../../../../Interfaces/resource';
-
-const StyledSongSlide = styled(SongSlide)`
-  width: 300px;
-  height: 200px;
-  margin-bottom: 10px;
-`;
+import NonActiveSongSlide from './NonActiveSlide/Song/SongSlide';
+import { Context } from '../../App';
+import State from '../../Interfaces/State';
+import ActiveResourcePointer from '../../Interfaces/ActiveResourcePointer';
+import Resource from '../../Interfaces/resource';
+import ActiveSongSlide from './ActiveSlide/ActiveSongSlide';
 
 interface Props {
   activeResourcePointer: ActiveResourcePointer;
@@ -71,10 +63,10 @@ export default function ({
             isActiveResource &&
             slideIndex === activeResourcePointer.slideIndex
           ) {
-            return <ActiveSlide />;
+            return <ActiveSongSlide />;
           } else {
             return (
-              <StyledSongSlide
+              <NonActiveSongSlide
                 slideIndex={slideIndex}
                 onClick={() => onSlideClick(slideIndex)}
                 verse={verse}

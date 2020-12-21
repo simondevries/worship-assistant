@@ -5,11 +5,9 @@ export const BibleVerseAddedToScheduleEventName =
   'BibleVerseAddedToSchedule';
 
 export default class extends AppEvent {
-  index: number;
   bibleVerse: BibleVerse;
-  constructor(index, isExternalEvent, bibleVerse) {
+  constructor(isExternalEvent, bibleVerse) {
     super(BibleVerseAddedToScheduleEventName, isExternalEvent);
-    this.index = index;
     this.bibleVerse = bibleVerse;
   }
 }

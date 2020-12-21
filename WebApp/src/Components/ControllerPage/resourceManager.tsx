@@ -1,11 +1,11 @@
 import React from 'react';
-import Slide from '../Slides/NonActiveSlide/SlideResolver';
+import Slide from '../Slides/SlideResolver';
 import styled, { css } from 'styled-components/macro';
 import { H3, Button, ButtonGroup } from '@blueprintjs/core';
 import ActiveSlide, {
   slideWidth,
 } from '../Slides/ActiveSlide/ActiveSongSlide';
-import SlideResolver from '../Slides/NonActiveSlide/SlideResolver';
+import SlideResolver from '../Slides/SlideResolver';
 import Scrollbar from '../../Common/Scrollbar/Scrollbar';
 import RemoveResourceFromScheduleEvent from '../../Events/Domain/removeResourceFromScheduleEvent';
 import useEventHandler from '../../Events/Handlers/useEventHandler';
@@ -32,7 +32,6 @@ const StyledResourceManager = styled.div`
 export default function ({
   resource,
   isActiveResource,
-  updateSlideNumber,
   activeResourcePointer,
 }) {
   const [raiseEvent] = useEventHandler();
@@ -64,7 +63,6 @@ export default function ({
           isActiveResource={isActiveResource}
           activeResourcePointer={activeResourcePointer}
           resource={resource}
-          updateSlideNumber={updateSlideNumber}
         />
       </StyledSlidesContainer>
     </StyledResourceManager>

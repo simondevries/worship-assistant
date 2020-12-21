@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Card, Elevation } from '@blueprintjs/core';
 import styled from 'styled-components/macro';
 import ActiveVideoSlide from '../../ActiveSlide/ActiveVideoSlide';
+import BaseNonActiveSlide from '../../../../Common/BaseNonActiveSlide/BaseNonActiveSlide';
 
 const StyledCard = styled(Card)`
   width: 300px;
@@ -9,19 +10,23 @@ const StyledCard = styled(Card)`
   margin-bottom: 10px;
 `;
 
-export default function ({ isActive, resource, updateSlideNumber }) {
+export default function ({
+  isActive,
+  resource,
+  slideIndex,
+  resourceId,
+}) {
   if (isActive) {
     return <ActiveVideoSlide resource={resource} />;
   }
 
   return (
-    <StyledCard
-      onClick={() => updateSlideNumber(0)}
-      interactive={true}
-      elevation={Elevation.TWO}
+    <BaseNonActiveSlide
+      slideIndex={slideIndex}
+      resourceId={resourceId}
     >
       <p>{resource.title}</p>
       <p>{resource.filePath}</p>
-    </StyledCard>
+    </BaseNonActiveSlide>
   );
 }

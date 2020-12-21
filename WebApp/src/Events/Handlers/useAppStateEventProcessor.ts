@@ -45,7 +45,7 @@ const useAppStateEventProcessors = () => {
 
     dispatch({
       type: 'addResourceToSchedule',
-      payload: { id: event.song.id, type: 'SONG' },
+      payload: { id: event.song.id, resourceType: 'SONG' },
     });
 
     dispatch({
@@ -62,7 +62,11 @@ const useAppStateEventProcessors = () => {
 
     dispatch({
       type: 'addResourceToSchedule',
-      payload: { id: newId(), bibleVerse: event.bibleVerse },
+      payload: {
+        ...event.bibleVerse,
+        id: newId(),
+        resourceType: 'BIBLEVERSE',
+      },
     });
   };
 

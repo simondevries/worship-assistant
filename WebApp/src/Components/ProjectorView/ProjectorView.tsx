@@ -4,6 +4,7 @@ import { Context } from '../../App';
 import State from '../../Interfaces/State';
 import SongResourceReference from '../../Interfaces/SongResourceReference';
 import { fileSystemApp } from '../../FileSystem/fileSystemTools';
+import ActiveResourcePointer from '../../Interfaces/ActiveResourcePointer';
 
 const StyledVideo = styled.video``;
 
@@ -16,6 +17,12 @@ const StyledProjectorView = styled.div<any>`
   text-align: ${(props) => props.theme.textAlign};
 `;
 
+type Props = {
+  activeResourcePointer: ActiveResourcePointer;
+  previewMode: boolean;
+  className?: string;
+};
+
 /**
  * Projects the lyrics in a tab
  */
@@ -23,9 +30,22 @@ export default function ({
   activeResourcePointer,
   previewMode,
   className,
-}) {
+}: Props) {
   const [state] = useContext<Array<State>>(Context);
+
   if (!state || !state.currentSchedule) return null;
+
+  // todo (sdv) bible verses
+  // useEffect(() => {
+  //   const getVerse = async () => {
+  //     if (!bibleVerse) return;
+  //     await bibleVerseResolver(bibleVerse).then((res) =>
+  //       setBibleVerse(res),
+  //     );
+  //   };
+
+  //   getVerse();
+  // }, [bibleVerse]);
 
   const resourceReference =
     state &&
@@ -40,7 +60,9 @@ export default function ({
   const errorMessage =
     (!resourceReference ||
       !resourceReference.resourceType ||
-      resourceReference.resourceType.toLowerCase() !== 'song') &&
+      (resourceReference.resourceType.toLowerCase() !== 'song' &&
+        resourceReference.resourceType.toLowerCase() !==
+          'bibleverse')) &&
     `The resource type ${
       !resourceReference ? 'unknown ' : resourceReference.resourceType
     } is not supported yet`;

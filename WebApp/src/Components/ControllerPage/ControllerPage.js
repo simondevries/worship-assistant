@@ -70,9 +70,6 @@ export default function ({ updateSlideNumber }) {
     state.currentSchedule.resources.sort((a, b) =>
       a.index < b.index ? -1 : 1,
     );
-  const updateSlideNumberLocal = (resource) => (sInx) => {
-    raiseEvent(new SlideChangeEvent(false, resource.id, sInx));
-  };
 
   const openSearch = () => {
     dispatch({
@@ -102,7 +99,6 @@ export default function ({ updateSlideNumber }) {
                 isActiveResource={
                   activeResourcePointer.resourceId === r.id
                 }
-                updateSlideNumber={updateSlideNumberLocal(r)}
                 activeResourcePointer={activeResourcePointer}
               ></ResourceManager>
               {rInx < resources.length && (

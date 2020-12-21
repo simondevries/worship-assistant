@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Card, Elevation, H5 } from '@blueprintjs/core';
 import styled from 'styled-components/macro';
 import Verse from '../../../../Interfaces/Verse';
+import BaseNonActiveSlide from '../../../../Common/BaseNonActiveSlide/BaseNonActiveSlide';
 
 const StyledCard = styled(Card)`
   width: 300px;
@@ -16,23 +17,19 @@ interface Props {
   resourceId: string;
 }
 
-export default function ({
-  verse,
-  onClick,
-  slideIndex,
-  resourceId,
-}: Props) {
+export default function ({ verse, slideIndex, resourceId }: Props) {
   return (
-    <StyledCard
-      id={`slide${slideIndex}resource${resourceId}`}
-      onClick={onClick}
-      interactive={true}
-      elevation={Elevation.TWO}
+    <BaseNonActiveSlide
+      slideIndex={slideIndex}
+      resourceId={resourceId}
     >
-      <H5>
-        <a href="#">Verse</a>
-      </H5>
-      {verse.content}
-    </StyledCard>
+      <>
+        {' '}
+        <H5>
+          <a href="#">Verse</a>
+        </H5>
+        {verse.content}
+      </>
+    </BaseNonActiveSlide>
   );
 }

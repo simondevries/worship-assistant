@@ -46,10 +46,9 @@ function reducers(state: State, action) {
     case 'addResourceToSchedule':
       const updatedSchedule = {
         ...state.currentSchedule,
-        resources: state.currentSchedule.resources.concat({
-          id: action.payload.id,
-          resourceType: 'SONG',
-        } as SongResourceReference),
+        resources: state.currentSchedule.resources.concat(
+          action.payload,
+        ),
       };
 
       return { ...state, currentSchedule: updatedSchedule };
