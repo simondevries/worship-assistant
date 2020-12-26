@@ -4,7 +4,8 @@ import styled from 'styled-components/macro';
 import Verse from '../../../../Interfaces/Verse';
 import BaseNonActiveSlide from '../../../../Common/BaseNonActiveSlide/BaseNonActiveSlide';
 import IVerse from '../../../../Interfaces/Verse';
-import useFitText from 'use-fit-text';
+import useFitText from "use-fit-text";
+import ProjectorView from '../../../ProjectorView/ProjectorView';
 
 const StyledCard = styled(Card)`
   width: 300px;
@@ -12,28 +13,49 @@ const StyledCard = styled(Card)`
   margin-bottom: 10px;
 `;
 
+const StyledProjectorView = styled(ProjectorView)`
+  height: 150px;
+`;
+
 interface Props {
   verse: IVerse;
   onClick: any;
   slideIndex: number;
-  resourceId: string;
+  resourceIndex: number;
 }
 
-export default function ({ verse, slideIndex, resourceId }: Props) {
+export default function ({
+  verse,
+  onClick,
+  slideIndex,
+  resourceIndex,
+}: Props) {
   const { fontSize, ref } = useFitText();
   return (
-    <div ref={ref} style={{ fontSize }}>
-      <BaseNonActiveSlide
-        slideIndex={slideIndex}
-        resourceId={resourceId}
-      >
-        <>
-          <H5>
-            <a href="#">Verse</a>
-          </H5>
-          {verse.content}
-        </>
-      </BaseNonActiveSlide>
-    </div>
+    <StyledCard
+      id={`slide${slideIndex}resource${resourceIndex}`}
+      onClick={onClick}
+      interactive={true}
+      elevation={Elevation.TWO}>
+      <StyledProjectorView
+        previewMode={true}
+        activeResourcePointer={{resourceIndex: resourceIndex, slideIndex: slideIndex }}
+        className
+      />
+    </StyledCard>
+    // <div ref={ref} style={{ fontSize }}>
+      
+    //   <StyledCard
+    //     id={`slide${slideIndex}resource${resourceIndex}`}
+    //     onClick={onClick}
+    //     interactive={true}
+    //     elevation={Elevation.TWO}
+    //   >
+    //     <H5>
+    //       <a href="#">Verse</a>
+    //     </H5>
+    //     {verse.content}
+    //   </StyledCard>
+    // </div>
   );
 }
