@@ -93,7 +93,10 @@ export default function () {
         // else if (videoPlayer.msRequestFullScreen)
         //   videoPlayer.msRequestFullScreen();
       } else {
-        document.getElementById('videoPlayer').style.display = 'none';
+        const ele = document.getElementById('videoPlayer');
+        if (ele) {
+          ele.style.display = 'none';
+        }
       }
 
       // const videoPlayer = document.getElementById('videoPlayer');
