@@ -6,6 +6,11 @@ import SongResourceReference from '../../Interfaces/SongResourceReference';
 import { fileSystemApp } from '../../FileSystem/fileSystemTools';
 import ActiveResourcePointer from '../../Interfaces/ActiveResourcePointer';
 
+const StyledPowerPointPresenter = styled.iframe`
+  width: 100%;
+  height: 100%;
+`;
+
 const StyledVideo = styled.video``;
 
 const StyledProjectorView = styled.div<any>`
@@ -50,8 +55,16 @@ export default function ({
   const resourceReference =
     state &&
     state.currentSchedule &&
+    activeResourcePointer &&
+    activeResourcePointer.resourceId &&
+    state.currentSchedule.resources &&
     state.currentSchedule.resources.find(
-      (r) => r.id === activeResourcePointer.resourceId,
+      (r) =>
+        r &&
+        r.id &&
+        activeResourcePointer &&
+        activeResourcePointer &&
+        r.id === activeResourcePointer.resourceId,
     );
 
   // todo (Sdv) need a generic name for lyrics
@@ -72,6 +85,7 @@ export default function ({
   const activeResource =
     state &&
     state.currentSchedule &&
+    songReference &&
     state.currentSchedule.activeSongs.find(
       (s) => s.id === songReference.id,
     );
@@ -80,19 +94,20 @@ export default function ({
     activeResource &&
     activeResource.lyrics[activeResourcePointer.slideIndex];
 
+  setTimeout(() => {
+    const rightArrowKey = 39;
+    const event = new KeyboardEvent('keydown', {
+      key: '39',
+    });
+    console.log('keydown');
+    document.dispatchEvent(event);
+  }, 1000);
+
   return (
     <StyledProjectorView
       previewMode={previewMode}
       className={className}
     >
-      {/* <iframe
-        id="ytplayer"
-        title="youtube"
-        width="640"
-        height="360"
-        src="https://www.youtube.com/embed/M7lc1UVf-VE?autoplay=1&origin=http://example.com"
-        frameBorder={0}
-      ></iframe> */}
       {previewMode === true ? errorMessage : null}
       {!errorMessage && activeSlide && activeSlide.content}
       {/* <StyledVideo id="videoPlayer" controls /> */}
