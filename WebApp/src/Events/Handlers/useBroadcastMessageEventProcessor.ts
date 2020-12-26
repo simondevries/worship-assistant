@@ -20,6 +20,9 @@ import RemoveResourceFromScheduleEvent, {
 import VideoCreatedEvent, {
   VideoCreatedEventName,
 } from '../Domain/videoCreatedEvent';
+import SlideShowAddedToScheduleEvent, {
+  SlideShowAddedToScheduleEventName,
+} from '../Domain/slideShowAddedToScheduleEvent';
 
 let bc = new BroadcastChannel('worshipAssistApp');
 
@@ -104,6 +107,20 @@ export default () => {
     );
   };
 
+  const SlideShowAddedToScheduleEventHandler = (
+    event: SlideShowAddedToScheduleEvent,
+  ) => {
+    if (
+      event.eventType !== SlideShowAddedToScheduleEventName ||
+      event.isExternalEvent
+    )
+      return;
+    // todo remoev song
+    bc.postMessage(
+      JSON.stringify({ ...event, isExternalEvent: true }),
+    );
+  };
+
   // Chrome extension
   // const activeResource =
   //   state.currentSchedule.resources[resourceId];
@@ -130,6 +147,7 @@ export default () => {
     NewScheduleCreatedEventHandler,
     RemoveResourceFromScheduleEventHandler,
     VideoAddedToScheduleEventHandler,
+    SlideShowAddedToScheduleEventHandler,
   ];
   return [arr];
 };

@@ -25,6 +25,7 @@ import SlideChangeEvent from './Events/Domain/slideChangeEvent';
 import useEventHandler from './Events/Handlers/useEventHandler';
 import { useLocation } from 'react-router-dom';
 import { Redirect } from 'react-router-dom/cjs/react-router-dom.min';
+import useBroadcastChannelMessageHandler from './useBroadcastChannelMessageHandler';
 
 const StyledControllerPageContainer = styled.div`
   display: flex;
@@ -47,13 +48,10 @@ const StyledSpinner = styled(Spinner)`
 `;
 
 export default function () {
-  //todo (sdv) too much going on here
   const [state, dispatch] = useContext(Context);
   const [scheduleModalOpen, setScheduleModalOpen] = useModal(false);
   const [loadingState] = useIntialize(dispatch);
-  const [raiseEvent] = useEventHandler();
-  const [eventsReceived, setEventsRecieved] = useState([]);
-  const [fullScreenVideo, setFullScreenVideo] = useState(false);
+  const [eventsReceived] = useBroadcastChannelMessageHandler();
   hotkeyListenter();
 
   /** Only open welcome modal if hasn't come to site recently */
@@ -64,48 +62,6 @@ export default function () {
       setScheduleModalOpen(true);
     }
     localStorage.setItem('lastOpened', new Date().toISOString());
-  }, []);
-
-  let bc = new BroadcastChannel('worshipAssistApp');
-
-  useEffect(() => {
-    bc.onmessage = function (channel) {
-      if (window.location.pathname.indexOf('project') === -1) return;
-
-      const event = JSON.parse(channel.data);
-      event.isExternalEvent = true;
-      raiseEvent(event);
-
-      ///  START TEMPORARY
-
-      if (event.blobUrl) {
-        const videoPlayer = document.getElementById('videoPlayer');
-        videoPlayer.src = event.blobUrl;
-        videoPlayer.play();
-        document.getElementById('videoPlayer').style.display =
-          'block';
-
-        // document.getElementById('videoPlayer').requestFullscreen();
-        // if (videoPlayer.requestFullscreen)
-        // videoPlayer.requestFullscreen();
-        // else if (videoPlayer.webkitRequestFullscreen)
-        //   videoPlayer.webkitRequestFullscreen();
-        // else if (videoPlayer.msRequestFullScreen)
-        //   videoPlayer.msRequestFullScreen();
-      } else {
-        const ele = document.getElementById('videoPlayer');
-        if (ele) {
-          ele.style.display = 'none';
-        }
-      }
-
-      // const videoPlayer = document.getElementById('videoPlayer');
-      // videoPlayer.src = uzz;
-
-      /// END TEMPORARY
-
-      setEventsRecieved(eventsReceived.concat([event]));
-    };
   }, []);
 
   if (loadingState === fetchStatus.Loading) {

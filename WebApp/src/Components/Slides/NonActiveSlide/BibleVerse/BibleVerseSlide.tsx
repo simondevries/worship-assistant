@@ -5,6 +5,7 @@ import Verse from '../../../../Interfaces/Verse';
 import BaseNonActiveSlide from '../../../../Common/BaseNonActiveSlide/BaseNonActiveSlide';
 import BibleVerse from '../../../../Interfaces/BibleVerse';
 import { bibleVerseResolver } from '../../../../BibleVerse/bibleVerseResolver';
+import ResourceReference from '../../../../Interfaces/ResourceReference';
 
 const StyledCard = styled(Card)`
   width: 300px;
@@ -13,34 +14,22 @@ const StyledCard = styled(Card)`
 `;
 
 interface Props {
-  bibleVerse: BibleVerse;
   slideIndex: number;
   resourceId: string;
+  resource: ResourceReference;
 }
 
 export default function ({
-  bibleVerse,
+  resource,
   slideIndex,
   resourceId,
 }: Props) {
-  const [bibleVerseContent, setBibleVerse] = useState('');
-
-  useEffect(() => {
-    const getVerse = async () => {
-      await bibleVerseResolver(bibleVerse).then((res) =>
-        setBibleVerse(res),
-      );
-    };
-
-    getVerse();
-  }, [bibleVerse]);
-
   return (
     <BaseNonActiveSlide
       slideIndex={slideIndex}
       resourceId={resourceId}
     >
-      <>{bibleVerseContent}</>
+      <>{resource.bibleVerseContent}</>
     </BaseNonActiveSlide>
   );
 }

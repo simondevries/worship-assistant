@@ -15,6 +15,11 @@ const StyledProjectorView = styled(ProjectorView)`
   height: 150px;
 `;
 
+const StyledIframe = styled.iframe`
+  width: 100%;
+  height: 100%;
+`;
+
 export const slideWidth = 300;
 
 const StyledContainer = styled(Card)`
@@ -40,11 +45,12 @@ export default function ({ resource }: Props) {
 
   return (
     <StyledContainer>
-      {`${resource.book} ${resource.chapter}:${resource.verse} (${resource.translation})`}
-      <StyledProjectorView
-        previewMode={true}
-        activeResourcePointer={activeResourcePointer}
-      />
+      {/* <StyledIframe
+        title={resource.id}
+        src={resource.embeddedPowerPointUrl}
+      /> */}
+      <Button intent="primary">Focus</Button>
+
       <StyledButtonContainer>
         <Button>Slide Settings</Button>
       </StyledButtonContainer>

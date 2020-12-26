@@ -7,6 +7,10 @@ import { fileSystemApp } from '../../FileSystem/fileSystemTools';
 import ActiveResourcePointer from '../../Interfaces/ActiveResourcePointer';
 import { defaultSongTheme } from '../../Interfaces/themes';
 import useFitText from 'use-fit-text';
+import SongHandler from './Handlers/SongHandler';
+import BibleVerseHandler from './Handlers/BibleVerseHandler';
+import SlideShowHandler from './Handlers/SlideShowHandler';
+import YouTubeHandler from './Handlers/YouTubeHandler';
 
 const StyledPowerPointPresenter = styled.iframe`
   width: 100%;
@@ -44,18 +48,6 @@ export default function ({
 
   if (!state || !state.currentSchedule) return null;
 
-  // todo (sdv) bible verses
-  // useEffect(() => {
-  //   const getVerse = async () => {
-  //     if (!bibleVerse) return;
-  //     await bibleVerseResolver(bibleVerse).then((res) =>
-  //       setBibleVerse(res),
-  //     );
-  //   };
-
-  //   getVerse();
-  // }, [bibleVerse]);
-
   const resourceReference =
     state &&
     state.currentSchedule &&
@@ -71,9 +63,6 @@ export default function ({
         r.id === activeResourcePointer.resourceId,
     );
 
-  // todo (Sdv) need a generic name for lyrics
-  // Maybe a different projector view for each type of resource
-
   const errorMessage =
     (!resourceReference ||
       !resourceReference.resourceType ||
@@ -84,54 +73,48 @@ export default function ({
       !resourceReference ? 'unknown ' : resourceReference.resourceType
     } is not supported yet`;
 
-  const songReference = resourceReference as ISongResourceReference;
-
-  const activeResource =
-    state &&
-    state.currentSchedule &&
-    songReference &&
-    state.currentSchedule.activeSongs.find(
-      (s) => s.id === songReference.id,
-    );
-
-  const activeSlide =
-    activeResource &&
-    activeResource.lyrics[activeResourcePointer.slideIndex];
-
-  setTimeout(() => {
-    const rightArrowKey = 39;
-    const event = new KeyboardEvent('keydown', {
-      key: '39',
-    });
-    console.log('keydown');
-    document.dispatchEvent(event);
-  }, 1000);
+  const renderAppropriateHandler = () => {
+    if (!resourceReference || !resourceReference.resourceType) return;
+    switch (resourceReference.resourceType.toLowerCase()) {
+      case 'song':
+        return (
+          <SongHandler
+            resourceReference={resourceReference}
+            slideIndex={activeResourcePointer.slideIndex}
+            activeSongs={state?.currentSchedule.activeSongs}
+          />
+        );
+      case 'slideshow':
+        return (
+          <SlideShowHandler resourceReference={resourceReference} />
+        );
+      case 'bibleverse':
+        return (
+          <BibleVerseHandler resourceReference={resourceReference} />
+        );
+      case 'youtube':
+        return (
+          <YouTubeHandler resourceReference={resourceReference} />
+        );
+      case 'video':
+        return <div>Todo</div>;
+      case 'image':
+        return <div>Image</div>;
+      default:
+        return 'not found';
+    }
+  };
 
   return (
-    <ThemeProvider
-      theme={
-        activeResource && activeResource.theme
-          ? activeResource.theme
-          : defaultSongTheme
-      }
-    >
+    <ThemeProvider theme={defaultSongTheme}>
       <StyledProjectorView
         ref={ref}
         style={{ fontSize }}
         previewMode={previewMode}
         className={className}
       >
-        {/* <iframe
-          id="ytplayer"
-          title="youtube"
-          width="640"
-          height="360"
-          src="https://www.youtube.com/embed/M7lc1UVf-VE?autoplay=1&origin=http://example.com"
-          frameBorder={0}
-        ></iframe> */}
         {previewMode === true ? errorMessage : null}
-        {!errorMessage && activeSlide && activeSlide.content}
-        {/* <StyledVideo id="videoPlayer" controls /> */}
+        {renderAppropriateHandler()}
       </StyledProjectorView>
     </ThemeProvider>
   );

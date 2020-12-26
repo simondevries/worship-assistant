@@ -6,6 +6,7 @@ export default interface BibleVerse extends Resource {
   verse: string;
   source: string;
   translation: string;
+  bibleVerseContent: string;
 }
 
 export const initNewBibleVerse = (
@@ -15,6 +16,7 @@ export const initNewBibleVerse = (
   verse,
   translation,
   source,
+  bibleVerseContent,
 ) => {
   return {
     id: id,
@@ -24,5 +26,13 @@ export const initNewBibleVerse = (
     verse: verse,
     translation: translation,
     source: source,
+    bibleVerseContent: bibleVerseContent,
   } as BibleVerse;
+};
+
+export const addBibleVerseContent = (
+  bibleVerse,
+  bibleVerseContent,
+) => {
+  return { ...bibleVerse, bibleVerseContent };
 };

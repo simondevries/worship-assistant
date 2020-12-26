@@ -5,6 +5,7 @@ import Verse from '../../../../Interfaces/Verse';
 import BaseNonActiveSlide from '../../../../Common/BaseNonActiveSlide/BaseNonActiveSlide';
 import IVerse from '../../../../Interfaces/Verse';
 import useFitText from 'use-fit-text';
+import ResourceReference from '../../../../Interfaces/ResourceReference';
 
 const StyledCard = styled(Card)`
   width: 300px;
@@ -13,13 +14,21 @@ const StyledCard = styled(Card)`
 `;
 
 interface Props {
-  verse: IVerse;
-  onClick: any;
+  resource: ResourceReference;
   slideIndex: number;
   resourceId: string;
 }
 
-export default function ({ verse, slideIndex, resourceId }: Props) {
+const StyledIframe = styled.iframe`
+  width: 100%;
+  height: 100%;
+`;
+
+export default function ({
+  resource,
+  slideIndex,
+  resourceId,
+}: Props) {
   const { fontSize, ref } = useFitText();
   return (
     <div ref={ref} style={{ fontSize }}>
@@ -28,10 +37,10 @@ export default function ({ verse, slideIndex, resourceId }: Props) {
         resourceId={resourceId}
       >
         <>
-          <H5>
-            <a href="#">Verse</a>
-          </H5>
-          {verse.content}
+          {/* <StyledIframe
+            title={resourceId}
+            src={resource.embeddedPowerPointUrl}
+          /> */}
         </>
       </BaseNonActiveSlide>
     </div>

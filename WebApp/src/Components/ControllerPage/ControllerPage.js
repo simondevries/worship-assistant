@@ -61,6 +61,7 @@ const StyledControllerPage = styled.div`
 export default function ({ updateSlideNumber }) {
   const [state, dispatch] = useContext(Context);
   const [raiseEvent] = useEventHandler();
+  const [a, seta] = useState();
 
   if (!state || !state.settings || !state.currentSchedule)
     return null;
@@ -90,6 +91,36 @@ export default function ({ updateSlideNumber }) {
 
   return (
     <StyledControllerPage>
+      <button
+        onClick={() => {
+          const ref = window.open('http://localhost:3000/project');
+
+          setTimeout(() => {
+            let bc = new BroadcastChannel('worshipAssistApp');
+            console.log('asd');
+            bc.postMessage(
+              JSON.stringify({ focusOnPptIframe: 'true' }),
+            );
+          }, 2000);
+          seta(ref);
+          ref.focus();
+        }}
+      >
+        open
+      </button>
+      <button
+        onClick={() => {
+          a.focus();
+
+          let bc = new BroadcastChannel('worshipAssistApp');
+          console.log('asd');
+          bc.postMessage(
+            JSON.stringify({ focusOnPptIframe: 'true' }),
+          );
+        }}
+      >
+        run
+      </button>
       <StyledResourcesContainer>
         {resources &&
           resources.map((r, rInx) => (

@@ -14,6 +14,9 @@ import ISongResourceReference from '../../Interfaces/SongResourceReference';
 import NewScheduleCreatedEvent, {
   NewScheduleCreatedEventName,
 } from '../Domain/newScheduleCreatedEvent';
+import SlideShowAddedToScheduleEvent, {
+  SlideShowAddedToScheduleEventName,
+} from '../Domain/slideShowAddedToScheduleEvent';
 
 const _handleScheduleUpdated = (state, inx, song) => {
   console.log('ns1', inx);
@@ -54,6 +57,28 @@ const useIndexDbEventProcessor = () => {
     scheduleRepo.set(updatedSchedule, updatedSchedule.id);
   };
 
+  // const SlideShowAddedToScheduleEventHandler = (
+  //   event: SlideShowAddedToScheduleEvent,
+  // ) => {
+  //   if (
+  //     event.eventType !== SlideShowAddedToScheduleEventName ||
+  //     event.isExternalEvent
+  //   )
+  //     return;
+
+  //   // Hacks this is duplicate from the reducer
+  //   const updatedSchedule = {
+  //     ...state.currentSchedule,
+  //     resources: state.currentSchedule.resources.concat({
+  //       id: event.id,
+  //       resourceType: 'SLIDESHOW',
+  //       embeddedPowerPointUrl: event.embeddedPowerPointUrl,
+  //     } as ISongResourceReference),
+  //   };
+
+  //   scheduleRepo.set(updatedSchedule, updatedSchedule.id);
+  // };
+
   const NewScheduleCreatedEventHandler = (
     event: NewScheduleCreatedEvent,
   ) => {
@@ -72,6 +97,7 @@ const useIndexDbEventProcessor = () => {
     SongCreatedEventHandler,
     SongAddedToScheduleEventHandler,
     NewScheduleCreatedEventHandler,
+    // SlideShowAddedToScheduleEventHandler,
   ];
   return [arr];
 };

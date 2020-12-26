@@ -4,6 +4,8 @@ import ResourceReference from '../../Interfaces/ResourceReference';
 import BibleVerseSlide from './NonActiveSlide/BibleVerse/BibleVerseSlide';
 import BibleVerse from '../../Interfaces/BibleVerse';
 import ActiveBibleVerseSlide from './ActiveSlide/ActiveBibleVerseSlide';
+import ActiveSlideShowSlide from './ActiveSlide/ActiveSlideShowSlide';
+import SlideShowSlide from './NonActiveSlide/SlideShow/SlideShowSlide';
 
 interface Props {
   activeResourcePointer: ActiveResourcePointer;
@@ -19,14 +21,14 @@ export default function ({
 }: Props) {
   if (isActiveResource) {
     return (
-      <ActiveBibleVerseSlide
+      <ActiveSlideShowSlide
         resource={resource}
-      ></ActiveBibleVerseSlide>
+      ></ActiveSlideShowSlide>
     );
   }
 
   return (
-    <BibleVerseSlide
+    <SlideShowSlide
       resource={resource}
       slideIndex={0}
       resourceId={resource.id}

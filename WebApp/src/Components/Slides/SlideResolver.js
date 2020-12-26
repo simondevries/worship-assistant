@@ -5,6 +5,7 @@ import SongResourceManager from './SongResourceManager';
 import VideoResourceManager from './NonActiveSlide/Video/VideoResourceManager';
 import ImageResourceManager from './NonActiveSlide/Image/ImageResourceManager';
 import BibleVerseResourceManager from './BibleVerseResourceManager';
+import SlideShowResourceManager from './SlideShowResourceManager';
 
 export default function ({
   resource,
@@ -31,14 +32,21 @@ export default function ({
     case 'VIDEO':
       return (
         <VideoResourceManager
-          isActive={isActiveResource}
+          isActiveResource={isActiveResource}
           resource={resource}
         />
       );
     case 'IMAGE':
       return (
         <ImageResourceManager
-          isActive={isActiveResource}
+          isActiveResource={isActiveResource}
+          resource={resource}
+        />
+      );
+    case 'SLIDESHOW':
+      return (
+        <SlideShowResourceManager
+          isActiveResource={isActiveResource}
           resource={resource}
         />
       );

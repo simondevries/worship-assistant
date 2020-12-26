@@ -22,6 +22,9 @@ import bibleVerseAddedToScheduleEvent, {
   BibleVerseAddedToScheduleEventName,
 } from '../Domain/bibleVerseAddedToScheduleEvent';
 import newId from '../../Helpers/newId';
+import SlideShowAddedToScheduleEvent, {
+  SlideShowAddedToScheduleEventName,
+} from '../Domain/slideShowAddedToScheduleEvent';
 
 const Channel_Name = 'Controller';
 let bc = new BroadcastChannel('Channel_Name');
@@ -51,6 +54,21 @@ const useAppStateEventProcessors = () => {
     dispatch({
       type: 'addSongToActiveSongs',
       payload: event.song,
+    });
+  };
+
+  const SlideShowAddedToScheduleEventHandler = (
+    event: SlideShowAddedToScheduleEvent,
+  ) => {
+    if (event.eventType !== SlideShowAddedToScheduleEventName) return;
+
+    dispatch({
+      type: 'addResourceToSchedule',
+      payload: {
+        id: event.id,
+        resourceType: 'SLIDESHOW',
+        embeddedPowerPointUrl: event.embeddedPowerPointUrl,
+      },
     });
   };
 
@@ -108,6 +126,7 @@ const useAppStateEventProcessors = () => {
     NewScheduleCreatedEventHandler,
     RemoveResourceFromScheduleEventHandler,
     BibleVerseAddedToScheduleEventHandler,
+    SlideShowAddedToScheduleEventHandler,
   ];
   return [arr];
 };

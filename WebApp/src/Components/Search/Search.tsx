@@ -24,10 +24,16 @@ import IImage from '../../Interfaces/Image';
 import ISong from '../../Interfaces/Song';
 import { fileSystemApp } from '../../FileSystem/fileSystemTools';
 import VideoCreatedEvent from '../../Events/Domain/videoCreatedEvent';
-import { initNewBibleVerse } from '../../Interfaces/BibleVerse';
+import {
+  initNewBibleVerse,
+  addBibleVerseContent,
+} from '../../Interfaces/BibleVerse';
 import BibleVerseAddedToScheduleEvent from '../../Events/Domain/bibleVerseAddedToScheduleEvent';
 import { isValidBibleVerse } from '../../BibleVerse/utils';
 import newId from '../../Helpers/newId';
+import useModal from '../Dialogs/useModal';
+import AddSlideShowDialog from '../Dialogs/AddSlideShowDialog/AddSlideShowDialog';
+import { bibleVerseResolver } from '../../BibleVerse/bibleVerseResolver';
 
 const StyledOmnibarContainer = styled.div`
   -webkit-filter: blur(0);
@@ -110,7 +116,7 @@ const Search = () => {
   const [allSongs, setAllSongs] = useState([]);
   const [state, dispatch] = useContext(Context);
   const [raiseEvent] = useEventHandler();
-
+  const [isSlideShowModalOpen, setSlideShowModalOpen] = useModal();
   const searchbox = useRef<HTMLInputElement>(null);
 
   const onClose = () => {
@@ -125,6 +131,11 @@ const Search = () => {
     raiseEvent(new VideoCreatedEvent(false, blobUrl));
   };
 
+  const addSlideShow = () => {
+    setSlideShowModalOpen(true);
+    // onClose();
+  };
+
   const addBibleVerse = async () => {
     if (!searchbox)
       alert('Please enter a bible verse in the format John 3:16');
@@ -133,15 +144,19 @@ const Search = () => {
     const chapter = searchValue.split(' ')[1].split(':')[0];
     const verse = searchValue.split(' ')[1].split(':')[1];
 
-    const bibleVerse = initNewBibleVerse(
+    let bibleVerse = initNewBibleVerse(
       newId(),
       book,
       chapter,
       verse,
       'kjv',
       'bible-api.com',
+      null,
     );
 
+    const verseContent = await bibleVerseResolver(bibleVerse);
+
+    bibleVerse = addBibleVerseContent(bibleVerse, verseContent);
     raiseEvent(new BibleVerseAddedToScheduleEvent(false, bibleVerse));
 
     onClose();
@@ -177,39 +192,48 @@ const Search = () => {
   const searchResult = SearchQuery(searchValue, allSongs);
   return (
     <>
-      <StyledBackdrop onClick={onClose} />
-      <StyledOmnibarContainer>
-        <StyledOmnibarSearchboxContainer>
-          {/* <span class="bp3-icon bp3-icon-search"></span> */}
-          <StyledSearchIcon
-            icon="search"
-            color="#5c7080"
-            iconSize={16}
-          />
-          <StyledInput
-            type="text"
-            placeholder="Add resource... (use '/' to open)"
-            ref={searchbox}
-            onChange={(e) => setSearchValue(e.target.value)}
-            value={searchValue}
-          />
-          <StyledRightArrowIcon icon="arrow-right" color="#5c7080" />
-        </StyledOmnibarSearchboxContainer>
-        <StyledDropdownContainer>
-          <StyledDropdownItem onClick={() => addVideo()}>
-            🎥 Add Video
-          </StyledDropdownItem>
-          {!searchValue ||
-            searchValue === '' ||
-            (isValidBibleVerse(searchValue) && (
-              <StyledDropdownItem onClick={() => addBibleVerse()}>
-                🎥 Add Bible Verse
+      {!isSlideShowModalOpen && (
+        <>
+          <StyledBackdrop onClick={onClose} />
+          <StyledOmnibarContainer>
+            <StyledOmnibarSearchboxContainer>
+              {/* <span class="bp3-icon bp3-icon-search"></span> */}
+              <StyledSearchIcon
+                icon="search"
+                color="#5c7080"
+                iconSize={16}
+              />
+              <StyledInput
+                type="text"
+                placeholder="Add resource... (use '/' to open)"
+                ref={searchbox}
+                onChange={(e) => setSearchValue(e.target.value)}
+                value={searchValue}
+              />
+              <StyledRightArrowIcon
+                icon="arrow-right"
+                color="#5c7080"
+              />
+            </StyledOmnibarSearchboxContainer>
+            <StyledDropdownContainer>
+              <StyledDropdownItem onClick={() => addVideo()}>
+                🎥 Add Video
               </StyledDropdownItem>
-            ))}
-          <StyledDropdownItem onClick={() => alert('todo')}>
-            🎥 Add Image
-          </StyledDropdownItem>
-          {/* <StyledDropdownItem
+              {!searchValue ||
+                searchValue === '' ||
+                (isValidBibleVerse(searchValue) && (
+                  <StyledDropdownItem onClick={() => addBibleVerse()}>
+                    🎥 Add Bible Verse
+                  </StyledDropdownItem>
+                ))}
+              <StyledDropdownItem onClick={() => alert('todo')}>
+                🎥 Add Image
+              </StyledDropdownItem>
+
+              <StyledDropdownItem onClick={addSlideShow}>
+                🎥 Add slide show
+              </StyledDropdownItem>
+              {/* <StyledDropdownItem
               onClick={() =>
                 addResource({
                   title:
@@ -223,17 +247,27 @@ const Search = () => {
               📷 Add Photo
             </StyledDropdownItem> */}
 
-          {searchResult &&
-            searchResult.map((resource) => {
-              return (
-                <StyledDropdownItem onClick={() => addSong(resource)}>
-                  {resource.properties.title}
-                </StyledDropdownItem>
-              );
-            })}
-        </StyledDropdownContainer>
-        {/* <button class="bp3-button bp3-minimal bp3-intent-primary bp3-icon-arrow-right"></button> */}
-      </StyledOmnibarContainer>
+              {searchResult &&
+                searchResult.map((resource) => {
+                  return (
+                    <StyledDropdownItem
+                      onClick={() => addSong(resource)}
+                    >
+                      {resource.properties.title}
+                    </StyledDropdownItem>
+                  );
+                })}
+            </StyledDropdownContainer>
+            {/* <button class="bp3-button bp3-minimal bp3-intent-primary bp3-icon-arrow-right"></button> */}
+          </StyledOmnibarContainer>{' '}
+        </>
+      )}
+      {isSlideShowModalOpen && (
+        <AddSlideShowDialog
+          setModalOpen={setSlideShowModalOpen}
+          index={1} // todo (sdv)
+        />
+      )}
     </>
   );
 };
