@@ -135,10 +135,9 @@ export default function () {
       <Router>
         <Switch>
           <Route path="/" exact>
-            <Redirect to="/operator" />
-            {/* <div>Go to /operator</div> */}
+            <Redirect to="/controller" />
           </Route>
-          <Route path="/operator" exact>
+          <Route path="/controller" exact>
             <StyledControllerPageContainer>
               <Sidebar />
 

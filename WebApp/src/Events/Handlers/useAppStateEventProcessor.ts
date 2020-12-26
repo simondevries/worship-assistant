@@ -8,7 +8,7 @@ import { Context } from '../../App';
 import SongAddedToSchedule, {
   SongAddedToScheduleEventName,
 } from '../Domain/songAddedToScheduleEvent';
-import SongResourceReference from '../../Interfaces/SongResourceReference';
+import ISongResourceReference from '../../Interfaces/SongResourceReference';
 import SlideChangeEvent, {
   SlideChangedEventName,
 } from '../Domain/slideChangeEvent';

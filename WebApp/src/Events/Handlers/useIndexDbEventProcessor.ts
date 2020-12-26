@@ -10,7 +10,7 @@ import { Context } from '../../App';
 import SongAddedToSchedule, {
   SongAddedToScheduleEventName,
 } from '../Domain/songAddedToScheduleEvent';
-import SongResourceReference from '../../Interfaces/SongResourceReference';
+import ISongResourceReference from '../../Interfaces/SongResourceReference';
 import NewScheduleCreatedEvent, {
   NewScheduleCreatedEventName,
 } from '../Domain/newScheduleCreatedEvent';
@@ -48,7 +48,7 @@ const useIndexDbEventProcessor = () => {
         index: event.index,
         id: event.song.id,
         resourceType: 'SONG',
-      } as SongResourceReference),
+      } as ISongResourceReference),
     };
 
     scheduleRepo.set(updatedSchedule, updatedSchedule.id);

@@ -2,8 +2,10 @@ import Song from './Song';
 import ResourceReference from './ResourceReference';
 import newId from '../Helpers/newId';
 import ActiveResourcePointer from './ActiveResourcePointer';
+import ISong from './Song';
+import IResourceReference from './ResourceReference';
 
-export default interface Schedule {
+export default interface ISchedule {
   id: string;
   date: string;
   activeResourcePointer: ActiveResourcePointer;

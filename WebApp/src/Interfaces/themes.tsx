@@ -1,10 +1,12 @@
-// export interface ITheme {
-//     backgroundColor: string,
-//     textColor: string,
-//     primary: string,
-//     textAlign: string,
-//     fontSize: string,
-// }
+export interface ITheme {
+    backgroundColor: string,
+    textColor: string,
+    primary: string,
+    lineHeight: string,
+    textAlign: string,
+    fontSize: string,
+    name: string,
+}
 
 export const defaultSongTheme = {
   backgroundColor: '#333333',
@@ -16,7 +18,7 @@ export const defaultSongTheme = {
   name: 'Default',
 };
 
-const lightSongTheme = {
+export const lightSongTheme = {
   backgroundColor: '#e0e0e0',
   textColor: '#000000',
   primary: '#333333',
@@ -33,11 +35,12 @@ const presentationTheme = {
   lineHeight: 'normal',
   textAlign: 'left',
   fontSize: '30pt',
-  name: 'presentation',
+  name: 'Presentation',
 };
-// export const themes: ITheme[] = [
-//     defaultSongTheme,
-//     lightSongTheme,
-// ]
+export const themes: ITheme[] = [
+    defaultSongTheme,
+    lightSongTheme,
+    presentationTheme,
+]
 
-export const themes = [defaultSongTheme, lightSongTheme];
+// export const themes = [defaultSongTheme, lightSongTheme, presentationTheme];

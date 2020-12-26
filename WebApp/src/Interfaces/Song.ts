@@ -1,5 +1,9 @@
-import Resource from './resource';
-export default interface Song extends Resource {
-  title: string;
+import IResource from './resource';
+export default interface ISong extends IResource {
   lyrics: any;
+  properties: {
+    title: string;
+    artist: string;
+    release_date: string;
+  }
 }

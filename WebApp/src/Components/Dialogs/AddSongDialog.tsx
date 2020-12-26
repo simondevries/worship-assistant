@@ -11,9 +11,10 @@ import styled from 'styled-components/macro';
 import HelpText from './HelpText';
 import newId from '../../Helpers/newId';
 import SongCreatedEvent from '../../Events/Domain/songCreatedEvent';
-import type Song from '../../Interfaces/Song';
 import useEventHandler from '../../Events/Handlers/useEventHandler';
 import SongAddedToScheduleEvent from '../../Events/Domain/songAddedToScheduleEvent';
+import { defaultSongTheme, lightSongTheme } from '../../Interfaces/themes';
+import ISong from '../../Interfaces/Song';
 
 const StyledEditableTextContent = styled(EditableText)`
   margin-bottom: 30px;
@@ -32,15 +33,19 @@ const StyledEditableTextTitle = styled(EditableText)`
 export default ({ setAddSongModalOpen, createSongAtIndex }) => {
   const [raiseEvent] = useEventHandler();
 
-  const [songContent, setSongContent] = useState({
+  const [songContent, setSongContent] = useState<ISong>({
     // lyrics: [{ type: 'verse', content: '' }],
     // properties: {
     //   title: '',
     // },
     id: newId(),
     lyrics: '',
+    resourceType: 'SONG',
+    theme: lightSongTheme,
     properties: {
       title: '',
+      artist: '',
+      release_date: '',
     },
   });
 
