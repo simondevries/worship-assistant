@@ -4,8 +4,9 @@ import { Context } from '../../App';
 import IState from '../../Interfaces/State';
 import ISongResourceReference from '../../Interfaces/SongResourceReference';
 import { fileSystemApp } from '../../FileSystem/fileSystemTools';
+import ActiveResourcePointer from '../../Interfaces/ActiveResourcePointer';
 import { defaultSongTheme } from '../../Interfaces/themes';
-import useFitText from "use-fit-text";
+import useFitText from 'use-fit-text';
 
 const StyledVideo = styled.video``;
 
@@ -19,6 +20,12 @@ const StyledProjectorView = styled.div<any>`
   text-align: ${(props) => props.theme.textAlign};
 `;
 
+type Props = {
+  activeResourcePointer: ActiveResourcePointer;
+  previewMode: boolean;
+  className?: string;
+};
+
 /**
  * Projects the lyrics in a tab
  */
@@ -26,17 +33,29 @@ export default function ({
   activeResourcePointer,
   previewMode,
   className,
-}) {
+}: Props) {
   const [state] = useContext<Array<IState>>(Context);
   const { fontSize, ref } = useFitText();
 
   if (!state || !state.currentSchedule) return null;
 
+  // todo (sdv) bible verses
+  // useEffect(() => {
+  //   const getVerse = async () => {
+  //     if (!bibleVerse) return;
+  //     await bibleVerseResolver(bibleVerse).then((res) =>
+  //       setBibleVerse(res),
+  //     );
+  //   };
+
+  //   getVerse();
+  // }, [bibleVerse]);
+
   const resourceReference =
     state &&
     state.currentSchedule &&
     state.currentSchedule.resources.find(
-      (r) => r.index === activeResourcePointer.resourceIndex,
+      (r) => r.id === activeResourcePointer.resourceId,
     );
 
   // todo (Sdv) need a generic name for lyrics
@@ -45,7 +64,9 @@ export default function ({
   const errorMessage =
     (!resourceReference ||
       !resourceReference.resourceType ||
-      resourceReference.resourceType.toLowerCase() !== 'song') &&
+      (resourceReference.resourceType.toLowerCase() !== 'song' &&
+        resourceReference.resourceType.toLowerCase() !==
+          'bibleverse')) &&
     `The resource type ${
       !resourceReference ? 'unknown ' : resourceReference.resourceType
     } is not supported yet`;
@@ -64,10 +85,16 @@ export default function ({
     activeResource.lyrics[activeResourcePointer.slideIndex];
 
   return (
-    <ThemeProvider theme={
-      (activeResource && activeResource.theme) ? activeResource.theme: defaultSongTheme}>
+    <ThemeProvider
+      theme={
+        activeResource && activeResource.theme
+          ? activeResource.theme
+          : defaultSongTheme
+      }
+    >
       <StyledProjectorView
-        ref={ref} style={{ fontSize }}
+        ref={ref}
+        style={{ fontSize }}
         previewMode={previewMode}
         className={className}
       >

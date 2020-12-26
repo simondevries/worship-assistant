@@ -46,11 +46,9 @@ function reducers(state: IState, action) {
     case 'addResourceToSchedule':
       const updatedSchedule = {
         ...state.currentSchedule,
-        resources: state.currentSchedule.resources.concat({
-          index: action.payload.index,
-          id: action.payload.id,
-          resourceType: 'SONG',
-        } as ISongResourceReference),
+        resources: state.currentSchedule.resources.concat(
+          action.payload,
+        ),
       };
 
       return { ...state, currentSchedule: updatedSchedule };
@@ -64,11 +62,15 @@ function reducers(state: IState, action) {
         },
       };
 
-    case 'addActiveSong':
+    case 'addSongToActiveSongs':
       const songs =
         (state.currentSchedule.activeSongs &&
           state.currentSchedule.activeSongs.filter(
-            (s) => s.id !== action.payload.id,
+            (s) =>
+              s &&
+              action &&
+              action.payload &&
+              s.id !== action.payload.id,
           )) ||
         [];
 
@@ -86,6 +88,19 @@ function reducers(state: IState, action) {
         currentSchedule: {
           ...state.currentSchedule,
           activeSongs: [],
+        },
+      };
+
+    case 'removeResourceFromSchedule':
+      console.log('RemoveResourceFromScheduleEventHandler');
+
+      return {
+        ...state,
+        currentSchedule: {
+          ...state.currentSchedule,
+          resources: state.currentSchedule.resources.filter(
+            (r) => r.id !== action.id,
+          ),
         },
       };
 

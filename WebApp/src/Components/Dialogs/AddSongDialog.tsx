@@ -87,8 +87,6 @@ export default ({ setAddSongModalOpen, createSongAtIndex }) => {
     raiseEvent(new SongCreatedEvent(false, song));
 
     if (addToSchedule) {
-      // todo (Sdv) make this raise an event to  add to schedule
-      console.log({ createSongAtIndex });
       raiseEvent(
         new SongAddedToScheduleEvent(createSongAtIndex, false, song),
       );

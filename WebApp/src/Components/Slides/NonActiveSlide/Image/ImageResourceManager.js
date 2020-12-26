@@ -1,22 +1,16 @@
 import React from 'react';
 import { Button, Card, Elevation } from '@blueprintjs/core';
 import styled from 'styled-components/macro';
+import BaseNonActiveSlide from '../../../../Common/BaseNonActiveSlide/BaseNonActiveSlide';
 
-const StyledCard = styled(Card)`
-  width: 300px;
-  height: 200px;
-  margin-bottom: 10px;
-`;
-
-export default function ({ resource, updateSlideNumber }) {
+export default function ({ resource, slideIndex, resourceId }) {
   return (
-    <StyledCard
-      onClick={() => updateSlideNumber(0)}
-      interactive={true}
-      elevation={Elevation.TWO}
+    <BaseNonActiveSlide
+      slideIndex={slideIndex}
+      resourceId={resourceId}
     >
       <p>{resource.title}</p>
       <p>{resource.filePath}</p>
-    </StyledCard>
+    </BaseNonActiveSlide>
   );
 }

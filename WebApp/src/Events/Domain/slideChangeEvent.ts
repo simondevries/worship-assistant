@@ -4,11 +4,11 @@ import ISong from '../../Interfaces/Song';
 export const SlideChangedEventName = 'SlideChangedEventName';
 
 export default class extends AppEvent {
-  resourceIndex: any;
+  resourceId: any;
   slideIndex: any;
-  constructor(isExternalEvent, resourceIndex, slideIndex) {
+  constructor(isExternalEvent, resourceId, slideIndex) {
     super(SlideChangedEventName, isExternalEvent);
-    this.resourceIndex = resourceIndex;
+    this.resourceId = resourceId;
     this.slideIndex = slideIndex;
   }
 }

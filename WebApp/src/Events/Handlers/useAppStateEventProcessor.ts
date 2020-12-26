@@ -15,6 +15,13 @@ import SlideChangeEvent, {
 import NewScheduleCreatedEvent, {
   NewScheduleCreatedEventName,
 } from '../Domain/newScheduleCreatedEvent';
+import removeResourceFromScheduleEvent, {
+  RemoveResourceFromScheduleEventName,
+} from '../Domain/removeResourceFromScheduleEvent';
+import bibleVerseAddedToScheduleEvent, {
+  BibleVerseAddedToScheduleEventName,
+} from '../Domain/bibleVerseAddedToScheduleEvent';
+import newId from '../../Helpers/newId';
 
 const Channel_Name = 'Controller';
 let bc = new BroadcastChannel('Channel_Name');
@@ -26,7 +33,7 @@ const useAppStateEventProcessors = () => {
     if (event.eventType !== SongCreatedEventName) return;
 
     dispatch({
-      type: 'addActiveSong',
+      type: 'addSongToActiveSongs',
       payload: event.song,
     });
   };
@@ -38,12 +45,28 @@ const useAppStateEventProcessors = () => {
 
     dispatch({
       type: 'addResourceToSchedule',
-      payload: { id: event.song.id, index: event.index },
+      payload: { id: event.song.id, resourceType: 'SONG' },
     });
 
     dispatch({
-      type: 'addActiveSong',
+      type: 'addSongToActiveSongs',
       payload: event.song,
+    });
+  };
+
+  const BibleVerseAddedToScheduleEventHandler = (
+    event: bibleVerseAddedToScheduleEvent,
+  ) => {
+    if (event.eventType !== BibleVerseAddedToScheduleEventName)
+      return;
+
+    dispatch({
+      type: 'addResourceToSchedule',
+      payload: {
+        ...event.bibleVerse,
+        id: newId(),
+        resourceType: 'BIBLEVERSE',
+      },
     });
   };
 
@@ -53,7 +76,7 @@ const useAppStateEventProcessors = () => {
     dispatch({
       type: 'setActiveResourcePointer',
       payload: {
-        resourceIndex: event.resourceIndex,
+        resourceId: event.resourceId,
         slideIndex: event.slideIndex,
       },
     });
@@ -69,11 +92,22 @@ const useAppStateEventProcessors = () => {
     dispatch({ type: 'clearActiveSongs' });
   };
 
+  const RemoveResourceFromScheduleEventHandler = (
+    event: removeResourceFromScheduleEvent,
+  ) => {
+    if (event.eventType !== RemoveResourceFromScheduleEventName)
+      return;
+
+    dispatch({ type: 'removeResourceFromSchedule', id: event.id });
+  };
+
   const arr = [
     SongCreatedEventHandler,
     SongAddedToScheduleEventHandler,
     SlideChangeEventHandler,
     NewScheduleCreatedEventHandler,
+    RemoveResourceFromScheduleEventHandler,
+    BibleVerseAddedToScheduleEventHandler,
   ];
   return [arr];
 };

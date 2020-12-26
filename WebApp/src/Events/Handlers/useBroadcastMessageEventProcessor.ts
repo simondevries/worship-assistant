@@ -14,9 +14,9 @@ import SlideChangeEvent, {
 import newScheduleCreatedEvent, {
   NewScheduleCreatedEventName,
 } from '../Domain/newScheduleCreatedEvent';
-import RemoveSongFromScheduleEvent, {
-  RemoveSongFromScheduleEventName,
-} from '../Domain/removeSongFromScheduleEvent';
+import RemoveResourceFromScheduleEvent, {
+  RemoveResourceFromScheduleEventName,
+} from '../Domain/removeResourceFromScheduleEvent';
 import VideoCreatedEvent, {
   VideoCreatedEventName,
 } from '../Domain/videoCreatedEvent';
@@ -76,15 +76,15 @@ export default () => {
     );
   };
 
-  const RemoveSongFromScheduleEventHandler = (
-    event: RemoveSongFromScheduleEvent,
+  const RemoveResourceFromScheduleEventHandler = (
+    event: RemoveResourceFromScheduleEvent,
   ) => {
     if (
-      event.eventType !== RemoveSongFromScheduleEventName ||
+      event.eventType !== RemoveResourceFromScheduleEventName ||
       event.isExternalEvent
     )
       return;
-    // todo remoev song
+
     bc.postMessage(
       JSON.stringify({ ...event, isExternalEvent: true }),
     );
@@ -106,7 +106,7 @@ export default () => {
 
   // Chrome extension
   // const activeResource =
-  //   state.currentSchedule.resources[resourceIndex];
+  //   state.currentSchedule.resources[resourceId];
 
   // if (
   //   activeResource.resourceType &&
@@ -128,7 +128,7 @@ export default () => {
     SongAddedToScheduleEventHandler,
     SlideChangeEventHandler,
     NewScheduleCreatedEventHandler,
-    RemoveSongFromScheduleEventHandler,
+    RemoveResourceFromScheduleEventHandler,
     VideoAddedToScheduleEventHandler,
   ];
   return [arr];

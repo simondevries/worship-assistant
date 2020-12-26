@@ -1,13 +1,14 @@
 import React from 'react';
-import Slide from '../Slides/NonActiveSlide/SlideResolver';
+import Slide from '../Slides/SlideResolver';
 import styled, { css } from 'styled-components/macro';
 import { H3, Button, ButtonGroup } from '@blueprintjs/core';
 import ActiveSlide, {
   slideWidth,
 } from '../Slides/ActiveSlide/ActiveSongSlide';
-import SlideResolver from '../Slides/NonActiveSlide/SlideResolver';
+import SlideResolver from '../Slides/SlideResolver';
 import Scrollbar from '../../Common/Scrollbar/Scrollbar';
-import RemoveSongFromScheduleEvent from '../../Events/Domain/removeSongFromScheduleEvent';
+import RemoveResourceFromScheduleEvent from '../../Events/Domain/removeResourceFromScheduleEvent';
+import useEventHandler from '../../Events/Handlers/useEventHandler';
 
 const StyledSlidesContainer = styled.div`
   ${Scrollbar}
@@ -30,12 +31,10 @@ const StyledResourceManager = styled.div`
 
 export default function ({
   resource,
-  resourceIndex,
   isActiveResource,
-  updateSlideNumber,
   activeResourcePointer,
 }) {
-  // const [raiseEvent] = useEventHandler();
+  const [raiseEvent] = useEventHandler();
 
   return (
     <StyledResourceManager>
@@ -47,14 +46,13 @@ export default function ({
             icon="edit"
           ></Button>
           <Button
-            onClick={
-              () => alert('todo')
-              // raiseEvent(
-              //   new RemoveSongFromScheduleEvent(
-              //     false,
-              //     resource.index,
-              //   ),
-              // )
+            onClick={() =>
+              raiseEvent(
+                new RemoveResourceFromScheduleEvent(
+                  false,
+                  resource.id,
+                ),
+              )
             }
             icon="trash"
           ></Button>
@@ -62,10 +60,9 @@ export default function ({
       </StyledHeader>
       <StyledSlidesContainer>
         <SlideResolver
-          resourceIndex={resourceIndex}
+          isActiveResource={isActiveResource}
           activeResourcePointer={activeResourcePointer}
           resource={resource}
-          updateSlideNumber={updateSlideNumber}
         />
       </StyledSlidesContainer>
     </StyledResourceManager>

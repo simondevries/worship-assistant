@@ -65,12 +65,11 @@ export default function ({ updateSlideNumber }) {
   if (!state || !state.settings || !state.currentSchedule)
     return null;
 
-  const resources = state.currentSchedule.resources.sort((a, b) =>
-    a.index < b.index ? -1 : 1,
-  );
-  const updateSlideNumberLocal = (rInx) => (sInx) => {
-    raiseEvent(new SlideChangeEvent(false, rInx, sInx));
-  };
+  const resources =
+    state.currentSchedule.resources &&
+    state.currentSchedule.resources.sort((a, b) =>
+      a.index < b.index ? -1 : 1,
+    );
 
   const openSearch = () => {
     dispatch({
@@ -98,11 +97,9 @@ export default function ({ updateSlideNumber }) {
               <ResourceManager
                 resource={r}
                 isActiveResource={
-                  activeResourcePointer.resourceIndex === rInx
+                  activeResourcePointer.resourceId === r.id
                 }
-                updateSlideNumber={updateSlideNumberLocal(rInx)}
                 activeResourcePointer={activeResourcePointer}
-                resourceIndex={rInx}
               ></ResourceManager>
               {rInx < resources.length && (
                 <StyledAddButton
