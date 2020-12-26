@@ -1,7 +1,7 @@
-import State from '../Interfaces/State';
-import SongResourceReference from '../Interfaces/SongResourceReference';
+import IState from '../Interfaces/State';
+import ISongResourceReference from '../Interfaces/SongResourceReference';
 
-function reducers(state: State, action) {
+function reducers(state: IState, action) {
   switch (action.type) {
     // Resources
     // case 'addResource':

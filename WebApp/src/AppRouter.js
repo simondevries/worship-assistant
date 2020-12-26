@@ -93,7 +93,10 @@ export default function () {
         // else if (videoPlayer.msRequestFullScreen)
         //   videoPlayer.msRequestFullScreen();
       } else {
-        document.getElementById('videoPlayer').style.display = 'none';
+        const ele = document.getElementById('videoPlayer');
+        if (ele) {
+          ele.style.display = 'none';
+        }
       }
 
       // const videoPlayer = document.getElementById('videoPlayer');
@@ -135,10 +138,9 @@ export default function () {
       <Router>
         <Switch>
           <Route path="/" exact>
-            <Redirect to="/operator" />
-            {/* <div>Go to /operator</div> */}
+            <Redirect to="/controller" />
           </Route>
-          <Route path="/operator" exact>
+          <Route path="/controller" exact>
             <StyledControllerPageContainer>
               <Sidebar />
 

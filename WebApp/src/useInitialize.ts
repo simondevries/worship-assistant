@@ -5,12 +5,12 @@ import React, { useContext, useState, useEffect } from 'react';
 import fetchStatus from './Common/FetchStatus/fetchStatus';
 import { Intent } from '@blueprintjs/core';
 import useModal from './Components/Dialogs/useModal';
-import Schedule from './Interfaces/Schedule';
+import ISchedule from './Interfaces/Schedule';
 import { songsRepo } from './Storage/songsRepository';
-import SongResourceReference from './Interfaces/SongResourceReference';
-import Song from './Interfaces/Song';
-import Resource from './Interfaces/resource';
-import ResourceReference from './Interfaces/ResourceReference';
+import ISongResourceReference from './Interfaces/SongResourceReference';
+import ISong from './Interfaces/Song';
+import IResource from './Interfaces/resource';
+import IResourceReference from './Interfaces/ResourceReference';
 
 function useIntialize(dispatch) {
   const [loadingState, setLoadingState] = useState(
@@ -36,7 +36,7 @@ function useIntialize(dispatch) {
       }
 
       const doo = await songsRepo.get(
-        (currentSchedule.resources[index] as SongResourceReference)
+        (currentSchedule.resources[index] as ISongResourceReference)
           .id,
       );
       array = array.concat(doo);
@@ -67,7 +67,7 @@ function useIntialize(dispatch) {
         },
         resources: currentSchedule.resources,
         activeSongs: activeSongs,
-      } as Schedule,
+      } as ISchedule,
     });
   };
 
@@ -79,7 +79,7 @@ function useIntialize(dispatch) {
           const settings = await primeSettings();
 
           const schedules = await scheduleRepo.getAll();
-          const currentSchedule: Schedule =
+          const currentSchedule: ISchedule =
             schedules &&
             settings &&
             schedules.find(
