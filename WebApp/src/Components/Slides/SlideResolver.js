@@ -25,7 +25,7 @@ export default function ({
         <SongResourceManager
           resource={resource}
           isActiveResource={isActiveResource}
-          updateSlideNumber={updateSlideNumberLocal(activeResourcePointer.resourceId)}
+          updateSlideNumber={updateSlideNumberLocal(resource.id)}
           activeResourcePointer={activeResourcePointer}
         />
       );
