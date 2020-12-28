@@ -21,32 +21,31 @@ interface Props {
   verse: IVerse;
   onClick: any;
   slideIndex: number;
-  resourceIndex: number;
+  resourceId: string;
 }
 
 export default function ({
   verse,
   onClick,
   slideIndex,
-  resourceIndex,
+  resourceId,
 }: Props) {
   const { fontSize, ref } = useFitText();
   return (
     <StyledCard
-      id={`slide${slideIndex}resource${resourceIndex}`}
+      id={`slide${slideIndex}resource${resourceId}`}
       onClick={onClick}
       interactive={true}
       elevation={Elevation.TWO}>
       <StyledProjectorView
         previewMode={true}
-        activeResourcePointer={{resourceIndex: resourceIndex, slideIndex: slideIndex }}
-        className
+        activeResourcePointer={{resourceId: resourceId, slideIndex: slideIndex }}
       />
     </StyledCard>
     // <div ref={ref} style={{ fontSize }}>
       
     //   <StyledCard
-    //     id={`slide${slideIndex}resource${resourceIndex}`}
+    //     id={`slide${slideIndex}resource${resourceId}`}
     //     onClick={onClick}
     //     interactive={true}
     //     elevation={Elevation.TWO}
