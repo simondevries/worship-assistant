@@ -1,4 +1,9 @@
-import React, { createContext, useReducer } from 'react';
+import React, {
+  createContext,
+  useReducer,
+  ReducerState,
+  Dispatch,
+} from 'react';
 import '@blueprintjs/core/lib/css/blueprint.css';
 import '@blueprintjs/icons/lib/css/blueprint-icons.css';
 import '@blueprintjs/datetime/lib/css/blueprint-datetime.css';
@@ -7,6 +12,7 @@ import 'normalize.css/normalize.css';
 import styled from 'styled-components/macro';
 import AppRouter from './AppRouter';
 import reducers from './Reducers/reducers';
+import IState from './Interfaces/State';
 
 const StyledApp = styled.div`
   background-color: #293742;
@@ -16,7 +22,7 @@ const StyledApp = styled.div`
 const initialState = [];
 
 export const Store = ({ children }) => {
-  const [state, dispatch] = useReducer(reducers, initialState);
+  const [state, dispatch] = useReducer<any>(reducers, initialState);
 
   console.log('state', { state });
 
@@ -27,7 +33,7 @@ export const Store = ({ children }) => {
   );
 };
 
-export const Context = createContext(initialState);
+export const Context = createContext<any>(initialState);
 
 function App() {
   return (

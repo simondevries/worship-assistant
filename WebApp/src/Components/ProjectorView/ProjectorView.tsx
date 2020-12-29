@@ -107,7 +107,6 @@ export default function ({
     }
   };
 
-  console.log('fos', fontSize);
   return (
     <ThemeProvider theme={defaultSongTheme}>
       <StyledProjectorView

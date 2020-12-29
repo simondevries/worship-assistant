@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Context } from '../../../App';
 import styled from 'styled-components';
 import ProjectorView from '../../ProjectorView/ProjectorView';
@@ -6,6 +6,7 @@ import { Button, Card } from '@blueprintjs/core';
 import ResourceReference from '../../../Interfaces/ResourceReference';
 import BibleVerse from '../../../Interfaces/BibleVerse';
 import ActiveSlideContainer from './ActiveSlideContainer';
+import focusOnProjectView from '../../../Hooks/focusOnProjectView';
 
 const StyledBackdrop = styled.div`
   bottom: 0;
@@ -46,6 +47,8 @@ const StyledIframe = styled.iframe`
   height: 100%;
 `;
 
+const StyledActiveSlideContainer = styled.div``;
+
 const StyledCloseButton = styled(Button)`
   padding: 19px 40px;
   font-size: 20px;
@@ -61,18 +64,24 @@ type Props = {
 export default function ({ resource }: Props) {
   const [state, dispatch] = useContext(Context);
   const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(true);
+  const [focusProjector] = focusOnProjectView();
 
-  const activeResourcePointer =
-    state.currentSchedule.activeResourcePointer;
+  const overlayClick = () => {
+    focusProjector();
+  };
+
+  useEffect(() => {
+    focusProjector();
+  }, []);
 
   return (
     <ActiveSlideContainer>
       <>
-        {isOverlayOpen && (
-          <StyledBackdrop onClick={() => setIsOverlayOpen(false)}>
+        {state.hasProjectorsAttached && isOverlayOpen && (
+          <StyledBackdrop onClick={overlayClick}>
             <StyledOverlayContainer>
               <h3>
-                Your slide Show is now in focus, use the arrow keys to
+                Slide Show is now in focus, use the arrow keys to
                 change slides.
               </h3>
               <StyledCloseButton
@@ -83,8 +92,8 @@ export default function ({ resource }: Props) {
                 Go back to schedule
               </StyledCloseButton>
               <small>
-                The slide show is in focus, this allows for the arrow
-                keys to work when changing slides.
+                Back to schedule takes the slide show out of focus and
+                prevents arrow keys from working.
               </small>
             </StyledOverlayContainer>
           </StyledBackdrop>
@@ -93,12 +102,17 @@ export default function ({ resource }: Props) {
         title={resource.id}
         src={resource.embeddedPowerPointUrl}
       /> */}
-        <Button
-          intent="primary"
-          onClick={() => setIsOverlayOpen(true)}
-        >
-          Focus
-        </Button>
+        {state.hasProjectorsAttached && (
+          <Button
+            intent="primary"
+            onClick={() => {
+              setIsOverlayOpen(true);
+              focusProjector();
+            }}
+          >
+            Focus
+          </Button>
+        )}
 
         <StyledButtonContainer>
           <Button>Slide Settings</Button>

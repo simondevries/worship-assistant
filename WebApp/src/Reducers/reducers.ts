@@ -53,6 +53,12 @@ function reducers(state: IState, action) {
 
       return { ...state, currentSchedule: updatedSchedule };
 
+    case 'hasProjectorsAttached':
+      return {
+        ...state,
+        hasProjectorsAttached: true,
+      };
+
     case 'setActiveSongs':
       return {
         ...state,

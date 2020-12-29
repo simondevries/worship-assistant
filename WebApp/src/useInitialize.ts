@@ -12,6 +12,8 @@ import ISong from './Interfaces/Song';
 import IResource from './Interfaces/resource';
 import IResourceReference from './Interfaces/ResourceReference';
 
+let bc = new BroadcastChannel('worshipAssistApp');
+
 function useIntialize(dispatch) {
   const [loadingState, setLoadingState] = useState(
     fetchStatus.Loading,
@@ -70,6 +72,14 @@ function useIntialize(dispatch) {
       } as ISchedule,
     });
   };
+
+  useEffect(() => {
+    if (window.location.pathname.indexOf('/project') === -1) {
+      bc.postMessage('ping-project-views--to-project');
+    } else {
+      bc.postMessage('ping-project-views--to-controller');
+    }
+  }, []);
 
   useEffect(() => {
     // wait for db to initialize... not pretty
