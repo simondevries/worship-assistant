@@ -28,6 +28,7 @@ const StyledProjectorView = styled.div<any>`
   width: 100%;
   height: 100%;
   text-align: ${(props) => props.theme.textAlign};
+  white-space: pre;
 `;
 
 type Props = {
