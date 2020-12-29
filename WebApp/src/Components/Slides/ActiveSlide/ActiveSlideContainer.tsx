@@ -3,6 +3,8 @@ import { Button, Card } from '@blueprintjs/core';
 import { slideWidth } from './ActiveSongSlide';
 import styled from 'styled-components';
 import { Context } from '../../../App';
+import IState from '../../../Interfaces/State';
+import focusOnProjectView from '../../../Hooks/focusOnProjectView';
 
 const StyledContainer = styled(Card)`
   background: #666f76 !important;
@@ -17,29 +19,17 @@ const StyledContainer = styled(Card)`
 
 export default ({ children }) => {
   const [state] = useContext(Context);
-
-  const hasExternalWindowsOpen =
-    state.externalMonitors && state.externalMonitors.length;
+  const [openOrFocus] = focusOnProjectView(true);
 
   const openNewWindowButton = (
-    <Button
-      intent="primary"
-      onClick={() => {
-        window.open(
-          'http://localhost:3000',
-          'http://localhost:3000',
-          '',
-          true,
-        );
-      }}
-    >
+    <Button intent="primary" onClick={openOrFocus}>
       Open new monitor window
     </Button>
   );
 
   return (
     <StyledContainer>
-      {!hasExternalWindowsOpen && openNewWindowButton}
+      {!state.hasProjectorsAttached && openNewWindowButton}
       {children}
     </StyledContainer>
   );

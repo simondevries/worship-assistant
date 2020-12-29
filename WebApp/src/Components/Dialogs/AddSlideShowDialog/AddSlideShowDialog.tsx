@@ -3,8 +3,6 @@ import {
   Button,
   Dialog,
   Classes,
-  MenuItem,
-  Menu,
   Callout,
   TextArea,
   Intent,
@@ -12,7 +10,6 @@ import {
 } from '@blueprintjs/core';
 import IState from '../../../Interfaces/State';
 import { Context } from '../../../App';
-import ISongResourceReference from '../../../Interfaces/SongResourceReference';
 import useEventHandler from '../../../Events/Handlers/useEventHandler';
 import SlideShowAddedToScheduleEvent from '../../../Events/Domain/slideShowAddedToScheduleEvent';
 import styled from 'styled-components';
@@ -53,8 +50,12 @@ export default ({ setModalOpen, index }) => {
       return;
     }
 
-    const reference =
-      matches && matches.length && matches[0].replace(/"/g, '');
+    let reference: string = matches[0].replace(/"/g, '');
+    console.log({ reference });
+    if (reference.indexOf('docs.google.com') !== -1) {
+      // hide controls on google power points
+      reference += '&rm=minimal';
+    }
 
     raiseEvent(
       new SlideShowAddedToScheduleEvent(
@@ -80,7 +81,8 @@ export default ({ setModalOpen, index }) => {
           <Callout>
             Enter embeded url from either power point online or google
             slides online. <br />
-            <b>PowerPoint online:</b> File then Share then <br />
+            <b>PowerPoint online:</b> File then Share then Embed
+            <br />
             <b>Google slides:</b> File then 'Publish to web' then
             embed
           </Callout>

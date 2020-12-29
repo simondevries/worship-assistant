@@ -50,7 +50,9 @@ function reducers(state: IState, action) {
           action.payload,
         ),
       };
-
+      if (state.currentSchedule.activeResourcePointer.resourceId === null) {
+        state.currentSchedule.activeResourcePointer.resourceId = action.payload.id;
+      }
       return { ...state, currentSchedule: updatedSchedule };
 
     case 'editSong':
@@ -64,6 +66,12 @@ function reducers(state: IState, action) {
             .filter((s) => s.id !== action.payload.id)
             .concat([action.payload]),
         },
+      }
+    case 'hasProjectorsAttached':
+      return {
+        ...state,
+        hasProjectorsAttached: true,
+
       };
 
     case 'setActiveSongs':
