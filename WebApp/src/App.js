@@ -18,7 +18,7 @@ const initialState = [];
 export const Store = ({ children }) => {
   const [state, dispatch] = useReducer(reducers, initialState);
 
-  console.log('state', state);
+  console.log('state', { state });
 
   return (
     <Context.Provider value={[state, dispatch]}>

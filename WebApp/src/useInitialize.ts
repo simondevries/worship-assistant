@@ -32,7 +32,7 @@ function useIntialize(dispatch) {
     let array = [];
     for (const index in currentSchedule.resources) {
       if (currentSchedule.resources[index].resourceType !== 'SONG') {
-        return;
+        continue;
       }
 
       const doo = await songsRepo.get(

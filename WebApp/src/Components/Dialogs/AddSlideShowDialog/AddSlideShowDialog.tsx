@@ -8,6 +8,7 @@ import {
   Callout,
   TextArea,
   Intent,
+  Icon,
 } from '@blueprintjs/core';
 import IState from '../../../Interfaces/State';
 import { Context } from '../../../App';
@@ -17,6 +18,19 @@ import SlideShowAddedToScheduleEvent from '../../../Events/Domain/slideShowAdded
 import styled from 'styled-components';
 import newId from '../../../Helpers/newId';
 
+const StyledButtonGroup = styled.div`
+  margin-top: 10px;
+`;
+
+const StyledErrorText = styled.div`
+  color: white;
+  margin-top: 10px;
+  margin-bottom: 30px;
+  .bp3-icon {
+    color: red;
+  }
+`;
+
 const StyledTextArea = styled(TextArea)`
   width: 100%;
   margin-top: 15px;
@@ -25,6 +39,7 @@ const StyledTextArea = styled(TextArea)`
 export default ({ setModalOpen, index }) => {
   const [state] = useContext<Array<IState>>(Context);
   const [url, setUrl] = useState<string>();
+  const [showError, setHasError] = useState<boolean>();
   const [raiseEvent] = useEventHandler();
 
   if (!state || !state.currentSchedule) return null;
@@ -32,6 +47,12 @@ export default ({ setModalOpen, index }) => {
   const addPowerPoint = () => {
     if (!url) return;
     const matches = url?.match(/["].*?["]/g);
+
+    if (!matches || !matches.length || matches.length < 1) {
+      setHasError(true);
+      return;
+    }
+
     const reference =
       matches && matches.length && matches[0].replace(/"/g, '');
 
@@ -71,13 +92,23 @@ export default ({ setModalOpen, index }) => {
             onChange={(res) => setUrl(res.target.value)}
             value={url}
           />
-        </div>
 
-        <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-          <Button onClick={() => setModalOpen(false)}>Close</Button>
-          <Button onClick={addPowerPoint} intent="primary">
-            Add to schedule
-          </Button>
+          {showError && (
+            <StyledErrorText>
+              <Icon icon="error" /> Invalid - the text you pasted is
+              not recognized. Ensure you are copying the entire
+              embeded link starting from {'<iframe'}
+            </StyledErrorText>
+          )}
+
+          <StyledButtonGroup
+            className={Classes.DIALOG_FOOTER_ACTIONS}
+          >
+            <Button onClick={() => setModalOpen(false)}>Close</Button>
+            <Button onClick={addPowerPoint} intent="primary">
+              Add to schedule
+            </Button>
+          </StyledButtonGroup>
         </div>
       </Dialog>
     </>

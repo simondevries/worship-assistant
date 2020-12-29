@@ -5,6 +5,7 @@ import ProjectorView from '../../ProjectorView/ProjectorView';
 import { Button, Card } from '@blueprintjs/core';
 import ResourceReference from '../../../Interfaces/ResourceReference';
 import BibleVerse from '../../../Interfaces/BibleVerse';
+import ActiveSlideContainer from './ActiveSlideContainer';
 
 const StyledButtonContainer = styled.div`
   display: flex;
@@ -17,17 +18,6 @@ const StyledProjectorView = styled(ProjectorView)`
 
 export const slideWidth = 300;
 
-const StyledContainer = styled(Card)`
-  background: #666f76 !important;
-  justify-content: space-between;
-  display: flex;
-  flex-direction: column;
-  width: ${slideWidth + 'px'};
-  font-size: 15pt;
-  min-height: 250px;
-  margin-bottom: 10px;
-`;
-
 type Props = {
   resource: ResourceReference;
 };
@@ -39,7 +29,7 @@ export default function ({ resource }: Props) {
     state.currentSchedule.activeResourcePointer;
 
   return (
-    <StyledContainer>
+    <ActiveSlideContainer>
       {`${resource.book} ${resource.chapter}:${resource.verse} (${resource.translation})`}
       <StyledProjectorView
         previewMode={true}
@@ -48,6 +38,6 @@ export default function ({ resource }: Props) {
       <StyledButtonContainer>
         <Button>Slide Settings</Button>
       </StyledButtonContainer>
-    </StyledContainer>
+    </ActiveSlideContainer>
   );
 }

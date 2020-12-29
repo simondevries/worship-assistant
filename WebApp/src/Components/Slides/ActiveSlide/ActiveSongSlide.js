@@ -4,6 +4,7 @@ import { Context } from '../../../App';
 import styled from 'styled-components';
 import ProjectorView from '../../ProjectorView/ProjectorView';
 import { Button, Card } from '@blueprintjs/core';
+import ActiveSlideContainer from './ActiveSlideContainer';
 
 const StyledButtonContainer = styled.div`
   display: flex;
@@ -16,17 +17,6 @@ const StyledProjectorView = styled(ProjectorView)`
 
 export const slideWidth = 300;
 
-const StyledContainer = styled(Card)`
-  background: #666f76 !important;
-  justify-content: space-between;
-  display: flex;
-  flex-direction: column;
-  width: ${slideWidth + 'px'};
-  font-size: 15pt;
-  min-height: 250px;
-  margin-bottom: 10px;
-`;
-
 export default function () {
   const [state, dispatch] = useContext(Context);
 
@@ -34,7 +24,7 @@ export default function () {
     state.currentSchedule.activeResourcePointer;
 
   return (
-    <StyledContainer>
+    <ActiveSlideContainer>
       <StyledProjectorView
         previewMode={true}
         activeResourcePointer={activeResourcePointer}
@@ -45,6 +35,6 @@ export default function () {
         <Button>Blank</Button>
         <Button>Play</Button>
       </StyledButtonContainer>
-    </StyledContainer>
+    </ActiveSlideContainer>
   );
 }

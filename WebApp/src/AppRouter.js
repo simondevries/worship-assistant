@@ -26,6 +26,7 @@ import useEventHandler from './Events/Handlers/useEventHandler';
 import { useLocation } from 'react-router-dom';
 import { Redirect } from 'react-router-dom/cjs/react-router-dom.min';
 import useBroadcastChannelMessageHandler from './useBroadcastChannelMessageHandler';
+import Tour from 'reactour';
 
 const StyledControllerPageContainer = styled.div`
   display: flex;
@@ -47,11 +48,20 @@ const StyledSpinner = styled(Spinner)`
   left: 50%;
 `;
 
+const steps = [
+  {
+    selector: '.side-bar_add-schedule',
+    content: 'This is my first Step',
+  },
+];
+
 export default function () {
   const [state, dispatch] = useContext(Context);
   const [scheduleModalOpen, setScheduleModalOpen] = useModal(false);
   const [loadingState] = useIntialize(dispatch);
   const [eventsReceived] = useBroadcastChannelMessageHandler();
+  const [isTourOpen, setIsTourOpen] = useState(false);
+
   hotkeyListenter();
 
   /** Only open welcome modal if hasn't come to site recently */
@@ -75,6 +85,11 @@ export default function () {
 
   return (
     <>
+      <Tour
+        steps={steps}
+        isOpen={isTourOpen}
+        onRequestClose={() => setIsTourOpen(false)}
+      />
       {scheduleModalOpen && (
         <ScheduleManagerDialog setOpen={setScheduleModalOpen} />
       )}

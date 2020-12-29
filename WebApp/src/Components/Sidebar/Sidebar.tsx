@@ -60,9 +60,12 @@ export default function () {
         />
       )}
       {settingsModalOpen && (
-        <SlideSettingsDialog 
-        setSettingsModalOpen={setSettingsModalOpen} 
-        activeResourcePointer={state.currentSchedule.activeResourcePointer} />
+        <SlideSettingsDialog
+          setSettingsModalOpen={setSettingsModalOpen}
+          activeResourcePointer={
+            state.currentSchedule.activeResourcePointer
+          }
+        />
       )}
       {scheduleModalOpen && (
         <ScheduleManagerDialog setOpen={setScheduleModalOpen} />
@@ -75,6 +78,7 @@ export default function () {
         <div>Schedules</div>
       </StyledIconButton>
       <StyledIconButton
+        className="side-bar_add-schedule"
         onClick={() => setAddSongModalOpenHacks(true)}
         icon={addIcon}
         minimal

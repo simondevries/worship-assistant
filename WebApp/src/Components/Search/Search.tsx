@@ -116,7 +116,7 @@ const Search = () => {
   const [allSongs, setAllSongs] = useState([]);
   const [state, dispatch] = useContext(Context);
   const [raiseEvent] = useEventHandler();
-  const [isSlideShowModalOpen, setSlideShowModalOpen] = useModal();
+  const [isSlideShowModalOpen, setIsSlideShowModalOpen] = useModal();
   const searchbox = useRef<HTMLInputElement>(null);
 
   const onClose = () => {
@@ -131,9 +131,16 @@ const Search = () => {
     raiseEvent(new VideoCreatedEvent(false, blobUrl));
   };
 
+  const changeSlideShowModalVisiblity = (visibility) => {
+    if (!visibility) {
+      onClose();
+    } else {
+      setIsSlideShowModalOpen(true);
+    }
+  };
+
   const addSlideShow = () => {
-    setSlideShowModalOpen(true);
-    // onClose();
+    setIsSlideShowModalOpen(true);
   };
 
   const addBibleVerse = async () => {
@@ -264,7 +271,7 @@ const Search = () => {
       )}
       {isSlideShowModalOpen && (
         <AddSlideShowDialog
-          setModalOpen={setSlideShowModalOpen}
+          setModalOpen={changeSlideShowModalVisiblity}
           index={1} // todo (sdv)
         />
       )}

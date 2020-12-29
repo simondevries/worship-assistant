@@ -11,6 +11,7 @@ import SongHandler from './Handlers/SongHandler';
 import BibleVerseHandler from './Handlers/BibleVerseHandler';
 import SlideShowHandler from './Handlers/SlideShowHandler';
 import YouTubeHandler from './Handlers/YouTubeHandler';
+import { Button } from '@blueprintjs/core';
 
 const StyledPowerPointPresenter = styled.iframe`
   width: 100%;
@@ -20,10 +21,10 @@ const StyledPowerPointPresenter = styled.iframe`
 const StyledVideo = styled.video``;
 
 const StyledProjectorView = styled.div<any>`
-  ${(props) => [!props.previewMode ? 'font-size: 100pt;' : '']}
+  /* ${(props) => [!props.previewMode ? 'font-size: 100pt;' : '']} */
   background: ${(props) => props.theme.backgroundColor};
   color: ${(props) => props.theme.primary};
-  font-size: ${(props) => props.theme.fontSize};
+  /* font-size: ${(props) => props.theme.fontSize}; */
   width: 100%;
   height: 100%;
   text-align: ${(props) => props.theme.textAlign};
@@ -44,7 +45,7 @@ export default function ({
   className,
 }: Props) {
   const [state] = useContext<Array<IState>>(Context);
-  const { fontSize, ref } = useFitText();
+  const { fontSize, ref } = useFitText({ maxFontSize: 9999 });
 
   if (!state || !state.currentSchedule) return null;
 
@@ -105,6 +106,7 @@ export default function ({
     }
   };
 
+  console.log('fos', fontSize);
   return (
     <ThemeProvider theme={defaultSongTheme}>
       <StyledProjectorView
