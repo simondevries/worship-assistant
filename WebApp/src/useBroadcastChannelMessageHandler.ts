@@ -1,18 +1,33 @@
 import useEventHandler from './Events/Handlers/useEventHandler';
 import AppEvent from './Events/Domain/appEvent';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
+import { Context } from './App';
 
 let bc = new BroadcastChannel('worshipAssistApp');
 
 export default () => {
   const [raiseEvent] = useEventHandler();
+  const [state, dispatch] = useContext(Context);
   const [eventsReceived, setEventsRecieved] = useState<
     Array<AppEvent>
   >([]);
 
   useEffect(() => {
     bc.onmessage = function (channel) {
-      if (window.location.pathname.indexOf('project') === -1) return;
+      if (window.location.pathname.indexOf('project') === -1) {
+        if (channel.data === 'ping-project-views--to-controller') {
+          dispatch({
+            type: 'hasProjectorsAttached',
+            payload: true,
+          });
+        }
+
+        return;
+      }
+
+      if (channel.data === 'ping-project-views--to-project') {
+        bc.postMessage('ping-project-views--to-controller');
+      }
 
       const event = JSON.parse(channel.data);
       event.isExternalEvent = true;

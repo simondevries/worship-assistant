@@ -57,27 +57,27 @@ const useIndexDbEventProcessor = () => {
     scheduleRepo.set(updatedSchedule, updatedSchedule.id);
   };
 
-  // const SlideShowAddedToScheduleEventHandler = (
-  //   event: SlideShowAddedToScheduleEvent,
-  // ) => {
-  //   if (
-  //     event.eventType !== SlideShowAddedToScheduleEventName ||
-  //     event.isExternalEvent
-  //   )
-  //     return;
+  const SlideShowAddedToScheduleEventHandler = (
+    event: SlideShowAddedToScheduleEvent,
+  ) => {
+    if (
+      event.eventType !== SlideShowAddedToScheduleEventName ||
+      event.isExternalEvent
+    )
+      return;
 
-  //   // Hacks this is duplicate from the reducer
-  //   const updatedSchedule = {
-  //     ...state.currentSchedule,
-  //     resources: state.currentSchedule.resources.concat({
-  //       id: event.id,
-  //       resourceType: 'SLIDESHOW',
-  //       embeddedPowerPointUrl: event.embeddedPowerPointUrl,
-  //     } as ISongResourceReference),
-  //   };
+    // Hacks this is duplicate from the reducer
+    const updatedSchedule = {
+      ...state.currentSchedule,
+      resources: state.currentSchedule.resources.concat({
+        id: event.id,
+        resourceType: 'SLIDESHOW',
+        embeddedPowerPointUrl: event.embeddedPowerPointUrl,
+      } as ISongResourceReference),
+    };
 
-  //   scheduleRepo.set(updatedSchedule, updatedSchedule.id);
-  // };
+    scheduleRepo.set(updatedSchedule, updatedSchedule.id);
+  };
 
   const NewScheduleCreatedEventHandler = (
     event: NewScheduleCreatedEvent,
@@ -97,7 +97,7 @@ const useIndexDbEventProcessor = () => {
     SongCreatedEventHandler,
     SongAddedToScheduleEventHandler,
     NewScheduleCreatedEventHandler,
-    // SlideShowAddedToScheduleEventHandler,
+    SlideShowAddedToScheduleEventHandler,
   ];
   return [arr];
 };
