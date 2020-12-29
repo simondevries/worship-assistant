@@ -17,6 +17,7 @@ import NewScheduleCreatedEvent, {
 import SlideShowAddedToScheduleEvent, {
   SlideShowAddedToScheduleEventName,
 } from '../Domain/slideShowAddedToScheduleEvent';
+import SongEditedEvent from '../Domain/songEditedEvent';
 
 const _handleScheduleUpdated = (state, inx, song) => {
   console.log('ns1', inx);
@@ -55,6 +56,15 @@ const useIndexDbEventProcessor = () => {
     };
 
     scheduleRepo.set(updatedSchedule, updatedSchedule.id);
+  };
+
+  const SongEditedEventHandler = (event: SongEditedEvent) => {
+    // todo (Sdv) double check this logic
+    if (event.eventType !== SongEditedEvent || event.isExternalEvent)
+      return;
+
+    // todo (Sdv) not tested
+    songsRepo.set(event.song, event.song.id);
   };
 
   // const SlideShowAddedToScheduleEventHandler = (
@@ -97,6 +107,7 @@ const useIndexDbEventProcessor = () => {
     SongCreatedEventHandler,
     SongAddedToScheduleEventHandler,
     NewScheduleCreatedEventHandler,
+    SongEditedEventHandler,
     // SlideShowAddedToScheduleEventHandler,
   ];
   return [arr];

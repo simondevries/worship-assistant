@@ -23,6 +23,7 @@ import VideoCreatedEvent, {
 import SlideShowAddedToScheduleEvent, {
   SlideShowAddedToScheduleEventName,
 } from '../Domain/slideShowAddedToScheduleEvent';
+import SongEditedEvent from '../Domain/songEditedEvent';
 
 let bc = new BroadcastChannel('worshipAssistApp');
 
@@ -115,7 +116,16 @@ export default () => {
       event.isExternalEvent
     )
       return;
-    // todo remoev song
+
+    bc.postMessage(
+      JSON.stringify({ ...event, isExternalEvent: true }),
+    );
+  };
+
+  const SongEditedEventHandler = (event: SongEditedEvent) => {
+    if (event.eventType !== SongEditedEvent || event.isExternalEvent)
+      return;
+
     bc.postMessage(
       JSON.stringify({ ...event, isExternalEvent: true }),
     );
@@ -148,6 +158,7 @@ export default () => {
     RemoveResourceFromScheduleEventHandler,
     VideoAddedToScheduleEventHandler,
     SlideShowAddedToScheduleEventHandler,
+    SongEditedEventHandler,
   ];
   return [arr];
 };

@@ -53,6 +53,19 @@ function reducers(state: IState, action) {
 
       return { ...state, currentSchedule: updatedSchedule };
 
+    case 'editSong':
+      // todo (Sdv) not tested
+
+      return {
+        ...state,
+        currentSchedule: {
+          ...state.currentSchedule,
+          activeSongs: state.currentSchedule.activeSongs
+            .filter((s) => s.id !== action.payload.id)
+            .concat([action.payload]),
+        },
+      };
+
     case 'setActiveSongs':
       return {
         ...state,

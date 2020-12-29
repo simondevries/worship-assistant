@@ -29,6 +29,16 @@ const StyledResourceManager = styled.div`
   height: 100%;
 `;
 
+const openEditSongModal = () => {
+  // useModal hook to open addSongDialog
+  // Add a prop to the upsertDialog to take a song reference
+  // -- Create a useEffect in addsong dialog that gets the song from index db and populates the song lyrics and the title
+  // Remove the 'save and add to schedule' button if the song prop exits
+  // Clicking the save button will update raise the songAddedToScheduleEvent if the song prop does not exists and will raise the songEditiedEvent if song is being updated
+  // Create three event handlers: state, broadcast, indexdb
+  // ~~rename addsong dialog to upsertSongDialog~~
+};
+
 export default function ({
   resource,
   isActiveResource,
@@ -41,10 +51,7 @@ export default function ({
       <StyledHeader>
         {resource && resource.title}
         <ButtonGroup>
-          <Button
-            onClick={() => console.log('s')}
-            icon="edit"
-          ></Button>
+          <Button onClick={openEditSongModal} icon="edit"></Button>
           <Button
             onClick={() =>
               raiseEvent(

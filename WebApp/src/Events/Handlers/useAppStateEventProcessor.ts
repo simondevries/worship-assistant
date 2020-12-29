@@ -25,6 +25,7 @@ import newId from '../../Helpers/newId';
 import SlideShowAddedToScheduleEvent, {
   SlideShowAddedToScheduleEventName,
 } from '../Domain/slideShowAddedToScheduleEvent';
+import SongEditedEvent from '../Domain/songEditedEvent';
 
 const Channel_Name = 'Controller';
 let bc = new BroadcastChannel('Channel_Name');
@@ -53,6 +54,18 @@ const useAppStateEventProcessors = () => {
 
     dispatch({
       type: 'addSongToActiveSongs',
+      payload: event.song,
+    });
+  };
+
+  const SongEditedEventHandler = (event: SongEditedEvent) => {
+    // todo (Sdv) double check this logic
+    if (event.eventType !== SongEditedEvent || event.isExternalEvent)
+      return;
+
+    // todo (Sdv) not tested
+    dispatch({
+      type: 'editSong',
       payload: event.song,
     });
   };
@@ -127,6 +140,7 @@ const useAppStateEventProcessors = () => {
     RemoveResourceFromScheduleEventHandler,
     BibleVerseAddedToScheduleEventHandler,
     SlideShowAddedToScheduleEventHandler,
+    SongEditedEventHandler,
   ];
   return [arr];
 };
