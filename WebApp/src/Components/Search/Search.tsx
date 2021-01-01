@@ -156,7 +156,7 @@ const Search = () => {
       newId(),
       book,
       chapter,
-      verse,re
+      verse,
       'kjv',
       'bible-api.com',
       null,
