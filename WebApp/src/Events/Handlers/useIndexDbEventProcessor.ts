@@ -17,6 +17,18 @@ import NewScheduleCreatedEvent, {
 import SlideShowAddedToScheduleEvent, {
   SlideShowAddedToScheduleEventName,
 } from '../Domain/slideShowAddedToScheduleEvent';
+import MoveResourceEvent, {
+  MoveResourceEventName,
+} from '../Domain/moveResourceEvent';
+import reducers from '../../Reducers/reducers';
+import IState from '../../Interfaces/State';
+import RemoveResourceFromScheduleEvent, {
+  RemoveResourceFromScheduleEventName,
+} from '../Domain/removeResourceFromScheduleEvent';
+import newId from '../../Helpers/newId';
+import BibleVerseAddedToScheduleEvent, {
+  BibleVerseAddedToScheduleEventName,
+} from '../Domain/bibleVerseAddedToScheduleEvent';
 
 const _handleScheduleUpdated = (state, inx, song) => {
   console.log('ns1', inx);
@@ -44,17 +56,19 @@ const useIndexDbEventProcessor = () => {
     )
       return;
 
-    // Hacks this is duplicate from the reducer
-    const updatedSchedule = {
-      ...state.currentSchedule,
-      resources: state.currentSchedule.resources.concat({
-        index: event.index,
+    const updatedState = reducers(state, {
+      type: 'addResourceToSchedule',
+      payload: {
         id: event.song.id,
         resourceType: 'SONG',
-      } as ISongResourceReference),
-    };
+        index: event.index,
+      },
+    });
 
-    scheduleRepo.set(updatedSchedule, updatedSchedule.id);
+    scheduleRepo.set(
+      updatedState.currentSchedule,
+      updatedState.currentSchedule.id,
+    );
   };
 
   const SlideShowAddedToScheduleEventHandler = (
@@ -66,17 +80,19 @@ const useIndexDbEventProcessor = () => {
     )
       return;
 
-    // Hacks this is duplicate from the reducer
-    const updatedSchedule = {
-      ...state.currentSchedule,
-      resources: state.currentSchedule.resources.concat({
+    const updatedState = reducers(state, {
+      type: 'addResourceToSchedule',
+      payload: {
         id: event.id,
         resourceType: 'SLIDESHOW',
         embeddedPowerPointUrl: event.embeddedPowerPointUrl,
-      } as ISongResourceReference),
-    };
+      },
+    });
 
-    scheduleRepo.set(updatedSchedule, updatedSchedule.id);
+    scheduleRepo.set(
+      updatedState.currentSchedule,
+      updatedState.currentSchedule.id,
+    );
   };
 
   const NewScheduleCreatedEventHandler = (
@@ -87,17 +103,76 @@ const useIndexDbEventProcessor = () => {
       event.isExternalEvent
     )
       return;
-    console.log('event.schedule', event.schedule.id);
+
     scheduleRepo.add(event.schedule, event.schedule.id);
 
     settingsRepo.setCurrentService(event.schedule.id);
+  };
+
+  const MoveResourceEventHandler = (event: MoveResourceEvent) => {
+    if (
+      event.eventType !== MoveResourceEventName ||
+      event.isExternalEvent
+    )
+      return;
+
+    const updatedState: IState = reducers(state, {
+      type: 'moveResourcePosition',
+      payload: { id: event.id, direction: event.direction },
+    });
+
+    scheduleRepo.set(
+      updatedState.currentSchedule,
+      updatedState.currentSchedule.id,
+    );
+  };
+
+  const RemoveResourceFromScheduleEventHandler = (
+    event: RemoveResourceFromScheduleEvent,
+  ) => {
+    if (event.eventType !== RemoveResourceFromScheduleEventName)
+      return;
+
+    const updatedState = reducers(state, {
+      type: 'removeResourceFromSchedule',
+      id: event.id,
+    });
+
+    scheduleRepo.set(
+      updatedState.currentSchedule,
+      updatedState.currentSchedule.id,
+    );
+  };
+
+  const BibleVerseAddedToScheduleEventHandler = (
+    event: BibleVerseAddedToScheduleEvent,
+  ) => {
+    if (event.eventType !== BibleVerseAddedToScheduleEventName)
+      return;
+
+    const updatedState = reducers(state, {
+      type: 'addResourceToSchedule',
+      payload: {
+        ...event.bibleVerse,
+        id: newId(),
+        resourceType: 'BIBLEVERSE',
+      },
+    });
+
+    scheduleRepo.set(
+      updatedState.currentSchedule,
+      updatedState.currentSchedule.id,
+    );
   };
 
   const arr = [
     SongCreatedEventHandler,
     SongAddedToScheduleEventHandler,
     NewScheduleCreatedEventHandler,
+    MoveResourceEventHandler,
+    RemoveResourceFromScheduleEventHandler,
     SlideShowAddedToScheduleEventHandler,
+    BibleVerseAddedToScheduleEventHandler,
   ];
   return [arr];
 };

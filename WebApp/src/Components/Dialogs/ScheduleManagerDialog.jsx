@@ -69,6 +69,8 @@ export default ({ setOpen }) => {
   useEffect(() => {
     async function fetchData() {
       const schedules = await scheduleRepo.getAll();
+      // todo (sdv) order by date
+      // schedules.orderBy(s => s.)
       setSchedules(schedules);
     }
     fetchData();

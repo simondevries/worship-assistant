@@ -6,10 +6,17 @@ import BaseNonActiveSlide from '../../../../Common/BaseNonActiveSlide/BaseNonAct
 import IVerse from '../../../../Interfaces/Verse';
 import useFitText from 'use-fit-text';
 
-const StyledCard = styled(Card)`
-  width: 300px;
-  height: 200px;
+const StyledBaseNonActiveSlide = styled(BaseNonActiveSlide)`
+  padding: 7px 10px 15px 7px;
+`;
+
+const StyledTitleLabel = styled.div`
+  background: lightskyblue;
+  padding: 1px 9px;
+  border-radius: 4px;
+  color: black;
   margin-bottom: 10px;
+  width: fit-content;
 `;
 
 interface Props {
@@ -17,23 +24,42 @@ interface Props {
   onClick: any;
   slideIndex: number;
   resourceId: string;
+  isFirstSlide: boolean;
+  isLastSlide: boolean;
 }
 
-export default function ({ verse, slideIndex, resourceId }: Props) {
+export default function ({
+  verse,
+  slideIndex,
+  resourceId,
+  isFirstSlide,
+  isLastSlide,
+}: Props) {
   const { fontSize, ref } = useFitText();
   return (
     <div ref={ref} style={{ fontSize }}>
-      <BaseNonActiveSlide
+      <StyledBaseNonActiveSlide
         slideIndex={slideIndex}
         resourceId={resourceId}
+        isFirstSlide={isFirstSlide}
+        isLastSlide={isLastSlide}
       >
         <>
-          <H5>
-            <a href="#">Verse</a>
-          </H5>
-          {verse.content}
+          <StyledTitleLabel>Verse {slideIndex + 1}</StyledTitleLabel>
+          <div className="versecont">
+            {' '}
+            {verse?.content?.split('\n').map(
+              (c) =>
+                c && (
+                  <>
+                    <span>{c}</span>
+                    <br />
+                  </>
+                ),
+            ) || ''}
+          </div>
         </>
-      </BaseNonActiveSlide>
+      </StyledBaseNonActiveSlide>
     </div>
   );
 }

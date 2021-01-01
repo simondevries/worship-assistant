@@ -14,7 +14,6 @@ const StyledContainer = styled(Card)`
   width: 300px;
   font-size: 15pt;
   min-height: 250px;
-  margin-bottom: 10px;
 `;
 
 export default ({ children }) => {

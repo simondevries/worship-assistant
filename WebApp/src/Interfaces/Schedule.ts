@@ -9,6 +9,7 @@ export default interface ISchedule {
   id: string;
   date: string;
   activeResourcePointer: ActiveResourcePointer;
+  resourceOrder: string[];
   resources: ResourceReference[];
   activeSongs: Song[];
   title: string;
@@ -24,6 +25,7 @@ export const empty = (title: string) => {
       slideIndex: 0,
       resourceId: null,
     },
+    resourceOrder: [],
     activeSongs: [],
   };
 };

@@ -15,9 +15,7 @@ import IResourceReference from './Interfaces/ResourceReference';
 let bc = new BroadcastChannel('worshipAssistApp');
 
 function useIntialize(dispatch) {
-  const [loadingState, setLoadingState] = useState(
-    fetchStatus.Loading,
-  );
+  const [loadingState, setLoadingState] = useState('Loading');
 
   const primeSettings = async () => {
     const settings = await settingsRepo.get();
@@ -37,11 +35,12 @@ function useIntialize(dispatch) {
         continue;
       }
 
-      const doo = await songsRepo.get(
+      const result = await songsRepo.get(
         (currentSchedule.resources[index] as ISongResourceReference)
           .id,
       );
-      array = array.concat(doo);
+
+      array = array.concat(result);
     }
     return array;
   };

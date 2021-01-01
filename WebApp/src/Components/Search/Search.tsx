@@ -18,7 +18,7 @@ import SearchQuery from './searchQuery';
 import { songsRepo } from '../../Storage/songsRepository';
 import { scheduleRepo } from '../../Storage/scheduleRepository';
 import useEventHandler from '../../Events/Handlers/useEventHandler';
-import SongAddedToSchedule from '../../Events/Domain/songAddedToScheduleEvent';
+import SongAddedToScheduleEvent from '../../Events/Domain/songAddedToScheduleEvent';
 import IVideo from '../../Interfaces/Video';
 import IImage from '../../Interfaces/Image';
 import ISong from '../../Interfaces/Song';
@@ -34,6 +34,7 @@ import newId from '../../Helpers/newId';
 import useModal from '../Dialogs/useModal';
 import AddSlideShowDialog from '../Dialogs/AddSlideShowDialog/AddSlideShowDialog';
 import { bibleVerseResolver } from '../../BibleVerse/bibleVerseResolver';
+import IState from '../../Interfaces/State';
 
 const StyledOmnibarContainer = styled.div`
   -webkit-filter: blur(0);
@@ -155,7 +156,7 @@ const Search = () => {
       newId(),
       book,
       chapter,
-      verse,
+      verse,re
       'kjv',
       'bible-api.com',
       null,
@@ -164,15 +165,21 @@ const Search = () => {
     const verseContent = await bibleVerseResolver(bibleVerse);
 
     bibleVerse = addBibleVerseContent(bibleVerse, verseContent);
-    raiseEvent(new BibleVerseAddedToScheduleEvent(false, bibleVerse));
+    raiseEvent(
+      new BibleVerseAddedToScheduleEvent(
+        false,
+        bibleVerse,
+        (state as IState).searchBar.insertResourceAtIndex,
+      ),
+    );
 
     onClose();
   };
 
   const addSong = async (song: ISong) => {
     raiseEvent(
-      new SongAddedToSchedule(
-        state.currentSchedule.resources.length,
+      new SongAddedToScheduleEvent(
+        (state as IState).searchBar.insertResourceAtIndex,
         false,
         song,
       ),

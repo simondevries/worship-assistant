@@ -6,6 +6,7 @@ import Search from './Components/Search/Search';
 import {
   BrowserRouter as Router,
   Switch,
+  Redirect,
   Route,
   Link,
 } from 'react-router-dom';
@@ -24,9 +25,9 @@ import useModal from './Components/Dialogs/useModal';
 import SlideChangeEvent from './Events/Domain/slideChangeEvent';
 import useEventHandler from './Events/Handlers/useEventHandler';
 import { useLocation } from 'react-router-dom';
-import { Redirect } from 'react-router-dom/cjs/react-router-dom.min';
 import useBroadcastChannelMessageHandler from './useBroadcastChannelMessageHandler';
 import Tour from 'reactour';
+import NotFound from './Components/NotFound/NotFound';
 
 const StyledControllerPageContainer = styled.div`
   display: flex;
@@ -93,7 +94,7 @@ export default function () {
       {scheduleModalOpen && (
         <ScheduleManagerDialog setOpen={setScheduleModalOpen} />
       )}
-      {state.isSearchVisible && <Search />}
+      {state?.searchBar?.isVisible && <Search />}
       {!process.env.NODE_ENV ||
         (process.env.NODE_ENV === 'development' && (
           <StyledEventsReceived>
@@ -118,6 +119,9 @@ export default function () {
               <ControllerPage />
               {/* <input type="button" onClick={onFocusTab} /> */}
             </StyledControllerPageContainer>
+          </Route>
+          <Route>
+            <NotFound />
           </Route>
           <Route path="/project">
             <ProjectorView
