@@ -69,15 +69,6 @@ function reducers(state: IState, action): IState {
         hasProjectorsAttached: true,
       };
 
-    case 'setActiveSongs':
-      return {
-        ...state,
-        currentSchedule: {
-          ...state.currentSchedule,
-          activeSongs: action.payload,
-        },
-      };
-
     case 'moveResourcePosition':
       const resourceOrder =
         state?.currentSchedule?.resourceOrder || [];
@@ -111,6 +102,8 @@ function reducers(state: IState, action): IState {
         },
       };
 
+    // Active Songs
+
     case 'addSongToActiveSongs':
       const songs =
         (state.currentSchedule.activeSongs &&
@@ -137,6 +130,37 @@ function reducers(state: IState, action): IState {
         currentSchedule: {
           ...state.currentSchedule,
           activeSongs: [],
+        },
+      };
+
+    // Active Videos
+
+    case 'addVideoToActiveVideos':
+      const videos =
+        (state.currentSchedule.activeVideos &&
+          state.currentSchedule.activeVideos.filter(
+            (s) =>
+              s &&
+              action &&
+              action.payload &&
+              s.id !== action.payload.id,
+          )) ||
+        [];
+
+      return {
+        ...state,
+        currentSchedule: {
+          ...state.currentSchedule,
+          activeVideos: videos.concat(action.payload),
+        },
+      };
+
+    case 'clearActiveVideos':
+      return {
+        ...state,
+        currentSchedule: {
+          ...state.currentSchedule,
+          activeVideos: [],
         },
       };
 

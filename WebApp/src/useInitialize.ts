@@ -1,21 +1,30 @@
 import { settingsRepo } from './Storage/settingsRepository';
+import { songsRepo } from './Storage/songsRepository';
 import { scheduleRepo } from './Storage/scheduleRepository';
 import { AppToaster } from './Toaster';
 import React, { useContext, useState, useEffect } from 'react';
 import fetchStatus from './Common/FetchStatus/fetchStatus';
 import { Intent } from '@blueprintjs/core';
 import useModal from './Components/Dialogs/useModal';
-import ISchedule from './Interfaces/Schedule';
-import { songsRepo } from './Storage/songsRepository';
+import ISchedule, { hasUserFileHandler } from './Interfaces/Schedule';
 import ISongResourceReference from './Interfaces/SongResourceReference';
 import ISong from './Interfaces/Song';
 import IResource from './Interfaces/resource';
 import IResourceReference from './Interfaces/ResourceReference';
+import { fileSystemApp } from './FileSystem/fileSystemTools';
+import { userFileHandlerRepo } from './Storage/userFileHandlerRepository';
+import getUrlFromFileHandle from './Helpers/getUrlFromFileHandle';
+import useEventHandler from './Events/Handlers/useEventHandler';
 
 let bc = new BroadcastChannel('worshipAssistApp');
 
 function useIntialize(dispatch) {
   const [loadingState, setLoadingState] = useState('Loading');
+  const [scheduleModalOpen, setScheduleModalOpen] = useModal(false);
+  const [
+    userFileHandlerPermissionManagerOpen,
+    setUserFileHandlerPermissionManagerOpen,
+  ] = useModal(false);
 
   const primeSettings = async () => {
     const settings = await settingsRepo.get();
@@ -72,6 +81,29 @@ function useIntialize(dispatch) {
     });
   };
 
+  /** Only open welcome modal if hasn't come to site recently */
+  const openModals = (currentSchedule) => {
+    var ONE_HOUR = 60 * 60 * 1000; /* ms */
+
+    const lastUpdated = localStorage.getItem('lastOpened');
+    const hasUserFileHandlerInSchedule = hasUserFileHandler(
+      currentSchedule,
+    );
+
+    if (lastUpdated) {
+      const lastOpened = Date.parse(lastUpdated);
+      if (Number(new Date()) - lastOpened > ONE_HOUR) {
+        setScheduleModalOpen(true);
+      } else {
+        if (hasUserFileHandlerInSchedule) {
+          setUserFileHandlerPermissionManagerOpen(true);
+        }
+      }
+    }
+
+    localStorage.setItem('lastOpened', new Date().toISOString());
+  };
+
   useEffect(() => {
     if (window.location.pathname.indexOf('/project') === -1) {
       bc.postMessage('ping-project-views--to-project');
@@ -101,6 +133,8 @@ function useIntialize(dispatch) {
 
           primeState(currentSchedule, activeSongs);
 
+          openModals(currentSchedule);
+
           setLoadingState(fetchStatus.Loaded);
         } catch (e) {
           setLoadingState(fetchStatus.Failed);
@@ -109,7 +143,13 @@ function useIntialize(dispatch) {
       initState();
     }, 500);
   }, []);
-  return [loadingState];
+  return [
+    loadingState,
+    scheduleModalOpen,
+    setScheduleModalOpen,
+    userFileHandlerPermissionManagerOpen,
+    setUserFileHandlerPermissionManagerOpen,
+  ];
 }
 
 export default useIntialize;

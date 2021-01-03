@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Context } from '../../App';
-import { Button, Card, H5, H3 } from '@blueprintjs/core';
+import { Button, Card, H5, H3, Icon, H4 } from '@blueprintjs/core';
 import { Dialog, Classes } from '@blueprintjs/core';
 import styled, { css } from 'styled-components/macro';
 import { DateInput } from '@blueprintjs/datetime';
@@ -9,10 +9,21 @@ import { settingsRepo } from '../../Storage/settingsRepository';
 import NewId from '../../Helpers/newId';
 import useEventHandler from '../../Events/Handlers/useEventHandler';
 import NewScheduleCreatedEvent from '../../Events/Domain/newScheduleCreatedEvent';
-import { empty as emptyResource } from '../../Interfaces/Schedule';
+import {
+  empty as emptyResource,
+  hasUserFileHandler,
+} from '../../Interfaces/Schedule';
+import getUrlFromFileHandle from '../../Helpers/getUrlFromFileHandle';
+import LoadScheduleEvent from '../../Events/Domain/loadScheduleEvent';
+import AddActiveVideoEvent from '../../Events/Domain/addActiveVideoEvent';
+import UserFileHandlerPermissionManagerDialog from './UserFileHandlerPermissionManagerDialog';
 
 const StyledDateInput = styled(DateInput)`
   margin-left: 30px;
+`;
+
+const StyledCard = styled(Card)`
+  background: #353535;
 `;
 
 const StyledActionButton = styled(Button)`
@@ -58,6 +69,15 @@ const StyledTable = styled.table`
   }
 `;
 
+const StyledTd = styled.td`
+  text-align: right;
+  padding-right: 10px;
+`;
+
+const StyledTipHeader = styled(H5)`
+  color: #48aff0;
+`;
+
 export default ({ setOpen }) => {
   const [scheduleTitle, setScheduleTitle] = useState();
   const [showOpenConfirm, setShowOpenConfirm] = useState(false);
@@ -65,6 +85,10 @@ export default ({ setOpen }) => {
   const [schedules, setSchedules] = useState([]);
   const [state, dispatch] = useContext(Context);
   const [raiseEvent] = useEventHandler();
+  const [
+    showUserFileHandlerModal,
+    setShowUserFileHandlerModal,
+  ] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -97,76 +121,107 @@ export default ({ setOpen }) => {
     setOpen(false);
   };
 
-  const openSchedule = (schedule) => {
+  const setShowUserFileHandlerModalLocal = (show) => {
+    if (!show) {
+      setShowUserFileHandlerModal(false);
+      onClose();
+    } else {
+      setShowUserFileHandlerModal(true);
+    }
+  };
+
+  const openSchedule = async (schedule) => {
     if (!showOpenConfirm) {
       setShowOpenConfirm(schedule.id);
       return;
     }
-    dispatch({
-      type: 'setCurrentSchedule',
-      payload: schedule,
-    });
-    settingsRepo.setCurrentService(schedule.id);
-    onClose();
+
+    raiseEvent(new LoadScheduleEvent(false, schedule));
+
+    if (hasUserFileHandler(schedule)) {
+      setShowUserFileHandlerModal(true);
+    }
+
+    // onClose();
   };
 
   return (
     <>
-      <Dialog
-        className={Classes.DARK}
-        isOpen
-        title="Welcome"
-        isCloseButtonShown={true}
-        onClose={onClose}
-      >
-        <div className={Classes.DIALOG_BODY}>
-          <StyledNewButton
-            icon="add"
-            large
-            onClick={addSchedule}
-            intent="success"
-          >
-            Start New Session
-          </StyledNewButton>
-          <H3>Previous Sessions</H3>
-          {/* </StyledAddSchedule> */}
-          <StyledPastSchedules>
-            <StyledTableScroller>
-              <StyledTable>
-                <tr></tr>
-                {schedules &&
-                  schedules.map((s) => (
-                    <>
-                      <tr>
-                        <H5 style={{ 'padding-top': '10px' }}>
-                          {s.date.toLocaleDateString('en-gb')}
-                        </H5>
-                        <td>
-                          <StyledActionButton
-                            miminal
-                            intent={
-                              showOpenConfirm === s.id
-                                ? 'Success'
-                                : 'None'
-                            }
-                            onBlur={() => setShowOpenConfirm(false)}
-                            onClick={() => openSchedule(s)}
-                            icon="folder-open"
-                          >
-                            {showOpenConfirm === s.id
-                              ? 'Confirm'
-                              : ''}
-                          </StyledActionButton>
-                        </td>
-                      </tr>
-                      <SpacerTr />
-                    </>
-                  ))}
-              </StyledTable>
-            </StyledTableScroller>
-          </StyledPastSchedules>
-        </div>
-      </Dialog>
+      {/* Todo (sdv) hacks - modal inception */}
+      {showUserFileHandlerModal ? (
+        <UserFileHandlerPermissionManagerDialog
+          setOpen={setShowUserFileHandlerModalLocal}
+        />
+      ) : (
+        <Dialog
+          className={Classes.DARK}
+          isOpen
+          title="Welcome"
+          isCloseButtonShown={true}
+          onClose={onClose}
+        >
+          <div className={Classes.DIALOG_BODY}>
+            <StyledNewButton
+              icon="add"
+              large
+              onClick={addSchedule}
+              intent="success"
+            >
+              Start New Session
+            </StyledNewButton>
+            <H4>Previous Sessions</H4>
+            {/* </StyledAddSchedule> */}
+            <StyledPastSchedules>
+              <StyledTableScroller>
+                <StyledTable>
+                  <tr></tr>
+                  {schedules &&
+                    schedules
+                      .sort((s, t) => (s.date > t.date ? -1 : 1))
+                      .map((s) => (
+                        <>
+                          <tr>
+                            <H5 style={{ 'padding-top': '10px' }}>
+                              {s.date.toLocaleDateString('en-gb') +
+                                ' ' +
+                                s.date.toLocaleTimeString('en-gb')}
+                            </H5>
+                            <StyledTd>
+                              <StyledActionButton
+                                miminal
+                                intent={
+                                  showOpenConfirm === s.id
+                                    ? 'Success'
+                                    : 'None'
+                                }
+                                onBlur={() =>
+                                  setShowOpenConfirm(false)
+                                }
+                                onClick={() => openSchedule(s)}
+                                icon="folder-open"
+                              >
+                                {showOpenConfirm === s.id
+                                  ? 'Confirm'
+                                  : ''}
+                              </StyledActionButton>
+                            </StyledTd>
+                          </tr>
+                          <SpacerTr />
+                        </>
+                      ))}
+                </StyledTable>
+              </StyledTableScroller>
+            </StyledPastSchedules>
+            <StyledCard>
+              <StyledTipHeader>
+                <Icon icon="lightbulb" />
+                {'  '}Did you know
+              </StyledTipHeader>
+              You can goasdnmakjls adsndkj adskjnasdknj asd
+            </StyledCard>
+          </div>
+        </Dialog>
+      )}
     </>
   );
 };

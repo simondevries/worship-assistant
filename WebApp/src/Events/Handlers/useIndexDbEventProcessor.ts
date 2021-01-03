@@ -29,10 +29,12 @@ import newId from '../../Helpers/newId';
 import BibleVerseAddedToScheduleEvent, {
   BibleVerseAddedToScheduleEventName,
 } from '../Domain/bibleVerseAddedToScheduleEvent';
-
-const _handleScheduleUpdated = (state, inx, song) => {
-  console.log('ns1', inx);
-};
+import videoCreatedEvent, {
+  VideoCreatedEventName,
+} from '../Domain/videoCreatedEvent';
+import LoadScheduleEvent, {
+  LoadScheduleEventName,
+} from '../Domain/loadScheduleEvent';
 
 const useIndexDbEventProcessor = () => {
   const [state, dispatch] = useContext(Context);
@@ -130,7 +132,10 @@ const useIndexDbEventProcessor = () => {
   const RemoveResourceFromScheduleEventHandler = (
     event: RemoveResourceFromScheduleEvent,
   ) => {
-    if (event.eventType !== RemoveResourceFromScheduleEventName)
+    if (
+      event.eventType !== RemoveResourceFromScheduleEventName ||
+      event.isExternalEvent
+    )
       return;
 
     const updatedState = reducers(state, {
@@ -147,7 +152,10 @@ const useIndexDbEventProcessor = () => {
   const BibleVerseAddedToScheduleEventHandler = (
     event: BibleVerseAddedToScheduleEvent,
   ) => {
-    if (event.eventType !== BibleVerseAddedToScheduleEventName)
+    if (
+      event.eventType !== BibleVerseAddedToScheduleEventName ||
+      event.isExternalEvent
+    )
       return;
 
     const updatedState = reducers(state, {
@@ -165,7 +173,44 @@ const useIndexDbEventProcessor = () => {
     );
   };
 
+  const VideoCreatedEventHandler = (event: videoCreatedEvent) => {
+    if (
+      event.eventType !== VideoCreatedEventName ||
+      event.isExternalEvent
+    )
+      return;
+
+    const updatedState = reducers(state, {
+      type: 'addResourceToSchedule',
+      payload: {
+        resourceType: 'VIDEO',
+        index: event.index,
+        id: event.id,
+      },
+    });
+
+    scheduleRepo.set(
+      updatedState.currentSchedule,
+      updatedState.currentSchedule.id,
+    );
+  };
+
+  const LoadScheduleEventHandler = (event: LoadScheduleEvent) => {
+    if (
+      event.eventType !== LoadScheduleEventName ||
+      event.isExternalEvent
+    )
+      return;
+
+    dispatch({
+      type: 'setCurrentSchedule',
+      payload: event.schedule,
+    });
+    // settingsRepo.setCurrentService(schedule.id);
+  };
+
   const arr = [
+    VideoCreatedEventHandler,
     SongCreatedEventHandler,
     SongAddedToScheduleEventHandler,
     NewScheduleCreatedEventHandler,
@@ -173,6 +218,7 @@ const useIndexDbEventProcessor = () => {
     RemoveResourceFromScheduleEventHandler,
     SlideShowAddedToScheduleEventHandler,
     BibleVerseAddedToScheduleEventHandler,
+    LoadScheduleEventHandler,
   ];
   return [arr];
 };

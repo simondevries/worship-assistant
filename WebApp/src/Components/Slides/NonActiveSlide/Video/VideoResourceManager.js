@@ -10,23 +10,13 @@ const StyledCard = styled(Card)`
   margin-bottom: 10px;
 `;
 
-export default function ({
-  isActive,
-  resource,
-  slideIndex,
-  resourceId,
-}) {
+export default function ({ isActive, resource }) {
   if (isActive) {
     return <ActiveVideoSlide resource={resource} />;
   }
-
   return (
-    <BaseNonActiveSlide
-      slideIndex={slideIndex}
-      resourceId={resourceId}
-    >
-      <p>{resource.title}</p>
-      <p>{resource.filePath}</p>
+    <BaseNonActiveSlide slideIndex={0} resourceId={resource.id}>
+      <p>{resource.id}</p>
     </BaseNonActiveSlide>
   );
 }

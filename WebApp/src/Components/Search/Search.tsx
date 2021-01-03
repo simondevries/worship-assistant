@@ -6,21 +6,12 @@ import React, {
   useContext,
 } from 'react';
 import { Context } from '../../App';
-import {
-  Hotkey,
-  Hotkeys,
-  HotkeysTarget,
-  Classes,
-} from '@blueprintjs/core';
 import styled from 'styled-components/macro';
 import { Icon } from '@blueprintjs/core';
 import SearchQuery from './searchQuery';
 import { songsRepo } from '../../Storage/songsRepository';
-import { scheduleRepo } from '../../Storage/scheduleRepository';
 import useEventHandler from '../../Events/Handlers/useEventHandler';
 import SongAddedToScheduleEvent from '../../Events/Domain/songAddedToScheduleEvent';
-import IVideo from '../../Interfaces/Video';
-import IImage from '../../Interfaces/Image';
 import ISong from '../../Interfaces/Song';
 import { fileSystemApp } from '../../FileSystem/fileSystemTools';
 import VideoCreatedEvent from '../../Events/Domain/videoCreatedEvent';
@@ -35,6 +26,7 @@ import useModal from '../Dialogs/useModal';
 import AddSlideShowDialog from '../Dialogs/AddSlideShowDialog/AddSlideShowDialog';
 import { bibleVerseResolver } from '../../BibleVerse/bibleVerseResolver';
 import IState from '../../Interfaces/State';
+import { userFileHandlerRepo } from '../../Storage/userFileHandlerRepository';
 
 const StyledOmnibarContainer = styled.div`
   -webkit-filter: blur(0);
@@ -91,6 +83,11 @@ const StyledDropdownItem = styled.div`
   border-top: 1px solid gray;
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
+  cursor: pointer;
+
+  &:hover {
+    background: #e6e6e6;
+  }
 `;
 const StyledDropdownContainer = styled.div`
   background: white;
@@ -128,8 +125,19 @@ const Search = () => {
   };
 
   const addVideo = async () => {
-    const blobUrl = await fileSystemApp.openFile();
-    raiseEvent(new VideoCreatedEvent(false, blobUrl));
+    const fileHandle = await fileSystemApp.openFile();
+    const videoId = newId();
+    await userFileHandlerRepo.set(fileHandle, videoId);
+
+    raiseEvent(
+      new VideoCreatedEvent(
+        false,
+        videoId,
+        (state as IState).searchBar.insertResourceAtIndex,
+      ),
+    );
+
+    onClose();
   };
 
   const changeSlideShowModalVisiblity = (visibility) => {

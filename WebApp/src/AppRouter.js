@@ -17,7 +17,7 @@ import hotkeyListenter from './Components/Sidebar/hotkeyListenter';
 import {
   startVideo,
   changeTab,
-} from './ChromeExtensionGateway/gateway';
+} from './__OLD_ChromeExtensionGateway/gateway';
 import fetchStatus from './Common/FetchStatus/fetchStatus';
 import useIntialize from './useInitialize';
 import ScheduleManagerDialog from './Components/Dialogs/ScheduleManagerDialog';
@@ -28,6 +28,8 @@ import { useLocation } from 'react-router-dom';
 import useBroadcastChannelMessageHandler from './useBroadcastChannelMessageHandler';
 import Tour from 'reactour';
 import NotFound from './Components/NotFound/NotFound';
+import UserFileHandlerPermissionManager from './Components/Dialogs/UserFileHandlerPermissionManagerDialog';
+import UserFileHandlerPermissionManagerDialog from './Components/Dialogs/UserFileHandlerPermissionManagerDialog';
 
 const StyledControllerPageContainer = styled.div`
   display: flex;
@@ -58,22 +60,17 @@ const steps = [
 
 export default function () {
   const [state, dispatch] = useContext(Context);
-  const [scheduleModalOpen, setScheduleModalOpen] = useModal(false);
-  const [loadingState] = useIntialize(dispatch);
+  const [
+    loadingState,
+    scheduleModalOpen,
+    setScheduleModalOpen,
+    userFileHandlerPermissionManagerOpen,
+    setUserFileHandlerPermissionManagerOpen,
+  ] = useIntialize(dispatch);
   const [eventsReceived] = useBroadcastChannelMessageHandler();
   const [isTourOpen, setIsTourOpen] = useState(false);
 
   hotkeyListenter();
-
-  /** Only open welcome modal if hasn't come to site recently */
-  useEffect(() => {
-    var ONE_HOUR = 60 * 60 * 1000; /* ms */
-    const lastOpened = Date.parse(localStorage.getItem('lastOpened'));
-    if (new Date() - lastOpened > ONE_HOUR) {
-      setScheduleModalOpen(true);
-    }
-    localStorage.setItem('lastOpened', new Date().toISOString());
-  }, []);
 
   if (loadingState === fetchStatus.Loading) {
     return <StyledSpinner />;
@@ -93,6 +90,11 @@ export default function () {
       />
       {scheduleModalOpen && (
         <ScheduleManagerDialog setOpen={setScheduleModalOpen} />
+      )}
+      {userFileHandlerPermissionManagerOpen && (
+        <UserFileHandlerPermissionManagerDialog
+          setOpen={setUserFileHandlerPermissionManagerOpen}
+        />
       )}
       {state?.searchBar?.isVisible && <Search />}
       {!process.env.NODE_ENV ||
@@ -120,13 +122,13 @@ export default function () {
               {/* <input type="button" onClick={onFocusTab} /> */}
             </StyledControllerPageContainer>
           </Route>
-          <Route>
-            <NotFound />
-          </Route>
-          <Route path="/project">
+          <Route path="/project" exact>
             <ProjectorView
               activeResourcePointer={activeResourcePointer}
             />
+          </Route>
+          <Route>
+            <NotFound />
           </Route>
         </Switch>
       </Router>

@@ -15,4 +15,5 @@ export default interface IResourceReference {
   embeddedPowerPointUrl: string; // SlideShow
   lyrics: string; // song
   youTubeUrl: string; // youtube
+  videoTitle: string;
 }

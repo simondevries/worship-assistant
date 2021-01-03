@@ -25,6 +25,16 @@ import SlideShowAddedToScheduleEvent, {
 import MoveResourceEvent, {
   MoveResourceEventName,
 } from '../Domain/moveResourceEvent';
+import VideoCreatedEvent, {
+  VideoCreatedEventName,
+} from '../Domain/videoCreatedEvent';
+import LoadScheduleEvent, {
+  LoadScheduleEventName,
+} from '../Domain/loadScheduleEvent';
+import getUrlFromFileHandle from '../../Helpers/getUrlFromFileHandle';
+import addActiveVideoEvent, {
+  AddActiveVideoEventName,
+} from '../Domain/addActiveVideoEvent';
 
 const useAppStateEventProcessors = () => {
   const [state, dispatch] = useContext(Context);
@@ -35,6 +45,19 @@ const useAppStateEventProcessors = () => {
     dispatch({
       type: 'addSongToActiveSongs',
       payload: event.song,
+    });
+  };
+
+  const VideoCreatedEventHandler = (event: VideoCreatedEvent) => {
+    if (event.eventType !== VideoCreatedEventName) return;
+
+    dispatch({
+      type: 'addResourceToSchedule',
+      payload: {
+        resourceType: 'VIDEO',
+        index: event.index,
+        id: event.id,
+      },
     });
   };
 
@@ -110,6 +133,7 @@ const useAppStateEventProcessors = () => {
     dispatch({ type: 'setCurrentSchedule', payload: event.schedule });
 
     dispatch({ type: 'clearActiveSongs' });
+    dispatch({ type: 'clearActiveVideos' });
   };
 
   const RemoveResourceFromScheduleEventHandler = (
@@ -134,6 +158,24 @@ const useAppStateEventProcessors = () => {
     });
   };
 
+  const LoadScheduleEventHandler = (event: LoadScheduleEvent) => {
+    if (event.eventType !== LoadScheduleEventName) return;
+
+    dispatch({
+      type: 'setCurrentSchedule',
+      payload: event.schedule,
+    });
+  };
+
+  const AddActiveVideoEventHandler = (event: addActiveVideoEvent) => {
+    if (event.eventType !== AddActiveVideoEventName) return;
+
+    dispatch({
+      type: 'addVideoToActiveVideos',
+      payload: { id: event.resourceId, url: event.url },
+    });
+  };
+
   const arr = [
     SongCreatedEventHandler,
     SongAddedToScheduleEventHandler,
@@ -143,6 +185,9 @@ const useAppStateEventProcessors = () => {
     BibleVerseAddedToScheduleEventHandler,
     SlideShowAddedToScheduleEventHandler,
     MoveResourceEventHandler,
+    VideoCreatedEventHandler,
+    LoadScheduleEventHandler,
+    AddActiveVideoEventHandler,
   ];
   return [arr];
 };

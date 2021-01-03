@@ -84,6 +84,14 @@ export default function ({
           (s) => s.id === resourceReference.id,
         );
         return `${bibleVerse?.book}  ${bibleVerse?.chapter}:${bibleVerse?.verse}`;
+      case 'video':
+        const video = state.currentSchedule.resources.find(
+          (s) => s.id === resourceReference.id,
+        );
+        return (
+          (video && video.videoTitle) || 'Video'
+          // <input type="text" id="video-title" />
+        );
 
       default:
         return '';
@@ -103,10 +111,13 @@ export default function ({
           <StyledTitle>{title}</StyledTitle>
         )}
         <ButtonGroup>
-          <Button
-            onClick={() => console.log('s')}
-            icon="edit"
-          ></Button>
+          {(resource.resourceType === 'SONG' ||
+            resource.resourceType === 'BIBLEVERSE') && (
+            <Button
+              onClick={() => console.log('s')}
+              icon="edit"
+            ></Button>
+          )}
           <Button
             onBlur={() => setTrashHighlighted(false)}
             onClick={() => {
