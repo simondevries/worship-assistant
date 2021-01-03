@@ -1,14 +1,12 @@
 import React from 'react';
-import Slide from '../Slides/SlideResolver';
-import styled, { css } from 'styled-components/macro';
+import styled from 'styled-components/macro';
 import { H3, Button, ButtonGroup } from '@blueprintjs/core';
-import ActiveSlide, {
-  slideWidth,
-} from '../Slides/ActiveSlide/ActiveSongSlide';
 import SlideResolver from '../Slides/SlideResolver';
 import Scrollbar from '../../Common/Scrollbar/Scrollbar';
 import RemoveResourceFromScheduleEvent from '../../Events/Domain/removeResourceFromScheduleEvent';
 import useEventHandler from '../../Events/Handlers/useEventHandler';
+import useModal from '../Dialogs/useModal';
+import EditSongDialog from '../Dialogs/UpsertSongDialog/EditSongDialog';
 
 const StyledSlidesContainer = styled.div`
   ${Scrollbar}
@@ -29,29 +27,26 @@ const StyledResourceManager = styled.div`
   height: 100%;
 `;
 
-const openEditSongModal = () => {
-  // useModal hook to open addSongDialog
-  // Add a prop to the upsertDialog to take a song reference
-  // -- Create a useEffect in addsong dialog that gets the song from index db and populates the song lyrics and the title
-  // Remove the 'save and add to schedule' button if the song prop exits
-  // Clicking the save button will update raise the songAddedToScheduleEvent if the song prop does not exists and will raise the songEditiedEvent if song is being updated
-  // Create three event handlers: state, broadcast, indexdb
-  // ~~rename addsong dialog to upsertSongDialog~~
-};
-
 export default function ({
   resource,
   isActiveResource,
   activeResourcePointer,
 }) {
   const [raiseEvent] = useEventHandler();
+  const [editSongModalOpen, setEditSongModalOpen] = useModal();
 
   return (
     <StyledResourceManager>
+      {editSongModalOpen && (
+        <EditSongDialog
+          setEditSongModalOpen={setEditSongModalOpen}
+          songId={resource.id}
+        />
+      )}
       <StyledHeader>
         {resource && resource.title}
         <ButtonGroup>
-          <Button onClick={openEditSongModal} icon="edit"></Button>
+          <Button onClick={() => setEditSongModalOpen(true)} icon="edit"></Button>
           <Button
             onClick={() =>
               raiseEvent(

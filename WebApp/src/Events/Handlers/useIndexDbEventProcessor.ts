@@ -17,7 +17,7 @@ import NewScheduleCreatedEvent, {
 import SlideShowAddedToScheduleEvent, {
   SlideShowAddedToScheduleEventName,
 } from '../Domain/slideShowAddedToScheduleEvent';
-import SongEditedEvent from '../Domain/songEditedEvent';
+import SongEditedEvent, { SongEditedEventEventName } from '../Domain/songEditedEvent';
 
 const _handleScheduleUpdated = (state, inx, song) => {
   console.log('ns1', inx);
@@ -59,11 +59,9 @@ const useIndexDbEventProcessor = () => {
   };
 
   const SongEditedEventHandler = (event: SongEditedEvent) => {
-    // todo (Sdv) double check this logic
-    if (event.eventType !== SongEditedEvent || event.isExternalEvent)
+    if (event.eventType !== SongEditedEventEventName || event.isExternalEvent)
       return;
 
-    // todo (Sdv) not tested
     songsRepo.set(event.song, event.song.id);
   };
 

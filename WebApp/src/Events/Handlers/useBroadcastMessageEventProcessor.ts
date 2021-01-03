@@ -23,7 +23,7 @@ import VideoCreatedEvent, {
 import SlideShowAddedToScheduleEvent, {
   SlideShowAddedToScheduleEventName,
 } from '../Domain/slideShowAddedToScheduleEvent';
-import SongEditedEvent from '../Domain/songEditedEvent';
+import SongEditedEvent, { SongEditedEventEventName } from '../Domain/songEditedEvent';
 
 let bc = new BroadcastChannel('worshipAssistApp');
 
@@ -123,7 +123,7 @@ export default () => {
   };
 
   const SongEditedEventHandler = (event: SongEditedEvent) => {
-    if (event.eventType !== SongEditedEvent || event.isExternalEvent)
+    if (event.eventType !== SongEditedEventEventName || event.isExternalEvent)
       return;
 
     bc.postMessage(

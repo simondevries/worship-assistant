@@ -56,8 +56,6 @@ function reducers(state: IState, action) {
       return { ...state, currentSchedule: updatedSchedule };
 
     case 'editSong':
-      // todo (Sdv) not tested
-
       return {
         ...state,
         currentSchedule: {

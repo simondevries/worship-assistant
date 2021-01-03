@@ -25,7 +25,9 @@ import newId from '../../Helpers/newId';
 import SlideShowAddedToScheduleEvent, {
   SlideShowAddedToScheduleEventName,
 } from '../Domain/slideShowAddedToScheduleEvent';
-import SongEditedEvent from '../Domain/songEditedEvent';
+import SongEditedEvent, { 
+  SongEditedEventEventName 
+} from '../Domain/songEditedEvent';
 
 const Channel_Name = 'Controller';
 let bc = new BroadcastChannel('Channel_Name');
@@ -59,13 +61,15 @@ const useAppStateEventProcessors = () => {
   };
 
   const SongEditedEventHandler = (event: SongEditedEvent) => {
-    // todo (Sdv) double check this logic
-    if (event.eventType !== SongEditedEvent || event.isExternalEvent)
+    if (event.eventType !== SongEditedEventEventName)
       return;
-
-    // todo (Sdv) not tested
     dispatch({
       type: 'editSong',
+      payload: event.song,
+    });
+
+    dispatch({
+      type: 'addSongToActiveSongs',
       payload: event.song,
     });
   };
