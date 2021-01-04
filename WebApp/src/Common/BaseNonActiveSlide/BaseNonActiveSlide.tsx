@@ -41,6 +41,7 @@ export default function ({
   const onSlideClick = () => {
     // todo (Sdv) make generic for all slides
 
+    console.log('4');
     raiseEvent(new SlideChangeEvent(false, resourceId, slideIndex));
   };
 

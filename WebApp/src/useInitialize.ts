@@ -90,7 +90,9 @@ function useIntialize(dispatch) {
       if (Number(new Date()) - lastOpened > ONE_HOUR) {
         setScheduleModalOpen(true);
       } else {
-        if (hasUserFileHandlerInSchedule) {
+        const isControllerPage =
+          window.location.pathname.indexOf('/controller') !== -1;
+        if (hasUserFileHandlerInSchedule && isControllerPage) {
           setUserFileHandlerPermissionManagerOpen(true);
         }
       }

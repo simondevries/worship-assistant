@@ -6,7 +6,7 @@ import React from 'react';
 import { Button, Card, Elevation } from '@blueprintjs/core';
 import styled from 'styled-components/macro';
 import SongResourceManager from './SongResourceManager';
-import VideoResourceManager from './NonActiveSlide/Video/VideoResourceManager';
+import VideoResourceManager from './VideoResourceManager';
 import ImageResourceManager from './NonActiveSlide/Image/ImageResourceManager';
 import BibleVerseResourceManager from './BibleVerseResourceManager';
 import SlideShowResourceManager from './SlideShowResourceManager';

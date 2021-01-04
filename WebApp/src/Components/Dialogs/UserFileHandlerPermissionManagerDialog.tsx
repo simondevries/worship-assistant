@@ -155,6 +155,15 @@ export default ({ setOpen }) => {
         metadata,
         updatedFileHandleMetadata,
       );
+
+      if (
+        !updatedFileHandleMetadata?.some(
+          (h) => h.status !== 'SUCCESS',
+        )
+      ) {
+        setOpen(false);
+      }
+
       setFileHandlesMetadata(updatedFileHandleMetadata);
     }
   };
@@ -185,6 +194,19 @@ export default ({ setOpen }) => {
     }
 
     return fileHandlesMetadata;
+  };
+
+  const onGrantFileClick = async (fileHandle) => {
+    const updated = await attemptGrantPermission(
+      fileHandle,
+      fileHandlesMetadata,
+    );
+
+    if (!updated?.some((h) => h.status !== 'SUCCESS')) {
+      setOpen(false);
+    }
+
+    setFileHandlesMetadata(updated);
   };
 
   return (
@@ -220,13 +242,9 @@ export default ({ setOpen }) => {
                                 : 'success'
                             }
                             onBlur={() => setShowConfirm('')}
-                            onClick={async () => {
-                              const update = await attemptGrantPermission(
-                                fileHandle,
-                                fileHandlesMetadata,
-                              );
-                              setFileHandlesMetadata(update);
-                            }}
+                            onClick={() =>
+                              onGrantFileClick(fileHandle)
+                            }
                             icon={
                               fileHandle.status === 'PENDING'
                                 ? 'warning-sign'

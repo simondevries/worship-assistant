@@ -13,27 +13,32 @@ const StyledVideoPlayer = styled.video`
 
 interface Props {
   resourceReference: IResourceReference;
+  previewMode: boolean;
 }
 
-export default ({ resourceReference }: Props) => {
+export default ({ resourceReference, previewMode }: Props) => {
   const [state] = useContext(Context);
 
-  // useEffect(() => {
-  //   const loadVideo = async () => {
-  //     const url = await getUrlFromFileHandle(resourceReference.id);
-  //     setVideoUrl(url);
-  //   };
-
-  //   loadVideo();
-  // }, []);
-
-  const activeVideo = (state as IState).currentSchedule.activeVideos.find(
+  const activeVideo = (state as IState)?.currentSchedule?.activeVideos?.find(
     (v) => v.id === resourceReference.id,
   );
 
+  if (!activeVideo) {
+    if (previewMode) {
+      return (
+        <div>
+          Unable to display video, ensure you have granted access to
+          the file
+        </div>
+      );
+    } else {
+      return null;
+    }
+  }
+
   return (
     <>
-      Vidz
+      {previewMode}
       <StyledVideoPlayer
         id={`videoPlayer-${resourceReference.id}`}
         src={activeVideo?.url}
