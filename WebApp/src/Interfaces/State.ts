@@ -7,4 +7,5 @@ export default interface IState {
   settings: ISettings;
   hasProjectorsAttached: boolean;
   searchBar: ISearchBar;
+  navigationArrowKeysEnabled: boolean; // determins whether the arrow key should change the slide
 }

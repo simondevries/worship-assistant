@@ -8,28 +8,19 @@ import {
   Switch,
   Redirect,
   Route,
-  Link,
 } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { Spinner } from '@blueprintjs/core';
 import Sidebar from './Components/Sidebar/Sidebar';
 import hotkeyListenter from './Components/Sidebar/hotkeyListenter';
-import {
-  startVideo,
-  changeTab,
-} from './__OLD_ChromeExtensionGateway/gateway';
 import fetchStatus from './Common/FetchStatus/fetchStatus';
 import useIntialize from './useInitialize';
 import ScheduleManagerDialog from './Components/Dialogs/ScheduleManagerDialog';
-import useModal from './Components/Dialogs/useModal';
-import SlideChangeEvent from './Events/Domain/slideChangeEvent';
-import useEventHandler from './Events/Handlers/useEventHandler';
-import { useLocation } from 'react-router-dom';
 import useBroadcastChannelMessageHandler from './useBroadcastChannelMessageHandler';
 import Tour from 'reactour';
 import NotFound from './Components/NotFound/NotFound';
-import UserFileHandlerPermissionManager from './Components/Dialogs/UserFileHandlerPermissionManagerDialog';
 import UserFileHandlerPermissionManagerDialog from './Components/Dialogs/UserFileHandlerPermissionManagerDialog';
+import IState from './Interfaces/State';
 
 const StyledControllerPageContainer = styled.div`
   display: flex;
@@ -70,16 +61,14 @@ export default function () {
   const [eventsReceived] = useBroadcastChannelMessageHandler();
   const [isTourOpen, setIsTourOpen] = useState(false);
 
+  const activeResourcePointer = (state as IState)?.currentSchedule
+    ?.activeResourcePointer;
+
   hotkeyListenter();
 
   if (loadingState === fetchStatus.Loading) {
     return <StyledSpinner />;
   }
-
-  const activeResourcePointer =
-    state &&
-    state.currentSchedule &&
-    state.currentSchedule.activeResourcePointer;
 
   return (
     <>
@@ -124,6 +113,7 @@ export default function () {
           </Route>
           <Route path="/project" exact>
             <ProjectorView
+              previewMode={false}
               activeResourcePointer={activeResourcePointer}
             />
           </Route>

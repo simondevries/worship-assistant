@@ -8,13 +8,6 @@ import { Intent } from '@blueprintjs/core';
 import useModal from './Components/Dialogs/useModal';
 import ISchedule, { hasUserFileHandler } from './Interfaces/Schedule';
 import ISongResourceReference from './Interfaces/SongResourceReference';
-import ISong from './Interfaces/Song';
-import IResource from './Interfaces/resource';
-import IResourceReference from './Interfaces/ResourceReference';
-import { fileSystemApp } from './FileSystem/fileSystemTools';
-import { userFileHandlerRepo } from './Storage/userFileHandlerRepository';
-import getUrlFromFileHandle from './Helpers/getUrlFromFileHandle';
-import useEventHandler from './Events/Handlers/useEventHandler';
 
 let bc = new BroadcastChannel('worshipAssistApp');
 
@@ -79,6 +72,8 @@ function useIntialize(dispatch) {
         activeSongs: activeSongs,
       } as ISchedule,
     });
+
+    dispatch({ type: 'navigationArrowKeysEnabled', payload: true });
   };
 
   /** Only open welcome modal if hasn't come to site recently */

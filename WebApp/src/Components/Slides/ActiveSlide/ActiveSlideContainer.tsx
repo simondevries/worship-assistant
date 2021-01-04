@@ -16,7 +16,7 @@ const StyledContainer = styled(Card)`
   min-height: 250px;
 `;
 
-export default ({ children }) => {
+export default ({ children, slideIndex, resourceId }) => {
   const [state] = useContext(Context);
   const [openOrFocus] = focusOnProjectView(true);
 
@@ -27,7 +27,7 @@ export default ({ children }) => {
   );
 
   return (
-    <StyledContainer>
+    <StyledContainer id={`slide${slideIndex}resource${resourceId}`}>
       {!state.hasProjectorsAttached && openNewWindowButton}
       {children}
     </StyledContainer>

@@ -1,6 +1,7 @@
 import IVerse from './Verse';
 import ISong from './Song';
 
+// todo (sdv) rename to resource
 export default interface IResourceReference {
   index: number;
   id: string;

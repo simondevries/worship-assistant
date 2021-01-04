@@ -1,7 +1,6 @@
 import IResource from './resource';
-export default interface IVideo extends IResource {
-  title: string;
-  filePath: string;
+export default interface SlideShow extends IResource {
+  embeddedPowerPointUrl: string;
 }
 
 export const isLastSlideSelected = () => true;

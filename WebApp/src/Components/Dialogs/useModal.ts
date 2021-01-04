@@ -1,7 +1,23 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { Context } from '../../App';
 
 export default (initialMode = false): Array<any> => {
+  const [, dispatch] = useContext(Context);
+
   const [modalOpen, setModalOpen] = useState(initialMode);
-  const toggle = () => setModalOpen(!modalOpen);
-  return [modalOpen, setModalOpen, toggle];
+
+  const localSetModalOpen = (value) => {
+    if (value === true) {
+      dispatch({
+        type: 'navigationArrowKeysEnabled',
+        payload: false,
+      });
+    } else {
+      dispatch({ type: 'navigationArrowKeysEnabled', payload: true });
+    }
+    setModalOpen(value);
+  };
+
+  const toggle = () => localSetModalOpen(!modalOpen);
+  return [modalOpen, localSetModalOpen, toggle];
 };

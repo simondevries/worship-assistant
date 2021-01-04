@@ -5,8 +5,6 @@ import styled from 'styled-components/macro';
 import { Button, Icon } from '@blueprintjs/core';
 import { slideWidth } from '../Slides/ActiveSlide/ActiveSongSlide';
 import IState from '../../Interfaces/State';
-import { userFileHandlerRepo } from '../../Storage/userFileHandlerRepository';
-import { fileSystemApp } from '../../FileSystem/fileSystemTools';
 
 const StyledAddButton = styled(Button)`
   margin-left: 10px;
@@ -58,7 +56,7 @@ const StyledControllerPage = styled.div`
   justify-content: stretch;
 `;
 
-export default function ({ updateSlideNumber }) {
+export default function () {
   const [state, dispatch] = useContext<any>(Context);
 
   if (!state || !state.settings || !state.currentSchedule)

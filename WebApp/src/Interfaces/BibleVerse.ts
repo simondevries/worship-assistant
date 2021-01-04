@@ -36,3 +36,7 @@ export const addBibleVerseContent = (
 ) => {
   return { ...bibleVerse, bibleVerseContent };
 };
+
+export const isLastSlideSelected = () => true;
+
+export const lastSlideIndex = () => 0;

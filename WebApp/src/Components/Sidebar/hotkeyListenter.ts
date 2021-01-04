@@ -2,24 +2,41 @@ import { Context } from '../../App';
 import { useContext } from 'react';
 
 import { useState, useEffect } from 'react';
+import GoToNextSlideEvent from '../../Events/Domain/goToNextSlideEvent';
+import GoToPreviousSlideEvent from '../../Events/Domain/goToPreviousSlideEvent';
+import useEventHandler from '../../Events/Handlers/useEventHandler';
 
-// Hook
 export default function () {
-  // State for keeping track of whether key is pressed
   const [keyPressed, setKeyPressed] = useState(false);
   const [state, dispatch] = useContext(Context);
+  const [raiseEvent] = useEventHandler();
 
-  // Add event listeners
   useEffect(() => {
-    const upHandler = ({ key }) => {
-      if (key && key.toLowerCase() === 'escape') {
+    const upHandler = (e) => {
+      if (e.key && e.key.toLowerCase() === 'escape') {
         dispatch({
           type: 'setSearchVisible',
           payload: false,
         });
       }
 
-      if (key === '/' || key === '?') {
+      if (
+        e.key.toLowerCase() === 'arrowright' &&
+        state.navigationArrowKeysEnabled
+      ) {
+        e.preventDefault();
+        raiseEvent(new GoToNextSlideEvent(false));
+      }
+
+      if (
+        e.key.toLowerCase() === 'arrowleft' &&
+        state.navigationArrowKeysEnabled
+      ) {
+        e.preventDefault();
+        raiseEvent(new GoToPreviousSlideEvent(false));
+      }
+
+      if (e.key === '/' || e.key === '?') {
         dispatch({
           type: 'setSearchVisible',
           payload: true,

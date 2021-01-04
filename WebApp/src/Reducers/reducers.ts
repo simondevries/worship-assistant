@@ -203,6 +203,10 @@ function reducers(state: IState, action): IState {
         },
       };
 
+    // Other
+    case 'navigationArrowKeysEnabled':
+      return { ...state, navigationArrowKeysEnabled: action.payload };
+
     default:
       throw new Error();
   }

@@ -2,7 +2,6 @@ import { songsRepo } from '../../Storage/songsRepository';
 import { scheduleRepo } from '../../Storage/scheduleRepository';
 import { settingsRepo } from '../../Storage/settingsRepository';
 import { useContext } from 'react';
-import AppEvent from '../Domain/appEvent';
 import SongCreatedEvent, {
   SongCreatedEventName,
 } from '../Domain/songCreatedEvent';
@@ -10,7 +9,6 @@ import { Context } from '../../App';
 import SongAddedToSchedule, {
   SongAddedToScheduleEventName,
 } from '../Domain/songAddedToScheduleEvent';
-import ISongResourceReference from '../../Interfaces/SongResourceReference';
 import NewScheduleCreatedEvent, {
   NewScheduleCreatedEventName,
 } from '../Domain/newScheduleCreatedEvent';

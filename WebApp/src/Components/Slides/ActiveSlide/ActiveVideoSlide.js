@@ -25,7 +25,14 @@ export default function ({ resource }) {
   const [state, dispatch] = useContext(Context);
 
   return (
-    <StyledContainer>
+    <StyledContainer
+      slideIndex={
+        state.currentSchedule.activeResourcePointer.slideIndex
+      }
+      resourceId={
+        state.currentSchedule.activeResourcePointer.resourceId
+      }
+    >
       <StyledButtonContainer>
         {resource.title}
         <Button>Slide Settings</Button>

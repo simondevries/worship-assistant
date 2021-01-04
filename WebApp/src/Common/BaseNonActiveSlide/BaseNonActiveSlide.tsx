@@ -42,19 +42,6 @@ export default function ({
     // todo (Sdv) make generic for all slides
 
     raiseEvent(new SlideChangeEvent(false, resourceId, slideIndex));
-
-    const element = document.getElementById(
-      'slide' + slideIndex + 'resource' + resourceId,
-    );
-    if (element) {
-      element.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-        inline: 'center',
-      });
-    } else {
-      console.error('Could not find slide');
-    }
   };
 
   return (

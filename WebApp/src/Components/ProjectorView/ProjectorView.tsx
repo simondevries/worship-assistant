@@ -47,7 +47,7 @@ export default function ({
   className,
 }: Props) {
   const [state] = useContext<Array<IState>>(Context);
-  const { fontSize, ref } = useFitText({ maxFontSize: 9999 });
+  const { fontSize, ref } = useFitText({ maxFontSize: 10 });
 
   if (!state || !state.currentSchedule) return null;
 
@@ -69,7 +69,6 @@ export default function ({
   const renderAppropriateHandler = () => {
     if (!resourceReference || !resourceReference.resourceType) return;
 
-    console.log(resourceReference.resourceType);
     switch (resourceReference.resourceType.toLowerCase()) {
       case 'song':
         return (

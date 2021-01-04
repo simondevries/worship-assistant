@@ -142,7 +142,7 @@ export default ({ setAddSongModalOpen }) => {
             </Button>
             <Button onClick={saveSong}>Save</Button>{' '}
             <Button onClick={saveSongAndAddToSet} intent="primary">
-              Save and add to Schedule (todo)
+              Save and add to Schedule
             </Button>
           </div>
         </div>
