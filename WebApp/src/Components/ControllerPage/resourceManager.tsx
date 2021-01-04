@@ -1,18 +1,14 @@
-import React, { useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import Slide from '../Slides/SlideResolver';
-import styled, { css } from 'styled-components/macro';
 import {
-  H3,
-  Button,
-  ButtonGroup,
   Intent,
   Popover,
   Tooltip,
   Position,
 } from '@blueprintjs/core';
-import ActiveSlide, {
-  slideWidth,
-} from '../Slides/ActiveSlide/ActiveSongSlide';
+import React from 'react';
+import styled from 'styled-components/macro';
+import { H3, Button, ButtonGroup } from '@blueprintjs/core';
 import SlideResolver from '../Slides/SlideResolver';
 import Scrollbar from '../../Common/Scrollbar/Scrollbar';
 import RemoveResourceFromScheduleEvent from '../../Events/Domain/removeResourceFromScheduleEvent';
@@ -21,6 +17,8 @@ import { Context } from '../../App';
 import IState from '../../Interfaces/State';
 import ResourceReference from '../../Interfaces/ResourceReference';
 import MoveResourceEvent from '../../Events/Domain/moveResourceEvent';
+import useModal from '../Dialogs/useModal';
+import EditSongDialog from '../Dialogs/UpsertSongDialog/EditSongDialog';
 
 const StyledSlidesContainer = styled.div`
   ${Scrollbar}
@@ -100,8 +98,16 @@ export default function ({
 
   const title = resolveTitle(resource);
 
+  const [editSongModalOpen, setEditSongModalOpen] = useModal();
+
   return (
     <StyledResourceManager>
+      {editSongModalOpen && (
+        <EditSongDialog
+          setEditSongModalOpen={setEditSongModalOpen}
+          songId={resource.id}
+        />
+      )}
       <StyledHeader>
         {title && title.length > 25 ? (
           <Tooltip content={title} position={Position.BOTTOM}>
@@ -114,7 +120,7 @@ export default function ({
           {(resource.resourceType === 'SONG' ||
             resource.resourceType === 'BIBLEVERSE') && (
             <Button
-              onClick={() => console.log('s')}
+              onClick={() => setEditSongModalOpen(true)}
               icon="edit"
             ></Button>
           )}

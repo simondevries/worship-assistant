@@ -7,11 +7,11 @@ import { slideWidth } from '../Slides/ActiveSlide/ActiveSongSlide';
 import IState from '../../Interfaces/State';
 
 const StyledAddButton = styled(Button)`
-  margin-left: 10px;
-  margin-right: 10px;
+  margin-left: 7px;
+  margin-right: 7px;
 `;
 
-const addIcon = <Icon icon="add" iconSize={30} />;
+const addIcon = <Icon icon="add" iconSize={20} />;
 
 const StyledResourceContainer = styled.div`
   display: flex;

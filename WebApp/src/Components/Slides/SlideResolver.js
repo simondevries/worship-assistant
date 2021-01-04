@@ -11,17 +11,25 @@ import ImageResourceManager from './NonActiveSlide/Image/ImageResourceManager';
 import BibleVerseResourceManager from './BibleVerseResourceManager';
 import SlideShowResourceManager from './SlideShowResourceManager';
 
+import SlideChangeEvent from '../../Events/Domain/slideChangeEvent';
+import useEventHandler from '../../Events/Handlers/useEventHandler';
+
 export default function ({
   resource,
   isActiveResource,
   activeResourcePointer,
 }) {
+  const [raiseEvent] = useEventHandler();
+  const updateSlideNumberLocal = (rInx) => (sInx) => {
+    raiseEvent(new SlideChangeEvent(false, rInx, sInx));
+  };
   switch (resource.resourceType) {
     case 'SONG':
       return (
         <SongResourceManager
           resource={resource}
           isActiveResource={isActiveResource}
+          updateSlideNumber={updateSlideNumberLocal(resource.id)}
           activeResourcePointer={activeResourcePointer}
         />
       );

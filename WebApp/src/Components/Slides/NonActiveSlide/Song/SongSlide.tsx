@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
-import { Button, Card, Elevation, H5 } from '@blueprintjs/core';
+import React from 'react';
 import styled from 'styled-components/macro';
-import Verse from '../../../../Interfaces/Verse';
 import BaseNonActiveSlide from '../../../../Common/BaseNonActiveSlide/BaseNonActiveSlide';
 import IVerse from '../../../../Interfaces/Verse';
 import useFitText from 'use-fit-text';
+import ProjectorView from '../../../ProjectorView/ProjectorView';
 
 const StyledBaseNonActiveSlide = styled(BaseNonActiveSlide)`
   padding: 7px 10px 15px 7px;
@@ -58,11 +57,11 @@ const StyledLabelContainer = styled.div`
 
 interface Props {
   verse: IVerse;
-  onClick: any;
   slideIndex: number;
   resourceId: string;
   isFirstSlide: boolean;
   isLastSlide: boolean;
+  onClick: Function;
 }
 
 export default function ({
@@ -141,6 +140,12 @@ export default function ({
         isLastSlide={isLastSlide}
       >
         <>
+          {/* Thumbnail mode */}
+          {/*     <StyledProjectorView
+        previewMode={true}
+        activeResourcePointer={{resourceId: resourceId, slideIndex: slideIndex }}
+      /> */}
+
           {labelResolver(slideIndex, verse?.name)}
           <div className="versecont">
             {' '}

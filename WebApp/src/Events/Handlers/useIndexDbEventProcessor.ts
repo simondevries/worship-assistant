@@ -33,6 +33,9 @@ import videoCreatedEvent, {
 import LoadScheduleEvent, {
   LoadScheduleEventName,
 } from '../Domain/loadScheduleEvent';
+import SongEditedEvent, {
+  SongEditedEventEventName,
+} from '../Domain/songEditedEvent';
 
 const useIndexDbEventProcessor = () => {
   const [state, dispatch] = useContext(Context);
@@ -69,6 +72,16 @@ const useIndexDbEventProcessor = () => {
       updatedState.currentSchedule,
       updatedState.currentSchedule.id,
     );
+  };
+
+  const SongEditedEventHandler = (event: SongEditedEvent) => {
+    if (
+      event.eventType !== SongEditedEventEventName ||
+      event.isExternalEvent
+    )
+      return;
+
+    songsRepo.set(event.song, event.song.id);
   };
 
   const SlideShowAddedToScheduleEventHandler = (
@@ -214,6 +227,7 @@ const useIndexDbEventProcessor = () => {
     NewScheduleCreatedEventHandler,
     MoveResourceEventHandler,
     RemoveResourceFromScheduleEventHandler,
+    SongEditedEventHandler,
     SlideShowAddedToScheduleEventHandler,
     BibleVerseAddedToScheduleEventHandler,
     LoadScheduleEventHandler,

@@ -35,6 +35,9 @@ import getUrlFromFileHandle from '../../Helpers/getUrlFromFileHandle';
 import addActiveVideoEvent, {
   AddActiveVideoEventName,
 } from '../Domain/addActiveVideoEvent';
+import SongEditedEvent, {
+  SongEditedEventEventName,
+} from '../Domain/songEditedEvent';
 
 const useAppStateEventProcessors = () => {
   const [state, dispatch] = useContext(Context);
@@ -73,6 +76,19 @@ const useAppStateEventProcessors = () => {
         resourceType: 'SONG',
         index: event.index,
       },
+    });
+
+    dispatch({
+      type: 'addSongToActiveSongs',
+      payload: event.song,
+    });
+  };
+
+  const SongEditedEventHandler = (event: SongEditedEvent) => {
+    if (event.eventType !== SongEditedEventEventName) return;
+    dispatch({
+      type: 'editSong',
+      payload: event.song,
     });
 
     dispatch({
@@ -188,6 +204,7 @@ const useAppStateEventProcessors = () => {
     VideoCreatedEventHandler,
     LoadScheduleEventHandler,
     AddActiveVideoEventHandler,
+    SongEditedEventHandler,
   ];
   return [arr];
 };

@@ -60,13 +60,26 @@ function reducers(state: IState, action): IState {
           ),
         ],
       };
-
+      if (state.currentSchedule.activeResourcePointer.resourceId === null) {
+        state.currentSchedule.activeResourcePointer.resourceId = action.payload.id;
+      }
       return { ...state, currentSchedule: updatedSchedule };
 
+    case 'editSong':
+      return {
+        ...state,
+        currentSchedule: {
+          ...state.currentSchedule,
+          activeSongs: state.currentSchedule.activeSongs
+            .filter((s) => s.id !== action.payload.id)
+            .concat([action.payload]),
+        },
+      }
     case 'hasProjectorsAttached':
       return {
         ...state,
         hasProjectorsAttached: true,
+
       };
 
     case 'moveResourcePosition':
