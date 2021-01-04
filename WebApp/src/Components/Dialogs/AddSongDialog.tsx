@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   Button,
   EditableText,
@@ -18,6 +18,8 @@ import {
   lightSongTheme,
 } from '../../Interfaces/themes';
 import ISong from '../../Interfaces/Song';
+import { Context } from '../../App';
+import IState from '../../Interfaces/State';
 
 const StyledEditableTextContent = styled(EditableText)`
   margin-bottom: 30px;
@@ -33,8 +35,9 @@ const StyledEditableTextTitle = styled(EditableText)`
   }
 `;
 
-export default ({ setAddSongModalOpen, createSongAtIndex }) => {
+export default ({ setAddSongModalOpen }) => {
   const [raiseEvent] = useEventHandler();
+  const [state] = useContext(Context);
 
   const [songContent, setSongContent] = useState<any>({
     // lyrics: [{ type: 'verse', content: '' }],
@@ -91,7 +94,11 @@ export default ({ setAddSongModalOpen, createSongAtIndex }) => {
 
     if (addToSchedule) {
       raiseEvent(
-        new SongAddedToScheduleEvent(createSongAtIndex, false, song),
+        new SongAddedToScheduleEvent(
+          (state as IState).currentSchedule.resources.length,
+          false,
+          song,
+        ),
       );
     }
   };
@@ -135,7 +142,7 @@ export default ({ setAddSongModalOpen, createSongAtIndex }) => {
             </Button>
             <Button onClick={saveSong}>Save</Button>{' '}
             <Button onClick={saveSongAndAddToSet} intent="primary">
-              Save and add to Schedule (todo)
+              Save and add to Schedule
             </Button>
           </div>
         </div>

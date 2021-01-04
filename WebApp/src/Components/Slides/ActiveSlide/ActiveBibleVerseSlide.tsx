@@ -29,7 +29,10 @@ export default function ({ resource }: Props) {
     state.currentSchedule.activeResourcePointer;
 
   return (
-    <ActiveSlideContainer>
+    <ActiveSlideContainer
+      slideIndex={activeResourcePointer.slideIndex}
+      resourceId={activeResourcePointer.resourceId}
+    >
       {`${resource.book} ${resource.chapter}:${resource.verse} (${resource.translation})`}
       <StyledProjectorView
         previewMode={true}

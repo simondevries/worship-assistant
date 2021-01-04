@@ -71,6 +71,8 @@ export default function ({
                 onClick={() => onSlideClick(slideIndex)}
                 verse={verse}
                 resourceId={resource.id}
+                isFirstSlide={slideIndex === 0}
+                isLastSlide={slideIndex === song.lyrics.length - 1}
               />
             );
           }

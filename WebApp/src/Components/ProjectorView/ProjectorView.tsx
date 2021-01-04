@@ -12,6 +12,7 @@ import BibleVerseHandler from './Handlers/BibleVerseHandler';
 import SlideShowHandler from './Handlers/SlideShowHandler';
 import YouTubeHandler from './Handlers/YouTubeHandler';
 import { Button } from '@blueprintjs/core';
+import VideoHandler from './Handlers/VideoHandler';
 
 const StyledPowerPointPresenter = styled.iframe`
   width: 100%;
@@ -46,7 +47,7 @@ export default function ({
   className,
 }: Props) {
   const [state] = useContext<Array<IState>>(Context);
-  const { fontSize, ref } = useFitText({ maxFontSize: 9999 });
+  const { fontSize, ref } = useFitText({ maxFontSize: 10 });
 
   if (!state || !state.currentSchedule) return null;
 
@@ -65,18 +66,9 @@ export default function ({
         r.id === activeResourcePointer.resourceId,
     );
 
-  const errorMessage =
-    (!resourceReference ||
-      !resourceReference.resourceType ||
-      (resourceReference.resourceType.toLowerCase() !== 'song' &&
-        resourceReference.resourceType.toLowerCase() !==
-          'bibleverse')) &&
-    `The resource type ${
-      !resourceReference ? 'unknown ' : resourceReference.resourceType
-    } is not supported yet`;
-
   const renderAppropriateHandler = () => {
     if (!resourceReference || !resourceReference.resourceType) return;
+
     switch (resourceReference.resourceType.toLowerCase()) {
       case 'song':
         return (
@@ -99,7 +91,11 @@ export default function ({
           <YouTubeHandler resourceReference={resourceReference} />
         );
       case 'video':
-        return <div>Todo</div>;
+        return (
+          <VideoHandler
+            resourceReference={resourceReference}
+          ></VideoHandler>
+        );
       case 'image':
         return <div>Image</div>;
       default:
@@ -115,7 +111,6 @@ export default function ({
         previewMode={previewMode}
         className={className}
       >
-        {previewMode === true ? errorMessage : null}
         {renderAppropriateHandler()}
       </StyledProjectorView>
     </ThemeProvider>

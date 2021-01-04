@@ -4,13 +4,16 @@ import newId from '../Helpers/newId';
 import ActiveResourcePointer from './ActiveResourcePointer';
 import ISong from './Song';
 import IResourceReference from './ResourceReference';
+import IActiveVideo from './ActiveVideo';
 
 export default interface ISchedule {
   id: string;
   date: string;
   activeResourcePointer: ActiveResourcePointer;
+  resourceOrder: string[];
   resources: ResourceReference[];
   activeSongs: Song[];
+  activeVideos: IActiveVideo[];
   title: string;
 }
 
@@ -24,6 +27,13 @@ export const empty = (title: string) => {
       slideIndex: 0,
       resourceId: null,
     },
+    resourceOrder: [],
     activeSongs: [],
   };
+};
+
+export const hasUserFileHandler = (schedule: ISchedule) => {
+  return schedule.resources.some(
+    (r) => r.resourceType === 'VIDEO' || r.resourceType === 'IMAGE',
+  );
 };

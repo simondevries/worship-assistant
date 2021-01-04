@@ -1,6 +1,4 @@
-import { songsRepo } from '../../Storage/songsRepository';
 import { useContext } from 'react';
-import AppEvent from '../Domain/appEvent';
 import SongCreatedEvent, {
   SongCreatedEventName,
 } from '../Domain/songCreatedEvent';
@@ -8,7 +6,6 @@ import { Context } from '../../App';
 import SongAddedToSchedule, {
   SongAddedToScheduleEventName,
 } from '../Domain/songAddedToScheduleEvent';
-import ISongResourceReference from '../../Interfaces/SongResourceReference';
 import SlideChangeEvent, {
   SlideChangedEventName,
 } from '../Domain/slideChangeEvent';
@@ -18,19 +15,29 @@ import NewScheduleCreatedEvent, {
 import removeResourceFromScheduleEvent, {
   RemoveResourceFromScheduleEventName,
 } from '../Domain/removeResourceFromScheduleEvent';
-import bibleVerseAddedToScheduleEvent, {
+import BibleVerseAddedToScheduleEvent, {
   BibleVerseAddedToScheduleEventName,
 } from '../Domain/bibleVerseAddedToScheduleEvent';
 import newId from '../../Helpers/newId';
 import SlideShowAddedToScheduleEvent, {
   SlideShowAddedToScheduleEventName,
 } from '../Domain/slideShowAddedToScheduleEvent';
-import SongEditedEvent, { 
-  SongEditedEventEventName 
+import MoveResourceEvent, {
+  MoveResourceEventName,
+} from '../Domain/moveResourceEvent';
+import VideoCreatedEvent, {
+  VideoCreatedEventName,
+} from '../Domain/videoCreatedEvent';
+import LoadScheduleEvent, {
+  LoadScheduleEventName,
+} from '../Domain/loadScheduleEvent';
+import getUrlFromFileHandle from '../../Helpers/getUrlFromFileHandle';
+import addActiveVideoEvent, {
+  AddActiveVideoEventName,
+} from '../Domain/addActiveVideoEvent';
+import SongEditedEvent, {
+  SongEditedEventEventName,
 } from '../Domain/songEditedEvent';
-
-const Channel_Name = 'Controller';
-let bc = new BroadcastChannel('Channel_Name');
 
 const useAppStateEventProcessors = () => {
   const [state, dispatch] = useContext(Context);
@@ -44,6 +51,19 @@ const useAppStateEventProcessors = () => {
     });
   };
 
+  const VideoCreatedEventHandler = (event: VideoCreatedEvent) => {
+    if (event.eventType !== VideoCreatedEventName) return;
+
+    dispatch({
+      type: 'addResourceToSchedule',
+      payload: {
+        resourceType: 'VIDEO',
+        index: event.index,
+        id: event.id,
+      },
+    });
+  };
+
   const SongAddedToScheduleEventHandler = (
     event: SongAddedToSchedule,
   ) => {
@@ -51,7 +71,11 @@ const useAppStateEventProcessors = () => {
 
     dispatch({
       type: 'addResourceToSchedule',
-      payload: { id: event.song.id, resourceType: 'SONG' },
+      payload: {
+        id: event.song.id,
+        resourceType: 'SONG',
+        index: event.index,
+      },
     });
 
     dispatch({
@@ -61,8 +85,7 @@ const useAppStateEventProcessors = () => {
   };
 
   const SongEditedEventHandler = (event: SongEditedEvent) => {
-    if (event.eventType !== SongEditedEventEventName)
-      return;
+    if (event.eventType !== SongEditedEventEventName) return;
     dispatch({
       type: 'editSong',
       payload: event.song,
@@ -90,7 +113,7 @@ const useAppStateEventProcessors = () => {
   };
 
   const BibleVerseAddedToScheduleEventHandler = (
-    event: bibleVerseAddedToScheduleEvent,
+    event: BibleVerseAddedToScheduleEvent,
   ) => {
     if (event.eventType !== BibleVerseAddedToScheduleEventName)
       return;
@@ -100,6 +123,7 @@ const useAppStateEventProcessors = () => {
       payload: {
         ...event.bibleVerse,
         id: newId(),
+        index: event.index,
         resourceType: 'BIBLEVERSE',
       },
     });
@@ -125,6 +149,7 @@ const useAppStateEventProcessors = () => {
     dispatch({ type: 'setCurrentSchedule', payload: event.schedule });
 
     dispatch({ type: 'clearActiveSongs' });
+    dispatch({ type: 'clearActiveVideos' });
   };
 
   const RemoveResourceFromScheduleEventHandler = (
@@ -136,6 +161,37 @@ const useAppStateEventProcessors = () => {
     dispatch({ type: 'removeResourceFromSchedule', id: event.id });
   };
 
+  const MoveResourceEventHandler = (event: MoveResourceEvent) => {
+    if (event.eventType !== MoveResourceEventName) return;
+
+    if (event.direction !== -1 && event.direction !== 1) {
+      console.error(`Invalid resource direction ${event?.direction}`);
+      return;
+    }
+    dispatch({
+      type: 'moveResourcePosition',
+      payload: { id: event.id, direction: event.direction },
+    });
+  };
+
+  const LoadScheduleEventHandler = (event: LoadScheduleEvent) => {
+    if (event.eventType !== LoadScheduleEventName) return;
+
+    dispatch({
+      type: 'setCurrentSchedule',
+      payload: event.schedule,
+    });
+  };
+
+  const AddActiveVideoEventHandler = (event: addActiveVideoEvent) => {
+    if (event.eventType !== AddActiveVideoEventName) return;
+
+    dispatch({
+      type: 'addVideoToActiveVideos',
+      payload: { id: event.resourceId, url: event.url },
+    });
+  };
+
   const arr = [
     SongCreatedEventHandler,
     SongAddedToScheduleEventHandler,
@@ -144,6 +200,10 @@ const useAppStateEventProcessors = () => {
     RemoveResourceFromScheduleEventHandler,
     BibleVerseAddedToScheduleEventHandler,
     SlideShowAddedToScheduleEventHandler,
+    MoveResourceEventHandler,
+    VideoCreatedEventHandler,
+    LoadScheduleEventHandler,
+    AddActiveVideoEventHandler,
     SongEditedEventHandler,
   ];
   return [arr];

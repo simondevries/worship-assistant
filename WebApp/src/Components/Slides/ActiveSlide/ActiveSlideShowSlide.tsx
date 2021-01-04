@@ -75,7 +75,14 @@ export default function ({ resource }: Props) {
   }, []);
 
   return (
-    <ActiveSlideContainer>
+    <ActiveSlideContainer
+      slideIndex={
+        state.currentSchedule.activeResourcePointer.slideIndex
+      }
+      resourceId={
+        state.currentSchedule.activeResourcePointer.resourceId
+      }
+    >
       <>
         {state.hasProjectorsAttached && isOverlayOpen && (
           <StyledBackdrop onClick={overlayClick}>

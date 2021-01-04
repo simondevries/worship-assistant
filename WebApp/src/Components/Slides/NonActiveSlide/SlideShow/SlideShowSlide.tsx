@@ -22,7 +22,6 @@ interface Props {
 const StyledIframe = styled.iframe`
   width: 100%;
   height: 100%;
-  pointer-events: none;
 `;
 
 export default function ({
@@ -31,7 +30,6 @@ export default function ({
   resourceId,
 }: Props) {
   const { fontSize, ref } = useFitText();
-  console.log('iframe', resource.embeddedPowerPointUrl);
   return (
     <div ref={ref} style={{ fontSize }}>
       <BaseNonActiveSlide
@@ -39,11 +37,6 @@ export default function ({
         resourceId={resourceId}
       >
         <>
-          <div
-            onClick={(e) => {
-              e.preventDefault();
-            }}
-          />
           <StyledIframe
             title={resourceId}
             src={resource.embeddedPowerPointUrl}

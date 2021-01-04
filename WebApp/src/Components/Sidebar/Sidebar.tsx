@@ -54,10 +54,7 @@ export default function () {
   return (
     <StyledContainer elevation={Elevation.FOUR}>
       {addSongModalOpen && (
-        <AddSongDialog
-          setAddSongModalOpen={setAddSongModalOpen}
-          createSongAtIndex={state.currentSchedule.resources.length}
-        />
+        <AddSongDialog setAddSongModalOpen={setAddSongModalOpen} />
       )}
       {settingsModalOpen && (
         <SlideSettingsDialog
