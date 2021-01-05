@@ -28,17 +28,6 @@ export const fileSystemApp = {
   isMac: navigator.userAgent.includes('Mac OS X'),
 };
 
-// Verify the APIs we need are supported, show a polite warning if not.
-if (fileSystemApp.hasNativeFS) {
-  console.error('does not have native file system');
-  //   document.getElementById('not-supported').classList.add('hidden');
-} else {
-  document
-    .getElementById('lblLegacyFS')
-    .classList.toggle('hidden', false);
-  document.getElementById('butSave').classList.toggle('hidden', true);
-}
-
 /**
  * Creates an empty notepad with no details in it.
  */
