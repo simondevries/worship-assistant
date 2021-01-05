@@ -146,7 +146,7 @@ fileSystemApp.saveFile = async () => {
 };
 
 /**
- * fileSystemApp.js:127 asd blob:http://localhost:8080/b98b1972-33d8-428f-aebb-b8cfd9914703
+ * fileSystemApp.js:
 
  * Saves a new file to disk.
  */
