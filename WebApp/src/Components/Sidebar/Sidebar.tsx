@@ -104,7 +104,11 @@ export default function () {
       </StyledIconButton>
       <StyledIconButton
         icon={<Icon icon={<img src={castIcon} />} />}
-        onClick={openOrFocus}
+        onClick={() => {
+          alert(
+            'one day this will cast to tv or projector which has google chrome cast enabled',
+          );
+        }}
         minimal
       >
         Cast

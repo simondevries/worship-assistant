@@ -5,9 +5,11 @@ export const VideoCreatedEventName = 'VideoCreated';
 export default class extends AppEvent {
   id: string;
   index: number;
-  constructor(isExternalEvent, id, index) {
+  fileHandle: any;
+  constructor(isExternalEvent, id, index, fileHandle) {
     super(VideoCreatedEventName, isExternalEvent);
     this.id = id;
     this.index = index;
+    this.fileHandle = fileHandle;
   }
 }

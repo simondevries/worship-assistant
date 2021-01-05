@@ -25,6 +25,9 @@ import AddActiveVideoEvent, {
 import SongEditedEvent, {
   SongEditedEventEventName,
 } from '../Domain/songEditedEvent';
+import VideoModeChangeEvent, {
+  VideoMoodeChangeEventName,
+} from '../Domain/VideoModeChangeEvent';
 
 let bc = new BroadcastChannel('worshipAssistApp');
 
@@ -159,6 +162,20 @@ export default () => {
     );
   };
 
+  const VideoModeChangeEventHandler = (
+    event: VideoModeChangeEvent,
+  ) => {
+    if (
+      event.eventType !== VideoMoodeChangeEventName ||
+      event.isExternalEvent
+    )
+      return;
+
+    bc.postMessage(
+      JSON.stringify({ ...event, isExternalEvent: true }),
+    );
+  };
+
   // Chrome extension
   // const activeResource =
   //   state.currentSchedule.resources[resourceId];
@@ -189,6 +206,7 @@ export default () => {
     VideoCreatedEventHandler,
     AddActiveVideoEventHandler,
     SongEditedEventHandler,
+    VideoModeChangeEventHandler,
   ];
   return [arr];
 };

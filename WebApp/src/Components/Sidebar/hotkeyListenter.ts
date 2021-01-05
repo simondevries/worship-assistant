@@ -25,7 +25,6 @@ export default function () {
         state.navigationArrowKeysEnabled
       ) {
         e.preventDefault();
-        console.log('next slide');
         raiseEvent(new GoToNextSlideEvent(false));
       }
 
@@ -33,7 +32,6 @@ export default function () {
         e.key.toLowerCase() === 'arrowleft' &&
         state.navigationArrowKeysEnabled
       ) {
-        console.log('next slide');
         e.preventDefault();
         raiseEvent(new GoToPreviousSlideEvent(false));
       }

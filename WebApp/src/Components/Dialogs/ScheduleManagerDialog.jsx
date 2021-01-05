@@ -150,6 +150,7 @@ export default ({ setOpen }) => {
             >
               Start New Session
             </StyledNewButton>
+
             <H4>Previous Sessions</H4>
             {/* </StyledAddSchedule> */}
             <StyledPastSchedules>
