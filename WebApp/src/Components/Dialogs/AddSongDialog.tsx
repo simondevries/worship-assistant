@@ -40,10 +40,6 @@ export default ({ setAddSongModalOpen }) => {
   const [state] = useContext(Context);
 
   const [songContent, setSongContent] = useState<any>({
-    // lyrics: [{ type: 'verse', content: '' }],
-    // properties: {
-    //   title: '',
-    // },
     id: newId(),
     lyrics: [],
     resourceType: 'SONG',

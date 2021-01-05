@@ -27,6 +27,7 @@ import AddSlideShowDialog from '../Dialogs/AddSlideShowDialog/AddSlideShowDialog
 import { bibleVerseResolver } from '../../BibleVerse/bibleVerseResolver';
 import IState from '../../Interfaces/State';
 import { userFileHandlerRepo } from '../../Storage/userFileHandlerRepository';
+import AddSongDialog from '../Dialogs/AddSongDialog';
 
 const StyledOmnibarContainer = styled.div`
   -webkit-filter: blur(0);
@@ -115,6 +116,7 @@ const Search = () => {
   const [state, dispatch] = useContext(Context);
   const [raiseEvent] = useEventHandler();
   const [isSlideShowModalOpen, setIsSlideShowModalOpen] = useModal();
+  const [isAddSongModalOpen, setIsAddSongModalOpen] = useModal();
   const searchbox = useRef<HTMLInputElement>(null);
 
   const onClose = () => {
@@ -145,6 +147,14 @@ const Search = () => {
       onClose();
     } else {
       setIsSlideShowModalOpen(true);
+    }
+  };
+
+  const changeAddSongModalVisiblity = (isVisible) => {
+    if (!isVisible) {
+      onClose();
+    } else {
+      setIsAddSongModalOpen(true);
     }
   };
 
@@ -184,7 +194,7 @@ const Search = () => {
     onClose();
   };
 
-  const addSong = async (song: ISong) => {
+  const addSongToSchedule = async (song: ISong) => {
     raiseEvent(
       new SongAddedToScheduleEvent(
         (state as IState).searchBar.insertResourceAtIndex,
@@ -214,7 +224,7 @@ const Search = () => {
   const searchResult = SearchQuery(searchValue, allSongs);
   return (
     <>
-      {!isSlideShowModalOpen && (
+      {!isSlideShowModalOpen && ! isAddSongModalOpen && (
         <>
           <StyledBackdrop onClick={onClose} />
           <StyledOmnibarContainer>
@@ -238,6 +248,11 @@ const Search = () => {
               />
             </StyledOmnibarSearchboxContainer>
             <StyledDropdownContainer>
+              <StyledDropdownItem onClick={() =>
+                setIsAddSongModalOpen(true)
+              }>
+                🎥 Add Song
+              </StyledDropdownItem>
               <StyledDropdownItem onClick={() => addVideo()}>
                 🎥 Add Video
               </StyledDropdownItem>
@@ -273,7 +288,7 @@ const Search = () => {
                 searchResult.map((resource) => {
                   return (
                     <StyledDropdownItem
-                      onClick={() => addSong(resource)}
+                      onClick={() => addSongToSchedule(resource)}
                     >
                       {resource.properties.title}
                     </StyledDropdownItem>
@@ -289,6 +304,9 @@ const Search = () => {
           setModalOpen={changeSlideShowModalVisiblity}
           index={1} // todo (sdv)
         />
+      )}
+      {isAddSongModalOpen && (
+        <AddSongDialog setAddSongModalOpen={changeAddSongModalVisiblity} />
       )}
     </>
   );

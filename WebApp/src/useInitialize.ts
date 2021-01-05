@@ -41,8 +41,9 @@ function useIntialize(dispatch) {
         (currentSchedule.resources[index] as ISongResourceReference)
           .id,
       );
-
-      array = array.concat(result);
+      if (result) {
+        array = array.concat(result);
+      }
     }
     return array;
   };
