@@ -5,11 +5,22 @@ import { useState, useEffect } from 'react';
 import GoToNextSlideEvent from '../../Events/Domain/goToNextSlideEvent';
 import GoToPreviousSlideEvent from '../../Events/Domain/goToPreviousSlideEvent';
 import useEventHandler from '../../Events/Handlers/useEventHandler';
+import IState from '../../Interfaces/State';
 
 export default function () {
   const [keyPressed, setKeyPressed] = useState(false);
   const [state, dispatch] = useContext(Context);
   const [raiseEvent] = useEventHandler();
+
+  const isSlideShowSelected = () => {
+    const activeResourcePointer = (state as IState).currentSchedule
+      .activeResourcePointer;
+
+    const resource = (state as IState).currentSchedule.resources.find(
+      (resource) => resource.id === activeResourcePointer.resourceId,
+    );
+    return resource?.resourceType === 'SLIDESHOW';
+  };
 
   useEffect(() => {
     const upHandler = (e) => {
@@ -22,7 +33,8 @@ export default function () {
 
       if (
         e.key.toLowerCase() === 'arrowright' &&
-        state.navigationArrowKeysEnabled
+        state.navigationArrowKeysEnabled &&
+        !isSlideShowSelected()
       ) {
         e.preventDefault();
         raiseEvent(new GoToNextSlideEvent(false));
@@ -30,7 +42,8 @@ export default function () {
 
       if (
         e.key.toLowerCase() === 'arrowleft' &&
-        state.navigationArrowKeysEnabled
+        state.navigationArrowKeysEnabled &&
+        !isSlideShowSelected()
       ) {
         e.preventDefault();
         raiseEvent(new GoToPreviousSlideEvent(false));

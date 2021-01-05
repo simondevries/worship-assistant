@@ -42,6 +42,9 @@ const eventIcon = (
   <StyledIcon icon={'timeline-events'} iconSize={26}></StyledIcon>
 );
 const cogIcon = <StyledIcon icon={'cog'} iconSize={26}></StyledIcon>;
+const googleDriveBackup = (
+  <StyledIcon icon={'cloud-upload'} iconSize={26}></StyledIcon>
+);
 const alertIcon = (
   <StyledIcon icon={'send-message'} iconSize={26}></StyledIcon>
 );
@@ -67,7 +70,7 @@ export default function () {
     <StyledContainer elevation={Elevation.FOUR}>
       {addSongModalOpen && (
         <AddSongDialog
-        setAddSongModalOpen={setAddSongModalOpen}
+          setAddSongModalOpen={setAddSongModalOpen}
           createSongAtIndex={state.currentSchedule.resources.length}
         />
       )}
@@ -98,18 +101,19 @@ export default function () {
         Add Song
       </StyledIconButton>
       <StyledIconButton
-        icon={cogIcon}
-        onClick={() => setSettingsModalOpenHacks(true)}
-        minimal
-      >
-        Settings
-      </StyledIconButton>
-      <StyledIconButton
         icon={desktopIcon}
         onClick={openOrFocus}
         minimal
       >
         New Monitor
+      </StyledIconButton>
+
+      <StyledIconButton
+        icon={cogIcon}
+        onClick={() => setSettingsModalOpenHacks(true)}
+        minimal
+      >
+        Settings
       </StyledIconButton>
       <StyledIconButton
         icon={<Icon icon={<img src={castIcon} />} />}
@@ -119,6 +123,15 @@ export default function () {
         minimal
       >
         Cast
+      </StyledIconButton>
+      <StyledIconButton
+        icon={googleDriveBackup}
+        onClick={() => {
+          alert('todo');
+        }}
+        minimal
+      >
+        Google drive backup
       </StyledIconButton>
       <StyledIconButton
         icon={alertIcon}

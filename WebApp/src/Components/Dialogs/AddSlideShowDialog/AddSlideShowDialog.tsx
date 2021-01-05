@@ -156,7 +156,11 @@ export default ({ setModalOpen, index }) => {
               <h4>Select a provider:</h4>
               <StyledProviderSelectorContainer>
                 <StyledProviderCard
-                  onClick={() => setSlideShowProvider('POWERPOINT')}
+                  onClick={() =>
+                    alert(
+                      'This feature is not yet available. Use google slides',
+                    )
+                  } // && setSlideShowProvider('POWERPOINT')}
                 >
                   <img src={ppt} alt="powerPoint" />
                   PowerPoint or

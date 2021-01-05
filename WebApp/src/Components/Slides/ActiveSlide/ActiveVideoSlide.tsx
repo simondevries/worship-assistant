@@ -57,21 +57,22 @@ export default function ({ resource }) {
           }
           icon="stop"
         />
-
+        {/* 
         <Button
           onClick={() => {
-            raiseEvent(
-              new VideoModeChangeEvent(
-                false,
-                'SHOWCONTROLS',
-                resource.id,
-              ),
-            );
-            // setShowControls(!showControls);
+            alert("Not implemented - this will allow the user to ")
+            // raiseEvent(
+            //   new VideoModeChangeEvent(
+            //     false,
+            //     'SHOWCONTROLS',
+            //     resource.id,
+            //   ),
+            // );
+            // // setShowControls(!showControls);
           }}
         >
           {showControls ? 'Show controls' : 'Hide controls'}
-        </Button>
+        </Button> */}
       </StyledButtonContainer>
     </ActiveSlideContainer>
   );

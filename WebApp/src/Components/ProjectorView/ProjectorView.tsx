@@ -14,6 +14,13 @@ import YouTubeHandler from './Handlers/YouTubeHandler';
 import { Button } from '@blueprintjs/core';
 import VideoHandler from './Handlers/VideoHandler';
 
+const StyledCentering = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+`;
+
 const StyledPowerPointPresenter = styled.iframe`
   width: 100%;
   height: 100%;
@@ -47,7 +54,9 @@ export default function ({
   className,
 }: Props) {
   const [state] = useContext<Array<IState>>(Context);
-  const { fontSize, ref } = useFitText({ maxFontSize: 9999 });
+  const { fontSize: dynamicFontSize, ref } = useFitText({
+    maxFontSize: 9999,
+  });
 
   if (!state || !state.currentSchedule) return null;
 
@@ -103,16 +112,32 @@ export default function ({
         return 'not found';
     }
   };
+  const controlledFontSize =
+    resourceReference && resourceReference.resourceType === 'SONG'
+      ? dynamicFontSize
+      : '0px';
 
   return (
     <ThemeProvider theme={defaultSongTheme}>
       <StyledProjectorView
         ref={ref}
-        style={{ fontSize }}
+        style={{ controlledFontSize }}
         previewMode={previewMode}
         className={className}
       >
         {renderAppropriateHandler()}
+        {!document.fullscreenElement && !previewMode && (
+          <StyledCentering>
+            <Button
+              intent="primary"
+              onClick={() => {
+                document.documentElement.requestFullscreen();
+              }}
+            >
+              Move to projector window and click to make full screen
+            </Button>
+          </StyledCentering>
+        )}
       </StyledProjectorView>
     </ThemeProvider>
   );

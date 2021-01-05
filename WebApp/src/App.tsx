@@ -33,7 +33,7 @@ export const Context = createContext<any>(initialState);
 
 function App() {
   useEffect(() => {
-    ReactGA.initialize('186478125-1', {
+    ReactGA.initialize('UA-186478125-1', {
       debug: true,
       titleCase: false,
       gaOptions: {

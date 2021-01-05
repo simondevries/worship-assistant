@@ -224,12 +224,18 @@ const Search = () => {
       setAllSongs(songs);
     }
     loadAllSongs();
+
+    dispatch({ type: 'navigationArrowKeysEnabled', payload: false });
+
+    return () => {
+      dispatch({ type: 'navigationArrowKeysEnabled', payload: true });
+    };
   }, []);
 
   const searchResult = SearchQuery(searchValue, allSongs);
   return (
     <>
-      {!isSlideShowModalOpen && ! isAddSongModalOpen && (
+      {!isSlideShowModalOpen && !isAddSongModalOpen && (
         <>
           <StyledBackdrop onClick={onClose} />
           <StyledOmnibarContainer>
@@ -253,14 +259,18 @@ const Search = () => {
               />
             </StyledOmnibarSearchboxContainer>
             <StyledDropdownContainer>
-              {!searchValue && (<StyledDropdownItem onClick={() =>
-                setIsAddSongModalOpen(true)
-              }>
-                🎶 Add Song
-              </StyledDropdownItem>)}
-              {!searchValue && (<StyledDropdownItem onClick={() => addVideo()}>
-                🎥 Add Video
-              </StyledDropdownItem>)}
+              {!searchValue && (
+                <StyledDropdownItem
+                  onClick={() => setIsAddSongModalOpen(true)}
+                >
+                  🎶 Add Song
+                </StyledDropdownItem>
+              )}
+              {!searchValue && (
+                <StyledDropdownItem onClick={() => addVideo()}>
+                  🎥 Add Video
+                </StyledDropdownItem>
+              )}
               {!searchValue ||
                 searchValue === '' ||
                 (isValidBibleVerse(searchValue) && (
@@ -268,13 +278,17 @@ const Search = () => {
                     🕮 Add Bible Verse
                   </StyledDropdownItem>
                 ))}
-              {!searchValue && (<StyledDropdownItem onClick={() => alert('todo')}>
-                📷 Add Image
-              </StyledDropdownItem>)}
+              {!searchValue && (
+                <StyledDropdownItem onClick={() => alert('todo')}>
+                  📷 Add Image
+                </StyledDropdownItem>
+              )}
 
-              {!searchValue && (<StyledDropdownItem onClick={addSlideShow}>
-               🗠 Add slide show
-              </StyledDropdownItem>)}
+              {!searchValue && (
+                <StyledDropdownItem onClick={addSlideShow}>
+                  🗠 Add slide show
+                </StyledDropdownItem>
+              )}
               {/* <StyledDropdownItem
               onClick={() =>
                 addResource({
@@ -311,9 +325,12 @@ const Search = () => {
         />
       )}
       {isAddSongModalOpen && (
-        <AddSongDialog 
-        setAddSongModalOpen={changeAddSongModalVisiblity} 
-        createSongAtIndex={(state as IState).searchBar.insertResourceAtIndex}/>
+        <AddSongDialog
+          setAddSongModalOpen={changeAddSongModalVisiblity}
+          createSongAtIndex={
+            (state as IState).searchBar.insertResourceAtIndex
+          }
+        />
       )}
     </>
   );

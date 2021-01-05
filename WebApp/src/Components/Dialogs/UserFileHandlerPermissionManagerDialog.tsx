@@ -111,12 +111,19 @@ export default ({ setOpen }) => {
             fileHandle: fileHandle,
           } as IFileHandleMetadata;
           localFileHandles.push(obj);
+
+          if (isGranted) {
+            const url = await getUrlFromFileHandle(fileHandle);
+            raiseEvent(new AddActiveVideoEvent(false, r.id, url));
+          }
         }
       }
 
       const hasFileThatNeedGranting = localFileHandles.some(
         (fh) => fh.status !== 'SUCCESS',
       );
+
+      console.log('localFileHandles,', localFileHandles);
 
       if (!hasFileThatNeedGranting) {
         onClose();
@@ -208,6 +215,12 @@ export default ({ setOpen }) => {
 
     setFileHandlesMetadata(updated);
   };
+
+  // Do not show anything if it is busy loading the files
+  // This makes the component more than just a dialog though, maybe it's name should be updated to reflect that
+  if (!fileHandlesMetadata || fileHandlesMetadata.length === 0) {
+    return null;
+  }
 
   return (
     <>

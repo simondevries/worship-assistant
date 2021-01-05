@@ -1,7 +1,5 @@
 import React, { useRef, useState } from 'react';
-import {
-  Button, FileInput,
-} from '@blueprintjs/core';
+import { Button, FileInput } from '@blueprintjs/core';
 import { Dialog, Classes } from '@blueprintjs/core';
 import newId from '../../../Helpers/newId';
 import SongCreatedEvent from '../../../Events/Domain/songCreatedEvent';
@@ -17,13 +15,18 @@ import useModal from '../useModal';
 
 export default ({ setAddSongModalOpen, createSongAtIndex }) => {
   const [raiseEvent] = useEventHandler();
-  const [importSongButtonDisabled, setImportSongButtonDisabled] = useState<boolean>(false);
-  const fileField = useRef<HTMLInputElement>(null)
+  const [
+    importSongButtonDisabled,
+    setImportSongButtonDisabled,
+  ] = useState<boolean>(false);
+  const fileField = useRef<HTMLInputElement>(null);
 
-  function handleFileSelected(e: React.ChangeEvent<HTMLInputElement>): void {
-    if (e.target.files){
-      const files = Array.from(e.target.files)
-      console.log("files:", files)
+  function handleFileSelected(
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): void {
+    if (e.target.files) {
+      const files = Array.from(e.target.files);
+      console.log('files:', files);
     }
   }
   const [songContent, setSongContent] = useState<any>({
@@ -45,7 +48,13 @@ export default ({ setAddSongModalOpen, createSongAtIndex }) => {
 
   const saveSongAndAddToSet = () => {
     raiseEvent(new SongCreatedEvent(false, songContent));
-    raiseEvent(new SongAddedToScheduleEvent(createSongAtIndex, false, songContent));
+    raiseEvent(
+      new SongAddedToScheduleEvent(
+        createSongAtIndex,
+        false,
+        songContent,
+      ),
+    );
     setAddSongModalOpen(false);
   };
 
@@ -59,9 +68,14 @@ export default ({ setAddSongModalOpen, createSongAtIndex }) => {
         onClose={() => setAddSongModalOpen(false)}
       >
         <div className={Classes.DIALOG_BODY}>
-          <SongContent songContent={songContent} songContentSetter={setSongContent} setImportSongButtonDisabled={setImportSongButtonDisabled}/>
+          <SongContent
+            songContent={songContent}
+            songContentSetter={setSongContent}
+            setImportSongButtonDisabled={setImportSongButtonDisabled}
+          />
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-          <FileInput 
+            {/* Todo import songs */}
+            {/* <FileInput 
               disabled={importSongButtonDisabled} 
               text={"Select file"}
               buttonText={"Import File"}
@@ -75,7 +89,7 @@ export default ({ setAddSongModalOpen, createSongAtIndex }) => {
                   onChange: handleFileSelected
                 }
               }
-            />
+            /> */}
           </div>
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
             <Button onClick={() => setAddSongModalOpen(false)}>
