@@ -140,9 +140,11 @@ export default () => {
       event.eventType !== AddActiveVideoEventName ||
       event.isExternalEvent
     )
-      bc.postMessage(
-        JSON.stringify({ ...event, isExternalEvent: true }),
-      );
+      return;
+
+    bc.postMessage(
+      JSON.stringify({ ...event, isExternalEvent: true }),
+    );
   };
 
   const SongEditedEventHandler = (event: SongEditedEvent) => {

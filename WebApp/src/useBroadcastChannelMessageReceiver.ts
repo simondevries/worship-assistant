@@ -13,21 +13,22 @@ export default () => {
   >([]);
 
   useEffect(() => {
+    console.log('Loading message processor');
     bc.onmessage = function (channel) {
-      if (window.location.pathname.indexOf('project') === -1) {
-        if (channel.data === 'ping-project-views--to-controller') {
-          dispatch({
-            type: 'hasProjectorsAttached',
-            payload: true,
-          });
-        }
+      // if (window.location.pathname.indexOf('project') === -1) {
+      //   if (channel.data === 'ping-project-views--to-controller') {
+      //     dispatch({
+      //       type: 'hasProjectorsAttached',
+      //       payload: true,
+      //     });
+      //   }
 
-        return;
-      }
+      //   return;
+      // }
 
-      if (channel.data === 'ping-project-views--to-project') {
-        bc.postMessage('ping-project-views--to-controller');
-      }
+      // if (channel.data === 'ping-project-views--to-project') {
+      //   bc.postMessage('ping-project-views--to-controller');
+      // }
 
       const event = JSON.parse(channel.data);
       event.isExternalEvent = true;

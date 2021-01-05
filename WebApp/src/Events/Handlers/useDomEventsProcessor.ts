@@ -40,11 +40,11 @@ const useDomEventsProcessor = () => {
     if (videoModeChangeEvent.eventType === VideoMoodeChangeEventName)
       return;
 
-    const ele: any = document.getElementById(
+    const element: any = document.getElementById(
       `videoPlayer-${videoModeChangeEvent.resourceId}`,
     );
 
-    if (!ele) {
+    if (!element) {
       console.warn(
         `Could not find element with Id ${`videoPlayer-${videoModeChangeEvent.resourceId}`}`,
       );
@@ -53,16 +53,16 @@ const useDomEventsProcessor = () => {
 
     switch (videoModeChangeEvent.action) {
       case 'PLAY':
-        ele.play();
+        element.play();
         break;
       case 'PAUSE':
-        ele.pause();
+        element.pause();
         break;
       case 'STOP':
-        ele.load();
+        element.load();
         break;
       case 'BACKTOSTART':
-        ele.load();
+        element.load();
         break;
 
       default:
