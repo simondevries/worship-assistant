@@ -19,7 +19,9 @@ import VideoCreatedEvent, {
 import SlideShowAddedToScheduleEvent, {
   SlideShowAddedToScheduleEventName,
 } from '../Domain/slideShowAddedToScheduleEvent';
-import { AddActiveVideoEventName } from '../Domain/addActiveVideoEvent';
+import AddActiveVideoEvent, {
+  AddActiveVideoEventName,
+} from '../Domain/addActiveVideoEvent';
 import SongEditedEvent, {
   SongEditedEventEventName,
 } from '../Domain/songEditedEvent';
@@ -133,7 +135,7 @@ export default () => {
     );
   };
 
-  const AddActiveVideoEventHandler = (event: VideoCreatedEvent) => {
+  const AddActiveVideoEventHandler = (event: AddActiveVideoEvent) => {
     if (
       event.eventType !== AddActiveVideoEventName ||
       event.isExternalEvent

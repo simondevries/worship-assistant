@@ -1,43 +1,9 @@
-import { songsRepo } from '../../Storage/songsRepository';
-import { scheduleRepo } from '../../Storage/scheduleRepository';
-import { settingsRepo } from '../../Storage/settingsRepository';
-import { useContext } from 'react';
-import AppEvent from '../Domain/appEvent';
-import SongCreatedEvent, {
-  SongCreatedEventName,
-} from '../Domain/songCreatedEvent';
-import { Context } from '../../App';
-import SongAddedToSchedule, {
-  SongAddedToScheduleEventName,
-} from '../Domain/songAddedToScheduleEvent';
-import ISongResourceReference from '../../Interfaces/SongResourceReference';
-import NewScheduleCreatedEvent, {
-  NewScheduleCreatedEventName,
-} from '../Domain/newScheduleCreatedEvent';
-import SlideShowAddedToScheduleEvent, {
-  SlideShowAddedToScheduleEventName,
-} from '../Domain/slideShowAddedToScheduleEvent';
-import MoveResourceEvent, {
-  MoveResourceEventName,
-} from '../Domain/moveResourceEvent';
-import reducers from '../../Reducers/reducers';
-import IState from '../../Interfaces/State';
-import RemoveResourceFromScheduleEvent, {
-  RemoveResourceFromScheduleEventName,
-} from '../Domain/removeResourceFromScheduleEvent';
-import newId from '../../Helpers/newId';
-import BibleVerseAddedToScheduleEvent, {
-  BibleVerseAddedToScheduleEventName,
-} from '../Domain/bibleVerseAddedToScheduleEvent';
-import videoCreatedEvent, {
-  VideoCreatedEventName,
-} from '../Domain/videoCreatedEvent';
-import LoadScheduleEvent, {
-  LoadScheduleEventName,
-} from '../Domain/loadScheduleEvent';
 import SlideChangeEvent, {
   SlideChangedEventName,
 } from '../Domain/slideChangeEvent';
+import VideoModeChangeEvent, {
+  VideoMoodeChangeEventName,
+} from '../Domain/VideoModeChangeEvent';
 
 const useDomEventsProcessor = () => {
   const SlideChangeEventHandler = (event: SlideChangeEvent) => {
@@ -68,7 +34,45 @@ const useDomEventsProcessor = () => {
     }, 1000);
   };
 
-  const arr = [SlideChangeEventHandler];
+  const VideoModeChangeEvent = (
+    videoModeChangeEvent: VideoModeChangeEvent,
+  ) => {
+    if (videoModeChangeEvent.eventType === VideoMoodeChangeEventName)
+      return;
+
+    const ele: any = document.getElementById(
+      `videoPlayer-${videoModeChangeEvent.resourceId}`,
+    );
+
+    if (!ele) {
+      console.warn(
+        `Could not find element with Id ${`videoPlayer-${videoModeChangeEvent.resourceId}`}`,
+      );
+      return;
+    }
+
+    switch (videoModeChangeEvent.action) {
+      case 'PLAY':
+        ele.play();
+        break;
+      case 'PAUSE':
+        ele.pause();
+        break;
+      case 'STOP':
+        ele.load();
+        break;
+      case 'BACKTOSTART':
+        ele.load();
+        break;
+
+      default:
+        console.warn(
+          `Could not find video mode change event action ${videoModeChangeEvent.action}`,
+        );
+    }
+  };
+
+  const arr = [SlideChangeEventHandler, VideoModeChangeEvent];
   return [arr];
 };
 

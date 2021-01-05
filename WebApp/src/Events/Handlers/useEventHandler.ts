@@ -1,10 +1,18 @@
 import useBroadcastMessageEventProcessor from './useBroadcastMessageEventProcessor';
 import useAppStateEventProcessors from './useAppStateEventProcessor';
 import useIndexDbEventProcessor from './useIndexDbEventProcessor';
-import useSlideChangeEventProcessor from './useGoToSlideProcessor';
+import useGoToSlideProcessor from './useGoToSlideProcessor';
 import useDomEventsProcessor from './useDomEventsProcessor';
 
 export default () => {
+  const [
+    broadCastEventProcessors,
+  ] = useBroadcastMessageEventProcessor();
+  const [appStateEventProcessors] = useAppStateEventProcessors();
+  const [indexDbEventProcessors] = useIndexDbEventProcessor();
+  const [domEventsProcessor] = useDomEventsProcessor();
+  const [useSlideChangeEventProcessors] = useGoToSlideProcessor({});
+
   const raiseEvent = (event: any) => {
     console.info('event raised: ' + event.eventType);
     try {
@@ -19,16 +27,5 @@ export default () => {
       console.error(e);
     }
   };
-
-  const [
-    broadCastEventProcessors,
-  ] = useBroadcastMessageEventProcessor();
-  const [appStateEventProcessors] = useAppStateEventProcessors();
-  const [indexDbEventProcessors] = useIndexDbEventProcessor();
-  const [domEventsProcessor] = useDomEventsProcessor();
-  const [
-    useSlideChangeEventProcessors,
-  ] = useSlideChangeEventProcessor(raiseEvent);
-
   return [raiseEvent];
 };

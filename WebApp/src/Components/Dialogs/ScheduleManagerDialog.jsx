@@ -1,26 +1,18 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Context } from '../../App';
-import { Button, Card, H5, H3, Icon, H4 } from '@blueprintjs/core';
+import { Button, Card, H5, Icon, H4 } from '@blueprintjs/core';
 import { Dialog, Classes } from '@blueprintjs/core';
-import styled, { css } from 'styled-components/macro';
+import styled from 'styled-components/macro';
 import { DateInput } from '@blueprintjs/datetime';
 import { scheduleRepo } from '../../Storage/scheduleRepository';
-import { settingsRepo } from '../../Storage/settingsRepository';
-import NewId from '../../Helpers/newId';
 import useEventHandler from '../../Events/Handlers/useEventHandler';
 import NewScheduleCreatedEvent from '../../Events/Domain/newScheduleCreatedEvent';
 import {
   empty as emptyResource,
   hasUserFileHandler,
 } from '../../Interfaces/Schedule';
-import getUrlFromFileHandle from '../../Helpers/getUrlFromFileHandle';
 import LoadScheduleEvent from '../../Events/Domain/loadScheduleEvent';
-import AddActiveVideoEvent from '../../Events/Domain/addActiveVideoEvent';
 import UserFileHandlerPermissionManagerDialog from './UserFileHandlerPermissionManagerDialog';
-
-const StyledDateInput = styled(DateInput)`
-  margin-left: 30px;
-`;
 
 const StyledCard = styled(Card)`
   background: #353535;
@@ -30,15 +22,9 @@ const StyledActionButton = styled(Button)`
   margin-left: 30px;
 `;
 
-const StyledAddButton = styled(Button)`
-  margin-top: 33px;
-  width: 130px;
-`;
-
 const SpacerTr = styled.tr`
   height: 20px;
 `;
-const StyledInput = styled.input``;
 
 const StyledNewButton = styled(Button)`
   padding: 14px 20px;
@@ -79,11 +65,11 @@ const StyledTipHeader = styled(H5)`
 `;
 
 export default ({ setOpen }) => {
-  const [scheduleTitle, setScheduleTitle] = useState();
+  const [scheduleTitle] = useState();
   const [showOpenConfirm, setShowOpenConfirm] = useState(false);
-  const [scheduleDateTime, setScheduleDateTime] = useState();
+  const [] = useState();
   const [schedules, setSchedules] = useState([]);
-  const [state, dispatch] = useContext(Context);
+  const [] = useContext(Context);
   const [raiseEvent] = useEventHandler();
   const [
     showUserFileHandlerModal,
@@ -99,11 +85,6 @@ export default ({ setOpen }) => {
     }
     fetchData();
   }, []);
-
-  const StyledBody = styled.div`
-    display: flex;
-    flex-direction: column;
-  `;
 
   const addSchedule = () => {
     raiseEvent(

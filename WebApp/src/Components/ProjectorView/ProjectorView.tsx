@@ -94,6 +94,7 @@ export default function ({
         return (
           <VideoHandler
             resourceReference={resourceReference}
+            previewMode={previewMode}
           ></VideoHandler>
         );
       case 'image':

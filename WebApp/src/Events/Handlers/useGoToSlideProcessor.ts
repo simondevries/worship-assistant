@@ -1,11 +1,6 @@
-import useEventHandler from './useEventHandler';
 import { useContext } from 'react';
 import { Context } from '../../App';
-import IState from '../../Interfaces/State';
-import slideChangeEvent from '../Domain/slideChangeEvent';
 import ISchedule from '../../Interfaces/Schedule';
-import IResource from '../../Interfaces/resource';
-
 import {
   isLastSlideSelected as isLastSlideShowSlideSelected,
   lastSlideIndex as slideShowLastSlideIndex,
@@ -30,7 +25,7 @@ import GoToNextSlideEvent, {
 import GoToPreviousSlideEvent, {
   GoToPreviousSlideEventName,
 } from '../Domain/goToPreviousSlideEvent';
-import goToNextSlideEvent from '../Domain/goToNextSlideEvent';
+import slideChangeEvent from '../Domain/slideChangeEvent';
 
 const getResource = (id, currentSchedule) => {
   const resource = currentSchedule.resources.find((r) => r.id === id);
@@ -99,7 +94,7 @@ export default (raiseEvent) => {
 
     let toResourceId;
     let toSlideId;
-    console.log('fdoo');
+
     if (
       isFirstSlideIndexSelected(currentSchedule.activeResourcePointer)
     ) {

@@ -38,20 +38,6 @@ export default function ({
 
   const onSlideClick = (slideIndex) => {
     updateSlideNumber(slideIndex);
-    // todo (Sdv) make generic for all slides
-
-    const element = document.getElementById(
-      'slide' + slideIndex + 'resource' + resource.id,
-    );
-    if (element) {
-      element.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-        inline: 'center',
-      });
-    } else {
-      console.error('Could not find slide');
-    }
   };
 
   return (
