@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import { Context } from '../../App';
 import styled from 'styled-components/macro';
-import { Icon } from '@blueprintjs/core';
+import { Icon, Spinner } from '@blueprintjs/core';
 import SearchQuery from './searchQuery';
 import { songsRepo } from '../../Storage/songsRepository';
 import useEventHandler from '../../Events/Handlers/useEventHandler';
@@ -115,6 +115,7 @@ export default function () {
 const Search = () => {
   const [searchValue, setSearchValue] = useState('');
   const [allSongs, setAllSongs] = useState([]);
+  const [isAddingBibleVerse, setIsAddingBibleVerse] = useState<boolean>(false);
   const [state, dispatch] = useContext(Context);
   const [raiseEvent] = useEventHandler();
   const [isSlideShowModalOpen, setIsSlideShowModalOpen] = useModal();
@@ -170,12 +171,12 @@ const Search = () => {
   const addBibleVerse = async () => {
     if (!searchbox)
       alert('Please enter a bible verse in the format John 3:16');
-
+    
+    setIsAddingBibleVerse(true);
     const book = searchValue.split(' ')[0];
     const chapter = searchValue.split(' ')[1].split(':')[0];
     const verse = searchValue.split(' ')[1].split(':')[1];
-
-    let bibleVerse = initNewBibleVerse(
+    let bibleQuery = (initNewBibleVerse(
       newId(),
       book,
       chapter,
@@ -183,15 +184,14 @@ const Search = () => {
       'kjv',
       'bible-api.com',
       null,
-    );
-
-    const verseContent = await bibleVerseResolver(bibleVerse);
-
-    bibleVerse = addBibleVerseContent(bibleVerse, verseContent);
+    ));
+    const verseContent = await bibleVerseResolver(bibleQuery);
+    let finalBibleVerse = addBibleVerseContent(bibleQuery, verseContent);
+    setIsAddingBibleVerse(false)
     raiseEvent(
       new BibleVerseAddedToScheduleEvent(
         false,
-        bibleVerse,
+        finalBibleVerse,
         (state as IState).searchBar.insertResourceAtIndex,
       ),
     );
@@ -232,6 +232,10 @@ const Search = () => {
     };
   }, []);
 
+  if (isAddingBibleVerse) {
+      return <Spinner/>;
+    }
+    
   const searchResult = SearchQuery(searchValue, allSongs);
   return (
     <>
