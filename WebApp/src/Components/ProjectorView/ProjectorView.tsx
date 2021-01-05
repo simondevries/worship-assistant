@@ -15,10 +15,11 @@ import { Button } from '@blueprintjs/core';
 import VideoHandler from './Handlers/VideoHandler';
 
 const StyledCentering = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
   height: 100%;
+  position: fixed;
+  margin: 0 auto;
+  left: 38%;
+  position: fixed;
 `;
 
 const StyledPowerPointPresenter = styled.iframe`
@@ -54,7 +55,7 @@ export default function ({
   className,
 }: Props) {
   const [state] = useContext<Array<IState>>(Context);
-  const { fontSize: dynamicFontSize, ref } = useFitText({
+  const { fontSize, ref } = useFitText({
     maxFontSize: 9999,
   });
 
@@ -112,32 +113,39 @@ export default function ({
         return 'not found';
     }
   };
+
+  // todo (sdv) hacks
   const controlledFontSize =
-    resourceReference && resourceReference.resourceType === 'SONG'
-      ? dynamicFontSize
+    (resourceReference &&
+      resourceReference.resourceType === 'SONG') ||
+    (resourceReference &&
+      resourceReference.resourceType === 'BIBLEVERSE')
+      ? fontSize
       : '0px';
 
   return (
     <ThemeProvider theme={defaultSongTheme}>
       <StyledProjectorView
         ref={ref}
-        style={{ controlledFontSize }}
+        style={{ fontSize: controlledFontSize }}
         previewMode={previewMode}
         className={className}
       >
         {renderAppropriateHandler()}
-        {!document.fullscreenElement && !previewMode && (
-          <StyledCentering>
-            <Button
-              intent="primary"
-              onClick={() => {
-                document.documentElement.requestFullscreen();
-              }}
-            >
-              Move to projector window and click to make full screen
-            </Button>
-          </StyledCentering>
-        )}
+        {window.innerHeight !== window.screen.height &&
+          !resourceReference &&
+          !previewMode && (
+            <StyledCentering>
+              <Button
+                intent="primary"
+                onClick={() => {
+                  document.documentElement.requestFullscreen();
+                }}
+              >
+                Full Screen
+              </Button>
+            </StyledCentering>
+          )}
       </StyledProjectorView>
     </ThemeProvider>
   );

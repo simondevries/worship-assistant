@@ -28,6 +28,9 @@ import SongEditedEvent, {
 import VideoModeChangeEvent, {
   VideoMoodeChangeEventName,
 } from '../Domain/VideoModeChangeEvent';
+import BibleVerseAddedToScheduleEvent, {
+  BibleVerseAddedToScheduleEventName,
+} from '../Domain/bibleVerseAddedToScheduleEvent';
 
 let bc = new BroadcastChannel('worshipAssistApp');
 
@@ -176,6 +179,17 @@ export default () => {
     );
   };
 
+  const BibleVerseAddedToScheduleEventHandler = (
+    event: BibleVerseAddedToScheduleEvent,
+  ) => {
+    if (event.eventType !== BibleVerseAddedToScheduleEventName)
+      return;
+
+    bc.postMessage(
+      JSON.stringify({ ...event, isExternalEvent: true }),
+    );
+  };
+
   // Chrome extension
   // const activeResource =
   //   state.currentSchedule.resources[resourceId];
@@ -207,6 +221,7 @@ export default () => {
     AddActiveVideoEventHandler,
     SongEditedEventHandler,
     VideoModeChangeEventHandler,
+    // BibleVerseAddedToScheduleEventHandler,
   ];
   return [arr];
 };
