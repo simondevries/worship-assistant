@@ -8,7 +8,7 @@ import { Context } from '../../App';
 import ScheduleManagerDialog from '../Dialogs/ScheduleManagerDialog';
 import IState from '../../Interfaces/State';
 import focusOnProjectView from '../../Hooks/focusOnProjectView';
-
+import castIcon from './cast.svg';
 export const sidebarWidth = 70;
 export const sidebarMargin = 15;
 
@@ -19,6 +19,7 @@ const StyledIconButton = styled(Button)`
   align-items: center;
   padding-top: 10px;
   padding-bottom: 10px;
+  text-align: center;
 `;
 
 const StyledIcon = styled(Icon)`
@@ -77,7 +78,7 @@ export default function () {
         icon={eventIcon}
         minimal
       >
-        <div>Schedules</div>
+        Schedules
       </StyledIconButton>
       <StyledIconButton
         className="side-bar_add-schedule"
@@ -85,20 +86,28 @@ export default function () {
         icon={addIcon}
         minimal
       >
-        <div>Add Song</div>
+        Add Song
       </StyledIconButton>
       <StyledIconButton
         icon={cogIcon}
         onClick={() => setSettingsModalOpenHacks(true)}
         minimal
       >
-        <div>Settings</div>
+        Settings
       </StyledIconButton>
-      <StyledIconButton icon={desktopIcon} onClick={openOrFocus}>
-        <div>New Monitor</div>
+      <StyledIconButton
+        icon={desktopIcon}
+        onClick={openOrFocus}
+        minimal
+      >
+        New Monitor
       </StyledIconButton>
-      <StyledIconButton icon={addIcon} minimal>
-        <div>Add</div>
+      <StyledIconButton
+        icon={<Icon icon={<img src={castIcon} />} />}
+        onClick={openOrFocus}
+        minimal
+      >
+        Cast
       </StyledIconButton>
     </StyledContainer>
   );
