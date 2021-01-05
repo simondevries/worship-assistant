@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   EditableText,
@@ -23,10 +23,14 @@ const StyledEditableTextTitle = styled(EditableText)`
   }
 `;
 
-export default ({ songContent, songContentSetter }) => {
+export default ({ songContent, songContentSetter, setImportSongButtonDisabled }) => {
   const [titleBeingEdited, setTitleBeingEdited] = useState<string>(songContent?.properties?.title);
   const [lyricsBeingEdited, setLyricsBeingEdited] = useState<string>(songContent?.lyrics?.map(lyric => '[' + lyric.name + ']' + lyric.content).join("\n"));
 
+  useEffect(() => {
+    setImportSongButtonDisabled(titleBeingEdited || lyricsBeingEdited)
+  }, [setImportSongButtonDisabled, titleBeingEdited, lyricsBeingEdited])
+  
   // Actually set song content title
   const updateSongContentTitle = (event) => {
     songContentSetter({

@@ -46,7 +46,12 @@ export default ({ setEditSongModalOpen, songId }) => {
         songContent.properties && 
         songContent.properties.title &&
         songContent.lyrics && 
-        <SongContent songContent={songContent} songContentSetter={setSongContent}/>}
+        <SongContent 
+          songContent={songContent}
+          songContentSetter={setSongContent}
+          setImportSongButtonDisabled={()=> undefined}
+        />
+        }
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
             <Button onClick={() => setEditSongModalOpen(false)}>
               Close

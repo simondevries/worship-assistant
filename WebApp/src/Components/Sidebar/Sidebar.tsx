@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Button, Card, Elevation, Icon } from '@blueprintjs/core';
 import styled from 'styled-components/macro';
 import useModal from '../Dialogs/useModal';
-import AddSongDialog from '../Dialogs/AddSongDialog';
+import AddSongDialog from '../Dialogs/UpsertSongDialog/AddSongDialog';
 import SlideSettingsDialog from '../Dialogs/SlideSettingsDialog/SlideSettingsDialog';
 import { Context } from '../../App';
 import ScheduleManagerDialog from '../Dialogs/ScheduleManagerDialog';
@@ -66,7 +66,10 @@ export default function () {
   return (
     <StyledContainer elevation={Elevation.FOUR}>
       {addSongModalOpen && (
-        <AddSongDialog setAddSongModalOpen={setAddSongModalOpen} />
+        <AddSongDialog
+        setAddSongModalOpen={setAddSongModalOpen}
+          createSongAtIndex={state.currentSchedule.resources.length}
+        />
       )}
       {settingsModalOpen && (
         <SlideSettingsDialog
