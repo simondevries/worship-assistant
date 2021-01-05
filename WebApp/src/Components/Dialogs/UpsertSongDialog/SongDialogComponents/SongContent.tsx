@@ -68,6 +68,7 @@ export default ({ songContent, songContentSetter, setImportSongButtonDisabled })
         value={titleBeingEdited}
         onChange={setTitleBeingEdited} // only update state variable
         onConfirm={updateSongContentTitle}
+        placeholder={"Add song title here"}
         />
         <StyledEditableTextContent
         multiline={true}
@@ -75,6 +76,11 @@ export default ({ songContent, songContentSetter, setImportSongButtonDisabled })
         value={lyricsBeingEdited}
         onChange={setLyricsBeingEdited} // only update state variable
         onConfirm={updateSongContentLyrics}
+        placeholder={
+          "[v1]\n Add lyrics here, oh, please do \n Type in the song section tags too\n\n" +
+          "[v2]\n These define the parts of the song \n The list of tags is frankly, quite long\n\n" +
+          "[c]\n See the other tags in the '?' button below\n See the other tags in the '?' button below\n\n"
+        }
         />
 
         <Popover content={<HelpText />} position={Position.TOP}>
