@@ -175,6 +175,7 @@ const useIndexDbEventProcessor = () => {
         ...event.bibleVerse,
         id: newId(),
         resourceType: 'BIBLEVERSE',
+        index: event.index,
       },
     });
 
