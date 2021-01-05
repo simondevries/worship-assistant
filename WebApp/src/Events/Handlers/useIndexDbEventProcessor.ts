@@ -36,6 +36,7 @@ import LoadScheduleEvent, {
 import SongEditedEvent, {
   SongEditedEventEventName,
 } from '../Domain/songEditedEvent';
+import { userFileHandlerRepo } from '../../Storage/userFileHandlerRepository';
 
 const useIndexDbEventProcessor = () => {
   const [state, dispatch] = useContext(Context);
@@ -175,6 +176,7 @@ const useIndexDbEventProcessor = () => {
         ...event.bibleVerse,
         id: newId(),
         resourceType: 'BIBLEVERSE',
+        index: event.index,
       },
     });
 
@@ -204,6 +206,8 @@ const useIndexDbEventProcessor = () => {
       updatedState.currentSchedule,
       updatedState.currentSchedule.id,
     );
+
+    userFileHandlerRepo.set(event.fileHandle, event.id);
   };
 
   const LoadScheduleEventHandler = (event: LoadScheduleEvent) => {

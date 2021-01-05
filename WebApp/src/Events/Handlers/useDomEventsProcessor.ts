@@ -37,7 +37,7 @@ const useDomEventsProcessor = () => {
   const VideoModeChangeEvent = (
     videoModeChangeEvent: VideoModeChangeEvent,
   ) => {
-    if (videoModeChangeEvent.eventType === VideoMoodeChangeEventName)
+    if (videoModeChangeEvent.eventType !== VideoMoodeChangeEventName)
       return;
 
     const element: any = document.getElementById(
@@ -59,9 +59,6 @@ const useDomEventsProcessor = () => {
         element.pause();
         break;
       case 'STOP':
-        element.load();
-        break;
-      case 'BACKTOSTART':
         element.load();
         break;
 

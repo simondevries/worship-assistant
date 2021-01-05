@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Context } from '../../../App';
 
 import styled from 'styled-components';
@@ -19,7 +19,7 @@ const StyledProjectorView = styled(ProjectorView)``;
 
 export default function ({ resource }) {
   const [raiseEvent] = useEventHandler();
-
+  const [showControls, setShowControls] = useState();
   const activeResourcePointer: ActiveResourcePointer = {
     resourceId: resource.id,
     slideIndex: 0,
@@ -34,44 +34,43 @@ export default function ({ resource }) {
         {resource.title}
 
         <Button
-          onClick={() =>
-            raiseEvent(
-              new VideoModeChangeEvent(
-                false,
-                'BACKTOSTART',
-                resource.id,
-              ),
-            )
-          }
-        >
-          Back to start
-        </Button>
-        <Button
+          icon="play"
           onClick={() =>
             raiseEvent(
               new VideoModeChangeEvent(false, 'PLAY', resource.id),
             )
           }
-        >
-          Play
-        </Button>
+        />
         <Button
           onClick={() =>
             raiseEvent(
               new VideoModeChangeEvent(false, 'PAUSE', resource.id),
             )
           }
-        >
-          Pause
-        </Button>
+          icon="pause"
+        />
         <Button
           onClick={() =>
             raiseEvent(
               new VideoModeChangeEvent(false, 'STOP', resource.id),
             )
           }
+          icon="stop"
+        />
+
+        <Button
+          onClick={() => {
+            raiseEvent(
+              new VideoModeChangeEvent(
+                false,
+                'SHOWCONTROLS',
+                resource.id,
+              ),
+            );
+            // setShowControls(!showControls);
+          }}
         >
-          Stop
+          {showControls ? 'Show controls' : 'Hide controls'}
         </Button>
       </StyledButtonContainer>
     </ActiveSlideContainer>

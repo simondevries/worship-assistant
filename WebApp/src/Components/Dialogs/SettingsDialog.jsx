@@ -27,6 +27,22 @@ export default ({ setSettingsModalOpen }) => {
   const StyledBody = styled.div`
     display: flex;
     flex-direction: column;
+
+    google-cast-launcher {
+      float: right;
+      margin: 10px 6px 14px 0px;
+      width: 40px;
+      height: 32px;
+      opacity: 0.7;
+      background-color: #000;
+      border: none;
+      outline: none;
+    }
+
+    google-cast-launcher:hover {
+      --disconnected-color: white;
+      --connected-color: white;
+    }
   `;
 
   const onSubmit = (values) => {
@@ -70,6 +86,7 @@ export default ({ setSettingsModalOpen }) => {
                 <span>This field is required</span>
               )}
             </StyledBody>
+
             <div className={Classes.DIALOG_FOOTER_ACTIONS}>
               <Button onClick={() => setSettingsModalOpen(false)}>
                 Close

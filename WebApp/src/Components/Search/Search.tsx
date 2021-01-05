@@ -28,6 +28,8 @@ import { bibleVerseResolver } from '../../BibleVerse/bibleVerseResolver';
 import IState from '../../Interfaces/State';
 import { userFileHandlerRepo } from '../../Storage/userFileHandlerRepository';
 import AddSongDialog from '../Dialogs/UpsertSongDialog/AddSongDialog';
+import AddActiveVideoEvent from '../../Events/Domain/addActiveVideoEvent';
+import getUrlFromFileHandle from '../../Helpers/getUrlFromFileHandle';
 
 const StyledOmnibarContainer = styled.div`
   -webkit-filter: blur(0);
@@ -128,16 +130,19 @@ const Search = () => {
 
   const addVideo = async () => {
     const fileHandle = await fileSystemApp.openFile();
+    const url = await getUrlFromFileHandle(fileHandle);
     const videoId = newId();
-    await userFileHandlerRepo.set(fileHandle, videoId);
 
     raiseEvent(
       new VideoCreatedEvent(
         false,
         videoId,
         (state as IState).searchBar.insertResourceAtIndex,
+        fileHandle,
       ),
     );
+
+    raiseEvent(new AddActiveVideoEvent(false, videoId, url));
 
     onClose();
   };
