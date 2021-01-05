@@ -17,12 +17,12 @@ export default interface ISchedule {
   title: string;
 }
 
-export const empty = (title: string) => {
+export const empty = () => {
   return {
     id: newId(),
     resources: [],
     date: new Date(),
-    title: title,
+    title: '', // title not really needed
     activeResourcePointer: {
       slideIndex: 0,
       resourceId: null,

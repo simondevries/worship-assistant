@@ -42,6 +42,12 @@ const eventIcon = (
   <StyledIcon icon={'timeline-events'} iconSize={26}></StyledIcon>
 );
 const cogIcon = <StyledIcon icon={'cog'} iconSize={26}></StyledIcon>;
+const alertIcon = (
+  <StyledIcon icon={'send-message'} iconSize={26}></StyledIcon>
+);
+const styledCastIcon = (
+  <StyledIcon icon={'cog'} iconSize={26}></StyledIcon>
+);
 const desktopIcon = (
   <StyledIcon icon={'desktop'} iconSize={26}></StyledIcon>
 );
@@ -105,13 +111,20 @@ export default function () {
       <StyledIconButton
         icon={<Icon icon={<img src={castIcon} />} />}
         onClick={() => {
-          alert(
-            'one day this will cast to tv or projector which has google chrome cast enabled',
-          );
+          alert('todo');
         }}
         minimal
       >
         Cast
+      </StyledIconButton>
+      <StyledIconButton
+        icon={alertIcon}
+        onClick={() => {
+          alert('todo');
+        }}
+        minimal
+      >
+        Alerts
       </StyledIconButton>
     </StyledContainer>
   );

@@ -8,6 +8,9 @@ import { Intent } from '@blueprintjs/core';
 import useModal from './Components/Dialogs/useModal';
 import ISchedule, { hasUserFileHandler } from './Interfaces/Schedule';
 import ISongResourceReference from './Interfaces/SongResourceReference';
+import newScheduleCreatedEvent from './Events/Domain/newScheduleCreatedEvent';
+import { empty as emptyResource } from './Interfaces/Schedule';
+import useEventHandler from './Events/Handlers/useEventHandler';
 
 let bc = new BroadcastChannel('worshipAssistApp');
 
@@ -18,6 +21,7 @@ function useIntialize(dispatch) {
     userFileHandlerPermissionManagerOpen,
     setUserFileHandlerPermissionManagerOpen,
   ] = useModal(false);
+  const [raiseEvent] = useEventHandler();
 
   const primeSettings = async () => {
     const settings = await settingsRepo.get();
@@ -47,14 +51,20 @@ function useIntialize(dispatch) {
     return array;
   };
 
-  const warnIfNoSchedule = (currentSchedule) => {
+  const handleNoSchedule = (currentSchedule, raiseEvent) => {
     if (!currentSchedule) {
-      AppToaster.show({
-        intent: Intent.DANGER,
-        message:
-          'Could not find an active service. Go to the schedule dialog and create a new schedule.',
-      });
-      throw Error();
+      // AppToaster.show({
+      //   intent: Intent.DANGER,
+      //   message:
+      //     'Could not find an active service. Go to the schedule dialog and create a new schedule.',
+      // });
+      // throw Error();
+
+      // todo (sdv) hacks
+      raiseEvent(new newScheduleCreatedEvent(false, emptyResource()));
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
     }
   };
 
@@ -124,7 +134,7 @@ function useIntialize(dispatch) {
               (s) => s.id === settings.currentScheduleId,
             );
 
-          warnIfNoSchedule(currentSchedule);
+          handleNoSchedule(currentSchedule, raiseEvent);
 
           let activeSongs = await primeActiveSongs(currentSchedule);
 
@@ -134,6 +144,7 @@ function useIntialize(dispatch) {
 
           setLoadingState(fetchStatus.Loaded);
         } catch (e) {
+          console.warn(e);
           setLoadingState(fetchStatus.Failed);
         }
       }

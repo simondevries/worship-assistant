@@ -47,7 +47,7 @@ export default function ({
   className,
 }: Props) {
   const [state] = useContext<Array<IState>>(Context);
-  const { fontSize, ref } = useFitText({ maxFontSize: 10 });
+  const { fontSize, ref } = useFitText({ maxFontSize: 9999 });
 
   if (!state || !state.currentSchedule) return null;
 

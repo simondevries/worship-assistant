@@ -13,7 +13,6 @@ export default () => {
   >([]);
 
   useEffect(() => {
-    console.log('Loading message processor');
     bc.onmessage = function (channel) {
       if (window.location.pathname.indexOf('project') === -1) {
         if (channel.data === 'ping-project-views--to-controller') {

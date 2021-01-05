@@ -69,7 +69,6 @@ export default function () {
   if (loadingState === fetchStatus.Loading) {
     return <StyledSpinner />;
   }
-
   return (
     <>
       <Tour

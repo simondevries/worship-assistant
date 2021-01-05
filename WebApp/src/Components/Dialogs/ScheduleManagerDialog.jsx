@@ -65,9 +65,7 @@ const StyledTipHeader = styled(H5)`
 `;
 
 export default ({ setOpen }) => {
-  const [scheduleTitle] = useState();
   const [showOpenConfirm, setShowOpenConfirm] = useState(false);
-  const [] = useState();
   const [schedules, setSchedules] = useState([]);
   const [] = useContext(Context);
   const [raiseEvent] = useEventHandler();
@@ -87,12 +85,7 @@ export default ({ setOpen }) => {
   }, []);
 
   const addSchedule = () => {
-    raiseEvent(
-      new NewScheduleCreatedEvent(
-        false,
-        emptyResource(scheduleTitle),
-      ),
-    );
+    raiseEvent(new NewScheduleCreatedEvent(false, emptyResource()));
 
     onClose();
   };
@@ -123,7 +116,7 @@ export default ({ setOpen }) => {
       setShowUserFileHandlerModal(true);
     }
 
-    // onClose();
+    onClose();
   };
 
   return (
@@ -199,7 +192,8 @@ export default ({ setOpen }) => {
                 <Icon icon="lightbulb" />
                 {'  '}Did you know
               </StyledTipHeader>
-              You can goasdnmakjls adsndkj adskjnasdknj asd
+              You can press '/' on the keyboard to bring up the search
+              bar
             </StyledCard>
           </div>
         </Dialog>

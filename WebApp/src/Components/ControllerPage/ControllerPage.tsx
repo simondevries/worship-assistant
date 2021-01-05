@@ -98,7 +98,7 @@ export default function () {
 
   const activeResourcePointer =
     state.currentSchedule.activeResourcePointer;
-
+  console.log({ sortedResources });
   if (!sortedResources || !sortedResources.length) {
     return (
       <StyledNoResourcesButton
@@ -106,7 +106,10 @@ export default function () {
         icon="add"
         large
       >
-        Click here to add your first resource
+        Click here to add your first resource{' '}
+        <span role="img" aria-label="clap">
+          👏
+        </span>
       </StyledNoResourcesButton>
     );
   }
