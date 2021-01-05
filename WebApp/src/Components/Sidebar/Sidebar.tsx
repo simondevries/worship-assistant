@@ -7,6 +7,7 @@ import SlideSettingsDialog from '../Dialogs/SlideSettingsDialog/SlideSettingsDia
 import { Context } from '../../App';
 import ScheduleManagerDialog from '../Dialogs/ScheduleManagerDialog';
 import IState from '../../Interfaces/State';
+import focusOnProjectView from '../../Hooks/focusOnProjectView';
 
 export const sidebarWidth = 70;
 export const sidebarMargin = 15;
@@ -40,12 +41,16 @@ const eventIcon = (
   <StyledIcon icon={'timeline-events'} iconSize={26}></StyledIcon>
 );
 const cogIcon = <StyledIcon icon={'cog'} iconSize={26}></StyledIcon>;
+const desktopIcon = (
+  <StyledIcon icon={'desktop'} iconSize={26}></StyledIcon>
+);
 
 export default function () {
   const [addSongModalOpen, setAddSongModalOpen] = useModal();
   const [settingsModalOpen, setSettingsModalOpen] = useModal();
   const [scheduleModalOpen, setScheduleModalOpen] = useModal(false);
   const [state, dispatch] = useContext<Array<IState>>(Context);
+  const [openOrFocus] = focusOnProjectView(true);
 
   const setScheduleModalOpenHacks = setScheduleModalOpen as Function;
   const setSettingsModalOpenHacks = setSettingsModalOpen as Function;
@@ -88,6 +93,9 @@ export default function () {
         minimal
       >
         <div>Settings</div>
+      </StyledIconButton>
+      <StyledIconButton icon={desktopIcon} onClick={openOrFocus}>
+        <div>New Monitor</div>
       </StyledIconButton>
       <StyledIconButton icon={addIcon} minimal>
         <div>Add</div>
