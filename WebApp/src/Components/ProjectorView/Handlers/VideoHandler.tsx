@@ -42,7 +42,7 @@ export default ({ resourceReference, previewMode }: Props) => {
         id={`videoPlayer-${resourceReference.id}${
           previewMode ? 'sometexttobreakthereference' : '' // todo (sdv) hacks to prevent the video from starting
         }`}
-        controls={!previewMode}
+        // controls={!previewMode}
         src={activeVideo?.url}
       ></StyledVideoPlayer>
     </>

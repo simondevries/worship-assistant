@@ -29,14 +29,21 @@ const StyledSlidesContainer = styled.div`
 `;
 
 const StyledHeader = styled.div`
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   width: 300px;
-
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
   flex-direction: column;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
-  gap: 7px;
+  gap: 0px;
 `;
 
 const StyledResourceManager = styled.div`

@@ -53,6 +53,10 @@ const StyledOmnibarContainer = styled.div`
   color: black;
 `;
 
+const StyledSpinner = styled(Spinner)`
+  height: 100%;
+`;
+
 const StyledOmnibarSearchboxContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -103,6 +107,7 @@ const StyledInput = styled.input`
   height: 100%;
   margin: 0px 10px;
   border: transparent;
+  outline: none;
 `;
 
 const StyledSearchIcon = styled(Icon)``;
@@ -115,7 +120,9 @@ export default function () {
 const Search = () => {
   const [searchValue, setSearchValue] = useState('');
   const [allSongs, setAllSongs] = useState([]);
-  const [isAddingBibleVerse, setIsAddingBibleVerse] = useState<boolean>(false);
+  const [isAddingBibleVerse, setIsAddingBibleVerse] = useState<
+    boolean
+  >(false);
   const [state, dispatch] = useContext(Context);
   const [raiseEvent] = useEventHandler();
   const [isSlideShowModalOpen, setIsSlideShowModalOpen] = useModal();
@@ -171,12 +178,12 @@ const Search = () => {
   const addBibleVerse = async () => {
     if (!searchbox)
       alert('Please enter a bible verse in the format John 3:16');
-    
+
     setIsAddingBibleVerse(true);
     const book = searchValue.split(' ')[0];
     const chapter = searchValue.split(' ')[1].split(':')[0];
     const verse = searchValue.split(' ')[1].split(':')[1];
-    let bibleQuery = (initNewBibleVerse(
+    let bibleQuery = initNewBibleVerse(
       newId(),
       book,
       chapter,
@@ -184,10 +191,14 @@ const Search = () => {
       'kjv',
       'bible-api.com',
       null,
-    ));
+    );
     const verseContent = await bibleVerseResolver(bibleQuery);
-    let finalBibleVerse = addBibleVerseContent(bibleQuery, verseContent);
-    setIsAddingBibleVerse(false)
+    let finalBibleVerse = addBibleVerseContent(
+      bibleQuery,
+      verseContent,
+    );
+    setIsAddingBibleVerse(false);
+
     raiseEvent(
       new BibleVerseAddedToScheduleEvent(
         false,
@@ -232,10 +243,6 @@ const Search = () => {
     };
   }, []);
 
-  if (isAddingBibleVerse) {
-      return <Spinner/>;
-    }
-    
   const searchResult = SearchQuery(searchValue, allSongs);
   return (
     <>
@@ -257,10 +264,13 @@ const Search = () => {
                 onChange={(e) => setSearchValue(e.target.value)}
                 value={searchValue}
               />
-              <StyledRightArrowIcon
-                icon="arrow-right"
-                color="#5c7080"
-              />
+              {!isAddingBibleVerse && (
+                <StyledRightArrowIcon
+                  icon="arrow-right"
+                  color="#5c7080"
+                />
+              )}
+              {isAddingBibleVerse && <StyledSpinner size={30} />}
             </StyledOmnibarSearchboxContainer>
             <StyledDropdownContainer>
               {!searchValue && (
@@ -278,7 +288,7 @@ const Search = () => {
               {!searchValue ||
                 searchValue === '' ||
                 (isValidBibleVerse(searchValue) && (
-                  <StyledDropdownItem onClick={() => addBibleVerse()}>
+                  <StyledDropdownItem onClick={addBibleVerse}>
                     🕮 Add Bible Verse
                   </StyledDropdownItem>
                 ))}
@@ -297,9 +307,7 @@ const Search = () => {
               onClick={() =>
                 addResource({
                   title:
-                    'Jesse taking a photo of reuel taking a photo',
                   filePath:
-                    'file:///C:/Users/simon/Pictures/2018/Camera/IMG_20181005_154404.jpg',
                   resourceType: 'IMAGE',
                 } as IImage)
               }

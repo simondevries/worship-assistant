@@ -122,7 +122,7 @@ const useAppStateEventProcessors = () => {
       type: 'addResourceToSchedule',
       payload: {
         ...event.bibleVerse,
-        id: newId(),
+        id: event.bibleVerse.id,
         index: event.index,
         resourceType: 'BIBLEVERSE',
       },

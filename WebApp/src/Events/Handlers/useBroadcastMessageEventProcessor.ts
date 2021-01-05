@@ -182,8 +182,12 @@ export default () => {
   const BibleVerseAddedToScheduleEventHandler = (
     event: BibleVerseAddedToScheduleEvent,
   ) => {
-    if (event.eventType !== BibleVerseAddedToScheduleEventName)
+    if (
+      event.eventType !== BibleVerseAddedToScheduleEventName ||
+      event.isExternalEvent
+    ) {
       return;
+    }
 
     bc.postMessage(
       JSON.stringify({ ...event, isExternalEvent: true }),
@@ -221,7 +225,7 @@ export default () => {
     AddActiveVideoEventHandler,
     SongEditedEventHandler,
     VideoModeChangeEventHandler,
-    // BibleVerseAddedToScheduleEventHandler,
+    BibleVerseAddedToScheduleEventHandler,
   ];
   return [arr];
 };
