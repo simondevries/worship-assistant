@@ -1,10 +1,6 @@
-import { songsRepo } from '../../Storage/songsRepository';
-import { useContext } from 'react';
-import AppEvent from '../Domain/appEvent';
 import SongCreatedEvent, {
   SongCreatedEventName,
 } from '../Domain/songCreatedEvent';
-import { Context } from '../../App';
 import SongAddedToSchedule, {
   SongAddedToScheduleEventName,
 } from '../Domain/songAddedToScheduleEvent';
@@ -23,7 +19,15 @@ import VideoCreatedEvent, {
 import SlideShowAddedToScheduleEvent, {
   SlideShowAddedToScheduleEventName,
 } from '../Domain/slideShowAddedToScheduleEvent';
-import SongEditedEvent, { SongEditedEventEventName } from '../Domain/songEditedEvent';
+import AddActiveVideoEvent, {
+  AddActiveVideoEventName,
+} from '../Domain/addActiveVideoEvent';
+import SongEditedEvent, {
+  SongEditedEventEventName,
+} from '../Domain/songEditedEvent';
+import VideoModeChangeEvent, {
+  VideoMoodeChangeEventName,
+} from '../Domain/VideoModeChangeEvent';
 
 let bc = new BroadcastChannel('worshipAssistApp');
 
@@ -102,7 +106,7 @@ export default () => {
       event.isExternalEvent
     )
       return;
-    // todo remoev song
+
     bc.postMessage(
       JSON.stringify({ ...event, isExternalEvent: true }),
     );
@@ -122,8 +126,49 @@ export default () => {
     );
   };
 
+  const VideoCreatedEventHandler = (event: VideoCreatedEvent) => {
+    if (
+      event.eventType !== VideoCreatedEventName ||
+      event.isExternalEvent
+    )
+      return;
+
+    bc.postMessage(
+      JSON.stringify({ ...event, isExternalEvent: true }),
+    );
+  };
+
+  const AddActiveVideoEventHandler = (event: AddActiveVideoEvent) => {
+    if (
+      event.eventType !== AddActiveVideoEventName ||
+      event.isExternalEvent
+    )
+      return;
+
+    bc.postMessage(
+      JSON.stringify({ ...event, isExternalEvent: true }),
+    );
+  };
+
   const SongEditedEventHandler = (event: SongEditedEvent) => {
-    if (event.eventType !== SongEditedEventEventName || event.isExternalEvent)
+    if (
+      event.eventType !== SongEditedEventEventName ||
+      event.isExternalEvent
+    )
+      return;
+
+    bc.postMessage(
+      JSON.stringify({ ...event, isExternalEvent: true }),
+    );
+  };
+
+  const VideoModeChangeEventHandler = (
+    event: VideoModeChangeEvent,
+  ) => {
+    if (
+      event.eventType !== VideoMoodeChangeEventName ||
+      event.isExternalEvent
+    )
       return;
 
     bc.postMessage(
@@ -158,7 +203,10 @@ export default () => {
     RemoveResourceFromScheduleEventHandler,
     VideoAddedToScheduleEventHandler,
     SlideShowAddedToScheduleEventHandler,
+    VideoCreatedEventHandler,
+    AddActiveVideoEventHandler,
     SongEditedEventHandler,
+    VideoModeChangeEventHandler,
   ];
   return [arr];
 };

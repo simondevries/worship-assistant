@@ -6,27 +6,21 @@ import Search from './Components/Search/Search';
 import {
   BrowserRouter as Router,
   Switch,
+  Redirect,
   Route,
-  Link,
 } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { Spinner } from '@blueprintjs/core';
 import Sidebar from './Components/Sidebar/Sidebar';
 import hotkeyListenter from './Components/Sidebar/hotkeyListenter';
-import {
-  startVideo,
-  changeTab,
-} from './ChromeExtensionGateway/gateway';
 import fetchStatus from './Common/FetchStatus/fetchStatus';
 import useIntialize from './useInitialize';
 import ScheduleManagerDialog from './Components/Dialogs/ScheduleManagerDialog';
-import useModal from './Components/Dialogs/useModal';
-import SlideChangeEvent from './Events/Domain/slideChangeEvent';
-import useEventHandler from './Events/Handlers/useEventHandler';
-import { useLocation } from 'react-router-dom';
-import { Redirect } from 'react-router-dom/cjs/react-router-dom.min';
-import useBroadcastChannelMessageHandler from './useBroadcastChannelMessageHandler';
+import useBroadcastChannelMessageHandler from './useBroadcastChannelMessageReceiver';
 import Tour from 'reactour';
+import NotFound from './Components/NotFound/NotFound';
+import UserFileHandlerPermissionManagerDialog from './Components/Dialogs/UserFileHandlerPermissionManagerDialog';
+import IState from './Interfaces/State';
 
 const StyledControllerPageContainer = styled.div`
   display: flex;
@@ -57,31 +51,24 @@ const steps = [
 
 export default function () {
   const [state, dispatch] = useContext(Context);
-  const [scheduleModalOpen, setScheduleModalOpen] = useModal(false);
-  const [loadingState] = useIntialize(dispatch);
+  const [
+    loadingState,
+    scheduleModalOpen,
+    setScheduleModalOpen,
+    userFileHandlerPermissionManagerOpen,
+    setUserFileHandlerPermissionManagerOpen,
+  ] = useIntialize(dispatch);
   const [eventsReceived] = useBroadcastChannelMessageHandler();
   const [isTourOpen, setIsTourOpen] = useState(false);
 
-  hotkeyListenter();
+  const activeResourcePointer = (state as IState)?.currentSchedule
+    ?.activeResourcePointer;
 
-  /** Only open welcome modal if hasn't come to site recently */
-  useEffect(() => {
-    var ONE_HOUR = 60 * 60 * 1000; /* ms */
-    const lastOpened = Date.parse(localStorage.getItem('lastOpened'));
-    if (new Date() - lastOpened > ONE_HOUR) {
-      setScheduleModalOpen(true);
-    }
-    localStorage.setItem('lastOpened', new Date().toISOString());
-  }, []);
+  hotkeyListenter();
 
   if (loadingState === fetchStatus.Loading) {
     return <StyledSpinner />;
   }
-
-  const activeResourcePointer =
-    state &&
-    state.currentSchedule &&
-    state.currentSchedule.activeResourcePointer;
 
   return (
     <>
@@ -93,7 +80,12 @@ export default function () {
       {scheduleModalOpen && (
         <ScheduleManagerDialog setOpen={setScheduleModalOpen} />
       )}
-      {state.isSearchVisible && <Search />}
+      {userFileHandlerPermissionManagerOpen && (
+        <UserFileHandlerPermissionManagerDialog
+          setOpen={setUserFileHandlerPermissionManagerOpen}
+        />
+      )}
+      {state?.searchBar?.isVisible && <Search />}
       {!process.env.NODE_ENV ||
         (process.env.NODE_ENV === 'development' && (
           <StyledEventsReceived>
@@ -119,10 +111,14 @@ export default function () {
               {/* <input type="button" onClick={onFocusTab} /> */}
             </StyledControllerPageContainer>
           </Route>
-          <Route path="/project">
+          <Route path="/project" exact>
             <ProjectorView
+              previewMode={false}
               activeResourcePointer={activeResourcePointer}
             />
+          </Route>
+          <Route>
+            <NotFound />
           </Route>
         </Switch>
       </Router>

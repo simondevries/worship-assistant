@@ -2,7 +2,6 @@ import { songsRepo } from '../../Storage/songsRepository';
 import { scheduleRepo } from '../../Storage/scheduleRepository';
 import { settingsRepo } from '../../Storage/settingsRepository';
 import { useContext } from 'react';
-import AppEvent from '../Domain/appEvent';
 import SongCreatedEvent, {
   SongCreatedEventName,
 } from '../Domain/songCreatedEvent';
@@ -10,18 +9,34 @@ import { Context } from '../../App';
 import SongAddedToSchedule, {
   SongAddedToScheduleEventName,
 } from '../Domain/songAddedToScheduleEvent';
-import ISongResourceReference from '../../Interfaces/SongResourceReference';
 import NewScheduleCreatedEvent, {
   NewScheduleCreatedEventName,
 } from '../Domain/newScheduleCreatedEvent';
 import SlideShowAddedToScheduleEvent, {
   SlideShowAddedToScheduleEventName,
 } from '../Domain/slideShowAddedToScheduleEvent';
-import SongEditedEvent, { SongEditedEventEventName } from '../Domain/songEditedEvent';
-
-const _handleScheduleUpdated = (state, inx, song) => {
-  console.log('ns1', inx);
-};
+import MoveResourceEvent, {
+  MoveResourceEventName,
+} from '../Domain/moveResourceEvent';
+import reducers from '../../Reducers/reducers';
+import IState from '../../Interfaces/State';
+import RemoveResourceFromScheduleEvent, {
+  RemoveResourceFromScheduleEventName,
+} from '../Domain/removeResourceFromScheduleEvent';
+import newId from '../../Helpers/newId';
+import BibleVerseAddedToScheduleEvent, {
+  BibleVerseAddedToScheduleEventName,
+} from '../Domain/bibleVerseAddedToScheduleEvent';
+import videoCreatedEvent, {
+  VideoCreatedEventName,
+} from '../Domain/videoCreatedEvent';
+import LoadScheduleEvent, {
+  LoadScheduleEventName,
+} from '../Domain/loadScheduleEvent';
+import SongEditedEvent, {
+  SongEditedEventEventName,
+} from '../Domain/songEditedEvent';
+import { userFileHandlerRepo } from '../../Storage/userFileHandlerRepository';
 
 const useIndexDbEventProcessor = () => {
   const [state, dispatch] = useContext(Context);
@@ -45,21 +60,26 @@ const useIndexDbEventProcessor = () => {
     )
       return;
 
-    // Hacks this is duplicate from the reducer
-    const updatedSchedule = {
-      ...state.currentSchedule,
-      resources: state.currentSchedule.resources.concat({
-        index: event.index,
+    const updatedState = reducers(state, {
+      type: 'addResourceToSchedule',
+      payload: {
         id: event.song.id,
         resourceType: 'SONG',
-      } as ISongResourceReference),
-    };
+        index: event.index,
+      },
+    });
 
-    scheduleRepo.set(updatedSchedule, updatedSchedule.id);
+    scheduleRepo.set(
+      updatedState.currentSchedule,
+      updatedState.currentSchedule.id,
+    );
   };
 
   const SongEditedEventHandler = (event: SongEditedEvent) => {
-    if (event.eventType !== SongEditedEventEventName || event.isExternalEvent)
+    if (
+      event.eventType !== SongEditedEventEventName ||
+      event.isExternalEvent
+    )
       return;
 
     songsRepo.set(event.song, event.song.id);
@@ -74,17 +94,19 @@ const useIndexDbEventProcessor = () => {
     )
       return;
 
-    // Hacks this is duplicate from the reducer
-    const updatedSchedule = {
-      ...state.currentSchedule,
-      resources: state.currentSchedule.resources.concat({
+    const updatedState = reducers(state, {
+      type: 'addResourceToSchedule',
+      payload: {
         id: event.id,
         resourceType: 'SLIDESHOW',
         embeddedPowerPointUrl: event.embeddedPowerPointUrl,
-      } as ISongResourceReference),
-    };
+      },
+    });
 
-    scheduleRepo.set(updatedSchedule, updatedSchedule.id);
+    scheduleRepo.set(
+      updatedState.currentSchedule,
+      updatedState.currentSchedule.id,
+    );
   };
 
   const NewScheduleCreatedEventHandler = (
@@ -95,18 +117,124 @@ const useIndexDbEventProcessor = () => {
       event.isExternalEvent
     )
       return;
-    console.log('event.schedule', event.schedule.id);
+
     scheduleRepo.add(event.schedule, event.schedule.id);
 
     settingsRepo.setCurrentService(event.schedule.id);
   };
 
+  const MoveResourceEventHandler = (event: MoveResourceEvent) => {
+    if (
+      event.eventType !== MoveResourceEventName ||
+      event.isExternalEvent
+    )
+      return;
+
+    const updatedState: IState = reducers(state, {
+      type: 'moveResourcePosition',
+      payload: { id: event.id, direction: event.direction },
+    });
+
+    scheduleRepo.set(
+      updatedState.currentSchedule,
+      updatedState.currentSchedule.id,
+    );
+  };
+
+  const RemoveResourceFromScheduleEventHandler = (
+    event: RemoveResourceFromScheduleEvent,
+  ) => {
+    if (
+      event.eventType !== RemoveResourceFromScheduleEventName ||
+      event.isExternalEvent
+    )
+      return;
+
+    const updatedState = reducers(state, {
+      type: 'removeResourceFromSchedule',
+      id: event.id,
+    });
+
+    scheduleRepo.set(
+      updatedState.currentSchedule,
+      updatedState.currentSchedule.id,
+    );
+  };
+
+  const BibleVerseAddedToScheduleEventHandler = (
+    event: BibleVerseAddedToScheduleEvent,
+  ) => {
+    if (
+      event.eventType !== BibleVerseAddedToScheduleEventName ||
+      event.isExternalEvent
+    )
+      return;
+
+    const updatedState = reducers(state, {
+      type: 'addResourceToSchedule',
+      payload: {
+        ...event.bibleVerse,
+        id: newId(),
+        resourceType: 'BIBLEVERSE',
+        index: event.index,
+      },
+    });
+
+    scheduleRepo.set(
+      updatedState.currentSchedule,
+      updatedState.currentSchedule.id,
+    );
+  };
+
+  const VideoCreatedEventHandler = (event: videoCreatedEvent) => {
+    if (
+      event.eventType !== VideoCreatedEventName ||
+      event.isExternalEvent
+    )
+      return;
+
+    const updatedState = reducers(state, {
+      type: 'addResourceToSchedule',
+      payload: {
+        resourceType: 'VIDEO',
+        index: event.index,
+        id: event.id,
+      },
+    });
+
+    scheduleRepo.set(
+      updatedState.currentSchedule,
+      updatedState.currentSchedule.id,
+    );
+
+    userFileHandlerRepo.set(event.fileHandle, event.id);
+  };
+
+  const LoadScheduleEventHandler = (event: LoadScheduleEvent) => {
+    if (
+      event.eventType !== LoadScheduleEventName ||
+      event.isExternalEvent
+    )
+      return;
+
+    dispatch({
+      type: 'setCurrentSchedule',
+      payload: event.schedule,
+    });
+    // settingsRepo.setCurrentService(schedule.id);
+  };
+
   const arr = [
+    VideoCreatedEventHandler,
     SongCreatedEventHandler,
     SongAddedToScheduleEventHandler,
     NewScheduleCreatedEventHandler,
+    MoveResourceEventHandler,
+    RemoveResourceFromScheduleEventHandler,
     SongEditedEventHandler,
     SlideShowAddedToScheduleEventHandler,
+    BibleVerseAddedToScheduleEventHandler,
+    LoadScheduleEventHandler,
   ];
   return [arr];
 };

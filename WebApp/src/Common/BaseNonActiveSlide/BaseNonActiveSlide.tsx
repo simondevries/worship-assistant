@@ -4,50 +4,56 @@ import styled from 'styled-components/macro';
 import useEventHandler from '../../Events/Handlers/useEventHandler';
 import SlideChangeEvent from '../../Events/Domain/slideChangeEvent';
 
-const StyledCard = styled(Card)`
+const StyledCard = styled(Card)<any>`
   width: 300px;
-  height: 200px;
-  margin-bottom: 10px;
+  padding: 7px 10px;
+
+  ${(props: any) =>
+    !props.isFirstSlide
+      ? 'border-top-left-radius: 0px; border-top-right-radius: 0px;'
+      : ''}
+
+  ${(props: any) =>
+    !props.isLastSlide
+      ? 'border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;'
+      : ''}
 `;
 
 type Props = {
   children: JSX.Element;
   slideIndex: number;
   resourceId: string;
+  className?: string;
+  isFirstSlide?: boolean;
+  isLastSlide?: boolean;
 };
 
 export default function ({
   children,
   slideIndex,
   resourceId,
+  className,
+  isFirstSlide,
+  isLastSlide,
 }: Props) {
   const [raiseEvent] = useEventHandler();
 
   const onSlideClick = () => {
     // todo (Sdv) make generic for all slides
 
+    console.log('4');
     raiseEvent(new SlideChangeEvent(false, resourceId, slideIndex));
-
-    const element = document.getElementById(
-      'slide' + 0 + 'resource' + resourceId,
-    );
-    if (element) {
-      element.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-        inline: 'center',
-      });
-    } else {
-      console.error('Could not find slide');
-    }
   };
 
   return (
     <StyledCard
+      className={className}
       id={`slide${slideIndex}resource${resourceId}`}
       onClick={onSlideClick}
       interactive={true}
       elevation={Elevation.TWO}
+      isFirstSlide={isFirstSlide}
+      isLastSlide={isLastSlide}
     >
       {children}
     </StyledCard>

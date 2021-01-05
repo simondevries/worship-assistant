@@ -1,11 +1,25 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Button, Dialog, Classes, MenuItem, Menu } from '@blueprintjs/core';
+import {
+  Button,
+  Dialog,
+  Classes,
+  MenuItem,
+  Menu,
+} from '@blueprintjs/core';
 import styled from 'styled-components';
 import { settingsRepo } from '../../../Storage/settingsRepository';
 import { useForm } from 'react-hook-form';
 import ProjectorView from '../../ProjectorView/ProjectorView';
-import { themes, ITheme, defaultSongTheme } from '../../../Interfaces/themes';
-import { ItemListRenderer, ItemRenderer, Select } from '@blueprintjs/select';
+import {
+  themes,
+  ITheme,
+  defaultSongTheme,
+} from '../../../Interfaces/themes';
+import {
+  ItemListRenderer,
+  ItemRenderer,
+  Select,
+} from '@blueprintjs/select';
 import IState from '../../../Interfaces/State';
 import { Context } from '../../../App';
 import ISongResourceReference from '../../../Interfaces/SongResourceReference';
@@ -52,21 +66,29 @@ export default ({ setSettingsModalOpen, activeResourcePointer }) => {
   const [settings, setSettings] = useState(settingsRepo.get());
   const oldSettings = settings;
   const [chosenTheme, setChosenTheme] = useState(
-    (activeResource && activeResource.theme)? activeResource.theme: defaultSongTheme,
+    activeResource && activeResource.theme
+      ? activeResource.theme
+      : defaultSongTheme,
   );
 
   const ThemeSelect = Select.ofType<ITheme>();
 
-  const renderThemeMenu: ItemListRenderer<ITheme> = ({ items, itemsParentRef, query, renderItem }) => {
-    const renderedItems = items.map(renderItem).filter(item => item != null);
-    return (
-        <Menu ulRef={itemsParentRef}>
-            {renderedItems}
-        </Menu>
-    );
+  const renderThemeMenu: ItemListRenderer<ITheme> = ({
+    items,
+    itemsParentRef,
+    query,
+    renderItem,
+  }) => {
+    const renderedItems = items
+      .map(renderItem)
+      .filter((item) => item != null);
+    return <Menu ulRef={itemsParentRef}>{renderedItems}</Menu>;
   };
 
-  const renderThemeItem: ItemRenderer<ITheme> = (theme, { handleClick, modifiers }) => {
+  const renderThemeItem: ItemRenderer<ITheme> = (
+    theme,
+    { handleClick, modifiers },
+  ) => {
     if (!modifiers.matchesPredicate) {
       return null;
     }
@@ -80,19 +102,19 @@ export default ({ setSettingsModalOpen, activeResourcePointer }) => {
   };
 
   const handleThemeChange = (item: ITheme) => {
-    setValue("blueprintSelect", item)
+    setValue('blueprintSelect', item);
     setChosenTheme(item);
     if (activeResource && activeResource.theme) {
       activeResource.theme = item;
     } else {
-      throw Error('activeResource is undefined!')
+      throw Error('activeResource is undefined!');
     }
   };
 
   const handleClose = () => {
     setSettings(oldSettings);
-    setSettingsModalOpen(false)
-  }
+    setSettingsModalOpen(false);
+  };
 
   const handleSave = () => {
     // setSettingsModalOpen(false);
@@ -100,14 +122,13 @@ export default ({ setSettingsModalOpen, activeResourcePointer }) => {
     //   ...settings,
     //   ...values,
     // };
-
     // settingsRepo.set(newSetting);
     // setSettings(newSetting);
   };
 
   useEffect(() => {
-    register({ name: "blueprintSelect" });
-  },[register]);
+    register({ name: 'blueprintSelect' });
+  }, [register]);
 
   useEffect(() => {
     async function fetchData() {
@@ -197,9 +218,7 @@ export default ({ setSettingsModalOpen, activeResourcePointer }) => {
               )}
             </StyledBody>
             <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-              <Button onClick={handleClose}>
-                Close
-              </Button>
+              <Button onClick={handleClose}>Close</Button>
               <Button
                 icon="floppy-disk"
                 type="submit"

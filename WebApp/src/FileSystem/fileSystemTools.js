@@ -4,6 +4,9 @@ import {
   getNewFileHandle,
   writeFile,
 } from './fs-helpers';
+import { scheduleRepo } from '../Storage/scheduleRepository';
+import { userFileHandlerRepo } from '../Storage/userFileHandlerRepository';
+import newId from '../Helpers/newId';
 
 // eslint-disable-next-line no-redeclare
 export const fileSystemApp = {
@@ -24,17 +27,6 @@ export const fileSystemApp = {
     'showOpenFilePicker' in window,
   isMac: navigator.userAgent.includes('Mac OS X'),
 };
-
-// Verify the APIs we need are supported, show a polite warning if not.
-if (fileSystemApp.hasNativeFS) {
-  console.error('does not have native file system');
-  //   document.getElementById('not-supported').classList.add('hidden');
-} else {
-  document
-    .getElementById('lblLegacyFS')
-    .classList.toggle('hidden', false);
-  document.getElementById('butSave').classList.toggle('hidden', true);
-}
 
 /**
  * Creates an empty notepad with no details in it.
@@ -94,9 +86,8 @@ fileSystemApp.openFile = async (fileHandle) => {
   if (!fileHandle) {
     return;
   }
-  const file = await fileHandle.getFile();
 
-  return fileSystemApp.readFile(file, fileHandle);
+  return fileHandle;
 };
 
 /**
@@ -106,8 +97,14 @@ fileSystemApp.openFile = async (fileHandle) => {
  *  @param {FileSystemFileHandle} fileHandle File handle to read from.
  */
 fileSystemApp.readFile = async (file, fileHandle) => {
+  // const file = await fileHandle.getFile();
+
   try {
-    let blob = new Blob([file], { type: 'video/avi' });
+    let blob = new Blob([file], { type: 'video/mp4' });
+
+    console.log('FILE IS ', fileHandle);
+
+    await userFileHandlerRepo.set(fileHandle, newId());
 
     return URL.createObjectURL(blob);
 

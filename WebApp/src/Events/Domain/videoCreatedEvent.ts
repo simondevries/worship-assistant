@@ -3,10 +3,13 @@ import AppEvent from './appEvent';
 export const VideoCreatedEventName = 'VideoCreated';
 
 export default class extends AppEvent {
-  blobUrl: string;
-  source: any;
-  constructor(isExternalEvent, blobUrl) {
+  id: string;
+  index: number;
+  fileHandle: any;
+  constructor(isExternalEvent, id, index, fileHandle) {
     super(VideoCreatedEventName, isExternalEvent);
-    this.blobUrl = blobUrl;
+    this.id = id;
+    this.index = index;
+    this.fileHandle = fileHandle;
   }
 }

@@ -24,7 +24,10 @@ export default function () {
     state.currentSchedule.activeResourcePointer;
 
   return (
-    <ActiveSlideContainer>
+    <ActiveSlideContainer
+      slideIndex={activeResourcePointer.slideIndex}
+      resourceId={activeResourcePointer.resourceId}
+    >
       <StyledProjectorView
         previewMode={true}
         activeResourcePointer={activeResourcePointer}

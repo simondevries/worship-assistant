@@ -1,7 +1,7 @@
 import IState from '../Interfaces/State';
 import ISongResourceReference from '../Interfaces/SongResourceReference';
 
-function reducers(state: IState, action) {
+function reducers(state: IState, action): IState {
   switch (action.type) {
     // Resources
     // case 'addResource':
@@ -49,6 +49,16 @@ function reducers(state: IState, action) {
         resources: state.currentSchedule.resources.concat(
           action.payload,
         ),
+        resourceOrder: [
+          ...state.currentSchedule.resourceOrder.slice(
+            0,
+            action.payload.index + 1,
+          ),
+          action.payload.id,
+          ...state.currentSchedule.resourceOrder.slice(
+            action.payload.index + 1,
+          ),
+        ],
       };
       if (state.currentSchedule.activeResourcePointer.resourceId === null) {
         state.currentSchedule.activeResourcePointer.resourceId = action.payload.id;
@@ -72,14 +82,40 @@ function reducers(state: IState, action) {
 
       };
 
-    case 'setActiveSongs':
+    case 'moveResourcePosition':
+      const resourceOrder =
+        state?.currentSchedule?.resourceOrder || [];
+
+      let currentPosition = resourceOrder.findIndex(
+        (r) => r === action.payload.id,
+      );
+
+      currentPosition =
+        currentPosition === -1
+          ? resourceOrder.length
+          : currentPosition;
+
+      let updatedResourceOrder = resourceOrder.filter(
+        (r) => r !== action.payload.id,
+      );
+
+      updatedResourceOrder.splice(
+        action.payload.direction < 0
+          ? currentPosition + action.payload.direction
+          : currentPosition + action.payload.direction,
+        0,
+        action.payload.id,
+      );
+
       return {
         ...state,
         currentSchedule: {
           ...state.currentSchedule,
-          activeSongs: action.payload,
+          resourceOrder: updatedResourceOrder,
         },
       };
+
+    // Active Songs
 
     case 'addSongToActiveSongs':
       const songs =
@@ -110,6 +146,37 @@ function reducers(state: IState, action) {
         },
       };
 
+    // Active Videos
+
+    case 'addVideoToActiveVideos':
+      const videos =
+        (state.currentSchedule.activeVideos &&
+          state.currentSchedule.activeVideos.filter(
+            (s) =>
+              s &&
+              action &&
+              action.payload &&
+              s.id !== action.payload.id,
+          )) ||
+        [];
+
+      return {
+        ...state,
+        currentSchedule: {
+          ...state.currentSchedule,
+          activeVideos: videos.concat(action.payload),
+        },
+      };
+
+    case 'clearActiveVideos':
+      return {
+        ...state,
+        currentSchedule: {
+          ...state.currentSchedule,
+          activeVideos: [],
+        },
+      };
+
     case 'removeResourceFromSchedule':
       console.log('RemoveResourceFromScheduleEventHandler');
 
@@ -120,8 +187,11 @@ function reducers(state: IState, action) {
           resources: state.currentSchedule.resources.filter(
             (r) => r.id !== action.id,
           ),
+          resourceOrder: state.currentSchedule.resourceOrder.filter(
+            (ro) => ro !== action.id,
+          ),
         },
-      };
+      } as IState;
 
     // Settings
     case 'setSettings':
@@ -129,7 +199,26 @@ function reducers(state: IState, action) {
 
     // Search
     case 'setSearchVisible':
-      return { ...state, isSearchVisible: action.payload };
+      return {
+        ...state,
+        searchBar: {
+          ...state.searchBar,
+          isVisible: action.payload,
+        },
+      };
+
+    case 'setInsertResourceAtIndex':
+      return {
+        ...state,
+        searchBar: {
+          ...state.searchBar,
+          insertResourceAtIndex: action.payload,
+        },
+      };
+
+    // Other
+    case 'navigationArrowKeysEnabled':
+      return { ...state, navigationArrowKeysEnabled: action.payload };
 
     default:
       throw new Error();

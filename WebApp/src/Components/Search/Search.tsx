@@ -6,21 +6,12 @@ import React, {
   useContext,
 } from 'react';
 import { Context } from '../../App';
-import {
-  Hotkey,
-  Hotkeys,
-  HotkeysTarget,
-  Classes,
-} from '@blueprintjs/core';
 import styled from 'styled-components/macro';
 import { Icon } from '@blueprintjs/core';
 import SearchQuery from './searchQuery';
 import { songsRepo } from '../../Storage/songsRepository';
-import { scheduleRepo } from '../../Storage/scheduleRepository';
 import useEventHandler from '../../Events/Handlers/useEventHandler';
-import SongAddedToSchedule from '../../Events/Domain/songAddedToScheduleEvent';
-import IVideo from '../../Interfaces/Video';
-import IImage from '../../Interfaces/Image';
+import SongAddedToScheduleEvent from '../../Events/Domain/songAddedToScheduleEvent';
 import ISong from '../../Interfaces/Song';
 import { fileSystemApp } from '../../FileSystem/fileSystemTools';
 import VideoCreatedEvent from '../../Events/Domain/videoCreatedEvent';
@@ -34,6 +25,9 @@ import newId from '../../Helpers/newId';
 import useModal from '../Dialogs/useModal';
 import AddSlideShowDialog from '../Dialogs/AddSlideShowDialog/AddSlideShowDialog';
 import { bibleVerseResolver } from '../../BibleVerse/bibleVerseResolver';
+import IState from '../../Interfaces/State';
+import AddActiveVideoEvent from '../../Events/Domain/addActiveVideoEvent';
+import getUrlFromFileHandle from '../../Helpers/getUrlFromFileHandle';
 
 const StyledOmnibarContainer = styled.div`
   -webkit-filter: blur(0);
@@ -90,6 +84,11 @@ const StyledDropdownItem = styled.div`
   border-top: 1px solid gray;
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
+  cursor: pointer;
+
+  &:hover {
+    background: #e6e6e6;
+  }
 `;
 const StyledDropdownContainer = styled.div`
   background: white;
@@ -127,8 +126,22 @@ const Search = () => {
   };
 
   const addVideo = async () => {
-    const blobUrl = await fileSystemApp.openFile();
-    raiseEvent(new VideoCreatedEvent(false, blobUrl));
+    const fileHandle = await fileSystemApp.openFile();
+    const url = await getUrlFromFileHandle(fileHandle);
+    const videoId = newId();
+
+    raiseEvent(
+      new VideoCreatedEvent(
+        false,
+        videoId,
+        (state as IState).searchBar.insertResourceAtIndex,
+        fileHandle,
+      ),
+    );
+
+    raiseEvent(new AddActiveVideoEvent(false, videoId, url));
+
+    onClose();
   };
 
   const changeSlideShowModalVisiblity = (visibility) => {
@@ -164,15 +177,21 @@ const Search = () => {
     const verseContent = await bibleVerseResolver(bibleVerse);
 
     bibleVerse = addBibleVerseContent(bibleVerse, verseContent);
-    raiseEvent(new BibleVerseAddedToScheduleEvent(false, bibleVerse));
+    raiseEvent(
+      new BibleVerseAddedToScheduleEvent(
+        false,
+        bibleVerse,
+        (state as IState).searchBar.insertResourceAtIndex,
+      ),
+    );
 
     onClose();
   };
 
   const addSong = async (song: ISong) => {
     raiseEvent(
-      new SongAddedToSchedule(
-        state.currentSchedule.resources.length,
+      new SongAddedToScheduleEvent(
+        (state as IState).searchBar.insertResourceAtIndex,
         false,
         song,
       ),
