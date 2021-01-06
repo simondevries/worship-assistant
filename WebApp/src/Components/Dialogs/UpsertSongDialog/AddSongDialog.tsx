@@ -73,7 +73,7 @@ export default ({ setAddSongModalOpen, createSongAtIndex }) => {
             songContentSetter={setSongContent}
             setImportSongButtonDisabled={setImportSongButtonDisabled}
           />
-          <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+          <div className={`test ${Classes.DIALOG_FOOTER_ACTIONS}`}>
             {/* Todo import songs */}
             {/* <FileInput 
               disabled={importSongButtonDisabled} 

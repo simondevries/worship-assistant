@@ -129,7 +129,7 @@ export default function ({
         ref={ref}
         style={{ fontSize: controlledFontSize }}
         previewMode={previewMode}
-        className={className}
+        className={`${className} projectorView`}
       >
         {renderAppropriateHandler()}
         {window.innerHeight !== window.screen.height &&

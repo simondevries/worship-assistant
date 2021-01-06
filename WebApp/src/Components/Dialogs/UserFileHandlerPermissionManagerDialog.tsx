@@ -236,6 +236,11 @@ export default ({ setOpen }) => {
             The schedule uses videos and images from your file system.
             When you reopen a schedule you will need to grant access
             to these files again.
+            <br />
+            <small>
+              These files are stored on your computer, we need
+              temporary access in order to display it
+            </small>
           </Card>
           <StyledTableScroller>
             <StyledTable>
