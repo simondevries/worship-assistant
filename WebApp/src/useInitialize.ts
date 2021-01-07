@@ -14,7 +14,7 @@ import useEventHandler from './Events/Handlers/useEventHandler';
 
 let bc = new BroadcastChannel('worshipAssistApp');
 
-function useIntialize(dispatch) {
+function useInitialize(dispatch) {
   const [loadingState, setLoadingState] = useState('Loading');
   const [scheduleModalOpen, setScheduleModalOpen] = useModal(false);
   const [
@@ -161,4 +161,4 @@ function useIntialize(dispatch) {
   ];
 }
 
-export default useIntialize;
+export default useInitialize;

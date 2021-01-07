@@ -18,7 +18,7 @@ const StyledContainer = styled(Card)`
 
 export default ({ children, slideIndex, resourceId }) => {
   const [state] = useContext(Context);
-  const [openOrFocus] = focusOnProjectView(true);
+  const [openOrFocus] = focusOnProjectView(resourceId, slideIndex);
 
   const openNewWindowButton = (
     <Button intent="primary" onClick={openOrFocus}>

@@ -12,9 +12,9 @@ import {
 import styled from 'styled-components/macro';
 import { Spinner } from '@blueprintjs/core';
 import Sidebar from './Components/Sidebar/Sidebar';
-import hotkeyListenter from './Components/Sidebar/hotkeyListenter';
+import hotkeyListener from './Components/Sidebar/hotkeyListener';
 import fetchStatus from './Common/FetchStatus/fetchStatus';
-import useIntialize from './useInitialize';
+import useInitialize from './useInitialize';
 import ScheduleManagerDialog from './Components/Dialogs/ScheduleManagerDialog';
 import useBroadcastChannelMessageHandler from './useBroadcastChannelMessageReceiver';
 import Tour from 'reactour';
@@ -289,7 +289,7 @@ export default function () {
     setScheduleModalOpen,
     userFileHandlerPermissionManagerOpen,
     setUserFileHandlerPermissionManagerOpen,
-  ] = useIntialize(dispatch);
+  ] = useInitialize(dispatch);
   const [eventsReceived] = useBroadcastChannelMessageHandler();
   const [isTourOpen, setIsTourOpen] = useState(
     window.location.pathname.indexOf('controller') !== -1,
@@ -298,7 +298,7 @@ export default function () {
   const activeResourcePointer = (state as IState)?.currentSchedule
     ?.activeResourcePointer;
 
-  hotkeyListenter();
+  hotkeyListener();
 
   if (loadingState === fetchStatus.Loading) {
     return <StyledSpinner />;
