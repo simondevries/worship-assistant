@@ -114,7 +114,7 @@ function useInitialize(dispatch) {
 
   useEffect(() => {
     if (window.location.pathname.indexOf('/project') === -1) {
-      bc.postMessage('ping-project-views--to-project');
+      bc.postMessage('ping-controller-views-to-project');
     } else {
       bc.postMessage('ping-project-views--to-controller');
     }

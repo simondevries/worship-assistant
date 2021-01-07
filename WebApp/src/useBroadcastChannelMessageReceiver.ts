@@ -8,7 +8,7 @@ let bc = new BroadcastChannel('worshipAssistApp');
 export default () => {
   const [raiseEvent] = useEventHandler();
   const [state, dispatch] = useContext(Context);
-  const [eventsReceived, setEventsRecieved] = useState<
+  const [eventsReceived, setEventsReceived] = useState<
     Array<AppEvent>
   >([]);
 
@@ -25,10 +25,9 @@ export default () => {
         return;
       }
 
-      if (channel.data === 'ping-project-views--to-project') {
+      if (channel.data === 'ping-controller-views-to-project') {
         bc.postMessage('ping-project-views--to-controller');
       }
-
       const event = JSON.parse(channel.data);
       event.isExternalEvent = true;
       raiseEvent(event);
@@ -69,7 +68,7 @@ export default () => {
 
       /// END TEMPORARY
 
-      setEventsRecieved(eventsReceived.concat([event]));
+      setEventsReceived(eventsReceived.concat([event]));
     };
   }, []);
 

@@ -31,6 +31,9 @@ import VideoModeChangeEvent, {
 import BibleVerseAddedToScheduleEvent, {
   BibleVerseAddedToScheduleEventName,
 } from '../Domain/bibleVerseAddedToScheduleEvent';
+import ProjectorWindowClosedEvent, {
+  ProjectorWindowClosedEventName,
+} from '../Domain/projectorWindowClosedEvent';
 
 let bc = new BroadcastChannel('worshipAssistApp');
 
@@ -194,6 +197,21 @@ export default () => {
     );
   };
 
+  const ProjectorWindowClosedEventHandler = (
+    event: ProjectorWindowClosedEvent,
+  ) => {
+    if (
+      event.eventType !== ProjectorWindowClosedEventName ||
+      !event.isExternalEvent
+    ) {
+      return;
+    }
+
+    bc.postMessage(
+      JSON.stringify({ ...event, isExternalEvent: false }),
+    );
+  };
+
   // Chrome extension
   // const activeResource =
   //   state.currentSchedule.resources[resourceId];
@@ -226,6 +244,7 @@ export default () => {
     SongEditedEventHandler,
     VideoModeChangeEventHandler,
     BibleVerseAddedToScheduleEventHandler,
+    ProjectorWindowClosedEventHandler,
   ];
   return [arr];
 };
