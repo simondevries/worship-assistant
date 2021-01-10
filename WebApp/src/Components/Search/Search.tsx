@@ -176,8 +176,15 @@ const Search = () => {
   };
 
   const addBibleVerse = async () => {
-    if (!searchbox)
+    if (
+      !searchbox ||
+      !isValidBibleVerse(searchValue) ||
+      searchValue.indexOf(' ') === -1 ||
+      searchValue.indexOf(':') === -1
+    ) {
       alert('Please enter a bible verse in the format John 3:16');
+      return;
+    }
 
     setIsAddingBibleVerse(true);
     const book = searchValue.split(' ')[0];
@@ -277,7 +284,7 @@ const Search = () => {
                 <StyledDropdownItem
                   onClick={() => setIsAddSongModalOpen(true)}
                 >
-                  🎶 Add Song
+                  🎶 Create New Song
                 </StyledDropdownItem>
               )}
               {!searchValue && (
@@ -285,13 +292,11 @@ const Search = () => {
                   🎥 Add Video
                 </StyledDropdownItem>
               )}
-              {!searchValue ||
-                searchValue === '' ||
-                (isValidBibleVerse(searchValue) && (
-                  <StyledDropdownItem onClick={addBibleVerse}>
-                    🕮 Add Bible Verse
-                  </StyledDropdownItem>
-                ))}
+              {(!searchValue || isValidBibleVerse(searchValue)) && (
+                <StyledDropdownItem onClick={addBibleVerse}>
+                  🕮 Add Bible Verse
+                </StyledDropdownItem>
+              )}
               {!searchValue && (
                 <StyledDropdownItem onClick={() => alert('todo')}>
                   📷 Add Image
@@ -316,6 +321,7 @@ const Search = () => {
             </StyledDropdownItem> */}
 
               {searchResult &&
+                searchValue &&
                 searchResult.map((resource) => {
                   return (
                     <StyledDropdownItem

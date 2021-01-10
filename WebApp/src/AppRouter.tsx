@@ -46,6 +46,7 @@ const steps = [
   {
     content: (
       <div>
+        <h1>Welcome</h1>
         Hi, thanks for offering to help with testing! <br />I have
         setup this tour instructions to guide you and prompt you for
         feedback. It would be great if you could use{' '}
@@ -60,14 +61,18 @@ const steps = [
         but no worries if not - also feel free to skip
         sections/questions:) You can click through the steps here, to
         reopen this tour click the blue tour button on the bottom
-        right of the screen. The point is to get feedback on your{' '}
-        <b>overall</b> feel for the app
+        right of the screen.{' '}
+        <b>
+          The point is to get feedback on your <b>overall</b> feel for
+          the app, not to find bugs... I am aware of many of them
+        </b>
       </div>
     ),
   },
   {
     content: (
       <div>
+        <h1>App Background</h1>
         This app exists to provide a free app for church and other
         organisations to project from. It's trying to provide a
         lightweight solution to get churches up and running -
@@ -99,8 +104,9 @@ const steps = [
   {
     content: (
       <div>
+        <h1>Add song</h1>
         Lets get started! Why not try creating your first song and
-        projecting it? <br />
+        projecting it to another screen? <br />
         <b>
           'See a victory' by elevation worship is quite popular at the
           moment, why not try add that?
@@ -109,7 +115,8 @@ const steps = [
         For projecting at church you'd need to be extending screens -
         you can use a second monitor if you have one or just move the
         projector window to the side/background. If you get stuck
-        there are tips on the next slide
+        there are tips on the next slide You're going to need to
+        google the song lyrics.
       </div>
     ),
   },
@@ -119,12 +126,6 @@ const steps = [
         <small>
           <i>Tips from previous slide:</i>
           <ul>
-            <li>
-              You're going to need to google the song lyrics - this
-              app does not and cannot store songs that aren't uploaded
-              by users. Often verses are repeated so you can remove
-              duplicates
-            </li>
             <li>
               Did you find the 'Open new monitor window' button? That
               would have opened a new tab that you could have moved
@@ -228,6 +229,7 @@ const steps = [
   {
     content: (
       <div>
+        <h1>Overall impressions?</h1>
         <ul>
           <li>What is your overall impression on the app?</li>
           <li>Was it intuitive?</li>
@@ -245,6 +247,26 @@ const steps = [
   {
     content: (
       <div>
+        <h1>Future features</h1>
+        The following features are being considered for the future.
+        How useful would you find them:
+        <ul>
+          <li>Song import and export</li>
+          <li>Youtube</li>
+          <li>Cast via google chrome</li>
+          <li>Connect to a song database through CCLI login</li>
+          <li>
+            Separate projector view for stage (i.e. containing chords)
+          </li>
+          <li>Alerts</li>
+        </ul>
+      </div>
+    ),
+  },
+  {
+    content: (
+      <div>
+        <h1>Thank you</h1>
         Thanks for your help :) Legend!
         <br />
         <br /> One last thing... we're trying to think of a name, what

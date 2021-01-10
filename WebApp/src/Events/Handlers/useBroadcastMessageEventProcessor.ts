@@ -202,7 +202,7 @@ export default () => {
   ) => {
     if (
       event.eventType !== ProjectorWindowClosedEventName ||
-      !event.isExternalEvent
+      event.isExternalEvent
     ) {
       return;
     }

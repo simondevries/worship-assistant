@@ -33,10 +33,9 @@ export default function () {
         activeResourcePointer={activeResourcePointer}
       />
       <StyledButtonContainer>
-        <Button>Slide Settings</Button>
-        <Button>White</Button>
-        <Button>Blank</Button>
-        <Button>Play</Button>
+        <Button onClick={() => alert('TODO')}>Slide Settings</Button>
+        <Button onClick={() => alert('TODO')}>White</Button>
+        <Button onClick={() => alert('TODO')}>Blank Screen</Button>
       </StyledButtonContainer>
     </ActiveSlideContainer>
   );

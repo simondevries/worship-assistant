@@ -57,6 +57,7 @@ export default function ({
   const [state] = useContext<Array<IState>>(Context);
   const { fontSize, ref } = useFitText({
     maxFontSize: 9999,
+    minFontSize: 60,
   });
 
   if (!state || !state.currentSchedule) return null;

@@ -41,6 +41,15 @@ const StyledResourcesContainer = styled.div`
 //   );
 // `;
 
+const StyledWelcomeCard = styled(Card)`
+  display: flex;
+  align-items: center;
+  height: 150px;
+  margin: auto;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
 const StyledNoResourcesButton = styled(Button)`
   height: 50px;
   position: absolute;
@@ -101,13 +110,8 @@ export default function () {
   console.log({ sortedResources });
   if (!sortedResources || !sortedResources.length) {
     return (
-      <Card>
-        {/* display: flex;
-    align-items: center;
-    height: 150px;
-    margin: auto;
-    flex-direction: column;
-    justify-content: space-between; */}
+      <StyledWelcomeCard>
+        {/* */}
         {/* <StyledNoResourcesButton
           onClick={() => openSearch(0)}
           icon="add"
@@ -115,11 +119,15 @@ export default function () {
         > */}
         Press '/' or click search to add your first song, slideshow,
         bible verse, video, image.
-        <span role="img" aria-label="clap">
+        <span
+          role="img"
+          aria-label="clap"
+          style={{ 'font-size': '40px' }}
+        >
           👏
         </span>
         {/* </StyledNoResourcesButton> */}
-      </Card>
+      </StyledWelcomeCard>
     );
   }
 

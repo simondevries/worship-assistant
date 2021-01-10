@@ -63,7 +63,10 @@ export default function () {
   const [settingsModalOpen, setSettingsModalOpen] = useModal();
   const [scheduleModalOpen, setScheduleModalOpen] = useModal(false);
   const [state, dispatch] = useContext(Context);
-  const [openOrFocus] = focusOnProjectView(true);
+  const [openOrFocus] = focusOnProjectView(
+    state?.activeResourcePointer?.resourceId,
+    state?.activeResourcePointer?.slideIndex,
+  );
 
   const setScheduleModalOpenHacks = setScheduleModalOpen as Function;
   const setSettingsModalOpenHacks = setSettingsModalOpen as Function;

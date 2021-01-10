@@ -28,6 +28,13 @@ const StyledSlidesContainer = styled.div`
   padding-right: 10px;
 `;
 
+const StyledTooltip = styled(Tooltip)`
+  width: 100%;
+  .bp3-popover-target {
+    width: 100%;
+  }
+`;
+
 const StyledHeader = styled.div`
   margin-top: 10px;
   margin-bottom: 10px;
@@ -117,9 +124,9 @@ export default function ({
       )}
       <StyledHeader>
         {title && title.length > 25 ? (
-          <Tooltip content={title} position={Position.BOTTOM}>
+          <StyledTooltip content={title} position={Position.BOTTOM}>
             <StyledTitle>{title}</StyledTitle>
-          </Tooltip>
+          </StyledTooltip>
         ) : (
           <StyledTitle>{title}</StyledTitle>
         )}

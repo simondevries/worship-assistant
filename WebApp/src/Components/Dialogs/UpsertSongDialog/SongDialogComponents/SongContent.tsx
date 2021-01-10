@@ -23,14 +23,30 @@ const StyledEditableTextTitle = styled(EditableText)`
   }
 `;
 
-export default ({ songContent, songContentSetter, setImportSongButtonDisabled }) => {
-  const [titleBeingEdited, setTitleBeingEdited] = useState<string>(songContent?.properties?.title);
-  const [lyricsBeingEdited, setLyricsBeingEdited] = useState<string>(songContent?.lyrics?.map(lyric => '[' + lyric.name + ']' + lyric.content).join("\n"));
+export default ({
+  songContent,
+  songContentSetter,
+  setImportSongButtonDisabled,
+}) => {
+  const [titleBeingEdited, setTitleBeingEdited] = useState<string>(
+    songContent?.properties?.title,
+  );
+  const [lyricsBeingEdited, setLyricsBeingEdited] = useState<string>(
+    songContent?.lyrics
+      ?.map((lyric) => '[' + lyric.name + ']' + lyric.content)
+      .join('\n'),
+  );
 
   useEffect(() => {
-    setImportSongButtonDisabled(titleBeingEdited || lyricsBeingEdited)
-  }, [setImportSongButtonDisabled, titleBeingEdited, lyricsBeingEdited])
-  
+    setImportSongButtonDisabled(
+      titleBeingEdited || lyricsBeingEdited,
+    );
+  }, [
+    setImportSongButtonDisabled,
+    titleBeingEdited,
+    lyricsBeingEdited,
+  ]);
+
   // Actually set song content title
   const updateSongContentTitle = (event) => {
     songContentSetter({
@@ -44,6 +60,12 @@ export default ({ songContent, songContentSetter, setImportSongButtonDisabled })
 
   // Actually set song content lyrics
   const updateSongContentLyrics = (event) => {
+    if (event?.indexOf('[') === -1) {
+      alert(
+        'No verse tags added! \nPlease break up your song into sections using tags (e.g. [v1], [c], etc',
+      );
+      return;
+    }
     const verses = event.split('[').filter((v) => !!v);
     const versesMapped = verses.map((v) => {
       const sections = v.split(']');
@@ -54,7 +76,7 @@ export default ({ songContent, songContentSetter, setImportSongButtonDisabled })
         name,
         content,
       } as Lyrics;
-    })
+    });
     songContentSetter({
       ...songContent,
       lyrics: versesMapped,
@@ -63,29 +85,29 @@ export default ({ songContent, songContentSetter, setImportSongButtonDisabled })
 
   return (
     <>
-        <StyledEditableTextTitle
+      <StyledEditableTextTitle
         multiline={false}
         value={titleBeingEdited}
         onChange={setTitleBeingEdited} // only update state variable
         onConfirm={updateSongContentTitle}
-        placeholder={"Add song title here"}
-        />
-        <StyledEditableTextContent
+        placeholder={'Add song title here'}
+      />
+      <StyledEditableTextContent
         multiline={true}
         minLines={20}
         value={lyricsBeingEdited}
         onChange={setLyricsBeingEdited} // only update state variable
         onConfirm={updateSongContentLyrics}
         placeholder={
-          "[v1]\n Add lyrics here, oh, please do \n Type in the song section tags too\n\n" +
-          "[v2]\n These define the parts of the song \n The list of tags is frankly, quite long\n\n" +
+          '[v1]\n Add lyrics here, oh, please do \n Type in the song section tags too\n\n' +
+          '[v2]\n These define the parts of the song \n The list of tags is frankly, quite long\n\n' +
           "[c]\n See the other tags in the '?' button below\n See the other tags in the '?' button below\n\n"
         }
-        />
+      />
 
-        <Popover content={<HelpText />} position={Position.TOP}>
+      <Popover content={<HelpText />} position={Position.TOP}>
         <Button>?</Button>
-        </Popover>
+      </Popover>
     </>
   );
 };

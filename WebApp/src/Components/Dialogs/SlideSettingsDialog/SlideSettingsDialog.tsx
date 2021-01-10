@@ -5,6 +5,7 @@ import {
   Classes,
   MenuItem,
   Menu,
+  Card,
 } from '@blueprintjs/core';
 import styled from 'styled-components';
 import { settingsRepo } from '../../../Storage/settingsRepository';
@@ -60,7 +61,7 @@ export default ({ setSettingsModalOpen, activeResourcePointer }) => {
     state &&
     state.currentSchedule &&
     state.currentSchedule.activeSongs.find(
-      (s) => s.id === songReference.id,
+      (s) => s?.id === songReference?.id,
     );
   const { handleSubmit, register, errors, setValue } = useForm();
   const [settings, setSettings] = useState(settingsRepo.get());
@@ -168,6 +169,14 @@ export default ({ setSettingsModalOpen, activeResourcePointer }) => {
       >
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className={Classes.DIALOG_BODY}>
+            <Card>
+              This will allow the user to change the theme/slide
+              layout. For example they might want to change the text
+              positioning or coloring. <br /> They can also add their
+              CCLI number here which should be projected on the
+              screen.
+            </Card>
+            <br />
             <StyledBody>
               <StyledInputsContainer>
                 <div>

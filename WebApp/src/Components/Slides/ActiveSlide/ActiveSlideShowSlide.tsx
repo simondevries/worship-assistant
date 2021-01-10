@@ -117,7 +117,7 @@ export default function ({ resource }: Props) {
               focusProjector();
             }}
           >
-            Focus
+            Change focus to slideshow
           </Button>
         )}
 

@@ -63,7 +63,7 @@ export default ({ setAddSongModalOpen, createSongAtIndex }) => {
       <Dialog
         className={Classes.DARK}
         isOpen
-        title="Add Song"
+        title="Create New Song"
         isCloseButtonShown={true}
         onClose={() => setAddSongModalOpen(false)}
       >
