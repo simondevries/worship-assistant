@@ -18,7 +18,7 @@ const StyledCentering = styled.div`
   height: 100%;
   position: fixed;
   margin: 0 auto;
-  left: 38%;
+  left: 45%;
   top: 40%;
   position: fixed;
 `;
@@ -138,7 +138,7 @@ export default function ({
           !resourceReference &&
           !previewMode && (
             <StyledCentering>
-              <Card>
+              <div>
                 Your lyrics will be displayed here. Move this screen
                 to your extended deskop and press full screen.
                 <Button
@@ -149,7 +149,7 @@ export default function ({
                 >
                   Full Screen
                 </Button>
-              </Card>
+              </div>
             </StyledCentering>
           )}
       </StyledProjectorView>
