@@ -131,8 +131,7 @@ export default function ({
           <StyledTitle>{title}</StyledTitle>
         )}
         <ButtonGroup>
-          {(resource.resourceType === 'SONG' ||
-            resource.resourceType === 'BIBLEVERSE') && (
+          {resource.resourceType === 'SONG' && (
             <Button
               onClick={() => setEditSongModalOpen(true)}
               icon="edit"
