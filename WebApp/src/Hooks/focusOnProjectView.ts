@@ -21,3 +21,38 @@ export default (openIfNotAlreadyOpen?: boolean) => {
 
   return [openOrFocus];
 };
+
+// import { useContext } from 'react';
+// import { Context } from '../App';
+// import IState from '../Interfaces/State';
+
+// export default (openIfNotAlreadyOpen?: boolean) => {
+//   const [state]: Array<IState> = useContext(Context);
+
+//   const windowFeatures =
+//     'menubar=no, status=no, titlebar=no, toolbar=no';
+
+//   const openOrFocus = () => {
+//     if (state.hasProjectorsAttached) {
+//       // this will focus the window
+//       window.open('', 'wa', windowFeatures, true); // _blank
+//     } else if (openIfNotAlreadyOpen) {
+//       {
+//         !process.env.NODE_ENV ||
+//         process.env.NODE_ENV === 'development'
+//           ? window.open(
+//               'http://localhost:3000/project',
+//               'wa',
+//               windowFeatures,
+//             )
+//           : window.open(
+//               'https://beamer-62bc7.web.app/project',
+//               'wa',
+//               windowFeatures,
+//             );
+//       }
+//     }
+//   };
+
+//   return [openOrFocus];
+// };

@@ -41,6 +41,9 @@ const addIcon = <StyledIcon icon={'add'} iconSize={26}></StyledIcon>;
 const eventIcon = (
   <StyledIcon icon={'timeline-events'} iconSize={26}></StyledIcon>
 );
+const searchIcon = (
+  <StyledIcon icon={'search'} iconSize={26}></StyledIcon>
+);
 const cogIcon = <StyledIcon icon={'cog'} iconSize={26}></StyledIcon>;
 const googleDriveBackup = (
   <StyledIcon icon={'cloud-upload'} iconSize={26}></StyledIcon>
@@ -59,7 +62,7 @@ export default function () {
   const [addSongModalOpen, setAddSongModalOpen] = useModal();
   const [settingsModalOpen, setSettingsModalOpen] = useModal();
   const [scheduleModalOpen, setScheduleModalOpen] = useModal(false);
-  const [state, dispatch] = useContext<Array<IState>>(Context);
+  const [state, dispatch] = useContext(Context);
   const [openOrFocus] = focusOnProjectView(true);
 
   const setScheduleModalOpenHacks = setScheduleModalOpen as Function;
@@ -86,6 +89,18 @@ export default function () {
         <ScheduleManagerDialog setOpen={setScheduleModalOpen} />
       )}
       <StyledIconButton
+        onClick={() => {
+          dispatch({
+            type: 'setSearchVisible',
+            payload: true,
+          });
+        }}
+        icon={searchIcon}
+        minimal
+      >
+        Search
+      </StyledIconButton>
+      <StyledIconButton
         onClick={() => setScheduleModalOpenHacks(true)}
         icon={eventIcon}
         minimal
@@ -98,14 +113,14 @@ export default function () {
         icon={addIcon}
         minimal
       >
-        Add Song
+        Create Song
       </StyledIconButton>
       <StyledIconButton
         icon={desktopIcon}
         onClick={openOrFocus}
         minimal
       >
-        New Monitor
+        New Screen
       </StyledIconButton>
 
       <StyledIconButton
@@ -115,7 +130,7 @@ export default function () {
       >
         Settings
       </StyledIconButton>
-      <StyledIconButton
+      {/* <StyledIconButton
         icon={<Icon icon={<img src={castIcon} />} />}
         onClick={() => {
           alert('todo');
@@ -141,7 +156,7 @@ export default function () {
         minimal
       >
         Alerts
-      </StyledIconButton>
+      </StyledIconButton> */}
     </StyledContainer>
   );
 }

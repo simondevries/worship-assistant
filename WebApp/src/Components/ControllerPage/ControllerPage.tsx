@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Context } from '../../App';
 import ResourceManager from './resourceManager';
 import styled from 'styled-components/macro';
-import { Button, Icon } from '@blueprintjs/core';
+import { Button, Icon, Card } from '@blueprintjs/core';
 import { slideWidth } from '../Slides/ActiveSlide/ActiveSongSlide';
 import IState from '../../Interfaces/State';
 
@@ -101,16 +101,25 @@ export default function () {
   console.log({ sortedResources });
   if (!sortedResources || !sortedResources.length) {
     return (
-      <StyledNoResourcesButton
-        onClick={() => openSearch(0)}
-        icon="add"
-        large
-      >
-        Click here to add your first resource{' '}
+      <Card>
+        {/* display: flex;
+    align-items: center;
+    height: 150px;
+    margin: auto;
+    flex-direction: column;
+    justify-content: space-between; */}
+        {/* <StyledNoResourcesButton
+          onClick={() => openSearch(0)}
+          icon="add"
+          large
+        > */}
+        Press '/' or click search to add your first song, slideshow,
+        bible verse, video, image.
         <span role="img" aria-label="clap">
           👏
         </span>
-      </StyledNoResourcesButton>
+        {/* </StyledNoResourcesButton> */}
+      </Card>
     );
   }
 
