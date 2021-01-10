@@ -14,7 +14,7 @@ import useEventHandler from './Events/Handlers/useEventHandler';
 
 let bc = new BroadcastChannel('worshipAssistApp');
 
-function useIntialize(dispatch) {
+function useInitialize(dispatch) {
   const [loadingState, setLoadingState] = useState('Loading');
   const [scheduleModalOpen, setScheduleModalOpen] = useModal(false);
   const [
@@ -114,7 +114,7 @@ function useIntialize(dispatch) {
 
   useEffect(() => {
     if (window.location.pathname.indexOf('/project') === -1) {
-      bc.postMessage('ping-project-views--to-project');
+      bc.postMessage('ping-controller-views-to-project');
     } else {
       bc.postMessage('ping-project-views--to-controller');
     }
@@ -161,4 +161,4 @@ function useIntialize(dispatch) {
   ];
 }
 
-export default useIntialize;
+export default useInitialize;

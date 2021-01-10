@@ -38,6 +38,9 @@ import addActiveVideoEvent, {
 import SongEditedEvent, {
   SongEditedEventEventName,
 } from '../Domain/songEditedEvent';
+import ProjectorWindowClosedEvent, {
+  ProjectorWindowClosedEventName,
+} from '../Domain/projectorWindowClosedEvent';
 
 const useAppStateEventProcessors = () => {
   const [state, dispatch] = useContext(Context);
@@ -192,6 +195,14 @@ const useAppStateEventProcessors = () => {
     });
   };
 
+  const ProjectorWindowClosedEventHandler = (event: ProjectorWindowClosedEvent) => {
+    if (event.eventType !== ProjectorWindowClosedEventName) return;
+
+    dispatch({
+      type: 'hasProjectorsAttached',
+      payload: false,
+    });
+  };
   const arr = [
     SongCreatedEventHandler,
     SongAddedToScheduleEventHandler,
@@ -205,6 +216,7 @@ const useAppStateEventProcessors = () => {
     LoadScheduleEventHandler,
     AddActiveVideoEventHandler,
     SongEditedEventHandler,
+    ProjectorWindowClosedEventHandler,
   ];
   return [arr];
 };

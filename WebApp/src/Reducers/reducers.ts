@@ -78,7 +78,7 @@ function reducers(state: IState, action): IState {
     case 'hasProjectorsAttached':
       return {
         ...state,
-        hasProjectorsAttached: true,
+        hasProjectorsAttached: action.payload,
 
       };
 
