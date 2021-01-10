@@ -122,7 +122,7 @@ export default function () {
         <span
           role="img"
           aria-label="clap"
-          style={{ 'font-size': '40px' }}
+          style={{ fontSize: '40px' }}
         >
           👏
         </span>
