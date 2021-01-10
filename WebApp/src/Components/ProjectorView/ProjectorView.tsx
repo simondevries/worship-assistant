@@ -11,7 +11,7 @@ import SongHandler from './Handlers/SongHandler';
 import BibleVerseHandler from './Handlers/BibleVerseHandler';
 import SlideShowHandler from './Handlers/SlideShowHandler';
 import YouTubeHandler from './Handlers/YouTubeHandler';
-import { Button } from '@blueprintjs/core';
+import { Button, Card } from '@blueprintjs/core';
 import VideoHandler from './Handlers/VideoHandler';
 
 const StyledCentering = styled.div`
@@ -19,6 +19,7 @@ const StyledCentering = styled.div`
   position: fixed;
   margin: 0 auto;
   left: 38%;
+  top: 40%;
   position: fixed;
 `;
 
@@ -137,14 +138,18 @@ export default function ({
           !resourceReference &&
           !previewMode && (
             <StyledCentering>
-              <Button
-                intent="primary"
-                onClick={() => {
-                  document.documentElement.requestFullscreen();
-                }}
-              >
-                Full Screen
-              </Button>
+              <Card>
+                Your lyrics will be displayed here. Move this screen
+                to your extended deskop and press full screen.
+                <Button
+                  intent="primary"
+                  onClick={() => {
+                    document.documentElement.requestFullscreen();
+                  }}
+                >
+                  Full Screen
+                </Button>
+              </Card>
             </StyledCentering>
           )}
       </StyledProjectorView>
