@@ -208,7 +208,7 @@ export default () => {
     }
 
     bc.postMessage(
-      JSON.stringify({ ...event, isExternalEvent: false }),
+      JSON.stringify({ ...event, isExternalEvent: true }),
     );
   };
 

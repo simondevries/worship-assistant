@@ -375,6 +375,9 @@ export default function () {
               activeResourcePointer={activeResourcePointer}
             />
           </Route>
+          <Route path="/listener" exact>
+            Yay
+          </Route>
           <Route>
             <NotFound />
           </Route>

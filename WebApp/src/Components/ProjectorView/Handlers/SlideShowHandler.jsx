@@ -7,15 +7,18 @@ const StyledSlideShowPlayer = styled.iframe`
   height: 100%;
 `;
 
-interface Props {
-  resourceReference: ResourceReference;
-}
+// interface Props {
+//   resourceReference: ResourceReference;
+// }
 
-export default ({ resourceReference }: Props) => {
+export default ({ resourceReference }) => {
   return (
     <StyledSlideShowPlayer
       id={`focusable-object--${resourceReference.id}`}
-      src={resourceReference.embeddedPowerPointUrl}
+      src={resourceReference.embeddedPowerPointUrl.replaceAll(
+        'amp;',
+        '',
+      )}
     ></StyledSlideShowPlayer>
   );
 };

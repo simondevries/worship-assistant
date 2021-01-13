@@ -40,7 +40,7 @@ export default function ({
         <>
           <StyledIframe
             title={resourceId}
-            src={resource.embeddedPowerPointUrl}
+            src={resource.embeddedPowerPointUrl.replaceAll('amp;', '')}
           />
         </>
       </BaseNonActiveSlide>

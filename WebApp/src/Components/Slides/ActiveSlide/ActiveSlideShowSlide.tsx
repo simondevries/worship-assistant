@@ -64,7 +64,7 @@ type Props = {
 export default function ({ resource }: Props) {
   const [state, dispatch] = useContext(Context);
   const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(true);
-  const [focusProjector] = focusOnProjectView();
+  const [focusProjector] = focusOnProjectView(resource?.id, 0);
 
   const overlayClick = () => {
     focusProjector();
@@ -92,7 +92,8 @@ export default function ({ resource }: Props) {
                 change slides.
               </h3>
               <StyledCloseButton
-                onClick={() => {
+                onClick={(event) => {
+                  event.stopPropagation();
                   setIsOverlayOpen(false);
                 }}
               >
