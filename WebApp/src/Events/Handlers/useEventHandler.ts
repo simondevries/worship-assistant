@@ -3,6 +3,7 @@ import useAppStateEventProcessors from './useAppStateEventProcessor';
 import useIndexDbEventProcessor from './useIndexDbEventProcessor';
 import useGoToSlideProcessor from './useGoToSlideProcessor';
 import useDomEventsProcessor from './useDomEventsProcessor';
+import ReactGA from 'react-ga';
 
 export default () => {
   const raiseEvent = (event: any) => {
@@ -17,6 +18,15 @@ export default () => {
       domEventsProcessor.forEach((handler) => handler(event));
     } catch (e) {
       console.error(e);
+    }
+
+    try {
+      ReactGA.event({
+        category: 'EventRaised',
+        action: JSON.stringify(event),
+      });
+    } catch {
+      // no op
     }
   };
 

@@ -34,8 +34,8 @@ export const Context = createContext<any>(initialState);
 function App() {
   useEffect(() => {
     ReactGA.initialize('UA-186478125-1', {
-      debug: true,
       titleCase: false,
+      debug: true,
       gaOptions: {
         siteSpeedSampleRate: 100,
       },
