@@ -1,0 +1,13 @@
+[debug] [2021-01-20T11:04:53.330Z] ----------------------------------------------------------------------
+[debug] [2021-01-20T11:04:53.335Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\simon\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2021-01-20T11:04:53.335Z] CLI Version:   9.1.0
+[debug] [2021-01-20T11:04:53.335Z] Platform:      win32
+[debug] [2021-01-20T11:04:53.335Z] Node Version:  v12.16.1
+[debug] [2021-01-20T11:04:53.337Z] Time:          Thu Jan 21 2021 00:04:53 GMT+1300 (New Zealand Daylight Time)
+[debug] [2021-01-20T11:04:53.338Z] ----------------------------------------------------------------------
+[debug] [2021-01-20T11:04:53.338Z] 
+[debug] [2021-01-20T11:04:53.354Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2021-01-20T11:04:53.355Z] > authorizing via signed-in user
+[debug] [2021-01-20T11:04:53.356Z] [iam] checking project beamer-62bc7 for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2021-01-20T11:04:53.364Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/beamer-62bc7:testIamPermissions  
+ {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}

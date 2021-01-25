@@ -35,11 +35,14 @@ function App() {
   useEffect(() => {
     ReactGA.initialize('UA-186478125-1', {
       titleCase: false,
-      debug: true,
+      debug: false,
       gaOptions: {
         siteSpeedSampleRate: 100,
       },
     });
+    ReactGA.pageview(
+      window.location.pathname + window.location.search,
+    );
   }, []);
   const [isSupported] = useBrowserSupported();
   if (isSupported === null) return <div>Loading...</div>;
