@@ -124,6 +124,7 @@ const Search = () => {
     boolean
   >(false);
   const [state, dispatch] = useContext(Context);
+  console.log('state is ', JSON.stringify(state));
   const [raiseEvent] = useEventHandler();
   const [isSlideShowModalOpen, setIsSlideShowModalOpen] = useModal();
   const [isAddSongModalOpen, setIsAddSongModalOpen] = useModal();
