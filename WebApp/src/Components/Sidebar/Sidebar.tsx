@@ -92,6 +92,7 @@ export default function () {
         <ScheduleManagerDialog setOpen={setScheduleModalOpen} />
       )}
       <StyledIconButton
+        className="SearchButton"
         onClick={() => {
           dispatch({
             type: 'setSearchVisible',
