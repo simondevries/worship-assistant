@@ -9,6 +9,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "cypress": "^6.3.0",
     "fake-indexeddb": "^3.1.2",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
@@ -43,8 +44,10 @@
     ]
   },
   "devDependencies": {
+    "@types/jest": "^26.0.20",
     "@types/styled-components": "^5.1.4",
     "eslint-config-prettier": "^6.13.0",
-    "eslint-plugin-prettier": "^3.1.4"
+    "eslint-plugin-prettier": "^3.1.4",
+    "ts-jest": "^26.4.4"
   }
 }

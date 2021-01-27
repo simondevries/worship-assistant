@@ -36,6 +36,7 @@ function App() {
     ReactGA.initialize('UA-186478125-1', {
       titleCase: false,
       debug: false,
+      testMode: true,
       gaOptions: {
         siteSpeedSampleRate: 100,
       },

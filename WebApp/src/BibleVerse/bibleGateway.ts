@@ -8,3 +8,4 @@ export const getBibleVerse = async (bibleVerse: BibleVerse) => {
   const res2: any = await res.json();
   return res2.text;
 };
+ 

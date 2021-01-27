@@ -8,11 +8,10 @@ export const useBrowserSupported = () => {
     const fileSystemSupported = fileSystemApp.hasNativeFS;
 
     var raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
-
     const chromeVersion = raw ? parseInt(raw[2], 10) : false;
 
     const isSupported = fileSystemSupported && chromeVersion > 50;
-
+    console.log(fileSystemSupported);
     setIsSupported(isSupported);
   }, []);
 
