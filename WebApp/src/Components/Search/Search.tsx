@@ -114,6 +114,7 @@ const StyledSearchIcon = styled(Icon)``;
 // const StyledInput = styled
 
 export default function () {
+  console.log({});
   return <Search />;
 }
 
