@@ -21,6 +21,7 @@ import Tour from 'reactour';
 import NotFound from './Components/NotFound/NotFound';
 import UserFileHandlerPermissionManagerDialog from './Components/Dialogs/UserFileHandlerPermissionManagerDialog';
 import IState from './Interfaces/State';
+import LoginPage from './Login';
 
 const StyledControllerPageContainer = styled.div`
   display: flex;
@@ -375,8 +376,11 @@ export default function () {
               activeResourcePointer={activeResourcePointer}
             />
           </Route>
-          <Route path="/listener" exact>
-            Yay
+          <Route path="/googleOAuthRedirect" exact>
+            Yay welcome back
+          </Route>
+          <Route path="/login" exact>
+            <LoginPage />
           </Route>
           <Route>
             <NotFound />
