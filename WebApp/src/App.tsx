@@ -6,8 +6,8 @@ import 'normalize.css/normalize.css';
 
 import ReactGA from 'react-ga';
 import styled from 'styled-components/macro';
-import AppRouter from './AppRouter';
-import reducers from './Reducers/reducers';
+  import AppRouter from './AppRouter';
+  import reducers from './Reducers/reducers';
 import { useBrowserSupported } from './Hooks/useBrowserSupported';
 
 const StyledApp = styled.div`

@@ -7,5 +7,5 @@ type Prop = {
 };
 
 export default ({ resourceReference }: Prop) => {
-  return <div>{resourceReference.bibleVerseContent}</div>;
+  return <div data-testid="bibleVerseHandler">{resourceReference.bibleVerseContent}</div>;
 };
