@@ -13,7 +13,7 @@ import SlideResolver from '../Slides/SlideResolver';
 import Scrollbar from '../../Common/Scrollbar/Scrollbar';
 import RemoveResourceFromScheduleEvent from '../../Events/Domain/removeResourceFromScheduleEvent';
 import useEventHandler from '../../Events/Handlers/useEventHandler';
-import { Context } from '../../App';
+import { Context } from '../../Common/Store/Store';
 import IState from '../../Interfaces/State';
 import ResourceReference from '../../Interfaces/ResourceReference';
 import MoveResourceEvent from '../../Events/Domain/moveResourceEvent';
@@ -85,6 +85,10 @@ export default function ({
   ] = useState(false);
 
   const resolveTitle = (resourceReference: ResourceReference) => {
+    if (!resourceReference || !resourceReference.resourceType) {
+      return '';
+    }
+
     switch (resourceReference.resourceType.toLowerCase()) {
       case 'song':
         const song = state.currentSchedule.activeSongs.find(
