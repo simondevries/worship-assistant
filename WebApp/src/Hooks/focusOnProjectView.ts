@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Context } from '../App';
+import { Context } from '../Common/Store/Store';
 import useEventHandler from '../Events/Handlers/useEventHandler';
 import SlideChangeEvent from '../Events/Domain/slideChangeEvent';
 import ProjectorWindowClosedEvent from '../Events/Domain/projectorWindowClosedEvent';

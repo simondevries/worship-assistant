@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Button, Card } from '@blueprintjs/core';
 import { slideWidth } from './ActiveSongSlide';
 import styled from 'styled-components';
-import { Context } from '../../../App';
+import { Context } from '../../../Common/Store/Store';
 import IState from '../../../Interfaces/State';
 import focusOnProjectView from '../../../Hooks/focusOnProjectView';
 

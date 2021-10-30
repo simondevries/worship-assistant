@@ -5,7 +5,7 @@ import { useContext } from 'react';
 import SongCreatedEvent, {
   SongCreatedEventName,
 } from '../Domain/songCreatedEvent';
-import { Context } from '../../App';
+import { Context } from '../../Common/Store/Store';
 import SongAddedToSchedule, {
   SongAddedToScheduleEventName,
 } from '../Domain/songAddedToScheduleEvent';

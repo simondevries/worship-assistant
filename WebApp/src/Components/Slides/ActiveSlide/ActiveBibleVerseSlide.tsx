@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Context } from '../../../App';
+import { Context } from '../../../Common/Store/Store';
 import styled from 'styled-components';
 import ProjectorView from '../../ProjectorView/ProjectorView';
 import { Button, Card } from '@blueprintjs/core';

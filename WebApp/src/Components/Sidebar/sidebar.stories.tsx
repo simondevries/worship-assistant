@@ -3,7 +3,9 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 import Sidebar from './Sidebar';
 import IState from '../../Interfaces/State';
 import reducers from '../../Reducers/reducers';
-import { Context } from '../../App';
+import { Context } from '../../Common/Store/Store';
+
+// todo (simon and )
 
 export default {
   title: 'Sidebar',

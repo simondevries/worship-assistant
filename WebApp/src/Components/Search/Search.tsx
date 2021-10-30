@@ -5,7 +5,7 @@ import React, {
   useRef,
   useContext,
 } from 'react';
-import { Context } from '../../App';
+import { Context } from '../../Common/Store/Store';
 import styled from 'styled-components/macro';
 import { Icon, Spinner } from '@blueprintjs/core';
 import SearchQuery from './searchQuery';
@@ -121,9 +121,10 @@ export default function () {
 const Search = () => {
   const [searchValue, setSearchValue] = useState('');
   const [allSongs, setAllSongs] = useState([]);
-  const [isAddingBibleVerse, setIsAddingBibleVerse] = useState<
-    boolean
-  >(false);
+  const [
+    isAddingBibleVerse,
+    setIsAddingBibleVerse,
+  ] = useState<boolean>(false);
   const [state, dispatch] = useContext(Context);
   console.log('state is ', JSON.stringify(state));
   const [raiseEvent] = useEventHandler();

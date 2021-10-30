@@ -1,7 +1,7 @@
 import useEventHandler from './Events/Handlers/useEventHandler';
 import AppEvent from './Events/Domain/appEvent';
 import { useEffect, useState, useContext } from 'react';
-import { Context } from './App';
+import { Context } from './Common/Store/Store';
 
 let bc = new BroadcastChannel('worshipAssistApp');
 

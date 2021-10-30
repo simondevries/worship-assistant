@@ -2,7 +2,7 @@ import React, { useEffect, useContext, useState } from 'react';
 import styled from 'styled-components';
 import IResourceReference from '../../../Interfaces/ResourceReference';
 import { userFileHandlerRepo } from '../../../Storage/userFileHandlerRepository';
-import { Context } from '../../../App';
+import { Context } from '../../../Common/Store/Store';
 import getUrlFromFileHandle from '../../../Helpers/getUrlFromFileHandle';
 import IState from '../../../Interfaces/State';
 

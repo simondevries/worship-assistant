@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Context } from '../../App';
+import { Context } from '../../Common/Store/Store';
 import ISchedule from '../../Interfaces/Schedule';
 import {
   isLastSlideSelected as isLastSlideShowSlideSelected,

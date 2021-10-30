@@ -4,7 +4,7 @@ import styled from 'styled-components/macro';
 import useModal from '../Dialogs/useModal';
 import AddSongDialog from '../Dialogs/UpsertSongDialog/AddSongDialog';
 import SlideSettingsDialog from '../Dialogs/SlideSettingsDialog/SlideSettingsDialog';
-import { Context } from '../../App';
+import { Context } from '../../Common/Store/Store';
 import ScheduleManagerDialog from '../Dialogs/ScheduleManagerDialog';
 import IState from '../../Interfaces/State';
 import focusOnProjectView from '../../Hooks/focusOnProjectView';
@@ -102,7 +102,7 @@ export default function () {
         icon={searchIcon}
         minimal
       >
-        Search
+        Add
       </StyledIconButton>
       <StyledIconButton
         onClick={() => setScheduleModalOpenHacks(true)}

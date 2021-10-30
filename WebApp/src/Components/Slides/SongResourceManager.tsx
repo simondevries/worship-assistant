@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import NonActiveSongSlide from './NonActiveSlide/Song/SongSlide';
-import { Context } from '../../App';
+import { Context } from '../../Common/Store/Store';
 import State from '../../Interfaces/State';
 import ActiveResourcePointer from '../../Interfaces/ActiveResourcePointer';
 import Resource from '../../Interfaces/resource';

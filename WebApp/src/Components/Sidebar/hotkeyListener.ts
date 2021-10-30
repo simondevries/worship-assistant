@@ -1,4 +1,4 @@
-import { Context } from '../../App';
+import { Context } from '../../Common/Store/Store';
 import { useContext } from 'react';
 
 import { useState, useEffect } from 'react';

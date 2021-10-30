@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components/macro';
-import { Context } from '../../App';
+import { Context } from '../../Common/Store/Store';
 import IState from '../../Interfaces/State';
 import ISongResourceReference from '../../Interfaces/SongResourceReference';
 import { fileSystemApp } from '../../FileSystem/fileSystemTools';

@@ -11,7 +11,7 @@ import {
   Collapse,
 } from '@blueprintjs/core';
 import IState from '../../../Interfaces/State';
-import { Context } from '../../../App';
+import { Context } from '../../../Common/Store/Store';
 import useEventHandler from '../../../Events/Handlers/useEventHandler';
 import SlideShowAddedToScheduleEvent from '../../../Events/Domain/slideShowAddedToScheduleEvent';
 import styled from 'styled-components';
@@ -95,9 +95,10 @@ export default ({ setModalOpen, index }) => {
   const [state] = useContext<Array<IState>>(Context);
   const [url, setUrl] = useState<string>();
   const [showError, setHasError] = useState<boolean>();
-  const [detailedInstructions, setDetailedInstructions] = useState<
-    string
-  >();
+  const [
+    detailedInstructions,
+    setDetailedInstructions,
+  ] = useState<string>();
   const [raiseEvent] = useEventHandler();
   const [slideShowProvider, setSlideShowProvider] = useState<string>(
     '',

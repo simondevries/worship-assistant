@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Context } from './App';
+import { Context } from './Common/Store/Store';
 import ControllerPage from './Components/ControllerPage/ControllerPage';
 import ProjectorView from './Components/ProjectorView/ProjectorView';
 import Search from './Components/Search/Search';

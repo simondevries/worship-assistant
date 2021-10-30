@@ -1,162 +1,18 @@
-import React, { useState, useEffect, useContext } from 'react';
-import {
-  Button,
-  Dialog,
-  Classes,
-  MenuItem,
-  Menu,
-  Card,
-} from '@blueprintjs/core';
-import styled from 'styled-components';
+import React, { useState, useContext } from 'react';
+import { Dialog, Classes, Tabs, Tab, TabId } from '@blueprintjs/core';
 import { settingsRepo } from '../../../Storage/settingsRepository';
-import { useForm } from 'react-hook-form';
-import ProjectorView from '../../ProjectorView/ProjectorView';
-import {
-  themes,
-  ITheme,
-  defaultSongTheme,
-} from '../../../Interfaces/themes';
-import {
-  ItemListRenderer,
-  ItemRenderer,
-  Select,
-} from '@blueprintjs/select';
-import IState from '../../../Interfaces/State';
-import { Context } from '../../../App';
-import ISongResourceReference from '../../../Interfaces/SongResourceReference';
-
-const StyledInput = styled.input`
-  margin-bottom: 10px;
-`;
-
-const StyledSelect = styled.select`
-  margin-bottom: 10px;
-`;
-
-const StyledInputsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-right: 20px;
-`;
-
-const StyledPreviewContainer = styled.div`
-  display: flex;
-  width: 100%;
-`;
+import IState from 'Interfaces/State';
+import MainPanel from './Panels/MainPanel';
+import ThemePanel from './Panels/ThemePanel';
+import { Context } from '../../../Common/Store/Store';
 
 export default ({ setSettingsModalOpen, activeResourcePointer }) => {
   const [state] = useContext<Array<IState>>(Context);
-  if (!state || !state.currentSchedule) return null;
+  if (!state || !state.currentSchedule) return <div>Nostate</div>;
 
-  const resourceReference =
-    state &&
-    state.currentSchedule &&
-    state.currentSchedule.resources.find(
-      (r) => r.index === activeResourcePointer.resourceIndex,
-    );
+  const [selectedTabId, setSelectedTabId] = useState<TabId>('main');
 
-  const songReference = resourceReference as ISongResourceReference;
-
-  const activeResource =
-    state &&
-    state.currentSchedule &&
-    state.currentSchedule.activeSongs.find(
-      (s) => s?.id === songReference?.id,
-    );
-  const { handleSubmit, register, errors, setValue } = useForm();
   const [settings, setSettings] = useState(settingsRepo.get());
-  const oldSettings = settings;
-  const [chosenTheme, setChosenTheme] = useState(
-    activeResource && activeResource.theme
-      ? activeResource.theme
-      : defaultSongTheme,
-  );
-
-  const ThemeSelect = Select.ofType<ITheme>();
-
-  const renderThemeMenu: ItemListRenderer<ITheme> = ({
-    items,
-    itemsParentRef,
-    query,
-    renderItem,
-  }) => {
-    const renderedItems = items
-      .map(renderItem)
-      .filter((item) => item != null);
-    return <Menu ulRef={itemsParentRef}>{renderedItems}</Menu>;
-  };
-
-  const renderThemeItem: ItemRenderer<ITheme> = (
-    theme,
-    { handleClick, modifiers },
-  ) => {
-    if (!modifiers.matchesPredicate) {
-      return null;
-    }
-    return (
-      <MenuItem
-        active={modifiers.active}
-        text={theme.name}
-        onClick={handleClick}
-      />
-    );
-  };
-
-  const handleThemeChange = (item: ITheme) => {
-    setValue('blueprintSelect', item);
-    setChosenTheme(item);
-    if (activeResource && activeResource.theme) {
-      activeResource.theme = item;
-    } else {
-      throw Error('activeResource is undefined!');
-    }
-  };
-
-  const handleClose = () => {
-    setSettings(oldSettings);
-    setSettingsModalOpen(false);
-  };
-
-  const handleSave = () => {
-    // setSettingsModalOpen(false);
-    // const newSetting = {
-    //   ...settings,
-    //   ...values,
-    // };
-    // settingsRepo.set(newSetting);
-    // setSettings(newSetting);
-  };
-
-  useEffect(() => {
-    register({ name: 'blueprintSelect' });
-  }, [register]);
-
-  useEffect(() => {
-    async function fetchData() {
-      const res = await settingsRepo.get();
-      setValue('fontSize', res.globalSlideTheme.fontSize);
-      setValue('textAlign', res.globalSlideTheme.textAlign);
-      settingsRepo.set(res);
-      setSettings(res);
-    }
-    fetchData();
-  }, [setValue]);
-
-  const StyledBody = styled.div`
-    display: flex;
-    flex-direction: row;
-  `;
-
-  const onSubmit = (values) => {
-    setSettingsModalOpen(false);
-    const newSetting = {
-      ...settings,
-      ...values,
-    };
-
-    settingsRepo.set(newSetting);
-    setSettings(newSetting);
-  };
 
   return (
     <>
@@ -167,78 +23,48 @@ export default ({ setSettingsModalOpen, activeResourcePointer }) => {
         isCloseButtonShown={true}
         onClose={() => setSettingsModalOpen(false)}
       >
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className={Classes.DIALOG_BODY}>
-            <Card>
-              This will allow the user to change the theme/slide
-              layout. For example they might want to change the text
-              positioning or coloring. <br /> They can also add their
-              CCLI number here which should be projected on the
-              screen.
-            </Card>
-            <br />
-            <StyledBody>
-              <StyledInputsContainer>
-                <div>
-                  <ThemeSelect
-                    items={themes}
-                    itemRenderer={renderThemeItem}
-                    itemListRenderer={renderThemeMenu}
-                    itemPredicate={(query, item) =>
-                      item.name
-                        .toLowerCase()
-                        .includes(query.toLowerCase())
-                    }
-                    noResults={
-                      <MenuItem disabled={true} text="No results." />
-                    }
-                    onItemSelect={handleThemeChange}
-                  >
-                    <Button
-                      text={chosenTheme.name}
-                      rightIcon="double-caret-vertical"
-                    />
-                  </ThemeSelect>
-                </div>
-                <StyledInput
-                  className={Classes.INPUT}
-                  name="fontSize"
-                  ref={register}
-                  placeholder="Font Size"
-                />
-                {/* include validation with required or other standard HTML validation rules */}
-                <StyledInput
-                  className={Classes.INPUT}
-                  name="textAlign"
-                  placeholder="Text Align"
-                  ref={register({ required: true })}
-                />
-              </StyledInputsContainer>
-              <StyledPreviewContainer>
-                <ProjectorView
-                  previewMode={true}
+        <div className={Classes.DIALOG_BODY}>
+          <Tabs
+            id="TabsExample"
+            onChange={(tab) => () => {
+              setSelectedTabId(tab);
+            }}
+            vertical={true}
+            selectedTabId={'selectedTabId'}
+          >
+            <Tab
+              id="main"
+              data-testid="main-section"
+              title="Main"
+              panel={<MainPanel />}
+            />
+            <Tab
+              id="theme"
+              title="Theme"
+              data-testid="theme-section"
+              role=""
+              panel={
+                <ThemePanel
                   activeResourcePointer={activeResourcePointer}
-                  className={''}
                 />
-              </StyledPreviewContainer>
-              {/* errors will return when field validation fails  */}
-              {errors.exampleRequired && (
-                <span>This field is required</span>
-              )}
-            </StyledBody>
-            <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-              <Button onClick={handleClose}>Close</Button>
-              <Button
-                icon="floppy-disk"
-                type="submit"
-                intent="primary"
-                onClick={handleSubmit(onSubmit)}
-              >
-                Save
-              </Button>
-            </div>
-          </div>
-        </form>
+              }
+              panelClassName="ember-panel"
+            />
+            {/* <Tab id="rx" title="React" panel={<ReactPanel />} />
+               <Tab
+                 id="bb"
+                 disabled
+                 title="Backbone"
+                 panel={<BackbonePanel />}
+               />
+               <Tabs.Expander />
+               <input
+                 className="bp3-input"
+                 type="text"
+                 placeholder="Search..."
+               /> */}
+          </Tabs>
+        </div>
       </Dialog>
     </>
   );

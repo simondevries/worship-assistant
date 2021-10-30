@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Context } from '../../../App';
+import { Context } from '../../../Common/Store/Store';
 
 import styled from 'styled-components';
 import ProjectorView from '../../ProjectorView/ProjectorView';
