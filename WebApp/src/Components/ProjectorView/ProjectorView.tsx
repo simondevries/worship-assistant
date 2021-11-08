@@ -5,7 +5,7 @@ import IState from '../../Interfaces/State';
 import ISongResourceReference from '../../Interfaces/SongResourceReference';
 import { fileSystemApp } from '../../FileSystem/fileSystemTools';
 import ActiveResourcePointer from '../../Interfaces/ActiveResourcePointer';
-import { defaultSongTheme } from '../../Interfaces/themes';
+import { defaultSongTheme, ITheme } from '../../Interfaces/themes';
 import useFitText from 'use-fit-text';
 import SongHandler from './Handlers/SongHandler';
 import BibleVerseHandler from './Handlers/BibleVerseHandler';
@@ -13,6 +13,7 @@ import SlideShowHandler from './Handlers/SlideShowHandler';
 import YouTubeHandler from './Handlers/YouTubeHandler';
 import { Button, Card } from '@blueprintjs/core';
 import VideoHandler from './Handlers/VideoHandler';
+import DemoSongHandler from './Handlers/DemoSongHandler';
 
 const StyledCentering = styled.div`
   height: 100%;
@@ -31,10 +32,8 @@ const StyledPowerPointPresenter = styled.iframe`
 const StyledVideo = styled.video``;
 
 const StyledProjectorView = styled.div<any>`
-  /* ${(props) => [!props.previewMode ? 'font-size: 100pt;' : '']} */
   background: ${(props) => props.theme.backgroundColor};
   color: ${(props) => props.theme.primary};
-  /* font-size: ${(props) => props.theme.fontSize}; */
   width: 100%;
   height: 100%;
   text-align: ${(props) => props.theme.textAlign};
@@ -45,7 +44,8 @@ type Props = {
   activeResourcePointer: ActiveResourcePointer;
   previewMode: boolean;
   className?: string;
-  isDemoMode?: boolean;
+  useDemoText?: boolean;
+  globalTheme: ITheme;
 };
 
 /**
@@ -55,13 +55,10 @@ export default function ({
   activeResourcePointer,
   previewMode,
   className,
-  isDemoMode,
+  globalTheme,
+  useDemoText,
 }: Props) {
   const [state] = useContext<Array<IState>>(Context);
-  const { fontSize, ref } = useFitText({
-    maxFontSize: 9999,
-    minFontSize: 60,
-  });
 
   if (!state || !state.currentSchedule) return null;
 
@@ -81,6 +78,10 @@ export default function ({
     );
 
   const renderAppropriateHandler = () => {
+    if (useDemoText) {
+      return <DemoSongHandler globalTheme={globalTheme} />;
+    }
+
     if (!resourceReference || !resourceReference.resourceType) return;
 
     switch (resourceReference.resourceType.toLowerCase()) {
@@ -90,7 +91,7 @@ export default function ({
             resourceReference={resourceReference}
             slideIndex={activeResourcePointer.slideIndex}
             activeSongs={state?.currentSchedule.activeSongs}
-            isDemo={isDemoMode}
+            globalTheme={globalTheme}
           />
         );
       case 'slideshow':
@@ -119,42 +120,31 @@ export default function ({
     }
   };
 
-  // todo (sdv) hacks
-  const controlledFontSize =
-    (resourceReference &&
-      resourceReference.resourceType === 'SONG') ||
-    (resourceReference &&
-      resourceReference.resourceType === 'BIBLEVERSE')
-      ? fontSize
-      : '0px';
+  const isFullScreen = window.innerHeight !== window.screen.height;
 
   return (
     <ThemeProvider theme={defaultSongTheme}>
       <StyledProjectorView
-        ref={ref}
-        style={{ fontSize: controlledFontSize }}
         previewMode={previewMode}
         className={`${className} projectorView`}
       >
         {renderAppropriateHandler()}
-        {window.innerHeight !== window.screen.height &&
-          !resourceReference &&
-          !previewMode && (
-            <StyledCentering>
-              <div>
-                Your lyrics will be displayed here. Move this screen
-                to your extended deskop and press full screen.
-                <Button
-                  intent="primary"
-                  onClick={() => {
-                    document.documentElement.requestFullscreen();
-                  }}
-                >
-                  Full Screen
-                </Button>
-              </div>
-            </StyledCentering>
-          )}
+        {!isFullScreen && !resourceReference && !previewMode && (
+          <StyledCentering>
+            <div>
+              Your lyrics will be displayed here. Move this screen to
+              your extended deskop and press full screen.
+              <Button
+                intent="primary"
+                onClick={() => {
+                  document.documentElement.requestFullscreen();
+                }}
+              >
+                Full Screen
+              </Button>
+            </div>
+          </StyledCentering>
+        )}
       </StyledProjectorView>
     </ThemeProvider>
   );

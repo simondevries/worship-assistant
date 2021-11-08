@@ -9,26 +9,30 @@ import ActiveResourcePointer from '../../../Interfaces/ActiveResourcePointer';
 import ActiveSlideContainer from './ActiveSlideContainer';
 import useEventHandler from '../../../Events/Handlers/useEventHandler';
 import VideoModeChangeEvent from '../../../Events/Domain/VideoModeChangeEvent';
+import IState from 'Interfaces/State';
 
 const StyledButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
 `;
 
-const StyledProjectorView = styled(ProjectorView)``;
-
 export default function ({ resource }) {
   const [raiseEvent] = useEventHandler();
+  const [state] = useContext<Array<IState>>(Context);
+
   const [showControls, setShowControls] = useState();
   const activeResourcePointer: ActiveResourcePointer = {
     resourceId: resource.id,
     slideIndex: 0,
   };
+  console.log('AVS');
+
   return (
     <ActiveSlideContainer slideIndex={0} resourceId={resource.id}>
       <ProjectorView
         activeResourcePointer={activeResourcePointer}
         previewMode={true}
+        globalTheme={state.settings.globalSlideTheme}
       />
       <StyledButtonContainer>
         {resource.title}

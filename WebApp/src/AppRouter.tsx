@@ -134,6 +134,9 @@ export default function () {
             <ProjectorView
               previewMode={false}
               activeResourcePointer={activeResourcePointer}
+              globalTheme={
+                (state as IState).settings.globalSlideTheme
+              }
             />
           </Route>
           <Route path="/googleOAuthRedirect" exact>

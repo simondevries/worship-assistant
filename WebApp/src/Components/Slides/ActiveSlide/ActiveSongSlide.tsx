@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import ProjectorView from '../../ProjectorView/ProjectorView';
 import { Button, Card } from '@blueprintjs/core';
 import ActiveSlideContainer from './ActiveSlideContainer';
+import IState from 'Interfaces/State';
 
 const StyledButtonContainer = styled.div`
   display: flex;
@@ -18,7 +19,7 @@ const StyledProjectorView = styled(ProjectorView)`
 export const slideWidth = 300;
 
 export default function () {
-  const [state, dispatch] = useContext(Context);
+  const [state] = useContext<Array<IState>>(Context);
 
   const activeResourcePointer =
     state.currentSchedule.activeResourcePointer;
@@ -31,6 +32,7 @@ export default function () {
       <StyledProjectorView
         previewMode={true}
         activeResourcePointer={activeResourcePointer}
+        globalTheme={state.settings.globalSlideTheme}
       />
       <StyledButtonContainer>
         <Button onClick={() => alert('TODO')}>Slide Settings</Button>

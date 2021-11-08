@@ -16,6 +16,10 @@ export default ({ setSettingsModalOpen, activeResourcePointer }) => {
     <>
       <Dialog
         className={Classes.DARK}
+        style={{
+          minWidth: '700px',
+          width: '80vw',
+        }}
         isOpen
         title="Settings"
         isCloseButtonShown={true}

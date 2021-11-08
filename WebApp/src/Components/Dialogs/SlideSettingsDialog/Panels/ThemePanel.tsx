@@ -49,6 +49,10 @@ const StyledPreviewContainer = styled.div`
   width: 100%;
 `;
 
+const StyledProjectorView = styled(ProjectorView)`
+  width: 500px;
+`;
+
 export default ({ activeResourcePointer, onClose }) => {
   const [state] = useContext<Array<IState>>(Context);
   if (!state || !state.currentSchedule) return <div>NoState</div>;
@@ -77,6 +81,7 @@ export default ({ activeResourcePointer, onClose }) => {
       isItalic: yup.boolean().notRequired(),
       horizontalAlign: yup.string().notRequired(),
       verticalAlign: yup.string().notRequired(),
+      fontSize: yup.number().notRequired(),
     })
     .required();
 
@@ -94,35 +99,51 @@ export default ({ activeResourcePointer, onClose }) => {
   useEffect(() => {
     async function fetchData() {
       const res: ISettings = await settingsRepo.get('settings');
-      setValue('isBold', res.globalSlideTheme.textIsBold);
-      setValue('isItalic', res.globalSlideTheme.textIsItalic);
-      setValue('isUnderline', res.globalSlideTheme.textIsUnderlined);
+      setValue('isBold', res.globalSlideTheme.textIsBold ?? false);
+      setValue(
+        'isItalic',
+        res.globalSlideTheme.textIsItalic ?? false,
+      );
+      setValue(
+        'isUnderline',
+        res.globalSlideTheme.textIsUnderlined ?? false,
+      );
       setValue(
         'verticalAlign',
-        res.globalSlideTheme.textVerticalAlign,
+        res.globalSlideTheme.textVerticalAlign ?? 'M',
       );
       setValue(
         'horizontalAlign',
-        res.globalSlideTheme.textHorizontalAlign,
+        res.globalSlideTheme.textHorizontalAlign ?? 'M',
       );
+      setValue('fontSize', res.globalSlideTheme.fontSize ?? 1);
     }
     fetchData();
   }, []);
+
+  const getThemeFromCurrentState = (): ITheme => {
+    return {
+      textVerticalAlign: getValues('verticalAlign'),
+      textIsBold: getValues('isBold'),
+      textIsItalic: getValues('isItalic'),
+      textIsUnderlined: getValues('isUnderline'),
+      textHorizontalAlign: getValues('horizontalAlign'),
+      fontSize: getValues('fontSize'),
+      backgroundColor: 'black',
+      lineHeight: '1',
+      name: 'default',
+      textColor: 'white',
+    };
+  };
 
   const onSubmit = async (values) => {
     const settings = await settingsRepo.get();
     const newSetting: ISettings = {
       ...settings,
-      globalSlideTheme: {
-        backgroundColor: 'black',
-        textColor: 'white',
-        textVerticalAlign: values.verticalAlign,
-        textHorizontalAlign: values.horizontalAlign,
-        textIsBold: values.isBold,
-        textIsItalic: values.isItalic,
-        textIsUnderlined: values.isUnderlined,
-      },
+      globalSlideTheme: getThemeFromCurrentState(),
     };
+
+    console.log({ newSetting });
 
     settingsRepo.set(newSetting, 'settings');
     onClose();
@@ -132,6 +153,7 @@ export default ({ activeResourcePointer, onClose }) => {
   register('isItalic');
   register('isUnderline');
   register('verticalAlign');
+  register('fontSize');
   register('horizontalAlign');
 
   // const { onChange: onIsBoldChange } = register('isBold');
@@ -247,13 +269,41 @@ export default ({ activeResourcePointer, onClose }) => {
                   ></Button>
                 </ButtonGroup>
               </FormGroup>
+              <FormGroup label="Font Size">
+                <ButtonGroup>
+                  <Button
+                    icon="chevron-up"
+                    onClick={() => {
+                      const currentFontSize =
+                        getValues('fontSize') ?? 1;
+
+                      setValue('fontSize', currentFontSize + 0.2, {
+                        shouldValidate: true,
+                      });
+                    }}
+                  ></Button>
+
+                  <Button
+                    icon="chevron-down"
+                    onClick={() => {
+                      const currentFontSize =
+                        getValues('fontSize') ?? 1;
+
+                      setValue('fontSize', currentFontSize - 0.2, {
+                        shouldValidate: true,
+                      });
+                    }}
+                  ></Button>
+                </ButtonGroup>
+              </FormGroup>
             </StyledInputsContainer>
             <StyledPreviewContainer>
-              <ProjectorView
-                previewMode={true}
+              <StyledProjectorView
+                useDemoText={true}
                 activeResourcePointer={activeResourcePointer}
                 className={''}
-                isDemoMode={true}
+                previewMode={true}
+                globalTheme={getThemeFromCurrentState()}
               />
             </StyledPreviewContainer>
             {/* errors will return when field validation fails  */}

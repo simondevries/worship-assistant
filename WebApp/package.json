@@ -20,7 +20,7 @@
     "react-scripts": "3.4.3",
     "reactour": "^1.18.0",
     "styled-components": "^5.2.0",
-    "typescript": "^4.1.3",
+    "typescript": "^4.4.4",
     "use-fit-text": "^2.4.0",
     "yup": "^0.32.11"
   },

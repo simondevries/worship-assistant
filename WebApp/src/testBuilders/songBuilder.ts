@@ -2,10 +2,16 @@ import IResourceReference from "../Interfaces/ResourceReference";
 import ISong from 'Interfaces/Song';
 
 export class SongBuilder {
-  
+  id: string = 'aSongId'
+
+    withReference(identifier: string):SongBuilder {
+        this.id = identifier;
+        return this;
+    }
+
     build(): ISong {
         return {
-            id: 'aSongId',
+            id: this.id,
             lyrics: [{name:"v1", content: `Oh Lord, my God
             When I, in awesome wonder
             Consider all the worlds Thy hands have made

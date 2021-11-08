@@ -1,47 +1,52 @@
 export interface ITheme {
   backgroundColor: string;
   textColor: string;
-  primary: string;
   lineHeight: string;
-  textAlign: string;
   name: string;
   textVerticalAlign: 'T' | 'M' | 'B';
-  textHorizontalAlign: 'L';
-  M;
-  R;
+  textHorizontalAlign: 'L' | 'M' | 'R';
   textIsBold: boolean;
   textIsItalic: boolean;
+  fontSize: number;
   textIsUnderlined: boolean;
 }
 
-export const defaultSongTheme = {
+export const defaultSongTheme: ITheme = {
   backgroundColor: '#333333',
   textColor: '#000000',
-  primary: '#e0e0e0',
   lineHeight: 'normal',
   textVerticalAlign: 'M',
   textHorizontalAlign: 'M',
-  textIsBold: 'M',
-  textIsItalic: 'M',
-  textIsUnderlined: 'M',
+  textIsBold: true,
+  textIsItalic: true,
+  textIsUnderlined: true,
+  fontSize: 1,
   name: 'Default',
 };
 
-export const lightSongTheme = {
+export const lightSongTheme: ITheme = {
   backgroundColor: '#e0e0e0',
   textColor: '#000000',
-  primary: '#333333',
   lineHeight: 'normal',
-  textAlign: 'center',
+  textVerticalAlign: 'M',
+  textHorizontalAlign: 'M',
+  textIsBold: true,
+  textIsItalic: true,
+  textIsUnderlined: true,
+  fontSize: 1,
   name: 'Light',
 };
 
-const presentationTheme = {
+const presentationTheme: ITheme = {
   backgroundColor: '#333333',
   textColor: '#000000',
-  primary: '#e0e0e0',
   lineHeight: 'normal',
-  textAlign: 'left',
+  textVerticalAlign: 'M',
+  textHorizontalAlign: 'M',
+  textIsBold: true,
+  textIsItalic: true,
+  fontSize: 1,
+  textIsUnderlined: true,
   name: 'Presentation',
 };
 export const themes: ITheme[] = [

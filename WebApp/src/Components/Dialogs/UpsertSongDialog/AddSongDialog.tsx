@@ -33,7 +33,6 @@ export default ({ setAddSongModalOpen, createSongAtIndex }) => {
     id: newId(),
     lyrics: [],
     resourceType: 'SONG',
-    theme: lightSongTheme,
     properties: {
       title: '',
       artist: '',

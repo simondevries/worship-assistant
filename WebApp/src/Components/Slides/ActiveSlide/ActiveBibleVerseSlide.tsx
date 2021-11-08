@@ -37,6 +37,7 @@ export default function ({ resource }: Props) {
       <StyledProjectorView
         previewMode={true}
         activeResourcePointer={activeResourcePointer}
+        globalTheme={state.settings.globalTheme}
       />
       <StyledButtonContainer>
         <Button>Slide Settings</Button>

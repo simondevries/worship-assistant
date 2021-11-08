@@ -4,5 +4,5 @@ import NewId from '../Helpers/newId';
 export default interface IResource {
   id: string;
   resourceType: string;
-  theme: ITheme;
+  theme?: ITheme;
 }
