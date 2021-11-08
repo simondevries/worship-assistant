@@ -5,6 +5,13 @@ export interface ITheme {
   lineHeight: string;
   textAlign: string;
   name: string;
+  textVerticalAlign: 'T' | 'M' | 'B';
+  textHorizontalAlign: 'L';
+  M;
+  R;
+  textIsBold: boolean;
+  textIsItalic: boolean;
+  textIsUnderlined: boolean;
 }
 
 export const defaultSongTheme = {
@@ -12,7 +19,11 @@ export const defaultSongTheme = {
   textColor: '#000000',
   primary: '#e0e0e0',
   lineHeight: 'normal',
-  textAlign: 'center',
+  textVerticalAlign: 'M',
+  textHorizontalAlign: 'M',
+  textIsBold: 'M',
+  textIsItalic: 'M',
+  textIsUnderlined: 'M',
   name: 'Default',
 };
 
@@ -34,9 +45,9 @@ const presentationTheme = {
   name: 'Presentation',
 };
 export const themes: ITheme[] = [
-  defaultSongTheme,
-  lightSongTheme,
-  presentationTheme,
+  // defaultSongTheme,
+  // lightSongTheme,
+  // presentationTheme,
 ];
 
 // export const themes = [defaultSongTheme, lightSongTheme, presentationTheme];

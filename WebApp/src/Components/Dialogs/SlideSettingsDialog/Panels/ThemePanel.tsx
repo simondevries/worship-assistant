@@ -2,9 +2,11 @@ import React, { useState, useEffect, useContext } from 'react';
 import {
   Button,
   Classes,
+  ButtonGroup,
   MenuItem,
   Menu,
   TabId,
+  FormGroup,
 } from '@blueprintjs/core';
 import styled from 'styled-components';
 import { settingsRepo } from '../../../../Storage/settingsRepository';
@@ -25,6 +27,7 @@ import {
 import IState from '../../../../Interfaces/State';
 import ISongResourceReference from '../../../../Interfaces/SongResourceReference';
 import { Context } from '../../../../Common/Store/Store';
+import { ISettings } from 'Interfaces/Settings';
 
 const StyledInput = styled.input`
   margin-bottom: 10px;
@@ -50,8 +53,6 @@ export default ({ activeResourcePointer, onClose }) => {
   const [state] = useContext<Array<IState>>(Context);
   if (!state || !state.currentSchedule) return <div>NoState</div>;
 
-  const [selectedTabId, setSelectedTabId] = useState<TabId>('main');
-
   const resourceReference =
     state &&
     state.currentSchedule &&
@@ -71,8 +72,11 @@ export default ({ activeResourcePointer, onClose }) => {
   const schema = yup
     .object()
     .shape({
-      textAlign: yup.string(),
-      isBold: yup.boolean(),
+      isBold: yup.boolean().notRequired(),
+      isUnderlined: yup.boolean().notRequired(),
+      isItalic: yup.boolean().notRequired(),
+      horizontalAlign: yup.string().notRequired(),
+      verticalAlign: yup.string().notRequired(),
     })
     .required();
 
@@ -87,64 +91,41 @@ export default ({ activeResourcePointer, onClose }) => {
   });
   const { isValid } = formState;
 
-  const [settings, setSettings] = useState(settingsRepo.get());
-  const oldSettings = settings;
-  const [chosenTheme, setChosenTheme] = useState(
-    activeResource && activeResource.theme
-      ? activeResource.theme
-      : defaultSongTheme,
-  );
-
-  const ThemeSelect = Select.ofType<ITheme>();
-
-  // const renderThemeMenu: ItemListRenderer<ITheme> = ({
-  //   items,
-  //   itemsParentRef,
-  //   query,
-  //   renderItem,
-  // }) => {
-  //   const renderedItems = items
-  //     .map(renderItem)
-  //     .filter((item) => item != null);
-  //   return <Menu ulRef={itemsParentRef}>{renderedItems}</Menu>;
-  // };
-
-  // const renderThemeItem: ItemRenderer<ITheme> = (
-  //   theme,
-  //   { handleClick, modifiers },
-  // ) => {
-  //   if (!modifiers.matchesPredicate) {
-  //     return null;
-  //   }
-  //   return (
-  //     <MenuItem
-  //       active={modifiers.active}
-  //       text={theme.name}
-  //       onClick={handleClick}
-  //     />
-  //   );
-  // };
   useEffect(() => {
     async function fetchData() {
-      const res = await settingsRepo.get();
-      // setValue('fontSize', res.globalSlideTheme.fontSize);
-      // setValue('textAlign', res.globalSlideTheme.textAlign);
-      settingsRepo.set(res);
-      setSettings(res);
+      const res: ISettings = await settingsRepo.get('settings');
+      setValue('isBold', res.globalSlideTheme.textIsBold);
+      setValue('isItalic', res.globalSlideTheme.textIsItalic);
+      setValue('isUnderline', res.globalSlideTheme.textIsUnderlined);
+      setValue(
+        'verticalAlign',
+        res.globalSlideTheme.textVerticalAlign,
+      );
+      setValue(
+        'horizontalAlign',
+        res.globalSlideTheme.textHorizontalAlign,
+      );
     }
     fetchData();
-  }, [setValue]);
+  }, []);
 
-  const onSubmit = (values) => {
-    console.log({ values });
+  const onSubmit = async (values) => {
+    const settings = await settingsRepo.get();
+    const newSetting: ISettings = {
+      ...settings,
+      globalSlideTheme: {
+        backgroundColor: 'black',
+        textColor: 'white',
+        textVerticalAlign: values.verticalAlign,
+        textHorizontalAlign: values.horizontalAlign,
+        textIsBold: values.isBold,
+        textIsItalic: values.isItalic,
+        textIsUnderlined: values.isUnderlined,
+      },
+    };
 
-    // const newSetting = {
-    //   ...settings,
-    //   ...values,
-    // };
-
-    // settingsRepo.set(newSetting);
-    // setSettings(newSetting);
+    settingsRepo.set(newSetting, 'settings');
+    onClose();
   };
 
   register('isBold');
@@ -162,120 +143,110 @@ export default ({ activeResourcePointer, onClose }) => {
           <br />
           <StyledBody>
             <StyledInputsContainer>
-              {/* <ThemeSelect
-                  items={themes}
-                  itemRenderer={renderThemeItem}
-                  itemListRenderer={renderThemeMenu}
-                  itemPredicate={(query, item) =>
-                    item.name
-                      .toLowerCase()
-                      .includes(query.toLowerCase())
-                  }
-                  noResults={
-                    <MenuItem disabled={true} text="No results." />
-                  }
-                  onItemSelect={handleThemeChange}
-                >
+              <FormGroup label="Font">
+                <ButtonGroup>
                   <Button
-                    text={chosenTheme.name}
-                    rightIcon="double-caret-vertical"
-                  />
-                </ThemeSelect> */}
+                    data-testid="bold"
+                    onClick={() => {
+                      setValue('isBold', true, {
+                        shouldValidate: true,
+                      });
+                    }}
+                    active={getValues('isBold') === true}
+                  >
+                    B
+                  </Button>
 
-              <Button
-                data-testid="bold"
-                onClick={() => {
-                  console.log('Hel;lowor');
-                  setValue('isBold', true, { shouldValidate: true });
-                }}
-                active={getValues('isBold') === true}
-              >
-                B
-              </Button>
+                  <Button
+                    onClick={() =>
+                      setValue('isItalic', true, {
+                        shouldValidate: true,
+                      })
+                    }
+                    active={getValues('isItalic') === true}
+                  >
+                    I
+                  </Button>
 
-              <Button
-                onClick={() =>
-                  setValue('isItalic', 'true', {
-                    shouldValidate: true,
-                  })
-                }
-              >
-                I
-              </Button>
+                  <Button
+                    onClick={() =>
+                      setValue('isUnderlined', 'true', {
+                        shouldValidate: true,
+                      })
+                    }
+                    active={getValues('isUnderlined') === true}
+                  >
+                    U
+                  </Button>
+                </ButtonGroup>
+              </FormGroup>
 
-              <Button
-                onClick={() =>
-                  setValue('isUnderlined', 'true', {
-                    shouldValidate: true,
-                  })
-                }
-              >
-                U
-              </Button>
+              <FormGroup label="Horizontal Align">
+                <ButtonGroup>
+                  <Button
+                    icon="align-left"
+                    onClick={() =>
+                      setValue('horizontalAlign', 'L', {
+                        shouldValidate: true,
+                      })
+                    }
+                    active={getValues('horizontalAlign') === 'L'}
+                  ></Button>
 
-              <div>
-                <Button
-                  onClick={() =>
-                    setValue('horizontalAlign', 'L', {
-                      shouldValidate: true,
-                    })
-                  }
-                >
-                  L
-                </Button>
+                  <Button
+                    icon="align-center"
+                    onClick={() =>
+                      setValue('horizontalAlign', 'M', {
+                        shouldValidate: true,
+                      })
+                    }
+                    active={getValues('horizontalAlign') === 'M'}
+                  ></Button>
 
-                <Button
-                  onClick={() =>
-                    setValue('horizontalAlign', 'M', {
-                      shouldValidate: true,
-                    })
-                  }
-                >
-                  M
-                </Button>
+                  <Button
+                    icon="align-right"
+                    onClick={() =>
+                      setValue('horizontalAlign', 'R', {
+                        shouldValidate: true,
+                      })
+                    }
+                    active={getValues('horizontalAlign') === 'R'}
+                  ></Button>
+                </ButtonGroup>
+              </FormGroup>
+              <FormGroup label="Vertical Align">
+                <ButtonGroup>
+                  <Button
+                    icon="caret-up"
+                    onClick={() =>
+                      setValue('verticalAlign', 'T', {
+                        shouldValidate: true,
+                      })
+                    }
+                    active={getValues('verticalAlign') === 'T'}
+                  ></Button>
 
-                <Button
-                  onClick={() =>
-                    setValue('horizontalAlign', 'R', {
-                      shouldValidate: true,
-                    })
-                  }
-                >
-                  R
-                </Button>
-              </div>
+                  <Button
+                    icon="alignment-horizontal-center"
+                    onClick={() =>
+                      setValue('verticalAlign', 'M', {
+                        shouldValidate: true,
+                      })
+                    }
+                    active={getValues('verticalAlign') === 'M'}
+                  ></Button>
 
-              <div>
-                <Button
-                  onClick={() =>
-                    setValue('verticalAlign', 'T', {
-                      shouldValidate: true,
-                    })
-                  }
-                >
-                  T
-                </Button>
-
-                <Button
-                  onClick={() =>
-                    setValue('verticalAlign', 'M', {
-                      shouldValidate: true,
-                    })
-                  }
-                >
-                  M
-                </Button>
-
-                <Button
-                  onClick={() =>
-                    setValue('verticalAlign', 'B', {
-                      shouldValidate: true,
-                    })
-                  }
-                >
-                  B
-                </Button>
-              </div>
+                  <Button
+                    icon="caret-down"
+                    onClick={() =>
+                      setValue('verticalAlign', 'B', {
+                        shouldValidate: true,
+                      })
+                    }
+                    active={getValues('verticalAlign') === 'B'}
+                  ></Button>
+                </ButtonGroup>
+              </FormGroup>
             </StyledInputsContainer>
             <StyledPreviewContainer>
               <ProjectorView
@@ -295,7 +266,6 @@ export default ({ activeResourcePointer, onClose }) => {
               type="submit"
               intent="primary"
               onClick={() => {
-                console.log('foo');
                 handleSubmit(onSubmit);
               }}
             >

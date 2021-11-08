@@ -31,13 +31,13 @@ function App() {
   }, []);
   const [isSupported] = useBrowserSupported();
   if (isSupported === null) return <div>Loading...</div>;
-  if (isSupported === false)
-    return (
-      <h2>
-        Unfortunately your browser is not yet supported. Please use an
-        up to date version of Google Chrome.
-      </h2>
-    );
+  // if (isSupported === false)
+  //   return (
+  //     <h2>
+  //       Unfortunately your browser is not yet supported. Please use an
+  //       up to date version of Google Chrome.
+  //     </h2>
+  //   );
 
   return (
     <StyledApp className="bp3-dark">
