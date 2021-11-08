@@ -1,12 +1,22 @@
 import React from 'react';
+import { SongBuilder } from 'testBuilders/songBuilder';
 import ISong from '../../../Interfaces/Song';
 
-export default ({ resourceReference, slideIndex, activeSongs }) => {
-  const activeSong: ISong = activeSongs.find(
-    (s) => s.id === resourceReference.id,
-  );
+export default ({
+  resourceReference,
+  slideIndex,
+  activeSongs,
+  isDemo,
+}) => {
+  const resolveActiveSong = (): ISong => {
+    if (isDemo) {
+      return new SongBuilder().build();
+    }
 
-  return (
-    <div>{activeSong && activeSong.lyrics[slideIndex].content}</div>
-  );
+    return activeSongs.find((s) => s.id === resourceReference.id);
+  };
+
+  const song = resolveActiveSong();
+
+  return <div>{song && song.lyrics[slideIndex].content}</div>;
 };

@@ -253,6 +253,7 @@ export default ({ activeResourcePointer, onClose }) => {
                 previewMode={true}
                 activeResourcePointer={activeResourcePointer}
                 className={''}
+                isDemoMode={true}
               />
             </StyledPreviewContainer>
             {/* errors will return when field validation fails  */}

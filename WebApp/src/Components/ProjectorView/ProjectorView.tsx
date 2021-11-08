@@ -45,6 +45,7 @@ type Props = {
   activeResourcePointer: ActiveResourcePointer;
   previewMode: boolean;
   className?: string;
+  isDemoMode?: boolean;
 };
 
 /**
@@ -54,6 +55,7 @@ export default function ({
   activeResourcePointer,
   previewMode,
   className,
+  isDemoMode,
 }: Props) {
   const [state] = useContext<Array<IState>>(Context);
   const { fontSize, ref } = useFitText({
@@ -88,6 +90,7 @@ export default function ({
             resourceReference={resourceReference}
             slideIndex={activeResourcePointer.slideIndex}
             activeSongs={state?.currentSchedule.activeSongs}
+            isDemo={isDemoMode}
           />
         );
       case 'slideshow':

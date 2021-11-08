@@ -4,7 +4,7 @@ export default interface Song extends IResource {
   id: string;
   lyrics: Lyrics[];
   resourceType: string,
-  theme: ITheme,
+  theme?: ITheme,
   properties: {
     title: string;
     artist: string;
