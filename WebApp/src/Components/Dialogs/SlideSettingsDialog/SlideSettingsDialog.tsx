@@ -1,18 +1,16 @@
 import React, { useState, useContext } from 'react';
 import { Dialog, Classes, Tabs, Tab, TabId } from '@blueprintjs/core';
-import { settingsRepo } from '../../../Storage/settingsRepository';
+import { settingsRepo } from 'Storage/settingsRepository';
 import IState from 'Interfaces/State';
 import MainPanel from './Panels/MainPanel';
 import ThemePanel from './Panels/ThemePanel';
-import { Context } from '../../../Common/Store/Store';
+import { Context } from 'Common/Store/Store';
 
 export default ({ setSettingsModalOpen, activeResourcePointer }) => {
   const [state] = useContext<Array<IState>>(Context);
   if (!state || !state.currentSchedule) return <div>Nostate</div>;
 
   const [selectedTabId, setSelectedTabId] = useState<TabId>('main');
-
-  const [settings, setSettings] = useState(settingsRepo.get());
 
   return (
     <>
@@ -26,11 +24,11 @@ export default ({ setSettingsModalOpen, activeResourcePointer }) => {
         <div className={Classes.DIALOG_BODY}>
           <Tabs
             id="TabsExample"
-            onChange={(tab) => () => {
+            onChange={(tab) => {
               setSelectedTabId(tab);
             }}
             vertical={true}
-            selectedTabId={'selectedTabId'}
+            selectedTabId={selectedTabId}
           >
             <Tab
               id="main"
@@ -46,6 +44,9 @@ export default ({ setSettingsModalOpen, activeResourcePointer }) => {
               panel={
                 <ThemePanel
                   activeResourcePointer={activeResourcePointer}
+                  onClose={() => {
+                    setSettingsModalOpen(false);
+                  }}
                 />
               }
               panelClassName="ember-panel"

@@ -11,5 +11,8 @@
       "url": "http://localhost:3000",
       "webRoot": "${workspaceFolder}"
     }
-  ]
+  ],
+  "eslint.options": {
+    "ignorePattern": ["!src/*"]
+  }
 }

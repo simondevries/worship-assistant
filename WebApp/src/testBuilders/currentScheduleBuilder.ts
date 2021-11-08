@@ -1,6 +1,6 @@
 import IResourceReference from "../Interfaces/ResourceReference";
 import ISchedule from "../Interfaces/Schedule";
-import { ActiveResourceBuilder } from "./activeResourcePointerBuilder";
+import ActiveResourceBuilder from "./activeResourcePointerBuilder";
 
 export class CurrentScheduleBuilder {
     

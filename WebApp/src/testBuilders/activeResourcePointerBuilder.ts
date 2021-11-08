@@ -1,5 +1,5 @@
 import ActiveResourcePointer from "../Interfaces/ActiveResourcePointer";
-export class ActiveResourceBuilder {
+export default class ActiveResourceBuilder {
 
 
     build(): ActiveResourcePointer {
