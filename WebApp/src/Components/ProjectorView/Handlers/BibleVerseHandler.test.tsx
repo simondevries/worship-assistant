@@ -1,12 +1,12 @@
 import React from 'react';
 
 import { render, screen } from '@testing-library/react';
-import { Primary } from './BibleVerseHandler.stories';
+import { BibleVerseHandler } from './BibleVerseHandler.stories';
 import '@testing-library/jest-dom/extend-expect';
 
 it('renders the bible verse', () => {
   render(
-    <Primary
+    <BibleVerseHandler
       resourceReference={{
         id: 'anId',
         bibleVerseContent: 'abibleversecontent',

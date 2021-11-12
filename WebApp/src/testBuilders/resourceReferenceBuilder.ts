@@ -19,7 +19,6 @@ export class ResourceReferenceBuilder {
         return this;
     }
 
-
     build(): IResourceReference {
         return {
             id: this.id,
