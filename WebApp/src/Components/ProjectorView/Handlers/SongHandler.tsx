@@ -29,7 +29,7 @@ export default ({
   }
 
   return (
-    <div style={{ fontSize: globalTheme.fontSize + 'em' }}>
+    <div style={{ fontSize: globalTheme.fontSize + '%' }}>
       {song && song.lyrics[slideIndex].content}
     </div>
   );

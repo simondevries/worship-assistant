@@ -277,7 +277,7 @@ export default ({ activeResourcePointer, onClose }) => {
                       const currentFontSize =
                         getValues('fontSize') ?? 1;
 
-                      setValue('fontSize', currentFontSize + 0.2, {
+                      setValue('fontSize', currentFontSize + 5, {
                         shouldValidate: true,
                       });
                     }}
@@ -287,9 +287,9 @@ export default ({ activeResourcePointer, onClose }) => {
                     icon="chevron-down"
                     onClick={() => {
                       const currentFontSize =
-                        getValues('fontSize') ?? 1;
+                        getValues('fontSize') ?? 50;
 
-                      setValue('fontSize', currentFontSize - 0.2, {
+                      setValue('fontSize', currentFontSize - 5, {
                         shouldValidate: true,
                       });
                     }}
