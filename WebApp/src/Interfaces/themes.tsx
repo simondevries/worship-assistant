@@ -9,11 +9,12 @@ export interface ITheme {
   textIsItalic: boolean;
   fontSize: number;
   textIsUnderlined: boolean;
+  fontFamily: string;
 }
 
 export const defaultSongTheme: ITheme = {
-  backgroundColor: '#333333',
-  textColor: '#000000',
+  backgroundColor: 'gray',
+  textColor: '#333333',
   lineHeight: 'normal',
   textVerticalAlign: 'M',
   textHorizontalAlign: 'M',
@@ -22,33 +23,9 @@ export const defaultSongTheme: ITheme = {
   textIsUnderlined: true,
   fontSize: 1,
   name: 'Default',
+  fontFamily: '"Myriad Pro" "Helvetica" "Century Gothic" "Arial"',
 };
 
-export const lightSongTheme: ITheme = {
-  backgroundColor: '#e0e0e0',
-  textColor: '#000000',
-  lineHeight: 'normal',
-  textVerticalAlign: 'M',
-  textHorizontalAlign: 'M',
-  textIsBold: true,
-  textIsItalic: true,
-  textIsUnderlined: true,
-  fontSize: 1,
-  name: 'Light',
-};
-
-const presentationTheme: ITheme = {
-  backgroundColor: '#333333',
-  textColor: '#000000',
-  lineHeight: 'normal',
-  textVerticalAlign: 'M',
-  textHorizontalAlign: 'M',
-  textIsBold: true,
-  textIsItalic: true,
-  fontSize: 1,
-  textIsUnderlined: true,
-  name: 'Presentation',
-};
 export const themes: ITheme[] = [
   // defaultSongTheme,
   // lightSongTheme,

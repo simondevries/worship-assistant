@@ -7,7 +7,7 @@ import { fileSystemApp } from '../../FileSystem/fileSystemTools';
 import ActiveResourcePointer from '../../Interfaces/ActiveResourcePointer';
 import { defaultSongTheme, ITheme } from '../../Interfaces/themes';
 import useFitText from 'use-fit-text';
-import SongHandler from './Handlers/SongHandler';
+import SongHandler from './Handlers/SongHandler/SongHandler';
 import BibleVerseHandler from './Handlers/BibleVerseHandler';
 import SlideShowHandler from './Handlers/SlideShowHandler';
 import YouTubeHandler from './Handlers/YouTubeHandler';

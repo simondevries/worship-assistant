@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Button, Card, Elevation, H5 } from '@blueprintjs/core';
 import styled from 'styled-components/macro';
 import Verse from '../../../../Interfaces/Verse';
-import BaseNonActiveSlide from '../../../../Common/BaseNonActiveSlide/BaseNonActiveSlide';
+import BaseNonActiveSlide from 'Common/BaseNonActiveSlide/BaseNonActiveSlide';
 import BibleVerse from '../../../../Interfaces/BibleVerse';
 import { bibleVerseResolver } from '../../../../BibleVerse/bibleVerseResolver';
 import ResourceReference from '../../../../Interfaces/ResourceReference';

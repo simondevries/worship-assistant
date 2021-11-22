@@ -27,7 +27,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --watchAll=false --maxWorkers=50%",
     "eject": "react-scripts eject",
     "cypress": "cypress open",
     "storybook": "start-storybook -p 6006 -s public",
@@ -71,12 +71,5 @@
     "eslint-plugin-prettier": "^3.1.4",
     "mutationobserver-shim": "^0.3.7",
     "ts-jest": "^26.4.4"
-  },
-  "jest": {
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts,tsx}",
-      "!<rootDir>/node_modules/",
-      "!<rootDir>/path/to/dir/"
-    ]
   }
 }

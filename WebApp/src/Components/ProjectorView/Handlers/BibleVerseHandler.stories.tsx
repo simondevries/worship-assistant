@@ -14,8 +14,8 @@ const Template: ComponentStory<typeof BibleVerseHandler> = (args) => (
   <BibleVerseHandler resourceReference={args.resourceReference} />
 );
 
-export const BibleVerseHandler = Template.bind({});
-BibleVerseHandler.args = {
+export const BibleVerseHandlerStory = Template.bind({});
+BibleVerseHandlerStory.args = {
   resourceReference: {
     id: 'anid',
     bibleVerseContent: 'test',

@@ -5,10 +5,6 @@ import newId from '../../../Helpers/newId';
 import SongCreatedEvent from '../../../Events/Domain/songCreatedEvent';
 import useEventHandler from '../../../Events/Handlers/useEventHandler';
 import SongAddedToScheduleEvent from '../../../Events/Domain/songAddedToScheduleEvent';
-import {
-  defaultSongTheme,
-  lightSongTheme,
-} from '../../../Interfaces/themes';
 import ISong from '../../../Interfaces/Song';
 import SongContent from './SongDialogComponents/SongContent';
 import useModal from '../useModal';

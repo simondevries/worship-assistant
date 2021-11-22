@@ -6,7 +6,7 @@ import { ResourceReferenceBuilder } from 'testBuilders/resourceReferenceBuilder'
 import { SongBuilder } from 'testBuilders/songBuilder';
 import Song from '../../../Interfaces/Song';
 import ISong from '../../../Interfaces/Song';
-import SongHandler from './SongHandler';
+import SongHandler from './SongHandler/SongHandler';
 
 export default ({ globalTheme }: { globalTheme: ITheme }) => {
   return (

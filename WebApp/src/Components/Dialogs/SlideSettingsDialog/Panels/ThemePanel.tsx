@@ -133,6 +133,7 @@ export default ({ activeResourcePointer, onClose }) => {
       lineHeight: '1',
       name: 'default',
       textColor: 'white',
+      fontFamily: 'Arial'
     };
   };
 
@@ -277,7 +278,7 @@ export default ({ activeResourcePointer, onClose }) => {
                       const currentFontSize =
                         getValues('fontSize') ?? 1;
 
-                      setValue('fontSize', currentFontSize + 5, {
+                      setValue('fontSize', currentFontSize + 0.1, {
                         shouldValidate: true,
                       });
                     }}
@@ -289,7 +290,7 @@ export default ({ activeResourcePointer, onClose }) => {
                       const currentFontSize =
                         getValues('fontSize') ?? 50;
 
-                      setValue('fontSize', currentFontSize - 5, {
+                      setValue('fontSize', currentFontSize - 0.1, {
                         shouldValidate: true,
                       });
                     }}
