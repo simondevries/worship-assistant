@@ -10,7 +10,6 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
     "@testing-library/user-event": "^13.2.1",
-    "craco": "0.0.3",
     "cypress": "^6.3.0",
     "fake-indexeddb": "^3.1.2",
     "react": "^16.14.0",
@@ -18,7 +17,7 @@
     "react-ga": "^3.3.0",
     "react-hook-form": "^7.18.0",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.3",
+    "react-scripts": "4.0.3",
     "reactour": "^1.18.0",
     "styled-components": "^5.2.0",
     "typescript": "^4.4.4",
@@ -44,6 +43,14 @@
         "rules": {
           "import/no-anonymous-default-export": "off"
         }
+      },
+      {
+        "files": [
+          "**/*.stories.*"
+        ],
+        "rules": {
+          "import/no-anonymous-default-export": "off"
+        }
       }
     ]
   },
@@ -60,17 +67,20 @@
     ]
   },
   "devDependencies": {
-    "@storybook/addon-actions": "^6.3.7",
-    "@storybook/addon-essentials": "^6.3.7",
-    "@storybook/addon-links": "^6.3.7",
-    "@storybook/node-logger": "^6.3.7",
+    "@storybook/addon-actions": "^6.4.9",
+    "@storybook/addon-essentials": "^6.4.9",
+    "@storybook/addon-links": "^6.4.9",
+    "@storybook/node-logger": "^6.4.9",
     "@storybook/preset-create-react-app": "^3.2.0",
-    "@storybook/react": "^6.3.7",
+    "@storybook/react": "^6.4.9",
     "@types/jest": "^26.0.24",
     "@types/styled-components": "^5.1.4",
     "eslint-config-prettier": "^6.13.0",
     "eslint-plugin-prettier": "^3.1.4",
     "mutationobserver-shim": "^0.3.7",
     "ts-jest": "^26.4.4"
+  },
+  "resolutions": {
+    "babel-loader": "8.1.0"
   }
 }

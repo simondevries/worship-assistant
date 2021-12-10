@@ -1,9 +1,13 @@
-import styled from '@emotion/styled';
 import IResourceReference from 'Interfaces/ResourceReference';
 import Song from 'Interfaces/Song';
 import ISongResourceReference from 'Interfaces/SongResourceReference';
 import { ITheme } from 'Interfaces/themes';
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, {
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
+import styled from 'styled-components';
 import getInverseColor from './getInverseColor';
 
 interface SSHandlerProps {
@@ -68,7 +72,7 @@ const useGetFontSize = (
   return `${fontSize}%`;
 };
 
-export default ({
+const SongHandler = ({
   resourceReference,
   slideIndex,
   activeSongs,
@@ -90,6 +94,13 @@ export default ({
   const containerRef = useRef<HTMLDivElement>(null);
   const fontSize = useGetFontSize(dimensions, globalTheme.fontSize);
 
+  useLayoutEffect(() => {
+    setDimensions({
+      width: containerRef.current?.offsetWidth ?? 0,
+      height: containerRef.current?.offsetHeight ?? 0,
+    });
+  }, []);
+
   if (
     !song ||
     song.lyrics.length <= slideIndex ||
@@ -100,13 +111,6 @@ export default ({
     );
     return null;
   }
-
-  useLayoutEffect(() => {
-    setDimensions({
-      width: containerRef.current?.offsetWidth ?? 0,
-      height: containerRef.current?.offsetHeight ?? 0,
-    });
-  }, []);
 
   const content =
     song &&
@@ -129,10 +133,15 @@ export default ({
     >
       {content &&
         content.map((c, indx) => (
-          <div data-testid={`songhandler-newlineelement-${indx}`} key={indx}>
+          <div
+            data-testid={`songhandler-newlineelement-${indx}`}
+            key={indx}
+          >
             {c}
           </div>
         ))}
     </SSongHandler>
   );
 };
+
+export default SongHandler;
