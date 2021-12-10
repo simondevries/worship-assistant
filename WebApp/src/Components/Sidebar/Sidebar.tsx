@@ -44,7 +44,6 @@ const eventIcon = (
 const searchIcon = (
   <StyledIcon icon={'search'} iconSize={26}></StyledIcon>
 );
-const addIcon = <StyledIcon icon={'plus'} iconSize={26}></StyledIcon>;
 const cogIcon = <StyledIcon icon={'cog'} iconSize={26}></StyledIcon>;
 const googleDriveBackup = (
   <StyledIcon icon={'cloud-upload'} iconSize={26}></StyledIcon>
@@ -59,7 +58,7 @@ const desktopIcon = (
   <StyledIcon icon={'desktop'} iconSize={26}></StyledIcon>
 );
 
-export default function (): JSX.Element {
+export default function () {
   const [addSongModalOpen, setAddSongModalOpen] = useModal();
   const [settingsModalOpen, setSettingsModalOpen] = useModal();
   const [scheduleModalOpen, setScheduleModalOpen] = useModal(false);
