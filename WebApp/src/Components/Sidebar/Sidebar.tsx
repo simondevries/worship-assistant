@@ -35,30 +35,33 @@ const StyledContainer = styled(Card)`
   align-items: center;
   padding: 0px;
   padding-top: 20px;
+  gap: 5px;
 `;
 
-const addIcon = <StyledIcon icon={'add'} iconSize={26}></StyledIcon>;
-const eventIcon = (
-  <StyledIcon icon={'timeline-events'} iconSize={26}></StyledIcon>
+const addIcon = (
+  <StyledIcon icon={'new-object'} iconSize={20}></StyledIcon>
+);
+const folderOpenIcon = (
+  <StyledIcon icon={'folder-open'} iconSize={20}></StyledIcon>
 );
 const searchIcon = (
-  <StyledIcon icon={'search'} iconSize={26}></StyledIcon>
+  <StyledIcon icon={'search'} iconSize={20}></StyledIcon>
 );
-const cogIcon = <StyledIcon icon={'cog'} iconSize={26}></StyledIcon>;
+const cogIcon = <StyledIcon icon={'cog'} iconSize={20}></StyledIcon>;
 const googleDriveBackup = (
-  <StyledIcon icon={'cloud-upload'} iconSize={26}></StyledIcon>
+  <StyledIcon icon={'cloud-upload'} iconSize={20}></StyledIcon>
 );
 const alertIcon = (
-  <StyledIcon icon={'send-message'} iconSize={26}></StyledIcon>
+  <StyledIcon icon={'send-message'} iconSize={20}></StyledIcon>
 );
-const styledCastIcon = (
-  <StyledIcon icon={'cog'} iconSize={26}></StyledIcon>
+const logIcon = (
+  <StyledIcon icon={'console'} iconSize={20}></StyledIcon>
 );
 const desktopIcon = (
-  <StyledIcon icon={'desktop'} iconSize={26}></StyledIcon>
+  <StyledIcon icon={'desktop'} iconSize={20}></StyledIcon>
 );
 
-export default function () {
+const Sidebar = () => {
   const [addSongModalOpen, setAddSongModalOpen] = useModal();
   const [settingsModalOpen, setSettingsModalOpen] = useModal();
   const [scheduleModalOpen, setScheduleModalOpen] = useModal(false);
@@ -102,14 +105,7 @@ export default function () {
         icon={searchIcon}
         minimal
       >
-        Add
-      </StyledIconButton>
-      <StyledIconButton
-        onClick={() => setScheduleModalOpenHacks(true)}
-        icon={eventIcon}
-        minimal
-      >
-        Schedules
+        Add to schedule
       </StyledIconButton>
       <StyledIconButton
         className="side-bar_add-schedule"
@@ -117,14 +113,21 @@ export default function () {
         icon={addIcon}
         minimal
       >
-        Create Song
+        New song
+      </StyledIconButton>
+      <StyledIconButton
+        onClick={() => setScheduleModalOpenHacks(true)}
+        icon={folderOpenIcon}
+        minimal
+      >
+        Previous service
       </StyledIconButton>
       <StyledIconButton
         icon={desktopIcon}
         onClick={openOrFocus}
         minimal
       >
-        New Screen
+        New projector screen
       </StyledIconButton>
 
       <StyledIconButton
@@ -134,6 +137,16 @@ export default function () {
       >
         Settings
       </StyledIconButton>
+
+      {window.location.origin.indexOf('localhost') !== -1 && (
+        <StyledIconButton
+          icon={logIcon}
+          onClick={() => console.log({ state })}
+          minimal
+        >
+          Log state
+        </StyledIconButton>
+      )}
       {/* <StyledIconButton
         icon={<Icon icon={<img src={castIcon} />} />}
         onClick={() => {
@@ -163,4 +176,6 @@ export default function () {
       </StyledIconButton> */}
     </StyledContainer>
   );
-}
+};
+
+export default Sidebar;

@@ -1,12 +1,8 @@
 import IResourceReference from 'Interfaces/ResourceReference';
-import Song from 'Interfaces/Song';
+import Song from 'Interfaces/Song/Song';
 import ISongResourceReference from 'Interfaces/SongResourceReference';
 import { ITheme } from 'Interfaces/themes';
-import React, {
-  useLayoutEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import getInverseColor from './getInverseColor';
 

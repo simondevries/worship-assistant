@@ -5,16 +5,18 @@ import newId from '../../../Helpers/newId';
 import SongCreatedEvent from '../../../Events/Domain/songCreatedEvent';
 import useEventHandler from '../../../Events/Handlers/useEventHandler';
 import SongAddedToScheduleEvent from '../../../Events/Domain/songAddedToScheduleEvent';
-import ISong from '../../../Interfaces/Song';
+import ISong from '../../../Interfaces/Song/Song';
 import SongContent from './SongDialogComponents/SongContent';
 import useModal from '../useModal';
+import styled from '@emotion/styled';
 
-export default ({ setAddSongModalOpen, createSongAtIndex }) => {
+const AddSongDialog = ({
+  setAddSongModalOpen,
+  createSongAtIndex,
+}) => {
   const [raiseEvent] = useEventHandler();
-  const [
-    importSongButtonDisabled,
-    setImportSongButtonDisabled,
-  ] = useState<boolean>(false);
+  const [importSongButtonDisabled, setImportSongButtonDisabled] =
+    useState<boolean>(false);
   const fileField = useRef<HTMLInputElement>(null);
 
   function handleFileSelected(
@@ -33,6 +35,8 @@ export default ({ setAddSongModalOpen, createSongAtIndex }) => {
       title: '',
       artist: '',
       release_date: '',
+      verseOrder: [],
+      verseOrderDisplayValue: [],
     },
   } as ISong);
 
@@ -58,7 +62,7 @@ export default ({ setAddSongModalOpen, createSongAtIndex }) => {
       <Dialog
         className={Classes.DARK}
         isOpen
-        title="Create New Song"
+        title="Create a new song"
         isCloseButtonShown={true}
         onClose={() => setAddSongModalOpen(false)}
       >
@@ -68,6 +72,7 @@ export default ({ setAddSongModalOpen, createSongAtIndex }) => {
             songContentSetter={setSongContent}
             setImportSongButtonDisabled={setImportSongButtonDisabled}
           />
+
           <div className={`test ${Classes.DIALOG_FOOTER_ACTIONS}`}>
             {/* Todo import songs */}
             {/* <FileInput 
@@ -100,3 +105,5 @@ export default ({ setAddSongModalOpen, createSongAtIndex }) => {
     </>
   );
 };
+
+export default AddSongDialog;

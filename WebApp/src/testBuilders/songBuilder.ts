@@ -1,5 +1,5 @@
 import IResourceReference from "../Interfaces/ResourceReference";
-import ISong from 'Interfaces/Song';
+import ISong from 'Interfaces/Song/Song';
 
 export class SongBuilder {
     id: string = 'anid'

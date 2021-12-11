@@ -1,8 +1,8 @@
-import Song from './Song';
+import Song from './Song/Song';
 import ResourceReference from './ResourceReference';
 import newId from '../Helpers/newId';
 import ActiveResourcePointer from './ActiveResourcePointer';
-import ISong from './Song';
+import ISong from './Song/Song';
 import IResourceReference from './ResourceReference';
 import IActiveVideo from './ActiveVideo';
 

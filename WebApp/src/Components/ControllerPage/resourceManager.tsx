@@ -68,21 +68,18 @@ const StyledTitle = styled(H3)`
   text-align: center;
 `;
 
-export default function ({
+const ResourceManager = ({
   resource,
   isActiveResource,
   activeResourcePointer,
-}) {
+}) => {
   const [raiseEvent] = useEventHandler();
   const [state]: Array<IState> = useContext(Context);
   const [isTrashHighlighed, setTrashHighlighted] = useState(false);
-  const [isMoveLeftHighlighted, setIsMoveLeftHighlighted] = useState(
-    false,
-  );
-  const [
-    isMoveRightHighlighted,
-    setIsMoveRightHighlighted,
-  ] = useState(false);
+  const [isMoveLeftHighlighted, setIsMoveLeftHighlighted] =
+    useState(false);
+  const [isMoveRightHighlighted, setIsMoveRightHighlighted] =
+    useState(false);
 
   const resolveTitle = (resourceReference: ResourceReference) => {
     if (!resourceReference || !resourceReference.resourceType) {
@@ -207,4 +204,5 @@ export default function ({
       </StyledSlidesContainer>
     </StyledResourceManager>
   );
-}
+};
+export default ResourceManager;

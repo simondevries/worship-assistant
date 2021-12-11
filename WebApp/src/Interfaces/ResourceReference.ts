@@ -1,5 +1,5 @@
 import IVerse from './Verse';
-import ISong from './Song';
+import ISong from './Song/Song';
 
 // todo (sdv) rename to resource
 export default interface IResourceReference {

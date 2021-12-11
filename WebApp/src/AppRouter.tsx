@@ -12,7 +12,7 @@ import {
 import styled from 'styled-components/macro';
 import { Spinner } from '@blueprintjs/core';
 import Sidebar from './Components/Sidebar/Sidebar';
-import hotkeyListener from './Components/Sidebar/hotkeyListener';
+import HotkeyListener from './Components/Sidebar/hotkeyListener';
 import fetchStatus from './Common/FetchStatus/fetchStatus';
 import useInitialize from './useInitialize';
 import ScheduleManagerDialog from './Components/Dialogs/ScheduleManagerDialog';
@@ -75,13 +75,14 @@ export default function () {
   ] = useInitialize(dispatch);
   const [eventsReceived] = useBroadcastChannelMessageHandler();
   const [isTourOpen, setIsTourOpen] = useState(
-    window.location.pathname.indexOf('controller') !== -1,
+    false,
+    // window.location.pathname.indexOf('controller') !== -1,
   );
 
   const activeResourcePointer = (state as IState)?.currentSchedule
     ?.activeResourcePointer;
 
-  hotkeyListener();
+  HotkeyListener();
 
   if (loadingState === fetchStatus.Loading) {
     return <StyledSpinner />;

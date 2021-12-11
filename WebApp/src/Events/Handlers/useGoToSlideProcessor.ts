@@ -12,7 +12,7 @@ import {
 import Song, {
   isLastSlideSelected as isLastSongSelected,
   lastSlideIndex as songLastSlideIndex,
-} from '../../Interfaces/Song';
+} from '../../Interfaces/Song/Song';
 import {
   isLastSlideSelected as isLastVideoSelected,
   lastSlideIndex as videoLastSlideIndex,

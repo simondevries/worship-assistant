@@ -64,15 +64,13 @@ const StyledTipHeader = styled(H5)`
   color: #48aff0;
 `;
 
-export default ({ setOpen }) => {
+const ScheduleManagerDialog = ({ setOpen }) => {
   const [showOpenConfirm, setShowOpenConfirm] = useState(false);
   const [schedules, setSchedules] = useState([]);
   const [] = useContext(Context);
   const [raiseEvent] = useEventHandler();
-  const [
-    showUserFileHandlerModal,
-    setShowUserFileHandlerModal,
-  ] = useState(false);
+  const [showUserFileHandlerModal, setShowUserFileHandlerModal] =
+    useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -192,7 +190,7 @@ export default ({ setOpen }) => {
                 <Icon icon="lightbulb" />
                 {'  '}Did you know
               </StyledTipHeader>
-              You can press '/' on the keyboard to bring up the search
+              You can press ` on the keyboard to bring up the search
               bar
             </StyledCard>
           </div>
@@ -201,3 +199,5 @@ export default ({ setOpen }) => {
     </>
   );
 };
+
+export default ScheduleManagerDialog;

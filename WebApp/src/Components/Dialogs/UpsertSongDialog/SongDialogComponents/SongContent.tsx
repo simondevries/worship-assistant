@@ -1,13 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import {
   Button,
+  Classes,
   EditableText,
   Popover,
   Position,
 } from '@blueprintjs/core';
 import styled from 'styled-components/macro';
 import HelpText from '../../HelpText';
-import { Lyrics } from '../../../../Interfaces/Song';
+import Song, {
+  Lyrics,
+  toInternalVerseTag,
+} from 'Interfaces/Song/Song';
+
+const StyledContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
 
 const StyledEditableTextContent = styled(EditableText)`
   margin-bottom: 30px;
@@ -15,7 +25,6 @@ const StyledEditableTextContent = styled(EditableText)`
 
 const StyledEditableTextTitle = styled(EditableText)`
   font-size: 30px;
-  margin-bottom: 20px;
   height: 50px;
   width: 100%;
   span {
@@ -23,14 +32,29 @@ const StyledEditableTextTitle = styled(EditableText)`
   }
 `;
 
-export default ({
+const StyledSongOrder = styled(EditableText)`
+  width: 100%;
+  padding: 0px 3px;
+`;
+
+type Props = {
+  songContent: Song;
+  songContentSetter: (song: Song) => void;
+  setImportSongButtonDisabled: (a: any) => void;
+};
+
+const SongContent = ({
   songContent,
   songContentSetter,
   setImportSongButtonDisabled,
-}) => {
+}: Props) => {
   const [titleBeingEdited, setTitleBeingEdited] = useState<string>(
     songContent?.properties?.title,
   );
+  const [verseOrderBeingEdited, setVerseOrderBeingEdited] =
+    useState<string>(
+      songContent?.properties?.verseOrderDisplayValueFromUser ?? '',
+    );
   const [lyricsBeingEdited, setLyricsBeingEdited] = useState<string>(
     songContent?.lyrics
       ?.map((lyric) => '[' + lyric.name + ']' + lyric.content)
@@ -54,6 +78,24 @@ export default ({
       properties: {
         ...songContent.properties,
         title: event,
+      },
+    });
+  };
+
+  // Actually set song content title
+  const updateSongVerseOrder = (event) => {
+    const contentArr =
+      !!event && event.length ? event.split(',') : [];
+    songContentSetter({
+      ...songContent,
+      properties: {
+        ...songContent.properties,
+        verseOrder: contentArr.map((item) =>
+          toInternalVerseTag(item),
+        ),
+        verseOrderDisplayValueFromUser: contentArr
+          .map((item) => item.trim().replace(/\s\s+/g, ' '))
+          .join(', '),
       },
     });
   };
@@ -84,7 +126,7 @@ export default ({
   };
 
   return (
-    <>
+    <StyledContainer>
       <StyledEditableTextTitle
         multiline={false}
         value={titleBeingEdited}
@@ -92,6 +134,16 @@ export default ({
         onConfirm={updateSongContentTitle}
         placeholder={'Add song title here'}
       />
+      <StyledSongOrder
+        multiline={false}
+        onChange={setVerseOrderBeingEdited}
+        onConfirm={updateSongVerseOrder}
+        value={verseOrderBeingEdited}
+        placeholder={
+          '[Optional] Set the song order here. I.e. v1, v2, c, v1, b, c'
+        }
+      />
+
       <StyledEditableTextContent
         multiline={true}
         minLines={20}
@@ -108,6 +160,8 @@ export default ({
       <Popover content={<HelpText />} position={Position.TOP}>
         <Button>?</Button>
       </Popover>
-    </>
+    </StyledContainer>
   );
 };
+
+export default SongContent;

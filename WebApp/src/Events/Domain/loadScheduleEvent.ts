@@ -1,5 +1,5 @@
 import AppEvent from './appEvent';
-import ISong from '../../Interfaces/Song';
+import ISong from '../../Interfaces/Song/Song';
 import ISchedule from '../../Interfaces/Schedule';
 
 export const LoadScheduleEventName = 'LoadScheduleEventName';

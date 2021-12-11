@@ -12,7 +12,7 @@ import SearchQuery from './searchQuery';
 import { songsRepo } from '../../Storage/songsRepository';
 import useEventHandler from '../../Events/Handlers/useEventHandler';
 import SongAddedToScheduleEvent from '../../Events/Domain/songAddedToScheduleEvent';
-import ISong from '../../Interfaces/Song';
+import ISong from '../../Interfaces/Song/Song';
 import { fileSystemApp } from '../../FileSystem/fileSystemTools';
 import VideoCreatedEvent from '../../Events/Domain/videoCreatedEvent';
 import {
@@ -91,11 +91,18 @@ const StyledDropdownItem = styled.div`
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
   cursor: pointer;
+  margin-right: 10px;
 
   &:hover {
     background: #e6e6e6;
   }
 `;
+
+const StyledNoResults = styled(StyledDropdownItem)`
+  display: flex;
+  justify-content: space-between;
+`;
+
 const StyledDropdownContainer = styled.div`
   background: white;
 `;
@@ -121,12 +128,10 @@ export default function () {
 const Search = () => {
   const [searchValue, setSearchValue] = useState('');
   const [allSongs, setAllSongs] = useState([]);
-  const [
-    isAddingBibleVerse,
-    setIsAddingBibleVerse,
-  ] = useState<boolean>(false);
+  const [isAddingBibleVerse, setIsAddingBibleVerse] =
+    useState<boolean>(false);
   const [state, dispatch] = useContext(Context);
-  console.log('state is ', JSON.stringify(state));
+  // console.log('state is ', JSON.stringify(state));
   const [raiseEvent] = useEventHandler();
   const [isSlideShowModalOpen, setIsSlideShowModalOpen] = useModal();
   const [isAddSongModalOpen, setIsAddSongModalOpen] = useModal();
@@ -334,6 +339,21 @@ const Search = () => {
                     </StyledDropdownItem>
                   );
                 })}
+
+              {!searchResult.length &&
+                searchValue &&
+                searchValue.length > 5 && (
+                  <StyledNoResults
+                    onClick={() => {
+                      window.open(
+                        `https://songselect.ccli.com/Search/Results?SongContent=&PrimaryLanguage=&Keys=&Themes=&List=&SearchText=${searchValue}`,
+                      );
+                    }}
+                  >
+                    Search CCLI for songs called '{searchValue}'
+                    <Icon icon={'document-open'} />
+                  </StyledNoResults>
+                )}
             </StyledDropdownContainer>
             {/* <button class="bp3-button bp3-minimal bp3-intent-primary bp3-icon-arrow-right"></button> */}
           </StyledOmnibarContainer>{' '}

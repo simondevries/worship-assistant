@@ -7,7 +7,7 @@ import GoToPreviousSlideEvent from '../../Events/Domain/goToPreviousSlideEvent';
 import useEventHandler from '../../Events/Handlers/useEventHandler';
 import IState from '../../Interfaces/State';
 
-export default function () {
+const HotkeyListener = () => {
   const [keyPressed, setKeyPressed] = useState(false);
   const [state, dispatch] = useContext(Context);
   const [raiseEvent] = useEventHandler();
@@ -48,8 +48,7 @@ export default function () {
         e.preventDefault();
         raiseEvent(new GoToPreviousSlideEvent(false));
       }
-
-      if (e.key === '/' || e.key === '?') {
+      if (e.code === "Backquote") {
         dispatch({
           type: 'setSearchVisible',
           payload: true,
@@ -61,6 +60,7 @@ export default function () {
       }
     };
 
+    // keyup used to prevent text from entering search textbox
     window.addEventListener('keyup', upHandler);
     // Remove event listeners on cleanup
     return () => {
@@ -70,3 +70,5 @@ export default function () {
 
   return keyPressed;
 }
+
+export default HotkeyListener;

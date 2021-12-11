@@ -65,7 +65,7 @@ const StyledControllerPage = styled.div`
   justify-content: stretch;
 `;
 
-export default function () {
+const ControllerPage = () => {
   const [state, dispatch] = useContext<any>(Context);
 
   if (!state || !state.settings || !state.currentSchedule)
@@ -117,8 +117,8 @@ export default function () {
           icon="add"
           large
         > */}
-        Press '/' or click search to add your first song, slideshow,
-        bible verse, video, image.
+        To add your first resource, click 'Add to schedule' or press
+        the ` key on your keyboard
         <span
           role="img"
           aria-label="clap"
@@ -160,4 +160,6 @@ export default function () {
       <div style={{ color: 'transparent' }}>.</div>
     </StyledControllerPage>
   );
-}
+};
+
+export default ControllerPage;

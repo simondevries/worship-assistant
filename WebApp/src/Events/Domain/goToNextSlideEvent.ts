@@ -1,5 +1,5 @@
 import AppEvent from './appEvent';
-import ISong from '../../Interfaces/Song';
+import ISong from '../../Interfaces/Song/Song';
 
 export const GoToNextSlideEventName = 'GoToNextSlideEventName';
 
