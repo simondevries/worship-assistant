@@ -133,7 +133,7 @@ export const songSelectors = {
         res = res.concat([found])
     });
 
-    const missedSections = song.lyrics.filter(section => res.some(res => res.name === section.name) === false)
+    const missedSections = song.lyrics.filter(section => res.some(res => songSelectors.toInternalVerseTag(res.name) === section.name) === false)
 
     return res.concat(missedSections);
   }

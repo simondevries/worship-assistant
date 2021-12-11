@@ -1,7 +1,12 @@
 import IState from '../Interfaces/State';
 import ISongResourceReference from '../Interfaces/SongResourceReference';
 
-function reducers(state: IState, action): IState {
+export interface ReducerAction {
+  payload: any;
+  type: string
+}
+
+function reducers(state: IState, action: ReducerAction): IState {
   switch (action.type) {
     // Resources
     // case 'addResource':
@@ -178,17 +183,16 @@ function reducers(state: IState, action): IState {
       };
 
     case 'removeResourceFromSchedule':
-      console.log('RemoveResourceFromScheduleEventHandler');
 
       return {
         ...state,
         currentSchedule: {
           ...state.currentSchedule,
           resources: state.currentSchedule.resources.filter(
-            (r) => r.id !== action.id,
+            (r) => r.id !== action.payload,
           ),
           resourceOrder: state.currentSchedule.resourceOrder.filter(
-            (ro) => ro !== action.id,
+            (ro) => ro !== action.payload,
           ),
         },
       } as IState;

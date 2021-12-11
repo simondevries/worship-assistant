@@ -3,7 +3,7 @@ import { Button, Card, Elevation, Icon } from '@blueprintjs/core';
 import styled from 'styled-components/macro';
 import useModal from '../Dialogs/useModal';
 import AddSongDialog from '../Dialogs/UpsertSongDialog/AddSongDialog';
-import SlideSettingsDialog from '../Dialogs/SlideSettingsDialog/SlideSettingsDialog';
+import SlideSettingsDialog from '../Dialogs/SettingsDialog/SettingsDialog';
 import { Context } from '../../Common/Store/Store';
 import ScheduleManagerDialog from '../Dialogs/ScheduleManagerDialog';
 import IState from '../../Interfaces/State';

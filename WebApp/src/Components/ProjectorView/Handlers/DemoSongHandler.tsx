@@ -7,8 +7,11 @@ import { SongBuilder } from 'testBuilders/songBuilder';
 import Song from '../../../Interfaces/Song/Song';
 import ISong from '../../../Interfaces/Song/Song';
 import SongHandler from './SongHandler/SongHandler';
-
-export default ({ globalTheme }: { globalTheme: ITheme }) => {
+const DemoSongHandler = ({
+  globalTheme,
+}: {
+  globalTheme: ITheme;
+}) => {
   return (
     <SongHandler
       activeSongs={[
@@ -22,3 +25,5 @@ export default ({ globalTheme }: { globalTheme: ITheme }) => {
     ></SongHandler>
   );
 };
+
+export default DemoSongHandler;

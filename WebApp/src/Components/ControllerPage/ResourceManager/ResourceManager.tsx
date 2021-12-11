@@ -3,10 +3,17 @@ import SlideResolver from '../../Slides/SlideResolver';
 import Scrollbar from '../../../Common/Scrollbar/Scrollbar';
 import ResourceHeader from './ResourceHeader/ResourceHeader';
 
+const StyledContentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow-y: auto;
+  height: 100%;
+`;
+
 const StyledSlidesContainer = styled.div`
   ${Scrollbar}
-  padding-top: calc(50vh - 200px);
-  padding-bottom: calc(50vh - 140px);
+
   overflow-y: auto;
   padding-right: 10px;
 `;
@@ -25,14 +32,15 @@ const ResourceManager = ({
   return (
     <StyledResourceManager>
       <ResourceHeader resource={resource} />
-
-      <StyledSlidesContainer>
-        <SlideResolver
-          isActiveResource={isActiveResource}
-          activeResourcePointer={activeResourcePointer}
-          resource={resource}
-        />
-      </StyledSlidesContainer>
+      <StyledContentContainer>
+        <StyledSlidesContainer>
+          <SlideResolver
+            isActiveResource={isActiveResource}
+            activeResourcePointer={activeResourcePointer}
+            resource={resource}
+          />
+        </StyledSlidesContainer>
+      </StyledContentContainer>
     </StyledResourceManager>
   );
 };

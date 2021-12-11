@@ -140,7 +140,6 @@ const SongContent = ({
           '[Optional] Set the song order here. I.e. v1, v2, c, v1, b, c'
         }
       />
-
       <StyledEditableTextContent
         multiline={true}
         minLines={20}

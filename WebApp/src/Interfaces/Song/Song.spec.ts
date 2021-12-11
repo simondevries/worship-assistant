@@ -81,4 +81,12 @@ describe('lyricsInUserSpecificedOrder', () => {
 
         expect(result.map(l => l.name)).toStrictEqual(['v1', 'v2'])
     })
+
+    it('lyric tags should use the internal name and not what the user typed', () => {
+        const song = new SongBuilder().withVerseOrder(['v1']).withLyricTags(['verse 1', ' verse 2 ']).build()
+        const result = songSelectors.lyricsInUserSpecificedOrder(song);
+
+
+        expect(result.map(l => l.name)).toStrictEqual(['v1', 'v2'])
+    })
 })

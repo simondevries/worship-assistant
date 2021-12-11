@@ -152,7 +152,7 @@ const useIndexDbEventProcessor = () => {
 
     const updatedState = reducers(state, {
       type: 'removeResourceFromSchedule',
-      id: event.id,
+      payload: event.id,
     });
 
     scheduleRepo.set(
