@@ -57,64 +57,84 @@ export const lastSlideIndex = (
 };
 
 
-export const toInternalVerseTag = (tag: string) => {
+export const songSelectors = {
+  toInternalVerseTag: (tag: string) => {
 
-  console.log('1')
-  if (!tag) {
-    return '-';
+    console.log('1')
+    if (!tag) {
+      return '-';
+    }
+    console.log('1')
+
+
+    const tagHasNumber = /\d/.test(tag);
+    const tagFormatted = tag.toLowerCase().trim();
+
+
+    const number = tagFormatted.replace(/^\D+/g, '')
+    const numberOfLetters = tagFormatted.replace(/[0-9]/g, '').length;
+    const hasOneLetter = numberOfLetters < 2;
+
+    if ((tagFormatted.startsWith("v") && hasOneLetter) || tagFormatted.startsWith("verse")) {
+      return `v${number}`;
+    }
+
+
+    if ((tagFormatted.startsWith("c") && hasOneLetter) || tagFormatted.startsWith("chorus") || tagFormatted.startsWith("ch")) {
+      return `c${number}`;
+    }
+
+    if ((tagFormatted.startsWith("p") && hasOneLetter) || tagFormatted.startsWith("pre-chorus") || tagFormatted.startsWith("pre-chorus")) {
+      return `p${number}`;
+    }
+
+    if ((tagFormatted.startsWith("b") && hasOneLetter) || tagFormatted.startsWith("br") || tagFormatted.startsWith("bridge")) {
+      return `b${number}`;
+    }
+
+    if ((tagFormatted.startsWith("e") && hasOneLetter) || tagFormatted.startsWith("end") || tagFormatted.startsWith("ending")) {
+      return `e${number}`;
+    }
+
+    if ((tagFormatted.startsWith("i") && hasOneLetter) || tagFormatted.startsWith("inst") || tagFormatted.startsWith("instrument") || tagFormatted.startsWith("instrumental")) {
+      return `i${number}`;
+    }
+
+    if ((tagFormatted.startsWith("m") && hasOneLetter) || tagFormatted.startsWith("instrumentalmiddle") || tagFormatted.startsWith("middle")) {
+      return `m${number}`;
+    }
+
+    if ((tagFormatted.startsWith("o") && hasOneLetter) || tagFormatted.startsWith("instrumentaloutro") || tagFormatted.startsWith("outro")) {
+      return `o${number}`;
+    }
+
+    if ((tagFormatted.startsWith("s") && hasOneLetter) || tagFormatted.startsWith("instrumentalsolo") || tagFormatted.startsWith("solo")) {
+      return `s${number}`;
+    }
+
+    // for cases such as chorus part a -> Cab
+    if (!tagHasNumber && tagFormatted.length <= 3) {
+      return tagFormatted;
+    }
+
+    return '-'
+  },
+  lyricsInUserSpecificedOrder: (song: Song | undefined): Lyrics[] => {
+    if (!song) return []
+
+    if (!song.properties?.verseOrder || !song.properties.verseOrder.length) {
+      return song.lyrics;
+    }
+
+    let res: Lyrics[] = [];
+    song.properties?.verseOrder.forEach(tag => {
+      const found = song.lyrics.find(l => l.name === tag);
+      if (found)
+        res = res.concat([found])
+    });
+
+    const missedSections = song.lyrics.filter(section => res.some(res => res.name === section.name) === false)
+
+    return res.concat(missedSections);
   }
-  console.log('1')
-
-
-  const tagHasNumber = /\d/.test(tag);
-  const tagFormatted = tag.toLowerCase().trim();
-
-
-  const number = tagFormatted.replace(/^\D+/g, '')
-  const numberOfLetters = tagFormatted.replace(/[0-9]/g, '').length;
-  const hasOneLetter = numberOfLetters < 2;
-
-  if ((tagFormatted.startsWith("v") && hasOneLetter) || tagFormatted.startsWith("verse")) {
-    return `v${number}`;
-  }
-
-
-  if ((tagFormatted.startsWith("c") && hasOneLetter) || tagFormatted.startsWith("chorus") || tagFormatted.startsWith("ch")) {
-    return `c${number}`;
-  }
-
-  if ((tagFormatted.startsWith("p") && hasOneLetter) || tagFormatted.startsWith("pre-chorus") || tagFormatted.startsWith("pre-chorus")) {
-    return `p${number}`;
-  }
-
-  if ((tagFormatted.startsWith("b") && hasOneLetter) || tagFormatted.startsWith("br") || tagFormatted.startsWith("bridge")) {
-    return `b${number}`;
-  }
-
-  if ((tagFormatted.startsWith("e") && hasOneLetter) || tagFormatted.startsWith("end") || tagFormatted.startsWith("ending")) {
-    return `e${number}`;
-  }
-
-  if ((tagFormatted.startsWith("i") && hasOneLetter) || tagFormatted.startsWith("inst") || tagFormatted.startsWith("instrument") || tagFormatted.startsWith("instrumental")) {
-    return `i${number}`;
-  }
-
-  if ((tagFormatted.startsWith("m") && hasOneLetter) || tagFormatted.startsWith("instrumentalmiddle") || tagFormatted.startsWith("middle")) {
-    return `m${number}`;
-  }
-
-  if ((tagFormatted.startsWith("o") && hasOneLetter) || tagFormatted.startsWith("instrumentaloutro") || tagFormatted.startsWith("outro")) {
-    return `o${number}`;
-  }
-
-  if ((tagFormatted.startsWith("s") && hasOneLetter) || tagFormatted.startsWith("instrumentalsolo") || tagFormatted.startsWith("solo")) {
-    return `s${number}`;
-  }
-
-  // for cases such as chorus part a -> Cab
-  if (!tagHasNumber && tagFormatted.length <= 3) {
-    return tagFormatted;
-  }
-
-  return '-'
 }

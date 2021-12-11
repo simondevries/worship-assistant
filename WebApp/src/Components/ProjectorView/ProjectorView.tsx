@@ -51,13 +51,13 @@ type Props = {
 /**
  * Projects the lyrics in a tab
  */
-export default function ({
+const ProjectorView = ({
   activeResourcePointer,
   previewMode,
   className,
   globalTheme,
   useDemoText,
-}: Props) {
+}: Props) => {
   const [state] = useContext<Array<IState>>(Context);
 
   if (!state || !state.currentSchedule) return null;
@@ -148,4 +148,5 @@ export default function ({
       </StyledProjectorView>
     </ThemeProvider>
   );
-}
+};
+export default ProjectorView;

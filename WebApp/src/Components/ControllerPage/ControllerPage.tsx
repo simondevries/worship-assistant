@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Context } from 'Common/Store/Store';
-import ResourceManager from './resourceManager';
+import ResourceManager from './ResourceManager/ResourceManager';
 import styled from 'styled-components/macro';
 import { Button, Icon, Card } from '@blueprintjs/core';
 import { slideWidth } from '../Slides/ActiveSlide/ActiveSongSlide';

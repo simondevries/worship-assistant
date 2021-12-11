@@ -5,6 +5,7 @@ import State from '../../Interfaces/State';
 import ActiveResourcePointer from '../../Interfaces/ActiveResourcePointer';
 import Resource from '../../Interfaces/resource';
 import ActiveSongSlide from './ActiveSlide/ActiveSongSlide';
+import { songSelectors } from 'Interfaces/Song/Song';
 
 interface Props {
   activeResourcePointer: ActiveResourcePointer;
@@ -13,12 +14,12 @@ interface Props {
   resource: Resource;
 }
 
-export default function ({
+const SongResourceManager = ({
   isActiveResource,
   resource,
   updateSlideNumber,
   activeResourcePointer,
-}: Props) {
+}: Props) => {
   const [state]: Array<State> = useContext(Context);
   if (
     !(
@@ -40,11 +41,13 @@ export default function ({
     updateSlideNumber(slideIndex);
   };
 
+  const songsInUserSpecifiedOrder =
+    (song && songSelectors.lyricsInUserSpecificedOrder(song)) ?? [];
+
   return (
     <>
-      {song &&
-        song.lyrics &&
-        song.lyrics.map((verse, slideIndex) => {
+      {songsInUserSpecifiedOrder &&
+        songsInUserSpecifiedOrder.map((verse, slideIndex) => {
           if (
             isActiveResource &&
             slideIndex === activeResourcePointer.slideIndex
@@ -65,4 +68,6 @@ export default function ({
         })}
     </>
   );
-}
+};
+
+export default SongResourceManager;

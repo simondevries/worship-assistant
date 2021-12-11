@@ -14,11 +14,11 @@ import SlideShowResourceManager from './SlideShowResourceManager';
 import SlideChangeEvent from '../../Events/Domain/slideChangeEvent';
 import useEventHandler from '../../Events/Handlers/useEventHandler';
 
-export default function ({
+const SlideResolver = ({
   resource,
   isActiveResource,
   activeResourcePointer,
-}) {
+}) => {
   const [raiseEvent] = useEventHandler();
   const updateSlideNumberLocal = (rInx) => (sInx) => {
     raiseEvent(new SlideChangeEvent(false, rInx, sInx));
@@ -68,3 +68,4 @@ export default function ({
       );
   }
 }
+export default SlideResolver;

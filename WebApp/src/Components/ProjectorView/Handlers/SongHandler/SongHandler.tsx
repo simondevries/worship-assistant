@@ -1,5 +1,5 @@
 import IResourceReference from 'Interfaces/ResourceReference';
-import Song from 'Interfaces/Song/Song';
+import Song, { songSelectors } from 'Interfaces/Song/Song';
 import ISongResourceReference from 'Interfaces/SongResourceReference';
 import { ITheme } from 'Interfaces/themes';
 import React, { useLayoutEffect, useRef, useState } from 'react';
@@ -97,21 +97,23 @@ const SongHandler = ({
     });
   }, []);
 
+  const lyricsInUserOrder =
+    songSelectors.lyricsInUserSpecificedOrder(song);
+
   if (
-    !song ||
-    song.lyrics.length <= slideIndex ||
-    !song.lyrics[slideIndex].content
+    !lyricsInUserOrder ||
+    lyricsInUserOrder.length <= slideIndex ||
+    !lyricsInUserOrder[slideIndex].content
   ) {
     console.warn(
-      `Could not find song for resource reference ${resourceReference}`,
+      `Could not find song for resource reference ${resourceReference} at index ${slideIndex}`,
     );
     return null;
   }
 
   const content =
-    song &&
-    song.lyrics[slideIndex].content &&
-    song.lyrics[slideIndex].content.split(/\r?\n/);
+    lyricsInUserOrder[slideIndex].content &&
+    lyricsInUserOrder[slideIndex].content.split(/\r?\n/);
 
   const asd = getInverseColor(globalTheme.textColor) ?? 'black';
 

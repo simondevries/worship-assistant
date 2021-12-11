@@ -8,10 +8,7 @@ import {
 } from '@blueprintjs/core';
 import styled from 'styled-components/macro';
 import HelpText from '../../HelpText';
-import Song, {
-  Lyrics,
-  toInternalVerseTag,
-} from 'Interfaces/Song/Song';
+import Song, { Lyrics, songSelectors } from 'Interfaces/Song/Song';
 
 const StyledContainer = styled.div`
   display: flex;
@@ -91,7 +88,7 @@ const SongContent = ({
       properties: {
         ...songContent.properties,
         verseOrder: contentArr.map((item) =>
-          toInternalVerseTag(item),
+          songSelectors.toInternalVerseTag(item),
         ),
         verseOrderDisplayValueFromUser: contentArr
           .map((item) => item.trim().replace(/\s\s+/g, ' '))

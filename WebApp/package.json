@@ -25,7 +25,8 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "echo **Winston** please clear index db in your browser before continuing, then replace this package.json > scripts > start with originalStart",
+    "originalStart": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --watchAll=false --maxWorkers=50%",
     "eject": "react-scripts eject",

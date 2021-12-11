@@ -6,3 +6,4 @@ export default interface IResource {
   resourceType: string;
   theme?: ITheme;
 }
+
