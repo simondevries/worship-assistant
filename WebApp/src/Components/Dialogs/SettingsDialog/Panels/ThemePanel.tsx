@@ -1,4 +1,4 @@
-import { useEffect, useContext } from 'react';
+import { useEffect, useContext, useState } from 'react';
 import {
   Button,
   Classes,
@@ -9,7 +9,10 @@ import styled from 'styled-components';
 import { settingsRepo } from '../../../../Storage/settingsRepository';
 import { useForm } from 'react-hook-form';
 import ProjectorView from '../../../ProjectorView/ProjectorView';
-import { ITheme } from '../../../../Interfaces/themes';
+import {
+  defaultSongTheme,
+  ITheme,
+} from '../../../../Interfaces/themes';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Context } from '../../../../Common/Store/Store';
@@ -39,96 +42,50 @@ const StyledProjectorView = styled(ProjectorView)`
   width: 100%;
 `;
 
-// todo (sdv) this is in need of a refactor
 const ThemePanel = ({ activeResourcePointer, onClose }) => {
   const [state, dispatch]: [State, (action: ReducerAction) => void] =
     useContext(Context);
 
-  const schema = yup
-    .object()
-    .shape({
-      isBold: yup.boolean().notRequired(),
-      isUnderlined: yup.boolean().notRequired(),
-      isItalic: yup.boolean().notRequired(),
-      horizontalAlign: yup.string().notRequired(),
-      verticalAlign: yup.string().notRequired(),
-      fontSize: yup.string().notRequired(),
-    })
-    .required();
+  const [editingState, setEditingState] =
+    useState<ITheme>(defaultSongTheme);
 
-  const { handleSubmit, register, setValue, formState, getValues } =
-    useForm({
-      resolver: yupResolver(schema),
-    });
-  const { isValid } = formState;
+  const setValue = (val) => {
+    setEditingState({ ...editingState, ...val });
+  };
 
   useEffect(() => {
     async function fetchData() {
       const res: ISettings = await settingsRepo.get('settings');
-      setValue('isBold', res.globalSlideTheme.textIsBold ?? false);
-      setValue(
-        'isItalic',
-        res.globalSlideTheme.textIsItalic ?? false,
-      );
-      setValue(
-        'isUnderlined',
-        res.globalSlideTheme.textIsUnderlined ?? false,
-      );
-      setValue(
-        'verticalAlign',
-        res.globalSlideTheme.textVerticalAlign ?? 'M',
-      );
-      setValue(
-        'horizontalAlign',
-        res.globalSlideTheme.textHorizontalAlign ?? 'M',
-      );
-      setValue('fontSize', res.globalSlideTheme.fontSize ?? 1);
+
+      setEditingState({
+        ...defaultSongTheme,
+        ...res.globalSlideTheme,
+      });
     }
     fetchData();
   }, []);
-
-  const getThemeFromCurrentState = (): ITheme => {
-    return {
-      textVerticalAlign: getValues('verticalAlign'),
-      textIsBold: getValues('isBold'),
-      textIsItalic: getValues('isItalic'),
-      textIsUnderlined: getValues('isUnderlined'),
-      textHorizontalAlign: getValues('horizontalAlign'),
-      fontSize: getValues('fontSize'),
-      backgroundColor: 'black',
-      lineHeight: '1',
-      name: 'default',
-      textColor: 'white',
-      fontFamily: 'Arial',
-    };
-  };
 
   const onSubmit = async () => {
     const settings = await settingsRepo.get();
     const newSetting: ISettings = {
       ...settings,
-      globalSlideTheme: getThemeFromCurrentState(),
+      globalSlideTheme: editingState,
     };
 
     console.log({ newSetting });
 
     settingsRepo.set(newSetting, 'settings');
     dispatch({ type: 'setSettings', payload: settings });
-    onClose();
+    setTimeout(() => {
+      onClose();
+    }, 0);
   };
-
-  register('isBold');
-  register('isItalic');
-  register('isUnderlined');
-  register('verticalAlign');
-  register('fontSize');
-  register('horizontalAlign');
 
   if (!state || !state.currentSchedule) return <div>NoState</div>;
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <div>
         <div className={Classes.DIALOG_BODY}>
           <br />
           <StyledBody>
@@ -138,37 +95,34 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
                   <Button
                     data-testid="bold"
                     onClick={() => {
-                      setValue('isBold', !getValues('isBold'), {
-                        shouldValidate: true,
+                      setValue({
+                        textIsBold: !editingState.textIsBold,
                       });
                     }}
-                    active={getValues('isBold') === true}
+                    active={editingState.textIsBold}
                   >
                     B
                   </Button>
 
                   <Button
                     onClick={() =>
-                      setValue('isItalic', !getValues('isItalic'), {
-                        shouldValidate: true,
+                      setValue({
+                        textIsItalic: !editingState.textIsItalic,
                       })
                     }
-                    active={getValues('isItalic') === true}
+                    active={editingState.textIsItalic}
                   >
                     I
                   </Button>
 
                   <Button
                     onClick={() =>
-                      setValue(
-                        'isUnderlined',
-                        !getValues('isUnderlined'),
-                        {
-                          shouldValidate: true,
-                        },
-                      )
+                      setValue({
+                        textIsUnderlined:
+                          !editingState.textIsUnderlined,
+                      })
                     }
-                    active={getValues('isUnderlined') === true}
+                    active={editingState.textIsUnderlined}
                   >
                     U
                   </Button>
@@ -180,31 +134,31 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
                   <Button
                     icon="align-left"
                     onClick={() =>
-                      setValue('horizontalAlign', 'L', {
-                        shouldValidate: true,
+                      setValue({
+                        textHorizontalAlign: 'L',
                       })
                     }
-                    active={getValues('horizontalAlign') === 'L'}
+                    active={editingState.textHorizontalAlign === 'L'}
                   ></Button>
 
                   <Button
                     icon="align-center"
                     onClick={() =>
-                      setValue('horizontalAlign', 'M', {
-                        shouldValidate: true,
+                      setValue({
+                        textHorizontalAlign: 'M',
                       })
                     }
-                    active={getValues('horizontalAlign') === 'M'}
+                    active={editingState.textHorizontalAlign === 'M'}
                   ></Button>
 
                   <Button
                     icon="align-right"
                     onClick={() =>
-                      setValue('horizontalAlign', 'R', {
-                        shouldValidate: true,
+                      setValue({
+                        textHorizontalAlign: 'R',
                       })
                     }
-                    active={getValues('horizontalAlign') === 'R'}
+                    active={editingState.textHorizontalAlign === 'R'}
                   ></Button>
                 </ButtonGroup>
               </FormGroup>
@@ -213,44 +167,70 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
                   <Button
                     icon="caret-up"
                     onClick={() =>
-                      setValue('verticalAlign', 'T', {
-                        shouldValidate: true,
+                      setValue({
+                        textVerticalAlign: 'T',
                       })
                     }
-                    active={getValues('verticalAlign') === 'T'}
+                    active={editingState.textVerticalAlign === 'T'}
                   ></Button>
 
                   <Button
                     icon="alignment-horizontal-center"
                     onClick={() =>
-                      setValue('verticalAlign', 'M', {
-                        shouldValidate: true,
+                      setValue({
+                        textVerticalAlign: 'M',
                       })
                     }
-                    active={getValues('verticalAlign') === 'M'}
+                    active={editingState.textVerticalAlign === 'M'}
                   ></Button>
 
                   <Button
                     icon="caret-down"
                     onClick={() =>
-                      setValue('verticalAlign', 'B', {
-                        shouldValidate: true,
+                      setValue({
+                        textVerticalAlign: 'B',
                       })
                     }
-                    active={getValues('verticalAlign') === 'B'}
+                    active={editingState.textVerticalAlign === 'B'}
                   ></Button>
                 </ButtonGroup>
+              </FormGroup>
+              <FormGroup label="Background Color">
+                <input
+                  type="color"
+                  value={editingState.backgroundColor}
+                  onChange={(e) =>
+                    setValue({ backgroundColor: e.target.value })
+                  }
+                />
+              </FormGroup>
+
+              <FormGroup label="Text">
+                <input
+                  type="color"
+                  value={editingState.textColor}
+                  onChange={(e) => {
+                    setValue({ textColor: e.target.value });
+                  }}
+                />
+                <Button
+                  onClick={() => {
+                    setValue({
+                      showTextBorder: !editingState.showTextBorder,
+                    });
+                  }}
+                  active={editingState.showTextBorder}
+                >
+                  Text border
+                </Button>
               </FormGroup>
               <FormGroup label="Font Size">
                 <ButtonGroup>
                   <Button
                     icon="chevron-up"
                     onClick={() => {
-                      const currentFontSize =
-                        getValues('fontSize') ?? 1;
-
-                      setValue('fontSize', currentFontSize + 0.1, {
-                        shouldValidate: true,
+                      setValue({
+                        fontSize: editingState.fontSize + 0.1,
                       });
                     }}
                   ></Button>
@@ -258,11 +238,8 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
                   <Button
                     icon="chevron-down"
                     onClick={() => {
-                      const currentFontSize =
-                        getValues('fontSize') ?? 1;
-
-                      setValue('fontSize', currentFontSize - 0.1, {
-                        shouldValidate: true,
+                      setValue({
+                        fontSize: editingState.fontSize - 0.1,
                       });
                     }}
                   ></Button>
@@ -275,7 +252,7 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
                 activeResourcePointer={activeResourcePointer}
                 className={''}
                 previewMode={true}
-                globalTheme={getThemeFromCurrentState()}
+                globalTheme={editingState}
               />
             </StyledPreviewContainer>
             {/* errors will return when field validation fails  */}
@@ -287,14 +264,12 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
             icon="floppy-disk"
             type="submit"
             intent="primary"
-            onClick={() => {
-              handleSubmit(onSubmit);
-            }}
+            onClick={onSubmit}
           >
             Save
           </Button>
         </div>
-      </form>
+      </div>
     </>
   );
 };

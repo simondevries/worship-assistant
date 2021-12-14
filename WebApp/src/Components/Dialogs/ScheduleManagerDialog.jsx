@@ -13,6 +13,7 @@ import {
 } from '../../Interfaces/Schedule';
 import LoadScheduleEvent from '../../Events/Domain/loadScheduleEvent';
 import UserFileHandlerPermissionManagerDialog from './UserFileHandlerPermissionManagerDialog';
+import { usePersistentStore } from '../../Hooks/usePersistentStore';
 
 const StyledCard = styled(Card)`
   background: #353535;
@@ -71,6 +72,10 @@ const ScheduleManagerDialog = ({ setOpen }) => {
   const [raiseEvent] = useEventHandler();
   const [showUserFileHandlerModal, setShowUserFileHandlerModal] =
     useState(false);
+  const {
+    isApproved: isPersistentStoreApproved,
+    requestAccess: requestPersistentStoreAccess,
+  } = usePersistentStore();
 
   useEffect(() => {
     async function fetchData() {
@@ -193,6 +198,23 @@ const ScheduleManagerDialog = ({ setOpen }) => {
               You can press ` on the keyboard to bring up the search
               bar
             </StyledCard>
+            <br />
+            {!isPersistentStoreApproved && (
+              <StyledCard>
+                <StyledTipHeader>
+                  <Icon icon="lightbulb" />
+                  {'  '}Permissions
+                </StyledTipHeader>
+                To ensure your songs do not get cleared off the web
+                app, please approve permission for your browser to
+                prevent the state from getting cleared.
+                <Button
+                  onClick={() => requestPersistentStoreAccess()}
+                >
+                  Enable
+                </Button>
+              </StyledCard>
+            )}
           </div>
         </Dialog>
       )}

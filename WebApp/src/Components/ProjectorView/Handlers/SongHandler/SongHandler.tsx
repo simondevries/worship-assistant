@@ -38,14 +38,19 @@ const SSongHandler = styled.div<SSHandlerProps>`
       : 'end';
   }};
   flex-direction: column;
-  text-shadow: 2px 0 0 ${({ inverseFontColor }) => inverseFontColor},
-    -2px 0 0 ${({ inverseFontColor }) => inverseFontColor},
-    0 2px 0 ${({ inverseFontColor }) => inverseFontColor},
-    0 -2px 0 ${({ inverseFontColor }) => inverseFontColor},
-    1px 1px ${({ inverseFontColor }) => inverseFontColor},
-    -1px -1px 0 ${({ inverseFontColor }) => inverseFontColor},
-    1px -1px 0 ${({ inverseFontColor }) => inverseFontColor},
-    -1px 1px 0 ${({ inverseFontColor }) => inverseFontColor};
+  ${({ theme, inverseFontColor }) => {
+    return theme.showTextBorder === false
+      ? ''
+      : `text-shadow: 2px 0 0 ${inverseFontColor},
+    -2px 0 0 ${inverseFontColor},
+    0 2px 0 ${inverseFontColor},
+    0 -2px 0 ${inverseFontColor},
+    1px 1px ${inverseFontColor},
+    -1px -1px 0 ${inverseFontColor},
+    1px -1px 0 ${inverseFontColor},
+    -1px 1px 0 ${inverseFontColor};`;
+  }}
+
   background: ${({ theme }) => theme.backgroundColor ?? 'black'};
 `;
 
@@ -116,7 +121,6 @@ const SongHandler = ({
     lyricsInUserOrder[slideIndex].content.split(/\r?\n/);
 
   const asd = getInverseColor(globalTheme.textColor) ?? 'black';
-
   return (
     <SSongHandler
       data-testid="songhandler-container"

@@ -60,11 +60,9 @@ export const lastSlideIndex = (
 export const songSelectors = {
   toInternalVerseTag: (tag: string) => {
 
-    console.log('1')
     if (!tag) {
       return '-';
     }
-    console.log('1')
 
 
     const tagHasNumber = /\d/.test(tag);

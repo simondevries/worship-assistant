@@ -10,10 +10,11 @@ export interface ITheme {
   fontSize: number;
   textIsUnderlined: boolean;
   fontFamily: string;
+  showTextBorder: boolean;
 }
 
 export const defaultSongTheme: ITheme = {
-  backgroundColor: 'gray',
+  backgroundColor: 'black',
   textColor: '#333333',
   lineHeight: 'normal',
   textVerticalAlign: 'M',
@@ -24,6 +25,7 @@ export const defaultSongTheme: ITheme = {
   fontSize: 1,
   name: 'Default',
   fontFamily: '"Myriad Pro" "Helvetica" "Century Gothic" "Arial"',
+  showTextBorder: true,
 };
 
 export const themes: ITheme[] = [

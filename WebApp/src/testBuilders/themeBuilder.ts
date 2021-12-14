@@ -21,7 +21,8 @@ export class ThemeBuilder {
             textIsItalic: true,
             textIsUnderlined: true,
             textVerticalAlign: 'M',
-            fontFamily: 'Helvetica'
+            fontFamily: 'Helvetica',
+            showTextBorder: true
         }
     }
 }

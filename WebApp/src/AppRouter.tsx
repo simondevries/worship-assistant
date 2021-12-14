@@ -64,7 +64,7 @@ const StyledOpenTour = styled.div`
   justify-content: center;
 `;
 
-export default function () {
+const AppRouter = () => {
   const [state, dispatch] = useContext(Context);
   const [
     loadingState,
@@ -153,4 +153,6 @@ export default function () {
       </Router>
     </>
   );
-}
+};
+
+export default AppRouter;
