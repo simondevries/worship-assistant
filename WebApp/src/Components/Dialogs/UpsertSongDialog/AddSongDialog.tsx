@@ -6,7 +6,7 @@ import SongCreatedEvent from '../../../Events/Domain/songCreatedEvent';
 import useEventHandler from '../../../Events/Handlers/useEventHandler';
 import SongAddedToScheduleEvent from '../../../Events/Domain/songAddedToScheduleEvent';
 import ISong from '../../../Interfaces/Song/Song';
-import SongContent from './SongDialogComponents/SongContent';
+import SongContent from './SongDialogComponents/SongEditor';
 import useModal from '../useModal';
 import styled from '@emotion/styled';
 

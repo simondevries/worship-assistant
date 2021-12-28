@@ -4,7 +4,7 @@ import { Dialog, Classes } from '@blueprintjs/core';
 import useEventHandler from '../../../Events/Handlers/useEventHandler';
 import SongEditedEvent from '../../../Events/Domain/songEditedEvent';
 import ISong from '../../../Interfaces/Song/Song';
-import SongContent from './SongDialogComponents/SongContent';
+import SongContent from './SongDialogComponents/SongEditor';
 import { songsRepo } from '../../../Storage/songsRepository';
 
 export default ({ setEditSongModalOpen, songId }) => {
