@@ -1,4 +1,4 @@
-import { lyricTagProcessor, splitByNewLineAndSpace, trimBlankSpacesAroundTags } from "./lyricTagProcessor";
+import { lyricTagProcessor, splitByNewLineAndSpace, trimBlankSpacesAroundTags } from "./plainTextTolyricTagProcessor";
 
 const ExampleSong = `Chorus
 Great is Thy faithfulness

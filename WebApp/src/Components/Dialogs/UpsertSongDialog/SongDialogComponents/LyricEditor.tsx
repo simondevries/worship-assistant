@@ -1,7 +1,7 @@
 import { Classes } from '@blueprintjs/core';
 import { useState } from 'react';
 import styled from 'styled-components/macro';
-import { lyricTagProcessor } from './lyricTagProcessor';
+import { plainTextTolyricTagProcessor } from './plainTextTolyricTagProcessor';
 const StyledEditableTextContent = styled.textarea<{
   inFocus: boolean;
 }>`
@@ -30,7 +30,7 @@ export default function LyricEditor({ lyrics, setLyrics }: Props) {
     // const caret = e.target.selectionStart;
     // const element = e.target;
 
-    const parsed = lyricTagProcessor(e.target.value);
+    const parsed = plainTextTolyricTagProcessor(e.target.value);
     const tagsBefore = lyrics?.match(/\[/g)?.length;
     const tagsAfter = parsed.match(/\[/g)?.length;
 
@@ -61,7 +61,7 @@ export default function LyricEditor({ lyrics, setLyrics }: Props) {
       value={lyrics}
       onChange={setLyricsBeingEditedInternal} // only update state variable
       placeholder={
-        '[v1]\n Add lyrics here, oh, please do \n Type in the song section tags too' +
+        '[Verse 1]\n Add lyrics here, oh, please do \n Type in the song section tags too' +
         '[v2]\n These define the parts of the song \n The list of tags is frankly, quite long\n\n' +
         "[c]\n See the other tags in the '?' button below\n See the other tags in the '?' button below\n\n"
       }

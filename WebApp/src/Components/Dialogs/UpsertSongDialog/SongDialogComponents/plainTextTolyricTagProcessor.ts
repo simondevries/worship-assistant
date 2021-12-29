@@ -1,6 +1,6 @@
 const specialWord: string[] = ['chorus', 'verse', 'outro', 'bridge', 'instrumental', 'ending', 'pre-chorus', 'prechorus', 'pre']; //instrumental outro, instrumental solo, instrumental into, pre chorus
 
-export const lyricTagProcessor = (lyrics: string): string => {
+export const plainTextTolyricTagProcessor = (lyrics: string): string => {
     if (!lyrics) return '';
 
     let lyricsWithTrimmedTags = trimBlankSpacesAroundTags(lyrics)
