@@ -37,6 +37,15 @@ const SSongHandler = styled.div<SSHandlerProps>`
       ? 'center'
       : 'end';
   }};
+  ${({ theme }) => {
+    console.log('backgroundImageUri', theme.backgroundImageUri);
+    return (
+      theme.backgroundImageUri &&
+      `background-image: url(${theme.backgroundImageUri});
+      background-repeat: no-repeat;
+      background-size: cover;`
+    );
+  }}
   flex-direction: column;
   ${({ theme, inverseFontColor }) => {
     return theme.showTextBorder === false
@@ -51,7 +60,8 @@ const SSongHandler = styled.div<SSHandlerProps>`
     -1px 1px 0 ${inverseFontColor};`;
   }}
 
-  background: ${({ theme }) => theme.backgroundColor ?? 'black'};
+  background: ${({ theme }) =>
+    (!theme.backgroundImageUri && theme.backgroundColor) ?? 'black'};
 `;
 
 interface Dimensions {

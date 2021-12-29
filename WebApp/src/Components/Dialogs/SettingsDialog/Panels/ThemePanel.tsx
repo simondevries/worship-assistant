@@ -19,6 +19,7 @@ import { Context } from '../../../../Common/Store/Store';
 import { ISettings } from 'Interfaces/Settings';
 import { State } from '@storybook/api';
 import { ReducerAction } from 'Reducers/reducers';
+import ImageSelectionDialog from 'Components/Dialogs/ImageSelectionDialog/ImageSelectionDialog';
 
 const StyledInputsContainer = styled.div`
   display: flex;
@@ -45,13 +46,10 @@ const StyledProjectorView = styled(ProjectorView)`
 const ThemePanel = ({ activeResourcePointer, onClose }) => {
   const [state, dispatch]: [State, (action: ReducerAction) => void] =
     useContext(Context);
-
+  const [isWallpaperSelectionOpen, setIsWallpaperSelectionOpen] =
+    useState(false);
   const [editingState, setEditingState] =
     useState<ITheme>(defaultSongTheme);
-
-  const setValue = (val) => {
-    setEditingState({ ...editingState, ...val });
-  };
 
   useEffect(() => {
     async function fetchData() {
@@ -95,7 +93,8 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
                   <Button
                     data-testid="bold"
                     onClick={() => {
-                      setValue({
+                      setEditingState({
+                        ...editingState,
                         textIsBold: !editingState.textIsBold,
                       });
                     }}
@@ -106,7 +105,8 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
 
                   <Button
                     onClick={() =>
-                      setValue({
+                      setEditingState({
+                        ...editingState,
                         textIsItalic: !editingState.textIsItalic,
                       })
                     }
@@ -117,7 +117,8 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
 
                   <Button
                     onClick={() =>
-                      setValue({
+                      setEditingState({
+                        ...editingState,
                         textIsUnderlined:
                           !editingState.textIsUnderlined,
                       })
@@ -134,7 +135,8 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
                   <Button
                     icon="align-left"
                     onClick={() =>
-                      setValue({
+                      setEditingState({
+                        ...editingState,
                         textHorizontalAlign: 'L',
                       })
                     }
@@ -144,7 +146,8 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
                   <Button
                     icon="align-center"
                     onClick={() =>
-                      setValue({
+                      setEditingState({
+                        ...editingState,
                         textHorizontalAlign: 'M',
                       })
                     }
@@ -154,7 +157,8 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
                   <Button
                     icon="align-right"
                     onClick={() =>
-                      setValue({
+                      setEditingState({
+                        ...editingState,
                         textHorizontalAlign: 'R',
                       })
                     }
@@ -167,7 +171,8 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
                   <Button
                     icon="caret-up"
                     onClick={() =>
-                      setValue({
+                      setEditingState({
+                        ...editingState,
                         textVerticalAlign: 'T',
                       })
                     }
@@ -177,7 +182,8 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
                   <Button
                     icon="alignment-horizontal-center"
                     onClick={() =>
-                      setValue({
+                      setEditingState({
+                        ...editingState,
                         textVerticalAlign: 'M',
                       })
                     }
@@ -187,7 +193,8 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
                   <Button
                     icon="caret-down"
                     onClick={() =>
-                      setValue({
+                      setEditingState({
+                        ...editingState,
                         textVerticalAlign: 'B',
                       })
                     }
@@ -200,9 +207,26 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
                   type="color"
                   value={editingState.backgroundColor}
                   onChange={(e) =>
-                    setValue({ backgroundColor: e.target.value })
+                    setEditingState({
+                      ...editingState,
+                      backgroundColor: e.target.value,
+                    })
                   }
                 />
+              </FormGroup>
+
+              <FormGroup>
+                Wallpaper
+                <ButtonGroup>
+                  <Button
+                    icon="search"
+                    onClick={() => {
+                      setIsWallpaperSelectionOpen(true);
+                    }}
+                  >
+                    Search
+                  </Button>
+                </ButtonGroup>
               </FormGroup>
 
               <FormGroup label="Text">
@@ -210,12 +234,16 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
                   type="color"
                   value={editingState.textColor}
                   onChange={(e) => {
-                    setValue({ textColor: e.target.value });
+                    setEditingState({
+                      ...editingState,
+                      textColor: e.target.value,
+                    });
                   }}
                 />
                 <Button
                   onClick={() => {
-                    setValue({
+                    setEditingState({
+                      ...editingState,
                       showTextBorder: !editingState.showTextBorder,
                     });
                   }}
@@ -229,7 +257,8 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
                   <Button
                     icon="chevron-up"
                     onClick={() => {
-                      setValue({
+                      setEditingState({
+                        ...editingState,
                         fontSize: editingState.fontSize + 0.1,
                       });
                     }}
@@ -238,7 +267,8 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
                   <Button
                     icon="chevron-down"
                     onClick={() => {
-                      setValue({
+                      setEditingState({
+                        ...editingState,
                         fontSize: editingState.fontSize - 0.1,
                       });
                     }}
@@ -269,6 +299,19 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
             Save
           </Button>
         </div>
+        {isWallpaperSelectionOpen && (
+          <ImageSelectionDialog
+            onImageSelected={(uri) => {
+              setEditingState({
+                ...editingState,
+                backgroundImageUri: uri,
+              });
+            }}
+            onClose={() => {
+              setIsWallpaperSelectionOpen(false);
+            }}
+          ></ImageSelectionDialog>
+        )}
       </div>
     </>
   );

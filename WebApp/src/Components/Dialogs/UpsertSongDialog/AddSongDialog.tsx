@@ -5,18 +5,20 @@ import newId from '../../../Helpers/newId';
 import SongCreatedEvent from '../../../Events/Domain/songCreatedEvent';
 import useEventHandler from '../../../Events/Handlers/useEventHandler';
 import SongAddedToScheduleEvent from '../../../Events/Domain/songAddedToScheduleEvent';
-import ISong from '../../../Interfaces/Song/Song';
+import ISong, { songSelectors } from '../../../Interfaces/Song/Song';
 import SongContent from './SongDialogComponents/SongEditor';
 import useModal from '../useModal';
 import styled from '@emotion/styled';
+import songReducers from 'Reducers/songReducers';
 
 const AddSongDialog = ({
   setAddSongModalOpen,
   createSongAtIndex,
 }) => {
   const [raiseEvent] = useEventHandler();
-  const [importSongButtonDisabled, setImportSongButtonDisabled] =
-    useState<boolean>(false);
+
+  const [lyricsBeingEdited, setLyricsBeingEdited] =
+    useState<string>('');
   const fileField = useRef<HTMLInputElement>(null);
 
   function handleFileSelected(
@@ -27,7 +29,8 @@ const AddSongDialog = ({
       console.log('files:', files);
     }
   }
-  const [songContent, setSongContent] = useState<any>({
+
+  const [song, setSongContent] = useState<ISong>({
     id: newId(),
     lyrics: [],
     resourceType: 'SONG',
@@ -40,20 +43,21 @@ const AddSongDialog = ({
     },
   } as ISong);
 
-  const saveSong = () => {
-    raiseEvent(new SongCreatedEvent(false, songContent));
-    setAddSongModalOpen(false);
-  };
-
-  const saveSongAndAddToSet = () => {
-    raiseEvent(new SongCreatedEvent(false, songContent));
-    raiseEvent(
-      new SongAddedToScheduleEvent(
-        createSongAtIndex,
-        false,
-        songContent,
-      ),
+  const saveSong = (shouldAddToSchedule) => {
+    const updatedSong = songReducers.updateLyricsFromString(
+      song,
+      lyricsBeingEdited,
     );
+    raiseEvent(new SongCreatedEvent(false, updatedSong));
+    if (shouldAddToSchedule) {
+      raiseEvent(
+        new SongAddedToScheduleEvent(
+          createSongAtIndex,
+          false,
+          updatedSong,
+        ),
+      );
+    }
     setAddSongModalOpen(false);
   };
 
@@ -68,9 +72,20 @@ const AddSongDialog = ({
       >
         <div className={Classes.DIALOG_BODY}>
           <SongContent
-            songContent={songContent}
-            songContentSetter={setSongContent}
-            setImportSongButtonDisabled={setImportSongButtonDisabled}
+            lyrics={lyricsBeingEdited}
+            setLyrics={(l) => setLyricsBeingEdited(l)}
+            setSongVerseOrder={(vo) =>
+              setSongContent(songReducers.updateVerseOrder(song, vo))
+            }
+            setTitle={(title) =>
+              setSongContent(
+                songReducers.updateSongTitle(song, title),
+              )
+            }
+            title={song.properties.title}
+            songVerseOrder={
+              song.properties.verseOrderDisplayValueFromUser
+            }
           />
 
           <div className={`test ${Classes.DIALOG_FOOTER_ACTIONS}`}>
@@ -95,8 +110,8 @@ const AddSongDialog = ({
             <Button onClick={() => setAddSongModalOpen(false)}>
               Close
             </Button>
-            <Button onClick={saveSong}>Save</Button>{' '}
-            <Button onClick={saveSongAndAddToSet} intent="primary">
+            <Button onClick={() => saveSong(false)}>Save</Button>{' '}
+            <Button onClick={() => saveSong(true)} intent="primary">
               Save and Add to Schedule
             </Button>
           </div>

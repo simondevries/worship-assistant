@@ -4,6 +4,7 @@ import BaseNonActiveSlide from '../../../../Common/BaseNonActiveSlide/BaseNonAct
 import IVerse from '../../../../Interfaces/Verse';
 import useFitText from 'use-fit-text';
 import ProjectorView from '../../../ProjectorView/ProjectorView';
+import { songSelectors } from 'Interfaces/Song/Song';
 
 const StyledBaseNonActiveSlide = styled(BaseNonActiveSlide)`
   padding: 7px 10px 15px 7px;
@@ -20,34 +21,20 @@ const StyledTitleLabel = styled.div`
   font-size: 12px;
 `;
 
-const StyledVerseLabel = styled(StyledTitleLabel)`
-  background: #4d7b97;
-  color: white;
-`;
-
-const StyledChorusLabel = styled(StyledTitleLabel)`
-  background: #ff8051;
-`;
-
-const StyledInstrumentalLabel = styled(StyledTitleLabel)`
-  background: #683b3b;
-  color: whitesmoke;
-`;
-
-const StyledBridgeLabel = styled(StyledTitleLabel)`
-  background: #005500;
-  color: white;
-`;
-
-const StyledPrechorusLabel = styled(StyledTitleLabel)`
-  background: #ffaf92;
-`;
-
 const StyledNumberLabel = styled(StyledTitleLabel)`
   background: #232e36;
   color: white;
   padding-left: 5px;
   padding-right: 5px;
+`;
+
+const StyledVerseNameLabel = styled(StyledTitleLabel)<{
+  background: string;
+  color: string;
+}>`
+  background: ${({ background }) =>
+    background ? background : 'black'};
+  color: ${({ color }) => (color ? color : 'white')};
 `;
 
 const StyledLabelContainer = styled.div`
@@ -64,70 +51,29 @@ interface Props {
   onClick: Function;
 }
 
-export default function ({
+const SongSlide = ({
   verse,
   slideIndex,
   resourceId,
   isFirstSlide,
   isLastSlide,
-}: Props) {
+}: Props) => {
   const { fontSize, ref } = useFitText();
 
   const labelResolver = (index, verseName: string) => {
     let labels: any[] = [];
 
     labels.push(<StyledNumberLabel>{index}</StyledNumberLabel>);
+    const tagDetails = songSelectors.getSongTagDetails(verseName);
 
-    if (verseName && verseName.toLowerCase().startsWith('v')) {
-      const number = verseName.slice(1);
-      labels.push(
-        <StyledVerseLabel>
-          Verse{number ? ` ${number}` : ''}
-        </StyledVerseLabel>,
-      );
-    }
-
-    if (verseName && verseName.toLowerCase().startsWith('c')) {
-      const number = verseName.slice(1);
-      labels.push(
-        <StyledChorusLabel>
-          Chorus{number ? ` ${number}` : ''}
-        </StyledChorusLabel>,
-      );
-    }
-
-    if (verseName && verseName.toLowerCase().startsWith('b')) {
-      const number = verseName.slice(1);
-      labels.push(
-        <StyledBridgeLabel>
-          Bridge{number ? ` ${number}` : ''}
-        </StyledBridgeLabel>,
-      );
-    }
-
-    if (verseName && verseName.toLowerCase().startsWith('p')) {
-      const number = verseName.slice(1);
-      labels.push(
-        <StyledPrechorusLabel>
-          Pre-Chorus{number ? ` ${number}` : ''}
-        </StyledPrechorusLabel>,
-      );
-    }
-
-    if (
-      (verseName && verseName.toLowerCase().startsWith('i')) ||
-      (verseName && verseName.toLowerCase().startsWith('m')) ||
-      (verseName && verseName.toLowerCase().startsWith('s')) ||
-      (verseName && verseName.toLowerCase().startsWith('o'))
-    ) {
-      const number = verseName.slice(1);
-      labels.push(
-        <StyledInstrumentalLabel>
-          Instrumental{number ? ` ${number}` : ''}
-        </StyledInstrumentalLabel>,
-      );
-    }
-
+    labels.push(
+      <StyledVerseNameLabel
+        color={tagDetails.color}
+        background={tagDetails.background}
+      >
+        {tagDetails.readableValue}
+      </StyledVerseNameLabel>,
+    );
     return <StyledLabelContainer>{labels}</StyledLabelContainer>;
   };
 
@@ -163,4 +109,6 @@ export default function ({
       </StyledBaseNonActiveSlide>
     </div>
   );
-}
+};
+
+export default SongSlide;

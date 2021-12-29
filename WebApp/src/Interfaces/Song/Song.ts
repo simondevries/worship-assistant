@@ -57,6 +57,12 @@ export const lastSlideIndex = (
 };
 
 
+export interface SongTagDetails {
+  readableValue: string;
+  color: string;
+  background: string;
+}
+
 export const songSelectors = {
   toInternalVerseTag: (tag: string) => {
 
@@ -134,5 +140,66 @@ export const songSelectors = {
     const missedSections = song.lyrics.filter(section => res.some(res => songSelectors.toInternalVerseTag(res.name) === section.name) === false)
 
     return res.concat(missedSections);
+  },
+  toStringForEditingLyrics: (song: Song) => {
+    return song.lyrics?.map((lyric) => '[' + lyric.name + ']' + lyric.content)
+      .join('\n')
+  },
+
+  getSongTagDetails: (name: string): SongTagDetails => {
+    const number = name.slice(1);
+
+    if (name && name.toLowerCase().startsWith('v')) {
+      return {
+        readableValue: `Verse ${number ? number : ''}`,
+        color: 'white',
+        background: '#4d7b97'
+      }
+    }
+
+    if (name && name.toLowerCase().startsWith('c')) {
+
+      return {
+        readableValue: `Chorus ${number ? number : ''}`,
+        color: 'black',
+        background: '#ff8051'
+      }
+    }
+
+    if (name && name.toLowerCase().startsWith('b')) {
+      return {
+        readableValue: `Bridge ${number ? number : ''}`,
+        color: 'white',
+        background: '#005500'
+      }
+    }
+
+    if (name && name.toLowerCase().startsWith('p')) {
+      return {
+        readableValue: `Pre-Chorus ${number ? number : ''}`,
+        color: 'black',
+        background: '#ffaf92'
+      }
+    }
+
+    if (
+      (name && name.toLowerCase().startsWith('i')) ||
+      (name && name.toLowerCase().startsWith('m')) ||
+      (name && name.toLowerCase().startsWith('s')) ||
+      (name && name.toLowerCase().startsWith('o'))
+    ) {
+      return {
+        readableValue: `Instrumental ${number ? number : ''}`,
+        color: 'whitesmoke',
+        background: '#683b3b'
+      }
+    }
+
+    return {
+      readableValue: name,
+      color: 'white',
+      background: 'black'
+    };
   }
 }
+

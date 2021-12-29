@@ -7,7 +7,7 @@ import ISong from '../../../Interfaces/Song/Song';
 import SongContent from './SongDialogComponents/SongEditor';
 import { songsRepo } from '../../../Storage/songsRepository';
 
-export default ({ setEditSongModalOpen, songId }) => {
+const EditSongDialog = ({ setEditSongModalOpen, songId }) => {
   const [raiseEvent] = useEventHandler();
   const [isSongLoaded, setSongLoaded] = useState<Boolean>(false);
   const [songContent, setSongContent] = useState<ISong>({} as ISong);
@@ -34,7 +34,7 @@ export default ({ setEditSongModalOpen, songId }) => {
 
   return (
     <>
-      <Dialog
+      {/* <Dialog
         className={Classes.DARK}
         isOpen
         title="Edit Song"
@@ -59,7 +59,9 @@ export default ({ setEditSongModalOpen, songId }) => {
             <Button onClick={saveSong}>Save</Button>{' '}
           </div>
         </div>
-      </Dialog>
+      </Dialog> */}
     </>
   );
 };
+
+export default EditSongDialog;

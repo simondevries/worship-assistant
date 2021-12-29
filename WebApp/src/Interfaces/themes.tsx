@@ -11,6 +11,7 @@ export interface ITheme {
   textIsUnderlined: boolean;
   fontFamily: string;
   showTextBorder: boolean;
+  backgroundImageUri?: string;
 }
 
 export const defaultSongTheme: ITheme = {

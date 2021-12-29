@@ -12,7 +12,7 @@ import {
 import styled from 'styled-components/macro';
 import { Spinner } from '@blueprintjs/core';
 import Sidebar from './Components/Sidebar/Sidebar';
-import HotkeyListener from './Components/Sidebar/hotkeyListener';
+import useGlobalHotkeyListener from './Components/Sidebar/useGlobalHotkeyListener';
 import fetchStatus from './Common/FetchStatus/fetchStatus';
 import useInitialize from './useInitialize';
 import ScheduleManagerDialog from './Components/Dialogs/ScheduleManagerDialog';
@@ -82,7 +82,7 @@ const AppRouter = () => {
   const activeResourcePointer = (state as IState)?.currentSchedule
     ?.activeResourcePointer;
 
-  HotkeyListener();
+  useGlobalHotkeyListener();
 
   if (loadingState === fetchStatus.Loading) {
     return <StyledSpinner />;
