@@ -1,7 +1,7 @@
 import { Classes } from '@blueprintjs/core';
 import { useState } from 'react';
+import { plainTextTolyricTagProcessor } from 'Reducers/SongReducers/plainTextTolyricTagProcessor';
 import styled from 'styled-components/macro';
-import { plainTextTolyricTagProcessor } from './plainTextTolyricTagProcessor';
 const StyledEditableTextContent = styled.textarea<{
   inFocus: boolean;
 }>`
@@ -26,13 +26,13 @@ interface Props {
 
 export default function LyricEditor({ lyrics, setLyrics }: Props) {
   const [isEditorInFocus, setIsEditorInFocus] = useState(false);
-  const setLyricsBeingEditedInternal = (e) => {
-    // const caret = e.target.selectionStart;
-    // const element = e.target;
 
-    const parsed = plainTextTolyricTagProcessor(e.target.value);
+  const adjustCursorPositionIfRequired = (
+    e: any,
+    parsedLyrics: string,
+  ) => {
     const tagsBefore = lyrics?.match(/\[/g)?.length;
-    const tagsAfter = parsed.match(/\[/g)?.length;
+    const tagsAfter = parsedLyrics.match(/\[/g)?.length;
 
     let caret = e.target.selectionStart;
     const element = e.target;
@@ -47,8 +47,16 @@ export default function LyricEditor({ lyrics, setLyrics }: Props) {
       element.selectionStart = caret;
       element.selectionEnd = caret;
     });
+  };
 
-    setLyrics(parsed);
+  const setLyricsBeingEditedInternal = (e) => {
+    // const caret = e.target.selectionStart;
+    // const element = e.target;
+
+    const parsedLyrics = plainTextTolyricTagProcessor(e.target.value);
+    adjustCursorPositionIfRequired(e, parsedLyrics);
+
+    setLyrics(parsedLyrics);
   };
 
   return (
@@ -60,11 +68,7 @@ export default function LyricEditor({ lyrics, setLyrics }: Props) {
       rows={5}
       value={lyrics}
       onChange={setLyricsBeingEditedInternal} // only update state variable
-      placeholder={
-        '[Verse 1]\n Add lyrics here, oh, please do \n Type in the song section tags too' +
-        '[v2]\n These define the parts of the song \n The list of tags is frankly, quite long\n\n' +
-        "[c]\n See the other tags in the '?' button below\n See the other tags in the '?' button below\n\n"
-      }
+      placeholder={'[Verse 1]\n Amazing Grace'}
     />
   );
 }

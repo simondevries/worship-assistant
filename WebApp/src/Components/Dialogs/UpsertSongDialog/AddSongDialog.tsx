@@ -9,7 +9,7 @@ import ISong, { songSelectors } from '../../../Interfaces/Song/Song';
 import SongContent from './SongDialogComponents/SongEditor';
 import useModal from '../useModal';
 import styled from '@emotion/styled';
-import songReducers from 'Reducers/songReducers';
+import songReducers from 'Reducers/SongReducers/songReducers';
 
 const AddSongDialog = ({
   setAddSongModalOpen,
@@ -19,16 +19,16 @@ const AddSongDialog = ({
 
   const [lyricsBeingEdited, setLyricsBeingEdited] =
     useState<string>('');
-  const fileField = useRef<HTMLInputElement>(null);
+  // const fileField = useRef<HTMLInputElement>(null);
 
-  function handleFileSelected(
-    e: React.ChangeEvent<HTMLInputElement>,
-  ): void {
-    if (e.target.files) {
-      const files = Array.from(e.target.files);
-      console.log('files:', files);
-    }
-  }
+  // function handleFileSelected(
+  //   e: React.ChangeEvent<HTMLInputElement>,
+  // ): void {
+  //   if (e.target.files) {
+  //     const files = Array.from(e.target.files);
+  //     console.log('files:', files);
+  //   }
+  // }
 
   const [song, setSongContent] = useState<ISong>({
     id: newId(),
@@ -44,7 +44,7 @@ const AddSongDialog = ({
   } as ISong);
 
   const saveSong = (shouldAddToSchedule) => {
-    const updatedSong = songReducers.updateLyricsFromString(
+    const updatedSong = songReducers.mapFromHumanReadableToInternal(
       song,
       lyricsBeingEdited,
     );

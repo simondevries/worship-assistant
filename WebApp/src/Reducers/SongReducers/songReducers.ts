@@ -1,3 +1,4 @@
+import { humanReadableTagsToInternal } from './humanReadableTagsToInternal';
 import Song, { Lyrics, songSelectors } from 'Interfaces/Song/Song';
 
 const songReducers = {
@@ -30,11 +31,11 @@ const songReducers = {
         }
     },
 
-    updateLyricsFromString: (song: Song, lyrics: string): Song => {
-        const verses = lyrics.split('[').filter((v) => !!v);
+    mapFromHumanReadableToInternal: (song: Song, updatedLyrics: string): Song => {
+        const verses = updatedLyrics.split('[').filter((v) => !!v);
         const versesMapped = verses.map((v) => {
             const sections = v.split(']');
-            const name = sections[0];
+            const name = humanReadableTagsToInternal(sections[0]);
             const content = sections[1];
 
             return {
