@@ -25,7 +25,6 @@ export default function ({ resource }) {
     resourceId: resource.id,
     slideIndex: 0,
   };
-  console.log('AVS');
 
   return (
     <ActiveSlideContainer slideIndex={0} resourceId={resource.id}>

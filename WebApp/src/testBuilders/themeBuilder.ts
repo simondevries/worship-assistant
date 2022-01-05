@@ -11,11 +11,11 @@ export class ThemeBuilder {
 
     build(): ITheme {
         return {
-            backgroundColor: 'red',
-            fontSize: 1,
+            backgroundColor: 'black',
+            fontSize: 2,
             lineHeight: '12',
             name: 'main',
-            textColor: '#333333',
+            textColor: 'white',
             textHorizontalAlign: 'M',
             textIsBold: true,
             textIsItalic: true,

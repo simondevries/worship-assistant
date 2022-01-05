@@ -38,7 +38,6 @@ const SSongHandler = styled.div<SSHandlerProps>`
       : 'end';
   }};
   ${({ theme }) => {
-    console.log('backgroundImageUri', theme.backgroundImageUri);
     return (
       theme.backgroundImageUri &&
       `background-image: url(${theme.backgroundImageUri});
@@ -74,7 +73,6 @@ const useGetFontSize = (
   configuredFontSize: number,
 ): string => {
   const ratio = dimensions.width * dimensions.height;
-
   const fontSizeRatioFactor = configuredFontSize / 2;
 
   const fontSize =
@@ -115,11 +113,7 @@ const SongHandler = ({
   const lyricsInUserOrder =
     songSelectors.lyricsInUserSpecificedOrder(song);
 
-  if (
-    !lyricsInUserOrder ||
-    lyricsInUserOrder.length <= slideIndex ||
-    !lyricsInUserOrder[slideIndex].content
-  ) {
+  if (!lyricsInUserOrder || lyricsInUserOrder.length <= slideIndex) {
     console.warn(
       `Could not find song for resource reference ${resourceReference} at index ${slideIndex}`,
     );

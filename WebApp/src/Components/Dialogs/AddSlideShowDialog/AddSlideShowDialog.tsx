@@ -95,14 +95,11 @@ export default ({ setModalOpen, index }) => {
   const [state] = useContext<Array<IState>>(Context);
   const [url, setUrl] = useState<string>();
   const [showError, setHasError] = useState<boolean>();
-  const [
-    detailedInstructions,
-    setDetailedInstructions,
-  ] = useState<string>();
+  const [detailedInstructions, setDetailedInstructions] =
+    useState<string>();
   const [raiseEvent] = useEventHandler();
-  const [slideShowProvider, setSlideShowProvider] = useState<string>(
-    '',
-  );
+  const [slideShowProvider, setSlideShowProvider] =
+    useState<string>('');
 
   if (!state || !state.currentSchedule) return null;
 
@@ -116,7 +113,6 @@ export default ({ setModalOpen, index }) => {
     }
 
     let reference: string = matches[0].replace(/"/g, '');
-    console.log({ reference });
     if (reference.indexOf('docs.google.com') !== -1) {
       // hide controls on google power points
       reference += '&rm=minimal';

@@ -91,7 +91,9 @@ export default ({ setOpen }) => {
   useEffect(() => {
     const init = async () => {
       let localFileHandles: IFileHandleMetadata[] = [];
-      const resources = (state as IState).currentSchedule.resources.filter(
+      const resources = (
+        state as IState
+      ).currentSchedule.resources.filter(
         (r) => r.resourceType === 'VIDEO',
       );
 
@@ -122,8 +124,6 @@ export default ({ setOpen }) => {
       const hasFileThatNeedGranting = localFileHandles.some(
         (fh) => fh.status !== 'SUCCESS',
       );
-
-      console.log('localFileHandles,', localFileHandles);
 
       if (!hasFileThatNeedGranting) {
         onClose();

@@ -17,9 +17,8 @@ export default (resourceId, slideIndex) => {
     if (state.hasProjectorsAttached) {
       // this will focus the window
       const w = window.open('', 'wa',
-      `width=1000px,height=500px`,);
-      console.log(w?.location.href)
-      if(w?.location.href === 'about:blank')
+        `width=1000px,height=500px`);
+      if (w?.location.href === 'about:blank')
         w.location.href = 'http://localhost:3000/project';
 
 
@@ -43,22 +42,19 @@ export default (resourceId, slideIndex) => {
       });
     }
 
-          // the Open Projector window button is only present
-      // in ActiveSlideContainer.The resourceId and slideIndex
-      // is provided to the function call there, which re-raises the
-      // slidechange event here, AFTER new window is initialised
-      // (hence the 2 sec delay). I don't think this timeout
-      // should be a permanent solution.
-      console.log('a', resourceId, 'b', slideIndex)
-      if (resourceId !== undefined && slideIndex !== undefined) {
-        console.log('raising slide change1')
-        setTimeout(() => {
-          console.log('raising slide change2')
-          raiseEvent(
-            new SlideChangeEvent(false, resourceId, slideIndex),
-          );
-        }, 2500);
-      }
+    // the Open Projector window button is only present
+    // in ActiveSlideContainer.The resourceId and slideIndex
+    // is provided to the function call there, which re-raises the
+    // slidechange event here, AFTER new window is initialised
+    // (hence the 2 sec delay). I don't think this timeout
+    // should be a permanent solution.
+    if (resourceId !== undefined && slideIndex !== undefined) {
+      setTimeout(() => {
+        raiseEvent(
+          new SlideChangeEvent(false, resourceId, slideIndex),
+        );
+      }, 2500);
+    }
   };
 
   return [openOrFocus];

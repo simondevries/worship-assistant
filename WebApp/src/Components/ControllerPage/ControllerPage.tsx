@@ -107,7 +107,6 @@ const ControllerPage = () => {
 
   const activeResourcePointer =
     state.currentSchedule.activeResourcePointer;
-  console.log({ sortedResources });
   if (!sortedResources || !sortedResources.length) {
     return (
       <StyledWelcomeCard>
