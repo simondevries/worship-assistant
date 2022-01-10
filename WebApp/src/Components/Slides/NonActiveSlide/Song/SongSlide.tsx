@@ -3,7 +3,7 @@ import styled from 'styled-components/macro';
 import BaseNonActiveSlide from '../../../../Common/BaseNonActiveSlide/BaseNonActiveSlide';
 import IVerse from '../../../../Interfaces/Verse';
 import useFitText from 'use-fit-text';
-import SongPartLabel from 'Common/SongPartLabel/SongPartLabel';
+import SongPartLabelTag from 'Common/SongPartLabel/SongPartLabelTag';
 
 const StyledBaseNonActiveSlide = styled(BaseNonActiveSlide)`
   padding: 7px 10px 15px 7px;
@@ -41,7 +41,10 @@ const SongSlide = ({
         previewMode={true}
         activeResourcePointer={{resourceId: resourceId, slideIndex: slideIndex }}
       /> */}
-          <SongPartLabel index={slideIndex} verseName={verse?.name} />
+          <SongPartLabelTag
+            index={slideIndex}
+            verseName={verse?.name}
+          />
           <div className="versecont">
             {' '}
             {verse?.content?.split('\n').map(

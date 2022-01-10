@@ -21,6 +21,14 @@ How great Thou art, how great Thou art`}];
         return this;
     }
 
+    withNullLyricContent(): SongBuilder {
+        // @ts-ignore
+        this.lyrics = this.lyrics.map((l, indx) => {
+            return { ...l, content: null }
+        });
+        return this;
+    }
+
 
     withNullVerseOrder(): SongBuilder {
         this.verseOrder = undefined;
@@ -42,6 +50,11 @@ How great Thou art, how great Thou art`}];
     thatDoesNotHaveLyrics(): SongBuilder {
         this.lyrics = [];
         this.verseOrder = [];
+        return this;
+    }
+
+    setVerseTag(index: number, tag: string): SongBuilder {
+        this.lyrics[index].name = tag;
         return this;
     }
 

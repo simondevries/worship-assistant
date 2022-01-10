@@ -1,5 +1,5 @@
 import { Classes } from '@blueprintjs/core';
-import SongPartLabel from 'Common/SongPartLabel/SongPartLabel';
+import SongPartLabelTag from 'Common/SongPartLabel/SongPartLabelTag';
 import { useState } from 'react';
 import { plainTextTolyricTagProcessor } from 'Reducers/SongReducers/plainTextTolyricTagProcessor';
 import styled from 'styled-components/macro';
@@ -20,7 +20,7 @@ const StyledEditableTextContent = styled.textarea<{
   max-height: 1000px;
 `;
 
-const StyledSongPartLabel = styled(SongPartLabel)`
+const StyledSongPartLabel = styled(SongPartLabelTag)`
   cursor: pointer;
 `;
 
@@ -77,16 +77,6 @@ export default function LyricEditor({ lyrics, setLyrics }: Props) {
 
   return (
     <>
-      <StyledEditableTextContent
-        inFocus={isEditorInFocus}
-        onBlur={() => setIsEditorInFocus(false)}
-        onFocus={() => setIsEditorInFocus(true)}
-        className={Classes.EDITABLE_TEXT}
-        rows={5}
-        value={lyrics}
-        onChange={setLyricsBeingEditedInternal} // only update state variable
-        placeholder={'[Verse 1]\n Amazing Grace'}
-      />
       <StyledTagContainer>
         <StyledSongPartLabel
           onClick={() => addPartToLyrics('Chorus')}
@@ -125,6 +115,16 @@ export default function LyricEditor({ lyrics, setLyrics }: Props) {
           verseName={'E'}
         />
       </StyledTagContainer>
+      <StyledEditableTextContent
+        inFocus={isEditorInFocus}
+        onBlur={() => setIsEditorInFocus(false)}
+        onFocus={() => setIsEditorInFocus(true)}
+        className={Classes.EDITABLE_TEXT}
+        rows={5}
+        value={lyrics}
+        onChange={setLyricsBeingEditedInternal} // only update state variable
+        placeholder={'[Verse 1]\n Amazing Grace'}
+      />
     </>
   );
 }

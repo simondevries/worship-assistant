@@ -147,51 +147,81 @@ export const songSelectors = {
   },
 
   getSongTagDetails: (name: string): SongTagDetails => {
-    const number = name.slice(1);
+    if (name === '' || name.length >= 4) return { background: 'black', color: 'white', readableValue: 'Unspecified' };
+    const remainder = name.slice(1).replace(/ */, '').toUpperCase();
+
 
     if (name && name.toLowerCase().startsWith('v')) {
       return {
-        readableValue: `Verse ${number ? number : ''}`,
-        color: 'white',
-        background: '#4d7b97'
+        readableValue: `Verse ${remainder ? remainder : ''}`.trim(),
+        color: 'black',
+        background: '#ffd6a5'
       }
     }
 
     if (name && name.toLowerCase().startsWith('c')) {
 
       return {
-        readableValue: `Chorus ${number ? number : ''}`,
+        readableValue: `Chorus ${remainder ? remainder : ''}`.trim(),
         color: 'black',
-        background: '#ff8051'
+        background: '#ffadad'
       }
     }
 
     if (name && name.toLowerCase().startsWith('b')) {
       return {
-        readableValue: `Bridge ${number ? number : ''}`,
-        color: 'white',
-        background: '#005500'
+        readableValue: `Bridge ${remainder ? remainder : ''}`.trim(),
+        color: 'black',
+        background: '#9bf6ff'
       }
     }
 
     if (name && name.toLowerCase().startsWith('p')) {
       return {
-        readableValue: `Pre-Chorus ${number ? number : ''}`,
+        readableValue: `Pre-Chorus ${remainder ? remainder : ''}`.trim(),
         color: 'black',
-        background: '#ffaf92'
+        background: '#fffffc'
       }
     }
 
-    if (
-      (name && name.toLowerCase().startsWith('i')) ||
-      (name && name.toLowerCase().startsWith('m')) ||
-      (name && name.toLowerCase().startsWith('s')) ||
-      (name && name.toLowerCase().startsWith('o'))
-    ) {
+
+    if (name && name.toLowerCase().startsWith('e')) {
       return {
-        readableValue: `Instrumental ${number ? number : ''}`,
-        color: 'whitesmoke',
-        background: '#683b3b'
+        readableValue: `Ending ${remainder ? remainder : ''}`.trim(),
+        color: 'black',
+        background: '#caffbf'
+      }
+    }
+
+    if (name && name.toLowerCase().startsWith('i')) {
+      return {
+        readableValue: `Intro ${remainder ? remainder : ''}`.trim(),
+        color: 'black',
+        background: '#bdb2ff'
+      }
+    }
+
+    if (name && name.toLowerCase().startsWith('m')) {
+      return {
+        readableValue: `Middle ${remainder ? remainder : ''}`.trim(),
+        color: 'black',
+        background: '#ffc6ff'
+      }
+    }
+
+    if (name && name.toLowerCase().startsWith('s')) {
+      return {
+        readableValue: `Solo ${remainder ? remainder : ''}`.trim(),
+        color: 'black',
+        background: '#fdffb6'
+      }
+    }
+
+    if (name && name.toLowerCase().startsWith('o')) {
+      return {
+        readableValue: `Outro ${remainder ? remainder : ''}`.trim(),
+        color: 'black',
+        background: '#a0c4ff'
       }
     }
 

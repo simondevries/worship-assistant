@@ -26,10 +26,20 @@ const StyledBody = styled.div`
   margin-top: 30px;
 `;
 
+const StyledDivider = styled.div`
+  background: #6d7982;
+  width: 3px;
+  border-radius: 5px;
+  flex-grow: 1;
+`;
+
 const StyledLeftContent = styled.div`
   min-width: 400px;
 `;
-const StyledRightContent = styled.div``;
+const StyledRightContent = styled.div`
+  display: flex;
+  justify-content: column;
+`;
 
 const EditSongDialog = ({ setEditSongModalOpen, songId }) => {
   const [raiseEvent] = useEventHandler();
@@ -112,6 +122,7 @@ const EditSongDialog = ({ setEditSongModalOpen, songId }) => {
                 className={`test ${Classes.DIALOG_FOOTER_ACTIONS}`}
               ></div>
             </StyledLeftContent>
+            <StyledDivider />
             <StyledRightContent>
               <SongPreview song={song}></SongPreview>
             </StyledRightContent>
@@ -121,7 +132,9 @@ const EditSongDialog = ({ setEditSongModalOpen, songId }) => {
             <Button onClick={() => setEditSongModalOpen(false)}>
               Close
             </Button>
-            <Button onClick={saveSong}>Save</Button>{' '}
+            <Button onClick={saveSong} intent="primary">
+              Save
+            </Button>{' '}
           </div>
         </div>
       </MediumDialog>

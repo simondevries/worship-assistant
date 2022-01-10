@@ -36,6 +36,16 @@ const songReducers = {
         const verses = updatedLyrics.split('[').filter((v) => !!v);
         const versesMapped = verses.map((v) => {
             const sections = v.split(']');
+
+            const doesSectionHaveTag = sections.length > 1;
+            if (!doesSectionHaveTag) {
+
+                return {
+                    name: '',
+                    content: sections[0],
+                } as Lyrics;
+            }
+
             const name = humanReadableTagsToInternal(sections[0]);
             const content = sections[1];
 
@@ -44,6 +54,7 @@ const songReducers = {
                 content,
             } as Lyrics;
         });
+        console.log({ versesMapped })
         return { ...song, lyrics: versesMapped };
     },
 
@@ -53,7 +64,7 @@ const songReducers = {
 
 
         lyrics.forEach((l, i) => {
-            workingResult += `[${mapFromInternalToHumanReadableTags(l.name)}]\n${l.content.trim()}`;
+            workingResult += `[${mapFromInternalToHumanReadableTags(l.name)}]\n${l.content?.trim() ?? ''}`;
             if (i < lyrics.length - 1) {
                 workingResult += '\n\n'
             }

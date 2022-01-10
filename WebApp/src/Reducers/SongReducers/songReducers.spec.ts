@@ -33,6 +33,21 @@ describe('mapFromHumanReadableToInternal', () => {
         expect(result.lyrics[1].name).toBe('v2')
     })
 
+    it('should store lyrics even when there is no tag associated with it', () => {
+
+        let song = new SongBuilder().build();
+
+
+        const lyrics = 'verseUnderConstruction[Verse 2]verseTwo';
+
+        const result = songReducers.mapFromHumanReadableToInternal(song, lyrics)
+
+        expect(result.lyrics.length).toBe(2)
+        expect(result.lyrics[0].name).toBe('')
+        expect(result.lyrics[0].content).toBe('verseUnderConstruction')
+        expect(result.lyrics[1].name).toBe('v2')
+    })
+
     it('should convert from human readable tags to internal', () => {
 
         const song = new SongBuilder().build();
@@ -73,6 +88,16 @@ describe('mapFromHumanReadableToInternal', () => {
         const res = songReducers.mapFromInternalToHumanReadable(song.lyrics);
 
         expect(res).toBe(`[Verse 1]\ncontent\n\n[Verse 2]\n${song.lyrics[1].content}`)
+    })
+
+
+    it('should handle null content', () => {
+        let song = new SongBuilder().withNullLyricContent().build();
+
+
+        const res = songReducers.mapFromInternalToHumanReadable(song.lyrics);
+
+        expect(res).toBe(`[Verse 1]\n\n\n[Verse 2]\n`)
     })
 
     it('should remove new lines at end of content', () => {

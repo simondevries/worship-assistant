@@ -1,20 +1,23 @@
-import SongPartLabel from 'Common/SongPartLabel/SongPartLabel';
+import SongPartLabelTag from 'Common/SongPartLabel/SongPartLabelTag';
 import SongHandler from 'Components/ProjectorView/Handlers/SongHandler/SongHandler';
 import Song, { songSelectors } from 'Interfaces/Song/Song';
 import React from 'react';
 import styled from 'styled-components';
 import { ThemeBuilder } from 'testBuilders/themeBuilder';
 const StyledPreviewsContainer = styled.div`
+  flex-grow: 1;
+  margin-bottom: 10px;
   background: #303e49;
   margin-top: 10px;
   display: flex;
   overflow-y: auto;
-  gap: 20px;
-  padding: 20px;
+  padding: 15px;
   max-width: 490px;
-  min-width: 240px;
+  gap: 10px;
+  width: 490px;
   flex-wrap: wrap;
   height: 50vh;
+  justify-content: center;
 `;
 
 const SongHandlerContainer = styled.div`
@@ -36,13 +39,13 @@ const SongPreview = ({ song }: Props) => {
   const lyricsInUserOrder =
     songSelectors.lyricsInUserSpecificedOrder(song);
   return (
-    <>
+    <div>
       <b>Preview</b>
       <StyledPreviewsContainer>
         {lyricsInUserOrder?.map((lyricPart, index) => {
           return (
             <StyledContainer>
-              <SongPartLabel
+              <SongPartLabelTag
                 index={index}
                 verseName={lyricPart?.name}
               />
@@ -58,7 +61,7 @@ const SongPreview = ({ song }: Props) => {
           );
         })}
       </StyledPreviewsContainer>
-    </>
+    </div>
   );
 };
 

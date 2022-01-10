@@ -41,7 +41,7 @@ interface Props {
   onClick?: () => void;
 }
 
-const SongPartLabel = ({
+const SongPartLabelTag = ({
   index,
   verseName,
   className,
@@ -69,4 +69,4 @@ const SongPartLabel = ({
   );
 };
 
-export default SongPartLabel;
+export default SongPartLabelTag;

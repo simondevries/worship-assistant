@@ -36,6 +36,7 @@ const SongEditor = ({
   return (
     <StyledContainer>
       <LyricEditor lyrics={lyrics} setLyrics={setLyrics} />
+      <b>Verse Order</b>
       <StyledSongOrder
         multiline={false}
         onChange={setSongVerseOrder}
@@ -44,9 +45,9 @@ const SongEditor = ({
           '[Optional] Set the song order here. I.e. v1, v2, c, v1, b, c'
         }
       />
-      <Popover content={<HelpText />} position={Position.TOP}>
+      {/* <Popover content={<HelpText />} position={Position.TOP}>
         <Button>?</Button>
-      </Popover>
+      </Popover> */}
     </StyledContainer>
   );
 };

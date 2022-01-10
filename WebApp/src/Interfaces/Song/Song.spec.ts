@@ -1,6 +1,54 @@
 import { SongBuilder } from 'testBuilders/songBuilder';
 import { songSelectors } from "./Song"
 
+
+
+describe('toInternalVerseTag', () => {
+
+    it('should handle empty', () => {
+        const res = songSelectors.getSongTagDetails('');
+        expect(res.readableValue).toEqual('Unspecified');
+        expect(res.color).toBeDefined();
+        expect(res.background).toBeDefined();
+    })
+
+    it('should ignore anything longer than 4 chars', () => {
+        const res = songSelectors.getSongTagDetails('verse 1');
+        expect(res.readableValue).toEqual('Unspecified');
+    })
+
+    it('should get tag details for verse 1', () => {
+        const res = songSelectors.getSongTagDetails('v1');
+        expect(res.readableValue).toEqual('Verse 1');
+    })
+
+    it('should get tag details for verse 1b', () => {
+        const res = songSelectors.getSongTagDetails('v1b');
+        expect(res.readableValue).toEqual('Verse 1B');
+    })
+
+    it('should get tag details for chorus', () => {
+        const res = songSelectors.getSongTagDetails('c');
+        expect(res.readableValue).toEqual('Chrous');
+    })
+
+    it('should get tag details for pre-chrous', () => {
+        const res = songSelectors.getSongTagDetails('p');
+        expect(res.readableValue).toEqual('Pre-Chrous');
+    })
+
+    it('should ignore spaces', () => {
+        const res = songSelectors.getSongTagDetails('c  1  b');
+        expect(res.readableValue).toEqual('Chrous 1B');
+    })
+
+    // it('should get tag details for instrumental solo ', () => {
+    //     const res = songSelectors.getSongTagDetails('i');
+    //     expect(res).toBe('Pre-Chrous');
+    // })
+
+})
+
 describe('toInternalVerseTag', () => {
     it('should map tags', () => {
 
