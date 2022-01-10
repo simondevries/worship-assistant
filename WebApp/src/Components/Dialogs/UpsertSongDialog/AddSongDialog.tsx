@@ -42,17 +42,6 @@ const AddSongDialog = ({
   const [lyricsBeingEdited, setLyricsBeingEdited] =
     useState<string>('');
 
-  // const fileField = useRef<HTMLInputElement>(null);
-
-  // function handleFileSelected(
-  //   e: React.ChangeEvent<HTMLInputElement>,
-  // ): void {
-  //   if (e.target.files) {
-  //     const files = Array.from(e.target.files);
-  //     console.log('files:', files);
-  //   }
-  // }
-
   const [song, setSong] = useState<ISong>({
     id: newId(),
     lyrics: [],
@@ -67,10 +56,6 @@ const AddSongDialog = ({
   } as ISong);
 
   const saveSong = (shouldAddToSchedule) => {
-    // const updatedSong = songReducers.mapFromHumanReadableToInternal(
-    //   song,
-    //   lyricsBeingEdited,
-    // );
     raiseEvent(new SongCreatedEvent(false, song));
     if (shouldAddToSchedule) {
       raiseEvent(
@@ -127,24 +112,7 @@ const AddSongDialog = ({
 
               <div
                 className={`test ${Classes.DIALOG_FOOTER_ACTIONS}`}
-              >
-                {/* Todo import songs */}
-                {/* <FileInput 
-              disabled={importSongButtonDisabled} 
-              text={"Select file"}
-              buttonText={"Import File"}
-              fill={true}
-              large={true}
-              inputProps={
-                {
-                  id: "file",
-                  accept:".sng, .song, .swg, .sbsong, .wow-song, .xml",
-                  ref: fileField,
-                  onChange: handleFileSelected
-                }
-              }
-            /> */}
-              </div>
+              ></div>
             </StyledLeftContent>
             <StyledRightContent>
               <SongPreview song={song}></SongPreview>
@@ -167,3 +135,35 @@ const AddSongDialog = ({
 };
 
 export default AddSongDialog;
+
+// const fileField = useRef<HTMLInputElement>(null);
+
+// function handleFileSelected(
+//   e: React.ChangeEvent<HTMLInputElement>,
+// ): void {
+//   if (e.target.files) {
+//     const files = Array.from(e.target.files);
+//     console.log('files:', files);
+//   }
+// }
+
+{
+  /* Todo import songs */
+}
+{
+  /* <FileInput 
+              disabled={importSongButtonDisabled} 
+              text={"Select file"}
+              buttonText={"Import File"}
+              fill={true}
+              large={true}
+              inputProps={
+                {
+                  id: "file",
+                  accept:".sng, .song, .swg, .sbsong, .wow-song, .xml",
+                  ref: fileField,
+                  onChange: handleFileSelected
+                }
+              }
+            /> */
+}

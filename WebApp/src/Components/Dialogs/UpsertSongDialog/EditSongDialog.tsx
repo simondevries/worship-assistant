@@ -1,30 +1,64 @@
 import React, { useEffect, useState } from 'react';
-import { Button } from '@blueprintjs/core';
+import { Button, EditableText } from '@blueprintjs/core';
 import { Dialog, Classes } from '@blueprintjs/core';
 import useEventHandler from '../../../Events/Handlers/useEventHandler';
 import SongEditedEvent from '../../../Events/Domain/songEditedEvent';
 import ISong from '../../../Interfaces/Song/Song';
 import SongEditor from './SongDialogComponents/SongEditor';
 import { songsRepo } from '../../../Storage/songsRepository';
+import MediumDialog from 'Common/Dialogs/MediumDialog';
+import SongPreview from './SongPreview';
+import styled from 'styled-components';
+import songReducers from 'Reducers/SongReducers/songReducers';
+
+const StyledEditableTextTitle = styled(EditableText)`
+  font-size: 30px;
+  height: 50px;
+  width: 100%;
+  span {
+    height: 40px !important;
+  }
+`;
+
+const StyledBody = styled.div`
+  display: flex;
+  gap: 25px;
+  margin-top: 30px;
+`;
+
+const StyledLeftContent = styled.div`
+  min-width: 400px;
+`;
+const StyledRightContent = styled.div``;
 
 const EditSongDialog = ({ setEditSongModalOpen, songId }) => {
   const [raiseEvent] = useEventHandler();
   const [isSongLoaded, setSongLoaded] = useState<Boolean>(false);
-  const [songContent, setSongContent] = useState<ISong>({} as ISong);
+  const [song, setSong] = useState<ISong>({} as ISong);
+  const [lyricsBeingEdited, setLyricsBeingEdited] =
+    useState<string>('');
+
+  const [titleBeingEdited, setTitleBeingEdited] = useState<string>(
+    song?.properties?.title ?? '',
+  );
 
   useEffect(() => {
     const loadSong = async () => {
-      const initSongContent = await songsRepo.get(songId);
+      const initSongContent: ISong = await songsRepo.get(songId);
       setSongLoaded(true);
-      setSongContent(initSongContent);
+      setSong(initSongContent);
+      setLyricsBeingEdited(
+        songReducers.mapFromInternalToHumanReadable(
+          initSongContent?.lyrics,
+        ),
+      );
+      setTitleBeingEdited(initSongContent?.properties?.title);
     };
     loadSong();
-  }, [songId, setSongLoaded, setSongContent]);
+  }, [songId, setSongLoaded, setSong]);
 
   const saveSong = () => {
-    raiseEvent(
-      new SongEditedEvent(songContent.id, false, songContent),
-    );
+    raiseEvent(new SongEditedEvent(song.id, false, song));
     setEditSongModalOpen(false);
   };
 
@@ -34,24 +68,55 @@ const EditSongDialog = ({ setEditSongModalOpen, songId }) => {
 
   return (
     <>
-      {/* <Dialog
+      <MediumDialog
         className={Classes.DARK}
         isOpen
-        title="Edit Song"
+        title="Create a new song"
         isCloseButtonShown={true}
         onClose={() => setEditSongModalOpen(false)}
       >
         <div className={Classes.DIALOG_BODY}>
-          {songContent &&
-            songContent.properties &&
-            songContent.properties.title &&
-            songContent.lyrics && (
-              <SongContent
-                songContent={songContent}
-                songContentSetter={setSongContent}
-                setImportSongButtonDisabled={() => undefined}
+          <StyledEditableTextTitle
+            multiline={false}
+            value={titleBeingEdited}
+            onChange={setTitleBeingEdited} // only update state variable
+            onConfirm={(title) => {
+              setSong(songReducers.updateSongTitle(song, title));
+            }}
+            placeholder={'Add song title here'}
+          />
+          <StyledBody>
+            <StyledLeftContent>
+              <SongEditor
+                lyrics={lyricsBeingEdited}
+                setLyrics={(l) => {
+                  setLyricsBeingEdited(l);
+                  const updatedSong =
+                    songReducers.mapFromHumanReadableToInternal(
+                      song,
+                      l,
+                    );
+
+                  setSong(updatedSong);
+                }}
+                setSongVerseOrder={(vo) =>
+                  setSong(songReducers.updateVerseOrder(song, vo))
+                }
+                songVerseOrder={
+                  song?.properties?.verseOrderDisplayValueFromUser ??
+                  ''
+                }
               />
-            )}
+
+              <div
+                className={`test ${Classes.DIALOG_FOOTER_ACTIONS}`}
+              ></div>
+            </StyledLeftContent>
+            <StyledRightContent>
+              <SongPreview song={song}></SongPreview>
+            </StyledRightContent>
+          </StyledBody>
+
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
             <Button onClick={() => setEditSongModalOpen(false)}>
               Close
@@ -59,7 +124,7 @@ const EditSongDialog = ({ setEditSongModalOpen, songId }) => {
             <Button onClick={saveSong}>Save</Button>{' '}
           </div>
         </div>
-      </Dialog> */}
+      </MediumDialog>
     </>
   );
 };

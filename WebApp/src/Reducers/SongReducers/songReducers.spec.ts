@@ -46,3 +46,49 @@ describe('mapFromHumanReadableToInternal', () => {
         expect(result.lyrics[1].name).toBe('v2')
     })
 })
+
+
+
+describe('mapFromHumanReadableToInternal', () => {
+    it('should map multiple sections', () => {
+        const song = new SongBuilder().build();
+
+        const res = songReducers.mapFromInternalToHumanReadable(song.lyrics);
+
+        expect(res).toBe(`[Verse 1]\n${song.lyrics[0].content}\n\n[Verse 2]\n${song.lyrics[1].content}`)
+    })
+
+    it('should handle empty', () => {
+        const song = new SongBuilder().thatDoesNotHaveLyrics().build();
+
+        const res = songReducers.mapFromInternalToHumanReadable(song.lyrics);
+
+        expect(res).toBe('')
+    })
+
+    it('should remove new lines at start of content', () => {
+        let song = new SongBuilder().build();
+
+        song.lyrics[0].content = '\n\ncontent'
+        const res = songReducers.mapFromInternalToHumanReadable(song.lyrics);
+
+        expect(res).toBe(`[Verse 1]\ncontent\n\n[Verse 2]\n${song.lyrics[1].content}`)
+    })
+
+    it('should remove new lines at end of content', () => {
+        let song = new SongBuilder().build();
+
+        song.lyrics[0].content = 'content\n\n'
+        const res = songReducers.mapFromInternalToHumanReadable(song.lyrics);
+
+        expect(res).toBe(`[Verse 1]\ncontent\n\n[Verse 2]\n${song.lyrics[1].content}`)
+    })
+
+    it('should handle null', () => {
+        const res = songReducers.mapFromInternalToHumanReadable([]);
+
+        expect(res).toBe('')
+    })
+
+
+});

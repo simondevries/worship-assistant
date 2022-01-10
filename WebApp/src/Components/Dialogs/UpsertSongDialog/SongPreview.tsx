@@ -35,12 +35,11 @@ interface Props {
 const SongPreview = ({ song }: Props) => {
   const lyricsInUserOrder =
     songSelectors.lyricsInUserSpecificedOrder(song);
-  console.log(lyricsInUserOrder);
   return (
     <>
       <b>Preview</b>
       <StyledPreviewsContainer>
-        {lyricsInUserOrder.map((lyricPart, index) => {
+        {lyricsInUserOrder?.map((lyricPart, index) => {
           return (
             <StyledContainer>
               <SongPartLabel

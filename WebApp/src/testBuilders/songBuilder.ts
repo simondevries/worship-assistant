@@ -14,7 +14,7 @@ Thy power throughout the universe displayed`},
         name: "v2", content: `Then sings \nmy soul, my Savior God to Thee\n
 How great Thou art, how great Thou art\n
 Then sings my soul, my Savior God to Thee\n
-How great Thou art, how great Thou art\n`}];
+How great Thou art, how great Thou art`}];
 
     withVerseOrder(order: string[]): SongBuilder {
         this.verseOrder = order;
@@ -36,6 +36,12 @@ How great Thou art, how great Thou art\n`}];
         this.lyrics = this.lyrics.map((l, indx) => {
             return { ...l, name: tags[indx] }
         });
+        return this;
+    }
+
+    thatDoesNotHaveLyrics(): SongBuilder {
+        this.lyrics = [];
+        this.verseOrder = [];
         return this;
     }
 

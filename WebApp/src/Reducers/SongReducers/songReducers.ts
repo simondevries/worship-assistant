@@ -1,3 +1,4 @@
+import { mapFromInternalToHumanReadableTags } from './internalToHumanReadableTags';
 import { humanReadableTagsToInternal } from './humanReadableTagsToInternal';
 import Song, { Lyrics, songSelectors } from 'Interfaces/Song/Song';
 
@@ -44,9 +45,23 @@ const songReducers = {
             } as Lyrics;
         });
         return { ...song, lyrics: versesMapped };
+    },
+
+    mapFromInternalToHumanReadable: (lyrics: Lyrics[]): string => {
+        if (!lyrics) return '';
+        let workingResult = '';
+
+
+        lyrics.forEach((l, i) => {
+            workingResult += `[${mapFromInternalToHumanReadableTags(l.name)}]\n${l.content.trim()}`;
+            if (i < lyrics.length - 1) {
+                workingResult += '\n\n'
+            }
+        })
+
+
+        return workingResult;
     }
-
-
 
 }
 
