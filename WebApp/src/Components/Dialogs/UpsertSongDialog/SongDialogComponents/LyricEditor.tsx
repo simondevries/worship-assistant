@@ -43,8 +43,8 @@ export default function LyricEditor({ lyrics, setLyrics }: Props) {
     e: any,
     parsedLyrics: string,
   ) => {
-    const tagsBefore = lyrics?.match(/\[/g)?.length;
-    const tagsAfter = parsedLyrics.match(/\[/g)?.length;
+    const tagsBefore = lyrics?.match(/\]/g)?.length;
+    const tagsAfter = parsedLyrics.match(/\]/g)?.length;
 
     let caret = e.target.selectionStart;
     const element = e.target;
@@ -116,6 +116,7 @@ export default function LyricEditor({ lyrics, setLyrics }: Props) {
         />
       </StyledTagContainer>
       <StyledEditableTextContent
+        spellCheck={true}
         inFocus={isEditorInFocus}
         onBlur={() => setIsEditorInFocus(false)}
         onFocus={() => setIsEditorInFocus(true)}

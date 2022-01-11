@@ -82,6 +82,7 @@ const AddSongDialog = ({
   return (
     <>
       <MediumDialog
+        canEscapeKeyClose={true}
         className={Classes.DARK}
         isOpen
         title="Create a new song"
