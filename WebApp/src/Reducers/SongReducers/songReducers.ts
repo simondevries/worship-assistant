@@ -54,7 +54,6 @@ const songReducers = {
                 content,
             } as Lyrics;
         });
-        console.log({ versesMapped })
         return { ...song, lyrics: versesMapped };
     },
 

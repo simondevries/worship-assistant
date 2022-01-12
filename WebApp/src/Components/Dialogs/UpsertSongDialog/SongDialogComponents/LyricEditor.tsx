@@ -3,13 +3,15 @@ import SongPartLabelTag from 'Common/SongPartLabel/SongPartLabelTag';
 import { useState } from 'react';
 import { plainTextTolyricTagProcessor } from 'Reducers/SongReducers/plainTextTolyricTagProcessor';
 import styled from 'styled-components/macro';
-const StyledEditableTextContent = styled.textarea<{
-  inFocus: boolean;
-}>`
+import AceEditor from "react-ace";
+
+import "ace-builds/src-noconflict/mode-xml";
+import "ace-builds/src-noconflict/theme-solarized_dark";
+
+const StyledEditableTextContent = styled(AceEditor)`
   margin-bottom: 5px;
   height: 300px;
-  background: ${({ inFocus }) =>
-    inFocus ? '#1f2931' : 'transparent'};
+  background: true: '#1f2931' : 'transparent'};
   color: white;
   flex-grow: 1;
   border: 0px;
@@ -38,6 +40,14 @@ interface Props {
 
 export default function LyricEditor({ lyrics, setLyrics }: Props) {
   const [isEditorInFocus, setIsEditorInFocus] = useState(false);
+  const [selectedLyrics, setSelectedLyrics] = useState<any>();
+
+  const textSelected = (
+    selectedText: any,
+    e: any,
+  ) => {
+    setSelectedLyrics(selectedText);
+  };
 
   const adjustCursorPositionIfRequired = (
     e: any,
@@ -62,17 +72,29 @@ export default function LyricEditor({ lyrics, setLyrics }: Props) {
     });
   };
 
-  const setLyricsBeingEditedInternal = (e) => {
-    const parsedLyrics = plainTextTolyricTagProcessor(e.target.value);
-    adjustCursorPositionIfRequired(e, parsedLyrics);
+  const setLyricsBeingEditedInternal = (value, e) => {
+    // const parsedLyrics = plainTextTolyricTagProcessor(value);
+    // adjustCursorPositionIfRequired(e, parsedLyrics);
 
-    setLyrics(parsedLyrics);
+    // setLyrics(parsedLyrics);
+    setLyrics(value)
   };
 
   const addPartToLyrics = (part: string) => {
-    const updatedLyrics = (lyrics += `\n\n[${part}]`);
-
-    setLyrics(updatedLyrics);
+    // mutate lyrics by adding parts in a new line
+    let editorTextArray = lyrics.split('\n');
+    let n = 0;
+    if (selectedLyrics) {
+      for (var cursorRange of selectedLyrics.getAllRanges()) {
+        // add part in inserted new line just before the start of selection
+        editorTextArray.splice(cursorRange.start['row'] + n, 0, `\n[${part}]`);
+        // insert new line just after the end of selection
+        n += 2;
+        editorTextArray.splice(cursorRange.end['row'] + n, 0, `\n`);
+      }
+    }
+    editorTextArray = editorTextArray.filter(e => e)
+    setLyrics(editorTextArray.join('\n'));
   };
 
   return (
@@ -116,14 +138,18 @@ export default function LyricEditor({ lyrics, setLyrics }: Props) {
         />
       </StyledTagContainer>
       <StyledEditableTextContent
-        spellCheck={true}
-        inFocus={isEditorInFocus}
+        mode="xml"
+        theme="solarized_dark"
+        fontSize={14}
+        showPrintMargin={true}
+        showGutter={false}
+        highlightActiveLine={true}
+        focus={isEditorInFocus}
+        value={lyrics}
         onBlur={() => setIsEditorInFocus(false)}
         onFocus={() => setIsEditorInFocus(true)}
-        className={Classes.EDITABLE_TEXT}
-        rows={5}
-        value={lyrics}
         onChange={setLyricsBeingEditedInternal} // only update state variable
+        onSelectionChange={textSelected}
         placeholder={'[Verse 1]\n Amazing Grace'}
       />
     </>
