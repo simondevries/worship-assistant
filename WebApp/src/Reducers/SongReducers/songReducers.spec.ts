@@ -146,6 +146,6 @@ describe('addPartToLyrics', () => {
     it('should support empty lyrics lines', () => {
         const res = songReducers.addPartToLyrics('', 'Chorus', [{ startRow: 0, endRow: 2 }])
 
-        expect(res).toBe('[Chorus]\n');
+        expect(res).toBe('[Chorus]\n\n');
     })
 })

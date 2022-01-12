@@ -230,6 +230,20 @@ export const songSelectors = {
       color: 'white',
       background: 'black'
     };
+  },
+
+  getLineNumbersOfTags: (lyrics: string) => {
+    let workingResult: Number[] = []
+    const lines = lyrics.split('\n')
+
+    lines.forEach((line, indx) => {
+      const match = line.match(/\[.*\][ ]*$/)
+      if (match) {
+        workingResult = workingResult.concat([indx])
+      }
+
+    })
+    return workingResult
   }
 }
 

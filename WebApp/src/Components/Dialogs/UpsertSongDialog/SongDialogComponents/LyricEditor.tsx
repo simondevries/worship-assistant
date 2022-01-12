@@ -3,18 +3,20 @@ import SongPartLabelTag from 'Common/SongPartLabel/SongPartLabelTag';
 import { useRef, useState } from 'react';
 import { plainTextTolyricTagProcessor } from 'Reducers/SongReducers/plainTextTolyricTagProcessor';
 import styled from 'styled-components/macro';
-import AceEditor from 'react-ace';
+import AceEditor, { IMarker } from 'react-ace';
 
 import 'ace-builds/src-noconflict/mode-xml';
 import 'ace-builds/src-noconflict/theme-solarized_dark';
 import songReducers, {
   SelectedText,
 } from 'Reducers/SongReducers/songReducers';
+import { songSelectors } from 'Interfaces/Song/Song';
 
 const StyledEditableTextContent = styled(AceEditor)`
   margin-bottom: 5px;
   height: 300px;
-  background: true: '#1f2931' : 'transparent'};
+  background: #1f2931;
+  /* font-family: inherit; */
   color: white;
   flex-grow: 1;
   border: 0px;
@@ -23,14 +25,13 @@ const StyledEditableTextContent = styled(AceEditor)`
   min-height: 250px;
   height: 50vh;
   max-height: 1000px;
-
 `;
 
 const StyledInTextTags = styled.div`
   .tag {
     position: absolute;
-    background-color: gray;
-    color: #000;
+    background-color: #ffadad;
+    opacity: 0.7;
   }
 `;
 
@@ -59,6 +60,8 @@ export default function LyricEditor({ lyrics, setLyrics }: Props) {
   const textSelected = (selectedText: any, e: any) => {
     setSelectedLyrics(selectedText);
   };
+
+  const markerPositions = songSelectors.getLineNumbersOfTags(lyrics);
 
   const adjustCursorPositionIfRequired = (
     e: any,
@@ -99,13 +102,17 @@ export default function LyricEditor({ lyrics, setLyrics }: Props) {
     }
 
     const textSelections = selectedLyrics
-      .getAllRanges()
-      .map((range) => {
+      ?.getAllRanges()
+      ?.map((range) => {
         return {
           startRow: range.start['row'],
           endRow: range.end['row'],
         } as SelectedText;
       });
+
+    if (!selectedLyrics) {
+      setLyrics(lyrics.concat(`\n[${partTagName}]`));
+    }
 
     const updatedLyrics = songReducers.addPartToLyrics(
       lyrics,
@@ -173,16 +180,18 @@ export default function LyricEditor({ lyrics, setLyrics }: Props) {
           onBlur={() => setIsEditorInFocus(false)}
           onFocus={() => setIsEditorInFocus(true)}
           onChange={setLyricsBeingEditedInternal} // only update state variable
-          markers={[
-            {
-              startRow: 0,
-              startCol: 2,
-              endRow: 1,
-              endCol: 20,
-              className: 'tag',
-              type: 'text',
-            },
-          ]}
+          markers={
+            (markerPositions?.map((pos) => {
+              return {
+                startRow: pos,
+                startCol: 0,
+                endRow: pos,
+                endCol: 999,
+                className: 'tag',
+                type: 'text',
+              };
+            }) as IMarker[]) ?? ([] as IMarker[])
+          }
           onSelectionChange={textSelected}
           placeholder={'[Verse 1]\n Amazing Grace'}
         />

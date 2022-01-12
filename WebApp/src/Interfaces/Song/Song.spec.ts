@@ -138,3 +138,18 @@ describe('lyricsInUserSpecificedOrder', () => {
         expect(result.map(l => l.name)).toStrictEqual(['v1', 'v2'])
     })
 })
+
+describe('getLineNumbersOfTags', () => {
+    it('handles empty', () => {
+        const res = songSelectors.getLineNumbersOfTags('');
+
+        expect(res).toEqual([]);
+    })
+    it('should get line numbers', () => {
+        const res = songSelectors.getLineNumbersOfTags('[chorus]\nwelcome\n\n[verse]\nto\n\n[verse]\n\nthis song');
+
+        expect(res[0]).toEqual(0);
+        expect(res[1]).toEqual(3);
+        expect(res[2]).toEqual(6);
+    })
+})
