@@ -71,8 +71,46 @@ const songReducers = {
 
 
         return workingResult;
+    },
+
+    addPartToLyrics: (lyrics: string, partTagName: string, selectedText: SelectedText[]) => {
+        if (!partTagName || selectedText.length === 0) return lyrics;
+
+        // mutate lyrics by adding parts in a new line
+        let editorTextArray = lyrics.split('\n');
+        let offset = 0;
+        for (var cursorRange of selectedText) {
+            const startRow = cursorRange.startRow;
+            const endRow = cursorRange.endRow;
+
+            let shouldIncludeNewLineBeforeParagraph = true;
+            if (
+                startRow === 0 ||
+                editorTextArray[startRow - 1].trim() === ''
+            ) {
+                shouldIncludeNewLineBeforeParagraph = false;
+            }
+            const tagText = `${shouldIncludeNewLineBeforeParagraph === true ? '\n' : ''
+                }[${partTagName}]`
+
+            editorTextArray.splice(
+                startRow + offset,
+                0,
+                tagText
+            );
+
+            // Add new line at end
+            offset += 2;
+            editorTextArray.splice(endRow + offset, 0, '');
+        }
+        return editorTextArray.join('\n');
     }
 
 }
 
 export default songReducers;
+
+export interface SelectedText {
+    startRow: number;
+    endRow: number
+}

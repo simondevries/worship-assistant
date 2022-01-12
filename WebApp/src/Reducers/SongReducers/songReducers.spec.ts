@@ -117,3 +117,35 @@ describe('mapFromHumanReadableToInternal', () => {
 
 
 });
+
+describe('addPartToLyrics', () => {
+    it('can add chorus to first row', () => {
+        const res = songReducers.addPartToLyrics('Amazing grace', 'Chorus', [{ startRow: 0, endRow: 0 }])
+
+        expect(res).toBe('[Chorus]\nAmazing grace\n');
+    })
+    it('should add chorus in correct place', () => {
+        const res = songReducers.addPartToLyrics('Amazing grace\nHow sweet the sound', 'Chorus', [{ startRow: 1, endRow: 1 }])
+
+        expect(res).toBe('Amazing grace\n\n[Chorus]\nHow sweet the sound\n');
+    })
+
+    it('should not add a new line when there is a new line preceeding line', () => {
+        const res = songReducers.addPartToLyrics('Amazing grace\n\nHow sweet the sound', 'Chorus', [{ startRow: 2, endRow: 2 }])
+
+        expect(res).toBe('Amazing grace\n\n[Chorus]\nHow sweet the sound\n');
+    })
+
+
+    it('should support multiple lines', () => {
+        const res = songReducers.addPartToLyrics('Amazing grace\nHow sweet the sound\nTwas grace that saved\n[Verse]\namazing', 'Chorus', [{ startRow: 0, endRow: 2 }])
+
+        expect(res).toBe('[Chorus]\nAmazing grace\nHow sweet the sound\nTwas grace that saved\n\n[Verse]\namazing');
+    })
+
+    it('should support empty lyrics lines', () => {
+        const res = songReducers.addPartToLyrics('', 'Chorus', [{ startRow: 0, endRow: 2 }])
+
+        expect(res).toBe('[Chorus]\n');
+    })
+})

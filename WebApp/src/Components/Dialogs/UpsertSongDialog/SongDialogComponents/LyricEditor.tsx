@@ -1,12 +1,15 @@
 import { Classes } from '@blueprintjs/core';
 import SongPartLabelTag from 'Common/SongPartLabel/SongPartLabelTag';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { plainTextTolyricTagProcessor } from 'Reducers/SongReducers/plainTextTolyricTagProcessor';
 import styled from 'styled-components/macro';
-import AceEditor from "react-ace";
+import AceEditor from 'react-ace';
 
-import "ace-builds/src-noconflict/mode-xml";
-import "ace-builds/src-noconflict/theme-solarized_dark";
+import 'ace-builds/src-noconflict/mode-xml';
+import 'ace-builds/src-noconflict/theme-solarized_dark';
+import songReducers, {
+  SelectedText,
+} from 'Reducers/SongReducers/songReducers';
 
 const StyledEditableTextContent = styled(AceEditor)`
   margin-bottom: 5px;
@@ -20,6 +23,15 @@ const StyledEditableTextContent = styled(AceEditor)`
   min-height: 250px;
   height: 50vh;
   max-height: 1000px;
+
+`;
+
+const StyledInTextTags = styled.div`
+  .tag {
+    position: absolute;
+    background-color: gray;
+    color: #000;
+  }
 `;
 
 const StyledSongPartLabel = styled(SongPartLabelTag)`
@@ -42,10 +54,9 @@ export default function LyricEditor({ lyrics, setLyrics }: Props) {
   const [isEditorInFocus, setIsEditorInFocus] = useState(false);
   const [selectedLyrics, setSelectedLyrics] = useState<any>();
 
-  const textSelected = (
-    selectedText: any,
-    e: any,
-  ) => {
+  const aceRef = useRef<any>(undefined);
+
+  const textSelected = (selectedText: any, e: any) => {
     setSelectedLyrics(selectedText);
   };
 
@@ -56,45 +67,56 @@ export default function LyricEditor({ lyrics, setLyrics }: Props) {
     const tagsBefore = lyrics?.match(/\]/g)?.length;
     const tagsAfter = parsedLyrics.match(/\]/g)?.length;
 
-    let caret = e.target.selectionStart;
-    const element = e.target;
+    const column =
+      aceRef?.current?.editor?.getCursorPosition().column;
+    const row = aceRef?.current?.editor?.getCursorPosition().row;
+
+    if (!column || !row) return;
+
     const hasATagJustBeenAdded =
       !tagsBefore ||
       (tagsBefore && tagsAfter && tagsBefore < tagsAfter);
     if (hasATagJustBeenAdded) {
-      // Move cursor one to the right to account for '[' char added just before current cursor
-      caret += 1;
+      const hasATagJustBeenAdded =
+        !tagsBefore ||
+        (tagsBefore && tagsAfter && tagsBefore < tagsAfter);
+      if (hasATagJustBeenAdded) {
+        aceRef.current.editor.moveCursorTo(row, column + 1);
+      }
     }
-
-    window.requestAnimationFrame(() => {
-      element.selectionStart = caret;
-      element.selectionEnd = caret;
-    });
   };
 
   const setLyricsBeingEditedInternal = (value, e) => {
-    // const parsedLyrics = plainTextTolyricTagProcessor(value);
-    // adjustCursorPositionIfRequired(e, parsedLyrics);
+    const parsedLyrics = plainTextTolyricTagProcessor(value);
+    adjustCursorPositionIfRequired(e, parsedLyrics);
 
-    // setLyrics(parsedLyrics);
-    setLyrics(value)
+    setLyrics(parsedLyrics);
   };
 
-  const addPartToLyrics = (part: string) => {
-    // mutate lyrics by adding parts in a new line
-    let editorTextArray = lyrics.split('\n');
-    let n = 0;
-    if (selectedLyrics) {
-      for (var cursorRange of selectedLyrics.getAllRanges()) {
-        // add part in inserted new line just before the start of selection
-        editorTextArray.splice(cursorRange.start['row'] + n, 0, `\n[${part}]`);
-        // insert new line just after the end of selection
-        n += 2;
-        editorTextArray.splice(cursorRange.end['row'] + n, 0, `\n`);
-      }
+  const addPartToLyrics = (partTagName: string) => {
+    if (!selectedLyrics) {
+      setLyrics(lyrics.concat(`\n[${partTagName}]`));
     }
-    editorTextArray = editorTextArray.filter(e => e)
-    setLyrics(editorTextArray.join('\n'));
+
+    const textSelections = selectedLyrics
+      .getAllRanges()
+      .map((range) => {
+        return {
+          startRow: range.start['row'],
+          endRow: range.end['row'],
+        } as SelectedText;
+      });
+
+    const updatedLyrics = songReducers.addPartToLyrics(
+      lyrics,
+      partTagName,
+      textSelections,
+    );
+
+    const row = aceRef?.current?.editor?.getCursorPosition().row;
+    aceRef.current.editor.moveCursorTo(row + 1, 0);
+
+    setLyrics(updatedLyrics);
   };
 
   return (
@@ -137,21 +159,34 @@ export default function LyricEditor({ lyrics, setLyrics }: Props) {
           verseName={'E'}
         />
       </StyledTagContainer>
-      <StyledEditableTextContent
-        mode="xml"
-        theme="solarized_dark"
-        fontSize={14}
-        showPrintMargin={true}
-        showGutter={false}
-        highlightActiveLine={true}
-        focus={isEditorInFocus}
-        value={lyrics}
-        onBlur={() => setIsEditorInFocus(false)}
-        onFocus={() => setIsEditorInFocus(true)}
-        onChange={setLyricsBeingEditedInternal} // only update state variable
-        onSelectionChange={textSelected}
-        placeholder={'[Verse 1]\n Amazing Grace'}
-      />
+      <StyledInTextTags>
+        <StyledEditableTextContent
+          mode="xml"
+          theme="solarized_dark"
+          fontSize={14}
+          ref={aceRef}
+          showPrintMargin={true}
+          showGutter={false}
+          highlightActiveLine={true}
+          focus={isEditorInFocus}
+          value={lyrics}
+          onBlur={() => setIsEditorInFocus(false)}
+          onFocus={() => setIsEditorInFocus(true)}
+          onChange={setLyricsBeingEditedInternal} // only update state variable
+          markers={[
+            {
+              startRow: 0,
+              startCol: 2,
+              endRow: 1,
+              endCol: 20,
+              className: 'tag',
+              type: 'text',
+            },
+          ]}
+          onSelectionChange={textSelected}
+          placeholder={'[Verse 1]\n Amazing Grace'}
+        />
+      </StyledInTextTags>
     </>
   );
 }
