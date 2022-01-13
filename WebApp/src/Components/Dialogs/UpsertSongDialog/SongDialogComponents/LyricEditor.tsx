@@ -14,7 +14,7 @@ import { songSelectors } from 'Interfaces/Song/Song';
 
 const StyledEditableTextContent = styled(AceEditor)`
   margin-bottom: 5px;
-  height: 300px;
+  /* height: 300px; */
   background: #1f2931;
   /* font-family: inherit; */
   color: white;
@@ -22,9 +22,9 @@ const StyledEditableTextContent = styled(AceEditor)`
   border: 0px;
   resize: none;
   /* overflow-y: hidden; */
-  min-height: 250px;
-  height: 50vh;
-  max-height: 1000px;
+  /* min-height: 250px; */
+  /* height: 50vh; */
+  /* max-height: 1000px; */
 `;
 
 const StyledInTextTags = styled.div`
@@ -33,6 +33,8 @@ const StyledInTextTags = styled.div`
     background-color: #ffadad;
     opacity: 0.7;
   }
+  height: inherit;
+  flex: 1;
 `;
 
 const StyledSongPartLabel = styled(SongPartLabelTag)`
@@ -180,6 +182,9 @@ export default function LyricEditor({ lyrics, setLyrics }: Props) {
           onBlur={() => setIsEditorInFocus(false)}
           onFocus={() => setIsEditorInFocus(true)}
           onChange={setLyricsBeingEditedInternal} // only update state variable
+          width={'100%'}
+          height={'100%'}
+          // wrapEnabled={true}
           markers={
             (markerPositions?.map((pos) => {
               return {

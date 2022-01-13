@@ -20,6 +20,18 @@ const StyledEditableTextTitle = styled(EditableText)`
   }
 `;
 
+const StyledDialogFooter = styled.div`
+  padding: 5px 15px;
+`;
+
+const StyledDialogBody = styled.div`
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: fit-content;
+  min-height: 500px;
+  max-height: 80vh;
+`;
+
 const StyledBody = styled.div`
   display: flex;
   gap: 25px;
@@ -34,7 +46,8 @@ const StyledDivider = styled.div`
 `;
 
 const StyledLeftContent = styled.div`
-  min-width: 400px;
+  /* min-width: 400px; */
+  min-height: 100%;
 `;
 const StyledRightContent = styled.div`
   display: flex;
@@ -86,7 +99,7 @@ const EditSongDialog = ({ setEditSongModalOpen, songId }) => {
         isCloseButtonShown={true}
         onClose={() => setEditSongModalOpen(false)}
       >
-        <div className={Classes.DIALOG_BODY}>
+        <StyledDialogBody className={Classes.DIALOG_BODY}>
           <StyledEditableTextTitle
             multiline={false}
             value={titleBeingEdited}
@@ -128,16 +141,16 @@ const EditSongDialog = ({ setEditSongModalOpen, songId }) => {
               <SongPreview song={song}></SongPreview>
             </StyledRightContent>
           </StyledBody>
+        </StyledDialogBody>
 
-          <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-            <Button onClick={() => setEditSongModalOpen(false)}>
-              Close
-            </Button>
-            <Button onClick={saveSong} intent="primary">
-              Save
-            </Button>{' '}
-          </div>
-        </div>
+        <StyledDialogFooter className={Classes.DIALOG_FOOTER_ACTIONS}>
+          <Button onClick={() => setEditSongModalOpen(false)}>
+            Close
+          </Button>
+          <Button onClick={saveSong} intent="primary">
+            Save
+          </Button>{' '}
+        </StyledDialogFooter>
       </MediumDialog>
     </>
   );
