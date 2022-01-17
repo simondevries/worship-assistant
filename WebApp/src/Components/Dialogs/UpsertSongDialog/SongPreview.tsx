@@ -12,12 +12,12 @@ const StyledPreviewsContainer = styled.div`
   display: flex;
   overflow-y: auto;
   padding: 15px;
-  max-width: 490px;
   gap: 10px;
-  width: 490px;
+  min-width: 490px;
   flex-wrap: wrap;
   height: 50vh;
   justify-content: center;
+  max-width: 510px;
 `;
 
 const SongHandlerContainer = styled.div`

@@ -1,11 +1,14 @@
+import { fromMessageToProjectorDimensionsMessage, projectorDimensionsMessageKey } from './Interfaces/projectorDimensionsMessage';
 import useEventHandler from './Events/Handlers/useEventHandler';
 import AppEvent from './Events/Domain/appEvent';
 import { useEffect, useState, useContext } from 'react';
 import { Context } from './Common/Store/Store';
+import { SetCurrentProjectorSizeAction } from 'Reducers/reducers';
 
 let bc = new BroadcastChannel('worshipAssistApp');
 
-export default () => {
+
+const useBroadcastChannelMessageReceiver = () => {
   const [raiseEvent] = useEventHandler();
   const [state, dispatch] = useContext(Context);
   const [eventsReceived, setEventsReceived] = useState<
@@ -15,7 +18,13 @@ export default () => {
   useEffect(() => {
     bc.onmessage = function (channel) {
       if (window.location.pathname.indexOf('project') === -1) {
-        if (channel.data === 'ping-project-views--to-controller') {
+        if ((channel.data as string).startsWith(projectorDimensionsMessageKey)) {
+          console.log('received', JSON.stringify(channel.data))
+          const dimensionMessage = fromMessageToProjectorDimensionsMessage(channel.data)
+
+          const action: SetCurrentProjectorSizeAction = { type: 'setCurrentProjectorSize', payload: { width: dimensionMessage.width, height: dimensionMessage.height } }
+          dispatch(action)
+
           dispatch({
             type: 'hasProjectorsAttached',
             payload: true,
@@ -23,6 +32,8 @@ export default () => {
         }
 
         return;
+      } else if ((channel.data as string).startsWith(projectorDimensionsMessageKey)) {
+        return
       }
 
       if (channel.data === 'ping-controller-views-to-project') {
@@ -74,3 +85,5 @@ export default () => {
 
   return [eventsReceived];
 };
+
+export default useBroadcastChannelMessageReceiver;

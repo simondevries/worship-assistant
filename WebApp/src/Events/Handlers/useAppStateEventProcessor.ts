@@ -203,6 +203,7 @@ const useAppStateEventProcessors = () => {
       payload: false,
     });
   };
+
   const arr = [
     SongCreatedEventHandler,
     SongAddedToScheduleEventHandler,

@@ -3,4 +3,10 @@ import { ITheme } from "./themes";
 export interface ISettings {
   currentScheduleId: string;
   globalSlideTheme: ITheme;
+  projectorScreenDimensions: IProjectorScreenDimensions;
+}
+
+export interface IProjectorScreenDimensions {
+  width: number;
+  height: number
 }

@@ -6,6 +6,11 @@ export interface ReducerAction {
   type: string
 }
 
+export interface SetCurrentProjectorSizeAction extends ReducerAction {
+  payload: { width: number, height: number },
+  type: 'setCurrentProjectorSize'
+}
+
 function reducers(state: IState, action: ReducerAction): IState {
   switch (action.type) {
     // Resources
@@ -226,6 +231,10 @@ function reducers(state: IState, action: ReducerAction): IState {
 
     default:
       throw new Error();
+
+    case 'setCurrentProjectorSize':
+      const sizeAction = action as SetCurrentProjectorSizeAction;
+      return { ...state, settings: { ...state.settings, projectorScreenDimensions: { width: sizeAction.payload.width, height: sizeAction.payload.height } } }
   }
 }
 

@@ -23,6 +23,7 @@ import UserFileHandlerPermissionManagerDialog from './Components/Dialogs/UserFil
 import IState from './Interfaces/State';
 import LoginPage from './Login';
 import tourSteps from './tourSteps';
+import ProjectorRoute from 'Components/ProjectorRoute/ProjectorRoute';
 
 const StyledControllerPageContainer = styled.div`
   display: flex;
@@ -79,9 +80,6 @@ const AppRouter = () => {
     // window.location.pathname.indexOf('controller') !== -1,
   );
 
-  const activeResourcePointer = (state as IState)?.currentSchedule
-    ?.activeResourcePointer;
-
   useGlobalHotkeyListener();
 
   if (loadingState === fetchStatus.Loading) {
@@ -132,13 +130,7 @@ const AppRouter = () => {
             </StyledControllerPageContainer>
           </Route>
           <Route path="/project" exact>
-            <ProjectorView
-              previewMode={false}
-              activeResourcePointer={activeResourcePointer}
-              globalTheme={
-                (state as IState).settings.globalSlideTheme
-              }
-            />
+            <ProjectorRoute />
           </Route>
           <Route path="/googleOAuthRedirect" exact>
             Yay welcome back

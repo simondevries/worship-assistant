@@ -5,7 +5,7 @@ import useGoToSlideProcessor from './useGoToSlideProcessor';
 import useDomEventsProcessor from './useDomEventsProcessor';
 import ReactGA from 'react-ga';
 
-export default () => {
+const useEventHandler = () => {
   const raiseEvent = (event: any) => {
     console.info('event raised: ' + event.eventType);
     try {
@@ -42,3 +42,5 @@ export default () => {
 
   return [raiseEvent];
 };
+
+export default useEventHandler;

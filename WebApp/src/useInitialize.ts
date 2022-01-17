@@ -11,6 +11,7 @@ import ISongResourceReference from './Interfaces/SongResourceReference';
 import newScheduleCreatedEvent from './Events/Domain/newScheduleCreatedEvent';
 import { empty as emptyResource } from './Interfaces/Schedule';
 import useEventHandler from './Events/Handlers/useEventHandler';
+import { generateProjectorDimensionsMessage } from 'Interfaces/projectorDimensionsMessage';
 
 let bc = new BroadcastChannel('worshipAssistApp');
 
@@ -116,7 +117,7 @@ function useInitialize(dispatch) {
     if (window.location.pathname.indexOf('/project') === -1) {
       bc.postMessage('ping-controller-views-to-project');
     } else {
-      bc.postMessage('ping-project-views--to-controller');
+      bc.postMessage(generateProjectorDimensionsMessage());
     }
   }, []);
 

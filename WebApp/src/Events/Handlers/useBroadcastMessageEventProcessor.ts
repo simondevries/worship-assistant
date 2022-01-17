@@ -34,10 +34,12 @@ import BibleVerseAddedToScheduleEvent, {
 import ProjectorWindowClosedEvent, {
   ProjectorWindowClosedEventName,
 } from '../Domain/projectorWindowClosedEvent';
+import PingToControllerEvent, { PingToControllerEventKey } from 'Events/Domain/pingToControllerEvent';
+import { projectorDimensionsMessageToString } from 'Interfaces/projectorDimensionsMessage';
 
 let bc = new BroadcastChannel('worshipAssistApp');
 
-export default () => {
+const useBroadcastMessageEventProcessor = () => {
   const SongCreatedEventHandler = (event: SongCreatedEvent) => {
     if (
       event.eventType !== SongCreatedEventName ||
@@ -212,6 +214,19 @@ export default () => {
     );
   };
 
+
+
+  const PingToController = (event: PingToControllerEvent) => {
+    if (event.eventType !== PingToControllerEventKey) return;
+
+    // NB: sdv this is a special case and does not go through the standard processors
+    // Could probably be refactored tho ;)
+    const message = projectorDimensionsMessageToString(event.projectorDimensionsMessage)
+    bc.postMessage(
+      message
+      // JSON.stringify({ ...event, isExternalEvent: true }),
+    );
+  };
   // Chrome extension
   // const activeResource =
   //   state.currentSchedule.resources[resourceId];
@@ -245,6 +260,10 @@ export default () => {
     VideoModeChangeEventHandler,
     BibleVerseAddedToScheduleEventHandler,
     ProjectorWindowClosedEventHandler,
+    PingToController,
   ];
   return [arr];
 };
+
+
+export default useBroadcastMessageEventProcessor;

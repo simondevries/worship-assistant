@@ -22,6 +22,18 @@ const StyledEditableTextTitle = styled(EditableText)`
   }
 `;
 
+const StyledDialogFooter = styled.div`
+  padding: 5px 15px;
+`;
+
+const StyledDialogBody = styled.div`
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: fit-content;
+  min-height: 500px;
+  max-height: 80vh;
+`;
+
 const StyledBody = styled.div`
   display: flex;
   gap: 25px;
@@ -89,7 +101,7 @@ const AddSongDialog = ({
         isCloseButtonShown={true}
         onClose={() => setAddSongModalOpen(false)}
       >
-        <div className={Classes.DIALOG_BODY}>
+        <StyledDialogBody className={Classes.DIALOG_BODY}>
           <StyledEditableTextTitle
             multiline={false}
             value={titleBeingEdited}
@@ -131,7 +143,9 @@ const AddSongDialog = ({
             </StyledRightContent>
           </StyledBody>
 
-          <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+          <StyledDialogFooter
+            className={Classes.DIALOG_FOOTER_ACTIONS}
+          >
             <Button onClick={() => setAddSongModalOpen(false)}>
               Close
             </Button>
@@ -139,8 +153,8 @@ const AddSongDialog = ({
             <Button onClick={() => saveSong(true)} intent="primary">
               Save and Add to Schedule
             </Button>
-          </div>
-        </div>
+          </StyledDialogFooter>
+        </StyledDialogBody>
       </MediumDialog>
     </>
   );
