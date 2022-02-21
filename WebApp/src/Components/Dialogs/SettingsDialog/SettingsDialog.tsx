@@ -17,8 +17,31 @@ const StyledDialog = styled(Dialog)`
   width: fit-content;
   max-width: 80vw;
 
+  height: 80vh;
+  max-height: 670px;
+  min-height: 300px;
+
   .bp3-tab-panel {
     flex-grow: 1;
+  }
+
+  .bp3-tab-panel {
+    height: 100%;
+  }
+
+  .bp3-tabs {
+    height: 100%;
+  }
+  .bp3-tab-list {
+    flex: 10 1 150px;
+  }
+
+  .themeTab {
+    flex: 50 1 600px;
+  }
+
+  .mainTab {
+    flex: 50 1 600px;
   }
 `;
 export enum SettingsDialogTab {
@@ -64,14 +87,15 @@ const SettingsDialog = ({
             <Tab
               id="main"
               data-testid="main-section"
+              panelClassName={'mainTab'}
               title="Main"
               panel={<MainPanel />}
             />
             <Tab
               id="theme"
               title="Theme"
-              data-testid="theme-section"
-              role=""
+              data-testid="themeSection"
+              panelClassName={'themeTab'}
               panel={
                 selectedTabId !== 'theme' ? (
                   <div />
@@ -84,7 +108,6 @@ const SettingsDialog = ({
                   />
                 )
               }
-              panelClassName="ember-panel"
             />
             {/* <Tab id="rx" title="React" panel={<ReactPanel />} />
                <Tab

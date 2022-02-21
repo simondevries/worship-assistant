@@ -19,27 +19,44 @@ import { ReducerAction } from 'Reducers/reducers';
 import ImageSelectionDialog from 'Components/Dialogs/ImageSelectionDialog/ImageSelectionDialog';
 import UpdateSettingsEvent from 'Events/Domain/updateSettingsEvent';
 import useEventHandler from 'Events/Handlers/useEventHandler';
+import MinatureProjectorView from 'Components/MinatureProjectorView/MinatureProjectorView';
 
+const StyledPreviewContainer = styled.div`
+  height: 100%;
+  padding: 10px 15px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background: black;
+  border-radius: 4px;
+`;
+
+const StyledTable = styled.table`
+  tr {
+    height: 55px;
+  }
+`;
+
+const StyledFooter = styled.div`
+  margin-top: 5px;
+`;
 const StyledInputsContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-right: 20px;
+  width: 300px;
+  margin-left: 10px;
+
+  .bp3-form-group {
+    justify-content: space-between;
+    align-items: center;
+  }
 `;
 
 const StyledBody = styled.div`
   display: flex;
   flex-direction: row;
-`;
-
-const StyledPreviewContainer = styled.div`
-  display: flex;
-  max-width: 500px;
-  width: 100%;
-  min-width: 300px;
-`;
-
-const StyledProjectorView = styled(ProjectorView)`
-  width: 100%;
+  height: 100%;
 `;
 
 const ThemePanel = ({ activeResourcePointer, onClose }) => {
@@ -81,12 +98,12 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
 
   return (
     <>
-      <div>
-        <div className={Classes.DIALOG_BODY}>
-          <br />
-          <StyledBody>
-            <StyledInputsContainer>
-              <FormGroup label="Font">
+      <StyledBody>
+        <StyledInputsContainer>
+          <StyledTable>
+            <tr>
+              <td>Font</td>
+              <td>
                 <ButtonGroup>
                   <Button
                     data-testid="bold"
@@ -100,7 +117,6 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
                   >
                     B
                   </Button>
-
                   <Button
                     onClick={() =>
                       setEditingState({
@@ -126,9 +142,12 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
                     U
                   </Button>
                 </ButtonGroup>
-              </FormGroup>
-
-              <FormGroup label="Horizontal Align">
+              </td>
+            </tr>
+            <tr>
+              <td>Vertical Align</td>
+              <td>
+                {' '}
                 <ButtonGroup>
                   <Button
                     icon="align-left"
@@ -163,8 +182,11 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
                     active={editingState.textHorizontalAlign === 'R'}
                   ></Button>
                 </ButtonGroup>
-              </FormGroup>
-              <FormGroup label="Vertical Align">
+              </td>
+            </tr>
+            <tr>
+              <td>Horizontal Align</td>
+              <td>
                 <ButtonGroup>
                   <Button
                     icon="caret-up"
@@ -199,8 +221,12 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
                     active={editingState.textVerticalAlign === 'B'}
                   ></Button>
                 </ButtonGroup>
-              </FormGroup>
-              <FormGroup label="Background Color">
+              </td>
+            </tr>
+            <tr>
+              <td>Background Colour</td>
+              <td>
+                {' '}
                 <input
                   type="color"
                   value={editingState.backgroundColor}
@@ -211,10 +237,13 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
                     })
                   }
                 />
-              </FormGroup>
+              </td>
+            </tr>
 
-              <FormGroup>
-                Wallpaper
+            <tr>
+              <td>Wallpaper</td>
+              <td>
+                {' '}
                 <ButtonGroup>
                   <Button
                     icon="search"
@@ -225,9 +254,11 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
                     Search
                   </Button>
                 </ButtonGroup>
-              </FormGroup>
-
-              <FormGroup label="Text">
+              </td>
+            </tr>
+            <tr>
+              <td>Text Colour</td>
+              <td>
                 <input
                   type="color"
                   value={editingState.textColor}
@@ -238,6 +269,12 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
                     });
                   }}
                 />
+              </td>
+            </tr>
+            <tr>
+              <td>Text border</td>
+              <td>
+                {' '}
                 <Button
                   onClick={() => {
                     setEditingState({
@@ -249,8 +286,11 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
                 >
                   Text border
                 </Button>
-              </FormGroup>
-              <FormGroup label="Font Size">
+              </td>
+            </tr>
+            <tr>
+              <td>Font Size</td>
+              <td>
                 <ButtonGroup>
                   <Button
                     icon="chevron-up"
@@ -272,45 +312,46 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
                     }}
                   ></Button>
                 </ButtonGroup>
-              </FormGroup>
-            </StyledInputsContainer>
-            <StyledPreviewContainer>
-              <StyledProjectorView
-                useDemoText={true}
-                activeResourcePointer={activeResourcePointer}
-                className={''}
-                previewMode={true}
-                globalTheme={editingState}
-              />
-            </StyledPreviewContainer>
-            {/* errors will return when field validation fails  */}
-          </StyledBody>
-        </div>
-        <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-          <Button onClick={onClose}>Close</Button>
-          <Button
-            icon="floppy-disk"
-            type="submit"
-            intent="primary"
-            onClick={onSubmit}
-          >
-            Save
-          </Button>
-        </div>
-        {isWallpaperSelectionOpen && (
-          <ImageSelectionDialog
-            onImageSelected={(uri) => {
-              setEditingState({
-                ...editingState,
-                backgroundImageUri: uri,
-              });
-            }}
-            onClose={() => {
-              setIsWallpaperSelectionOpen(false);
-            }}
-          ></ImageSelectionDialog>
-        )}
-      </div>
+              </td>
+            </tr>
+          </StyledTable>
+
+          {/* <FormGroup label="Text"></FormGroup>
+          
+          </FormGroup> */}
+        </StyledInputsContainer>
+        <StyledPreviewContainer>
+          <MinatureProjectorView
+            useDemoText={true}
+            overrideTheme={editingState}
+          />
+        </StyledPreviewContainer>
+        {/* errors will return when field validation fails  */}
+      </StyledBody>
+      <StyledFooter className={Classes.DIALOG_FOOTER_ACTIONS}>
+        <Button onClick={onClose}>Close</Button>
+        <Button
+          icon="floppy-disk"
+          type="submit"
+          intent="primary"
+          onClick={onSubmit}
+        >
+          Save
+        </Button>
+      </StyledFooter>
+      {isWallpaperSelectionOpen && (
+        <ImageSelectionDialog
+          onImageSelected={(uri) => {
+            setEditingState({
+              ...editingState,
+              backgroundImageUri: uri,
+            });
+          }}
+          onClose={() => {
+            setIsWallpaperSelectionOpen(false);
+          }}
+        ></ImageSelectionDialog>
+      )}
     </>
   );
 };

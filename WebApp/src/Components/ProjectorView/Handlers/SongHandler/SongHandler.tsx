@@ -124,7 +124,6 @@ const SongHandler = ({
     lyricsInUserOrder[slideIndex].content &&
     lyricsInUserOrder[slideIndex].content.split(/\r?\n/);
 
-  const asd = getInverseColor(globalTheme.textColor) ?? 'black';
   return (
     <SSongHandler
       data-testid="songhandler-container"
@@ -138,12 +137,12 @@ const SongHandler = ({
       ref={containerRef}
     >
       {content &&
-        content.map((c, indx) => (
+        content.map((content, indx) => (
           <div
             data-testid={`songhandler-newlineelement-${indx}`}
             key={indx}
           >
-            {c}
+            {content}
           </div>
         ))}
     </SSongHandler>
