@@ -1,19 +1,16 @@
+import PongFromProjectorToControllerEvent from './Events/Domain/pongFromProjectorToControllerEvent';
+import PingProjectorEventName from './Events/Domain/pingProjector';
 import { settingsRepo } from './Storage/settingsRepository';
 import { songsRepo } from './Storage/songsRepository';
 import { scheduleRepo } from './Storage/scheduleRepository';
-import { AppToaster } from './Toaster';
-import React, { useContext, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import fetchStatus from './Common/FetchStatus/fetchStatus';
-import { Intent } from '@blueprintjs/core';
 import useModal from './Components/Dialogs/useModal';
 import ISchedule, { hasUserFileHandler } from './Interfaces/Schedule';
 import ISongResourceReference from './Interfaces/SongResourceReference';
 import newScheduleCreatedEvent from './Events/Domain/newScheduleCreatedEvent';
 import { empty as emptyResource } from './Interfaces/Schedule';
 import useEventHandler from './Events/Handlers/useEventHandler';
-import { generateProjectorDimensionsMessage } from 'Interfaces/projectorDimensionsMessage';
-
-let bc = new BroadcastChannel('worshipAssistApp');
 
 function useInitialize(dispatch) {
   const [loadingState, setLoadingState] = useState('Loading');
@@ -114,10 +111,13 @@ function useInitialize(dispatch) {
   };
 
   useEffect(() => {
-    if (window.location.pathname.indexOf('/project') === -1) {
-      bc.postMessage('ping-controller-views-to-project');
+    const isOnControllerPage = window.location.pathname.indexOf('/project') === -1;
+    if (isOnControllerPage) {
+      console.log('pinging projector')
+      raiseEvent(new PingProjectorEventName(false))
     } else {
-      bc.postMessage(generateProjectorDimensionsMessage());
+      console.log('ponging controller')
+      raiseEvent(new PongFromProjectorToControllerEvent(false))
     }
   }, []);
 

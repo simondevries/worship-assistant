@@ -1,3 +1,4 @@
+import { defaultProjectorWidth, defaultProjectorHeight } from './../../Components/Slides/ActiveSlide/helpers/slideSizeResolver';
 import { useContext } from 'react';
 import SongCreatedEvent, {
   SongCreatedEventName,
@@ -31,7 +32,6 @@ import VideoCreatedEvent, {
 import LoadScheduleEvent, {
   LoadScheduleEventName,
 } from '../Domain/loadScheduleEvent';
-import getUrlFromFileHandle from '../../Helpers/getUrlFromFileHandle';
 import addActiveVideoEvent, {
   AddActiveVideoEventName,
 } from '../Domain/addActiveVideoEvent';
@@ -41,6 +41,7 @@ import SongEditedEvent, {
 import ProjectorWindowClosedEvent, {
   ProjectorWindowClosedEventName,
 } from '../Domain/projectorWindowClosedEvent';
+import PongFromProjectorToControllerEvent, { PongFromProjectorToControllerEventName } from 'Events/Domain/pongFromProjectorToControllerEvent';
 
 const useAppStateEventProcessors = () => {
   const [state, dispatch] = useContext(Context);
@@ -204,6 +205,24 @@ const useAppStateEventProcessors = () => {
     });
   };
 
+
+  const PingFromProjectorReceivedEventHandler = (event: PongFromProjectorToControllerEvent) => {
+    if (event.eventType !== PongFromProjectorToControllerEventName || event.isExternalEvent === false) return;
+
+    dispatch({
+      type: 'setCurrentProjectorSize', payload:
+        { width: event?.projectorDimensionsMessage?.width ?? defaultProjectorWidth, height: event?.projectorDimensionsMessage?.height ?? defaultProjectorHeight }
+    })
+
+
+    dispatch({
+      type: 'hasProjectorsAttached',
+      payload: true,
+    });
+  };
+
+
+
   const arr = [
     SongCreatedEventHandler,
     SongAddedToScheduleEventHandler,
@@ -218,6 +237,7 @@ const useAppStateEventProcessors = () => {
     AddActiveVideoEventHandler,
     SongEditedEventHandler,
     ProjectorWindowClosedEventHandler,
+    PingFromProjectorReceivedEventHandler,
   ];
   return [arr];
 };

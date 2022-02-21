@@ -1,8 +1,11 @@
+export const defaultProjectorWidth = 260;
+export const defaultProjectorHeight = 146.25;
+
 const resolvers = {
     getSmallerVersionOfProjectorView: (slideWidth: number, projectorViewWidth: number, projectorViewHeight: number) => {
         if (!slideWidth) throw Error('slideWidth is not defined')
-        projectorViewWidth = projectorViewWidth ?? 260;
-        projectorViewHeight = projectorViewHeight ?? 146.25
+        projectorViewWidth = projectorViewWidth ?? defaultProjectorWidth;
+        projectorViewHeight = projectorViewHeight ?? defaultProjectorHeight
 
         const ratio = projectorViewHeight /
             projectorViewWidth;

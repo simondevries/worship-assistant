@@ -7,7 +7,7 @@ import ReactGA from 'react-ga';
 
 const useEventHandler = () => {
   const raiseEvent = (event: any) => {
-    console.info('event raised: ' + event.eventType);
+    console.info('Event raised: ' + event.eventType);
     try {
       broadCastEventProcessors.forEach((handler) => handler(event));
       appStateEventProcessors.forEach((handler) => handler(event));

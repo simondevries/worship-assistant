@@ -1,3 +1,4 @@
+import { PingProjectorEventName } from './../Domain/pingProjector';
 import SongCreatedEvent, {
   SongCreatedEventName,
 } from '../Domain/songCreatedEvent';
@@ -34,8 +35,10 @@ import BibleVerseAddedToScheduleEvent, {
 import ProjectorWindowClosedEvent, {
   ProjectorWindowClosedEventName,
 } from '../Domain/projectorWindowClosedEvent';
-import PingToControllerEvent, { PingToControllerEventKey } from 'Events/Domain/pingToControllerEvent';
-import { projectorDimensionsMessageToString } from 'Interfaces/projectorDimensionsMessage';
+import RequestPongFromProjectorEvent, { PongFromProjectorToControllerEventName } from 'Events/Domain/pongFromProjectorToControllerEvent';
+import { crossBrowserMessageMapper, MessageToController, MessageToProjector } from 'Events/Domain/CrossBrowserMessage';
+import PongFromProjectorToControllerEvent from 'Events/Domain/pongFromProjectorToControllerEvent';
+import PingProjectorEvent from '../Domain/pingProjector';
 
 let bc = new BroadcastChannel('worshipAssistApp');
 
@@ -47,8 +50,10 @@ const useBroadcastMessageEventProcessor = () => {
     )
       return;
 
+    const message = new MessageToProjector(event);
+
     bc.postMessage(
-      JSON.stringify({ ...event, isExternalEvent: true }),
+      crossBrowserMessageMapper.toString(message)
     );
   };
 
@@ -61,8 +66,9 @@ const useBroadcastMessageEventProcessor = () => {
     )
       return;
 
+    const message = new MessageToProjector(event);
     bc.postMessage(
-      JSON.stringify({ ...event, isExternalEvent: true }),
+      crossBrowserMessageMapper.toString(message)
     );
   };
 
@@ -73,8 +79,10 @@ const useBroadcastMessageEventProcessor = () => {
     )
       return;
 
+    const message = new MessageToProjector(event);
+
     bc.postMessage(
-      JSON.stringify({ ...event, isExternalEvent: true }),
+      crossBrowserMessageMapper.toString(message)
     );
   };
 
@@ -87,8 +95,10 @@ const useBroadcastMessageEventProcessor = () => {
     )
       return;
 
+    const message = new MessageToProjector(event);
+
     bc.postMessage(
-      JSON.stringify({ ...event, isExternalEvent: true }),
+      crossBrowserMessageMapper.toString(message)
     );
   };
 
@@ -101,8 +111,10 @@ const useBroadcastMessageEventProcessor = () => {
     )
       return;
 
+    const message = new MessageToProjector(event);
+
     bc.postMessage(
-      JSON.stringify({ ...event, isExternalEvent: true }),
+      crossBrowserMessageMapper.toString(message)
     );
   };
 
@@ -115,8 +127,10 @@ const useBroadcastMessageEventProcessor = () => {
     )
       return;
 
+    const message = new MessageToProjector(event);
+
     bc.postMessage(
-      JSON.stringify({ ...event, isExternalEvent: true }),
+      crossBrowserMessageMapper.toString(message)
     );
   };
 
@@ -129,8 +143,10 @@ const useBroadcastMessageEventProcessor = () => {
     )
       return;
 
+    const message = new MessageToProjector(event);
+
     bc.postMessage(
-      JSON.stringify({ ...event, isExternalEvent: true }),
+      crossBrowserMessageMapper.toString(message)
     );
   };
 
@@ -141,8 +157,10 @@ const useBroadcastMessageEventProcessor = () => {
     )
       return;
 
+    const message = new MessageToProjector(event);
+
     bc.postMessage(
-      JSON.stringify({ ...event, isExternalEvent: true }),
+      crossBrowserMessageMapper.toString(message)
     );
   };
 
@@ -153,8 +171,10 @@ const useBroadcastMessageEventProcessor = () => {
     )
       return;
 
+    const message = new MessageToProjector(event);
+
     bc.postMessage(
-      JSON.stringify({ ...event, isExternalEvent: true }),
+      crossBrowserMessageMapper.toString(message)
     );
   };
 
@@ -165,8 +185,11 @@ const useBroadcastMessageEventProcessor = () => {
     )
       return;
 
+
+    const message = new MessageToProjector(event);
+
     bc.postMessage(
-      JSON.stringify({ ...event, isExternalEvent: true }),
+      crossBrowserMessageMapper.toString(message)
     );
   };
 
@@ -179,8 +202,10 @@ const useBroadcastMessageEventProcessor = () => {
     )
       return;
 
+    const message = new MessageToProjector(event);
+
     bc.postMessage(
-      JSON.stringify({ ...event, isExternalEvent: true }),
+      crossBrowserMessageMapper.toString(message)
     );
   };
 
@@ -194,8 +219,10 @@ const useBroadcastMessageEventProcessor = () => {
       return;
     }
 
+    const message = new MessageToProjector(event);
+
     bc.postMessage(
-      JSON.stringify({ ...event, isExternalEvent: true }),
+      crossBrowserMessageMapper.toString(message)
     );
   };
 
@@ -209,24 +236,65 @@ const useBroadcastMessageEventProcessor = () => {
       return;
     }
 
+    const message = new MessageToController(event);
+
     bc.postMessage(
-      JSON.stringify({ ...event, isExternalEvent: true }),
+      crossBrowserMessageMapper.toString(message)
     );
   };
 
 
+  const RequestPongFromProjector = (event: RequestPongFromProjectorEvent) => {
+    const shouldContinueWhen = event.eventType === PingProjectorEventName && !event.isExternalEvent;
+    if (!shouldContinueWhen) return;
+    console.log('received')
+    const message = new MessageToProjector(event);
 
-  const PingToController = (event: PingToControllerEvent) => {
-    if (event.eventType !== PingToControllerEventKey) return;
-
-    // NB: sdv this is a special case and does not go through the standard processors
-    // Could probably be refactored tho ;)
-    const message = projectorDimensionsMessageToString(event.projectorDimensionsMessage)
     bc.postMessage(
-      message
-      // JSON.stringify({ ...event, isExternalEvent: true }),
+      crossBrowserMessageMapper.toString(message)
     );
   };
+
+  const PingReceivedFromController = (event: RequestPongFromProjectorEvent) => {
+    const shouldContinueWhen = (event.eventType === PingProjectorEventName && event.isExternalEvent);
+    if (!shouldContinueWhen) return;
+
+    const pongEvent = new PongFromProjectorToControllerEvent(true);
+    const message = new MessageToController(pongEvent);
+
+    bc.postMessage(
+      crossBrowserMessageMapper.toString(message)
+    );
+  };
+
+  /**
+   * Notify controller of my existance
+   */
+  const PongToControllerInternal = (event: RequestPongFromProjectorEvent) => {
+    if ((event.eventType !== PongFromProjectorToControllerEventName || event.isExternalEvent)) return;
+    console.log('shoul not fire')
+    const message = new MessageToController(event);
+
+    bc.postMessage(
+      crossBrowserMessageMapper.toString(message)
+    );
+  };
+
+  // const PongFromProjectorToControllerEventName = (event: RequestPongFromProjectorEvent) => {
+  //   if ((event.eventType !== RequestPongFromProjectorEventName)) return;
+
+  //   const pongEvent = new PongFromProjectorToControllerEvent(true);
+  //   const message = new MessageToController(pongEvent);
+
+  //   bc.postMessage(
+  //     crossBrowserMessageMapper.toString(message)
+  //   );
+  // };
+
+
+
+
+
   // Chrome extension
   // const activeResource =
   //   state.currentSchedule.resources[resourceId];
@@ -260,10 +328,14 @@ const useBroadcastMessageEventProcessor = () => {
     VideoModeChangeEventHandler,
     BibleVerseAddedToScheduleEventHandler,
     ProjectorWindowClosedEventHandler,
-    PingToController,
+    PingReceivedFromController,
+    RequestPongFromProjector,
+    PongToControllerInternal
   ];
   return [arr];
 };
 
 
 export default useBroadcastMessageEventProcessor;
+
+

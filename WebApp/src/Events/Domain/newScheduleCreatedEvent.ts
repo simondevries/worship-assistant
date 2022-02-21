@@ -4,10 +4,11 @@ import ISchedule from '../../Interfaces/Schedule';
 
 export const NewScheduleCreatedEventName = 'NewScheduleCreatedEvent';
 
-export default class extends AppEvent {
+class NewScheduleCreatedEvent extends AppEvent {
   schedule: ISchedule;
   constructor(isExternalEvent, schedule) {
     super(NewScheduleCreatedEventName, isExternalEvent);
     this.schedule = schedule;
   }
 }
+export default NewScheduleCreatedEvent;

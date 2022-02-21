@@ -16,7 +16,7 @@ import useGlobalHotkeyListener from './Components/Sidebar/useGlobalHotkeyListene
 import fetchStatus from './Common/FetchStatus/fetchStatus';
 import useInitialize from './useInitialize';
 import ScheduleManagerDialog from './Components/Dialogs/ScheduleManagerDialog';
-import useBroadcastChannelMessageHandler from './useBroadcastChannelMessageReceiver';
+import useBroadcastChannelMessageHandler from './Events/useBroadcastChannelMessageReceiver';
 import Tour from 'reactour';
 import NotFound from './Components/NotFound/NotFound';
 import UserFileHandlerPermissionManagerDialog from './Components/Dialogs/UserFileHandlerPermissionManagerDialog';

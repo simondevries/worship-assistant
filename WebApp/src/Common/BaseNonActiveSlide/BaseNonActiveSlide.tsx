@@ -28,20 +28,19 @@ type Props = {
   isLastSlide?: boolean;
 };
 
-export default function ({
+const BaseNonActiveSlide = ({
   children,
   slideIndex,
   resourceId,
   className,
   isFirstSlide,
   isLastSlide,
-}: Props) {
+}: Props) => {
   const [raiseEvent] = useEventHandler();
 
   const onSlideClick = () => {
     // todo (Sdv) make generic for all slides
 
-    console.log('4');
     raiseEvent(new SlideChangeEvent(false, resourceId, slideIndex));
   };
 
@@ -58,4 +57,5 @@ export default function ({
       {children}
     </StyledCard>
   );
-}
+};
+export default BaseNonActiveSlide;
