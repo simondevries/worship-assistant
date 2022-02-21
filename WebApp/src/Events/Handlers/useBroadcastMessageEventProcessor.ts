@@ -1,3 +1,4 @@
+import { UpdateSettingsEventName } from './../Domain/updateSettingsEvent';
 import { PingProjectorEventName } from './../Domain/pingProjector';
 import SongCreatedEvent, {
   SongCreatedEventName,
@@ -38,8 +39,8 @@ import ProjectorWindowClosedEvent, {
 import RequestPongFromProjectorEvent, { PongFromProjectorToControllerEventName } from 'Events/Domain/pongFromProjectorToControllerEvent';
 import { crossBrowserMessageMapper, MessageToController, MessageToProjector } from 'Events/Domain/CrossBrowserMessage';
 import PongFromProjectorToControllerEvent from 'Events/Domain/pongFromProjectorToControllerEvent';
-import PingProjectorEvent from '../Domain/pingProjector';
 import { SlidedBlackoutEventName } from 'Events/Domain/slideBlackoutEvent';
+import UpdateSettingsEvent from 'Events/Domain/updateSettingsEvent';
 
 let bc = new BroadcastChannel('worshipAssistApp');
 
@@ -293,16 +294,17 @@ const useBroadcastMessageEventProcessor = () => {
     );
   };
 
-  // const PongFromProjectorToControllerEventName = (event: RequestPongFromProjectorEvent) => {
-  //   if ((event.eventType !== RequestPongFromProjectorEventName)) return;
+  const UpdateSettingsEventHandler = (event: UpdateSettingsEvent) => {
+    const shouldContinue = event.eventType === UpdateSettingsEventName && !event.isExternalEvent;
 
-  //   const pongEvent = new PongFromProjectorToControllerEvent(true);
-  //   const message = new MessageToController(pongEvent);
+    if (!shouldContinue) { return; }
 
-  //   bc.postMessage(
-  //     crossBrowserMessageMapper.toString(message)
-  //   );
-  // };
+    const message = new MessageToProjector(event);
+
+    bc.postMessage(
+      crossBrowserMessageMapper.toString(message)
+    );
+  }
 
 
 
@@ -345,6 +347,7 @@ const useBroadcastMessageEventProcessor = () => {
     RequestPongFromProjectorEventHandler,
     PongToControllerInternalEventHandler,
     SlideBlackoutEventHandler,
+    UpdateSettingsEventHandler,
   ];
   return [arr];
 };

@@ -4,8 +4,6 @@ import SlideSettingsDialog, {
   SettingsDialogTab,
 } from './SettingsDialog';
 import ActiveResourceBuilder from '../../../testBuilders/activeResourcePointerBuilder';
-import IState from '../../../Interfaces/State';
-import { Context } from '../../../Common/Store/Store';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 export default {

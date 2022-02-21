@@ -17,6 +17,8 @@ import { ISettings } from 'Interfaces/Settings';
 import { State } from '@storybook/api';
 import { ReducerAction } from 'Reducers/reducers';
 import ImageSelectionDialog from 'Components/Dialogs/ImageSelectionDialog/ImageSelectionDialog';
+import UpdateSettingsEvent from 'Events/Domain/updateSettingsEvent';
+import useEventHandler from 'Events/Handlers/useEventHandler';
 
 const StyledInputsContainer = styled.div`
   display: flex;
@@ -41,6 +43,7 @@ const StyledProjectorView = styled(ProjectorView)`
 `;
 
 const ThemePanel = ({ activeResourcePointer, onClose }) => {
+  const [raiseEvent] = useEventHandler();
   const [state, dispatch]: [State, (action: ReducerAction) => void] =
     useContext(Context);
   const [isWallpaperSelectionOpen, setIsWallpaperSelectionOpen] =
@@ -62,15 +65,13 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
 
   const onSubmit = async () => {
     const settings = await settingsRepo.get();
-    const newSetting: ISettings = {
+    const newSettings: ISettings = {
       ...settings,
       globalSlideTheme: editingState,
     };
 
-    console.log({ newSetting });
+    raiseEvent(new UpdateSettingsEvent(false, newSettings));
 
-    settingsRepo.set(newSetting, 'settings');
-    dispatch({ type: 'setSettings', payload: settings });
     setTimeout(() => {
       onClose();
     }, 0);

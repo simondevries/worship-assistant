@@ -1,3 +1,5 @@
+import { UpdateSettingsEventName } from './../Domain/updateSettingsEvent';
+import { Type } from './../../Components/Dialogs/ImageSelectionDialog/ImageResult';
 import { songsRepo } from '../../Storage/songsRepository';
 import { scheduleRepo } from '../../Storage/scheduleRepository';
 import { settingsRepo } from '../../Storage/settingsRepository';
@@ -37,6 +39,7 @@ import SongEditedEvent, {
   SongEditedEventEventName,
 } from '../Domain/songEditedEvent';
 import { userFileHandlerRepo } from '../../Storage/userFileHandlerRepository';
+import UpdateSettingsEvent from 'Events/Domain/updateSettingsEvent';
 
 const useIndexDbEventProcessor = () => {
   const [state, dispatch] = useContext(Context);
@@ -224,6 +227,15 @@ const useIndexDbEventProcessor = () => {
     // settingsRepo.setCurrentService(schedule.id);
   };
 
+  const UpdateSettingsEventHandler = (event: UpdateSettingsEvent) => {
+
+    const shouldContinue = event.eventType === UpdateSettingsEventName;
+
+    if (!shouldContinue) return;
+
+    settingsRepo.set(event.settings, 'settings');
+  }
+
   const arr = [
     VideoCreatedEventHandler,
     SongCreatedEventHandler,
@@ -235,7 +247,7 @@ const useIndexDbEventProcessor = () => {
     SlideShowAddedToScheduleEventHandler,
     BibleVerseAddedToScheduleEventHandler,
     LoadScheduleEventHandler,
-  ];
+    UpdateSettingsEventHandler];
   return [arr];
 };
 

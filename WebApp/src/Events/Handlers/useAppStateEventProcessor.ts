@@ -1,3 +1,4 @@
+import UpdateSettingsEvent, { UpdateSettingsEventName } from './../Domain/updateSettingsEvent';
 import SlideBlackoutEvent, { SlidedBlackoutEventName } from 'Events/Domain/slideBlackoutEvent';
 import { defaultProjectorWidth, defaultProjectorHeight } from './../../Components/Slides/ActiveSlide/helpers/slideSizeResolver';
 import { useContext } from 'react';
@@ -233,6 +234,14 @@ const useAppStateEventProcessors = () => {
   };
 
 
+  const UpdateSettingsEventHandler = (event: UpdateSettingsEvent) => {
+    const shouldContinue = event.eventType === UpdateSettingsEventName;
+    if (!shouldContinue) return;
+
+    dispatch({ type: 'setSettings', payload: event.settings });
+  }
+
+
 
   const arr = [
     SongCreatedEventHandler,
@@ -250,6 +259,7 @@ const useAppStateEventProcessors = () => {
     ProjectorWindowClosedEventHandler,
     PingFromProjectorReceivedEventHandler,
     SlideBlackoutEventHandler,
+    UpdateSettingsEventHandler,
   ];
   return [arr];
 };
