@@ -3,12 +3,11 @@ import { Context } from '../../Common/Store/Store';
 import { Button, Card, H5, Icon, H4 } from '@blueprintjs/core';
 import { Dialog, Classes } from '@blueprintjs/core';
 import styled from 'styled-components/macro';
-import { DateInput } from '@blueprintjs/datetime';
 import { scheduleRepo } from '../../Storage/scheduleRepository';
 import useEventHandler from '../../Events/Handlers/useEventHandler';
 import NewScheduleCreatedEvent from '../../Events/Domain/newScheduleCreatedEvent';
 import {
-  empty as emptyResource,
+  emptySchedule,
   hasUserFileHandler,
 } from '../../Interfaces/Schedule';
 import LoadScheduleEvent from '../../Events/Domain/loadScheduleEvent';
@@ -88,7 +87,7 @@ const ScheduleManagerDialog = ({ setOpen }) => {
   }, []);
 
   const addSchedule = () => {
-    raiseEvent(new NewScheduleCreatedEvent(false, emptyResource()));
+    raiseEvent(new NewScheduleCreatedEvent(false, emptySchedule()));
 
     onClose();
   };

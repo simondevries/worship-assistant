@@ -1,3 +1,4 @@
+import SlideBlackoutEvent, { SlidedBlackoutEventName } from 'Events/Domain/slideBlackoutEvent';
 import { defaultProjectorWidth, defaultProjectorHeight } from './../../Components/Slides/ActiveSlide/helpers/slideSizeResolver';
 import { useContext } from 'react';
 import SongCreatedEvent, {
@@ -221,6 +222,16 @@ const useAppStateEventProcessors = () => {
     });
   };
 
+  const SlideBlackoutEventHandler = (event: SlideBlackoutEvent) => {
+    const shouldContinue = event.eventType === SlidedBlackoutEventName;
+    if (!shouldContinue) return;
+
+    dispatch({
+      type: 'setProjectorViewBlank',
+      payload: event.color
+    });
+  };
+
 
 
   const arr = [
@@ -238,6 +249,7 @@ const useAppStateEventProcessors = () => {
     SongEditedEventHandler,
     ProjectorWindowClosedEventHandler,
     PingFromProjectorReceivedEventHandler,
+    SlideBlackoutEventHandler,
   ];
   return [arr];
 };

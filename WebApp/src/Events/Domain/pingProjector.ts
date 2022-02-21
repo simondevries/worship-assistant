@@ -6,6 +6,7 @@ export const PingProjectorEventName =
 
 class PingProjectorEvent extends AppEvent {
 
+
   constructor(isExternalEvent) {
     super(PingProjectorEventName, isExternalEvent);
   }

@@ -6,6 +6,7 @@ import MainPanel from './Panels/MainPanel';
 import ThemePanel from './Panels/ThemePanel';
 import { Context } from 'Common/Store/Store';
 import styled from '@emotion/styled';
+import ActiveResourcePointer from 'Interfaces/ActiveResourcePointer';
 
 const StyledThemeTab = styled(Tab)`
   flex-grow: 1;
@@ -20,14 +21,26 @@ const StyledDialog = styled(Dialog)`
     flex-grow: 1;
   }
 `;
+export enum SettingsDialogTab {
+  Main,
+  Theme,
+}
 
-const SlideSettingDialog = ({
+const SettingsDialog = ({
   setSettingsModalOpen,
   activeResourcePointer,
+  openTab,
+}: {
+  setSettingsModalOpen: (isOpen: boolean) => void;
+  activeResourcePointer: ActiveResourcePointer;
+  openTab?: SettingsDialogTab;
 }) => {
   const [state] = useContext<Array<IState>>(Context);
 
-  const [selectedTabId, setSelectedTabId] = useState<TabId>('main');
+  const firstTab =
+    openTab === SettingsDialogTab.Theme ? 'theme' : 'main';
+
+  const [selectedTabId, setSelectedTabId] = useState<TabId>(firstTab);
   if (!state || !state.currentSchedule) return <div>Nostate</div>;
 
   return (
@@ -93,4 +106,4 @@ const SlideSettingDialog = ({
   );
 };
 
-export default SlideSettingDialog;
+export default SettingsDialog;

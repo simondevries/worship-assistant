@@ -39,6 +39,7 @@ import RequestPongFromProjectorEvent, { PongFromProjectorToControllerEventName }
 import { crossBrowserMessageMapper, MessageToController, MessageToProjector } from 'Events/Domain/CrossBrowserMessage';
 import PongFromProjectorToControllerEvent from 'Events/Domain/pongFromProjectorToControllerEvent';
 import PingProjectorEvent from '../Domain/pingProjector';
+import { SlidedBlackoutEventName } from 'Events/Domain/slideBlackoutEvent';
 
 let bc = new BroadcastChannel('worshipAssistApp');
 
@@ -244,7 +245,7 @@ const useBroadcastMessageEventProcessor = () => {
   };
 
 
-  const RequestPongFromProjector = (event: RequestPongFromProjectorEvent) => {
+  const RequestPongFromProjectorEventHandler = (event: RequestPongFromProjectorEvent) => {
     const shouldContinueWhen = event.eventType === PingProjectorEventName && !event.isExternalEvent;
     if (!shouldContinueWhen) return;
     console.log('received')
@@ -255,7 +256,7 @@ const useBroadcastMessageEventProcessor = () => {
     );
   };
 
-  const PingReceivedFromController = (event: RequestPongFromProjectorEvent) => {
+  const PingReceivedFromControllerEventHandler = (event: RequestPongFromProjectorEvent) => {
     const shouldContinueWhen = (event.eventType === PingProjectorEventName && event.isExternalEvent);
     if (!shouldContinueWhen) return;
 
@@ -270,10 +271,22 @@ const useBroadcastMessageEventProcessor = () => {
   /**
    * Notify controller of my existance
    */
-  const PongToControllerInternal = (event: RequestPongFromProjectorEvent) => {
-    if ((event.eventType !== PongFromProjectorToControllerEventName || event.isExternalEvent)) return;
-    console.log('shoul not fire')
+  const PongToControllerInternalEventHandler = (event: RequestPongFromProjectorEvent) => {
+    const shouldContinue = event.eventType === PongFromProjectorToControllerEventName && !event.isExternalEvent;
+    if (!shouldContinue) return;
     const message = new MessageToController(event);
+
+    bc.postMessage(
+      crossBrowserMessageMapper.toString(message)
+    );
+  };
+
+
+  const SlideBlackoutEventHandler = (event: RequestPongFromProjectorEvent) => {
+    const shouldContinue = event.eventType === SlidedBlackoutEventName && !event.isExternalEvent;
+    if (!shouldContinue) return;
+
+    const message = new MessageToProjector(event);
 
     bc.postMessage(
       crossBrowserMessageMapper.toString(message)
@@ -328,9 +341,10 @@ const useBroadcastMessageEventProcessor = () => {
     VideoModeChangeEventHandler,
     BibleVerseAddedToScheduleEventHandler,
     ProjectorWindowClosedEventHandler,
-    PingReceivedFromController,
-    RequestPongFromProjector,
-    PongToControllerInternal
+    PingReceivedFromControllerEventHandler,
+    RequestPongFromProjectorEventHandler,
+    PongToControllerInternalEventHandler,
+    SlideBlackoutEventHandler,
   ];
   return [arr];
 };

@@ -1,5 +1,6 @@
 import IState from '../Interfaces/State';
 import ISongResourceReference from '../Interfaces/SongResourceReference';
+import { ProjectorViewMode } from 'Interfaces/Schedule';
 
 export interface ReducerAction {
   payload: any;
@@ -50,6 +51,10 @@ function reducers(state: IState, action: ReducerAction): IState {
       };
 
     // Schedule
+    case 'setProjectorViewBlank':
+      return { ...state, currentSchedule: { ...state.currentSchedule, currentProjectorViewMode: { mode: ProjectorViewMode.Blank, blankColor: action.payload } } } as IState;
+
+
     case 'setCurrentSchedule':
       return { ...state, currentSchedule: action.payload };
 

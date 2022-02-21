@@ -14,6 +14,10 @@ import YouTubeHandler from './Handlers/YouTubeHandler';
 import { Button, Card } from '@blueprintjs/core';
 import VideoHandler from './Handlers/VideoHandler';
 import DemoSongHandler from './Handlers/DemoSongHandler';
+import { ProjectorViewMode } from 'Interfaces/Schedule';
+import SettingsDialog, {
+  SettingsDialogTab,
+} from 'Components/Dialogs/SettingsDialog/SettingsDialog';
 
 const StyledCentering = styled.div`
   height: 100%;
@@ -31,12 +35,18 @@ const StyledPowerPointPresenter = styled.iframe`
 
 const StyledVideo = styled.video``;
 
-const StyledProjectorView = styled.div<any>`
-  background: ${(props) => props.theme.backgroundColor};
-  color: ${(props) => props.theme.primary};
+const StyledProjectorView = styled.div<{
+  isBlank: boolean;
+  blankColor: string;
+  previewMode: boolean;
+  theme: ITheme;
+}>`
+  background: ${({ theme, isBlank, blankColor }) =>
+    isBlank ? blankColor : theme.backgroundColor};
+  color: ${({ theme }) => theme.primary};
   width: 100%;
   height: 100%;
-  text-align: ${(props) => props.theme.textAlign};
+  text-align: ${({ theme }) => theme.textAlign};
   white-space: pre;
 `;
 
@@ -121,32 +131,42 @@ const ProjectorView = ({
   };
 
   const isFullScreen = window.innerHeight !== window.screen.height;
+  const isBlank =
+    state.currentSchedule.currentProjectorViewMode.mode ===
+    ProjectorViewMode.Blank;
 
   return (
-    <ThemeProvider theme={defaultSongTheme}>
-      <StyledProjectorView
-        previewMode={previewMode}
-        className={`${className} projectorView`}
-      >
-        {renderAppropriateHandler()}
-        {!isFullScreen && !resourceReference && !previewMode && (
-          <StyledCentering>
-            <div>
-              Your lyrics will be displayed here. Move this screen to
-              your extended deskop and press full screen.
-              <Button
-                intent="primary"
-                onClick={() => {
-                  document.documentElement.requestFullscreen();
-                }}
-              >
-                Full Screen
-              </Button>
-            </div>
-          </StyledCentering>
-        )}
-      </StyledProjectorView>
-    </ThemeProvider>
+    <>
+      <ThemeProvider theme={defaultSongTheme}>
+        <StyledProjectorView
+          isBlank={isBlank}
+          blankColor={
+            state.currentSchedule.currentProjectorViewMode
+              ?.blankColor ?? 'black'
+          }
+          previewMode={previewMode}
+          className={`${className} projectorView`}
+        >
+          {!isBlank && renderAppropriateHandler()}
+          {!isFullScreen && !resourceReference && !previewMode && (
+            <StyledCentering>
+              <div>
+                Your lyrics will be displayed here. Move this screen
+                to your extended deskop and press full screen.
+                <Button
+                  intent="primary"
+                  onClick={() => {
+                    document.documentElement.requestFullscreen();
+                  }}
+                >
+                  Full Screen
+                </Button>
+              </div>
+            </StyledCentering>
+          )}
+        </StyledProjectorView>
+      </ThemeProvider>
+    </>
   );
 };
 export default ProjectorView;

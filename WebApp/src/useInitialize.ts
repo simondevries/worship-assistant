@@ -6,10 +6,9 @@ import { scheduleRepo } from './Storage/scheduleRepository';
 import { useState, useEffect } from 'react';
 import fetchStatus from './Common/FetchStatus/fetchStatus';
 import useModal from './Components/Dialogs/useModal';
-import ISchedule, { hasUserFileHandler } from './Interfaces/Schedule';
+import ISchedule, { emptySchedule, hasUserFileHandler, ProjectorViewMode, scheduleSchemaMigrator } from './Interfaces/Schedule';
 import ISongResourceReference from './Interfaces/SongResourceReference';
 import newScheduleCreatedEvent from './Events/Domain/newScheduleCreatedEvent';
-import { empty as emptyResource } from './Interfaces/Schedule';
 import useEventHandler from './Events/Handlers/useEventHandler';
 
 function useInitialize(dispatch) {
@@ -60,7 +59,7 @@ function useInitialize(dispatch) {
       // throw Error();
 
       // todo (sdv) hacks
-      raiseEvent(new newScheduleCreatedEvent(false, emptyResource()));
+      raiseEvent(new newScheduleCreatedEvent(false, emptySchedule()));
       setTimeout(() => {
         window.location.reload();
       }, 500);
@@ -129,12 +128,15 @@ function useInitialize(dispatch) {
           const settings = await primeSettings();
 
           const schedules = await scheduleRepo.getAll();
-          const currentSchedule: ISchedule =
+          let currentSchedule: ISchedule =
             schedules &&
             settings &&
             schedules.find(
               (s) => s.id === settings.currentScheduleId,
-            );
+            )
+
+
+          currentSchedule = scheduleSchemaMigrator(currentSchedule)
 
           handleNoSchedule(currentSchedule, raiseEvent);
 

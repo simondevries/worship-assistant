@@ -7,14 +7,11 @@ import {
 } from '@blueprintjs/core';
 import styled from 'styled-components';
 import { settingsRepo } from '../../../../Storage/settingsRepository';
-import { useForm } from 'react-hook-form';
 import ProjectorView from '../../../ProjectorView/ProjectorView';
 import {
   defaultSongTheme,
   ITheme,
 } from '../../../../Interfaces/themes';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 import { Context } from '../../../../Common/Store/Store';
 import { ISettings } from 'Interfaces/Settings';
 import { State } from '@storybook/api';

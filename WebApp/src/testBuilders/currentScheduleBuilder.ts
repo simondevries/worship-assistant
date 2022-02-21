@@ -1,19 +1,19 @@
-import IResourceReference from "../Interfaces/ResourceReference";
-import ISchedule from "../Interfaces/Schedule";
+import ISchedule, { ProjectorViewMode } from "../Interfaces/Schedule";
 import ActiveResourceBuilder from "./activeResourcePointerBuilder";
 
 export class CurrentScheduleBuilder {
-    
+
     build(): ISchedule {
         return {
             id: 'anid',
             activeResourcePointer: new ActiveResourceBuilder().build(),
             activeSongs: [],
             activeVideos: [],
-            date: '',
+            date: new Date(),
             resourceOrder: [],
             resources: [],
-            title: ''
+            title: '',
+            currentProjectorViewMode: { mode: ProjectorViewMode.Standard },
         }
     }
 }

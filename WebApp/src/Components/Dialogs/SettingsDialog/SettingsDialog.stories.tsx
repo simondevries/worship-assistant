@@ -1,6 +1,8 @@
 import React, { Dispatch, useContext, useEffect } from 'react';
 // import { ComponentMeta } from '@storybook/react';
-import SlideSettingsDialog from './SettingsDialog';
+import SlideSettingsDialog, {
+  SettingsDialogTab,
+} from './SettingsDialog';
 import ActiveResourceBuilder from '../../../testBuilders/activeResourcePointerBuilder';
 import IState from '../../../Interfaces/State';
 import { Context } from '../../../Common/Store/Store';
@@ -16,7 +18,8 @@ const Template: ComponentStory<any> = () => {
   return (
     <SlideSettingsDialog
       activeResourcePointer={new ActiveResourceBuilder().build()}
-      setSettingsModalOpen={() => {}}
+      setSettingsModalOpen={(isOpen: boolean) => {}}
+      openTab={SettingsDialogTab.Main}
     />
   );
 };

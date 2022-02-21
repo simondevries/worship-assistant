@@ -9,17 +9,12 @@ import { settingsRepo } from '../../Storage/settingsRepository';
 import NewId from '../../Helpers/newId';
 import useEventHandler from '../../Events/Handlers/useEventHandler';
 import NewScheduleCreatedEvent from '../../Events/Domain/newScheduleCreatedEvent';
-import { empty as emptyResource } from '../../Interfaces/Schedule';
 import getUrlFromFileHandle from '../../Helpers/getUrlFromFileHandle';
 import LoadScheduleEvent from '../../Events/Domain/loadScheduleEvent';
 import AddActiveVideoEvent from '../../Events/Domain/addActiveVideoEvent';
 import loadScheduleEvent from '../../Events/Domain/loadScheduleEvent';
 import IState from '../../Interfaces/State';
 import { userFileHandlerRepo } from '../../Storage/userFileHandlerRepository';
-
-const StyledDateInput = styled(DateInput)`
-  margin-left: 30px;
-`;
 
 const StyledFooterButton = styled(Button)`
   margin-left: 5px;
@@ -28,11 +23,6 @@ const StyledFooterButton = styled(Button)`
 
 const StyledActionButton = styled(Button)`
   margin-left: 30px;
-`;
-
-const StyledAddButton = styled(Button)`
-  margin-top: 33px;
-  width: 130px;
 `;
 
 const SpacerTr = styled.tr`
@@ -80,7 +70,7 @@ interface IFileHandleMetadata {
   fileHandle: any;
 }
 
-export default ({ setOpen }) => {
+const UserFileHandlerPermissionManagerDialog = ({ setOpen }) => {
   const [state] = useContext(Context);
   const [fileHandlesMetadata, setFileHandlesMetadata] = useState<
     IFileHandleMetadata[]
@@ -298,3 +288,5 @@ export default ({ setOpen }) => {
     </>
   );
 };
+
+export default UserFileHandlerPermissionManagerDialog;

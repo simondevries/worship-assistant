@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Context } from '../../../Common/Store/Store';
 
 import styled from 'styled-components';
@@ -8,6 +8,11 @@ import ActiveSlideContainer from './ActiveSlideContainer';
 import IState from 'Interfaces/State';
 import { ISettings } from 'Interfaces/Settings';
 import slideSizeResolver from './helpers/slideSizeResolver';
+import SlideBlackoutEvent from 'Events/Domain/slideBlackoutEvent';
+import useEventHandler from 'Events/Handlers/useEventHandler';
+import SettingsDialog, {
+  SettingsDialogTab,
+} from 'Components/Dialogs/SettingsDialog/SettingsDialog';
 
 const StyledButtonContainer = styled.div`
   display: flex;
@@ -23,6 +28,8 @@ const StyledProjectorView = styled(ProjectorView)<{
 export const slideWidth = 300;
 
 const ActiveSongSlide = () => {
+  const [raiseEvent] = useEventHandler();
+  const [settingsModalOpen, setSettingsModalOpen] = useState(false);
   const [state] = useContext<Array<IState>>(Context);
   const projectorWidth =
     state?.settings?.projectorScreenDimensions?.width ?? 160;
@@ -33,26 +40,52 @@ const ActiveSongSlide = () => {
     state.currentSchedule.activeResourcePointer;
 
   return (
-    <ActiveSlideContainer
-      slideIndex={activeResourcePointer.slideIndex}
-      resourceId={activeResourcePointer.resourceId}
-    >
-      <StyledProjectorView
-        previewMode={true}
-        activeResourcePointer={activeResourcePointer}
-        globalTheme={state.settings.globalSlideTheme}
-        height={slideSizeResolver.getSmallerVersionOfProjectorView(
-          260,
-          projectorWidth,
-          projectorHeight,
-        )}
-      />
-      <StyledButtonContainer>
-        <Button onClick={() => alert('TODO')}>Slide Settings</Button>
-        <Button onClick={() => alert('TODO')}>White</Button>
-        <Button onClick={() => alert('TODO')}>Blank Screen</Button>
-      </StyledButtonContainer>
-    </ActiveSlideContainer>
+    <>
+      <ActiveSlideContainer
+        slideIndex={activeResourcePointer.slideIndex}
+        resourceId={activeResourcePointer.resourceId}
+      >
+        <StyledProjectorView
+          previewMode={true}
+          activeResourcePointer={activeResourcePointer}
+          globalTheme={state.settings.globalSlideTheme}
+          height={slideSizeResolver.getSmallerVersionOfProjectorView(
+            260,
+            projectorWidth,
+            projectorHeight,
+          )}
+        />
+        <StyledButtonContainer>
+          <Button onClick={() => setSettingsModalOpen(true)}>
+            Slide Settings
+          </Button>
+          <Button
+            onClick={() =>
+              raiseEvent(new SlideBlackoutEvent(false, 'White'))
+            }
+          >
+            White
+          </Button>
+          <Button
+            onClick={() =>
+              raiseEvent(new SlideBlackoutEvent(false, 'Black'))
+            }
+          >
+            Blank Screen
+          </Button>
+        </StyledButtonContainer>
+      </ActiveSlideContainer>
+
+      {settingsModalOpen && (
+        <SettingsDialog
+          setSettingsModalOpen={setSettingsModalOpen}
+          activeResourcePointer={
+            state.currentSchedule.activeResourcePointer
+          }
+          openTab={SettingsDialogTab.Theme}
+        />
+      )}
+    </>
   );
 };
 
