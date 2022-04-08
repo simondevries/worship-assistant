@@ -1,14 +1,21 @@
+import { Button } from '@blueprintjs/core';
 import styled from '@emotion/styled';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { restore, backup } from 'Storage/dbBackupAndRestore';
+import { useFilePicker } from 'use-file-picker';
+import BackupAndRestore from './BackupAndRestore';
 
 const StyledTitle = styled.div`
   height: 100%;
 `;
 
-export default () => {
+const MainPanel = () => {
   return (
     <div>
-      <StyledTitle>hello</StyledTitle>
+      <StyledTitle>Settings</StyledTitle>
+      <BackupAndRestore />
     </div>
   );
 };
+
+export default MainPanel;
