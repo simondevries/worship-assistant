@@ -1,3 +1,4 @@
+import { debounce } from 'Helpers/debounce';
 import IResourceReference from 'Interfaces/ResourceReference';
 import Song, { songSelectors } from 'Interfaces/Song/Song';
 import ISongResourceReference from 'Interfaces/SongResourceReference';
@@ -12,6 +13,8 @@ interface SSHandlerProps {
 }
 
 const SSongHandler = styled.div<SSHandlerProps>`
+  word-wrap: break-word;
+  white-space: break-spaces;
   height: 100%;
   width: 100%;
   overflow: hidden;
@@ -72,13 +75,13 @@ const useGetFontSize = (
   dimensions: Dimensions,
   configuredFontSize: number,
 ): string => {
-  const ratio = dimensions.width * dimensions.height;
-  const fontSizeRatioFactor = configuredFontSize / 2;
+  const currentFontSizeBeforeScaling = configuredFontSize * 5; // we'll be working with pt here
 
-  const fontSize =
-    (fontSizeRatioFactor * ratio) / (1000 + ratio / 800);
+  const heightMultiplier = dimensions.height / 100;
+  const currentFontSize =
+    currentFontSizeBeforeScaling * heightMultiplier;
 
-  return `${fontSize}%`;
+  return `${currentFontSize}pt`;
 };
 
 const SongHandler = ({
@@ -104,10 +107,17 @@ const SongHandler = ({
   const fontSize = useGetFontSize(dimensions, globalTheme.fontSize);
 
   useLayoutEffect(() => {
-    setDimensions({
-      width: containerRef.current?.offsetWidth ?? 0,
-      height: containerRef.current?.offsetHeight ?? 0,
-    });
+    function updateSize() {
+      setDimensions({
+        width: containerRef.current?.offsetWidth ?? 0,
+        height: containerRef.current?.offsetHeight ?? 0,
+      });
+    }
+    window.addEventListener(
+      'resize',
+      debounce(updateSize, 400, false),
+    );
+    updateSize();
   }, []);
 
   const lyricsInUserOrder =
@@ -120,9 +130,7 @@ const SongHandler = ({
     return null;
   }
 
-  const content =
-    lyricsInUserOrder[slideIndex].content &&
-    lyricsInUserOrder[slideIndex].content.split(/\r?\n/);
+  const content = lyricsInUserOrder[slideIndex]?.content ?? '';
 
   return (
     <SSongHandler
@@ -136,15 +144,7 @@ const SongHandler = ({
       }
       ref={containerRef}
     >
-      {content &&
-        content.map((content, indx) => (
-          <div
-            data-testid={`songhandler-newlineelement-${indx}`}
-            key={indx}
-          >
-            {content}
-          </div>
-        ))}
+      {content}
     </SSongHandler>
   );
 };

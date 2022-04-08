@@ -2,30 +2,13 @@ import { Context } from 'Common/Store/Store';
 import ProjectorView from 'Components/ProjectorView/ProjectorView';
 import PongFromProjectorToControllerEventName from 'Events/Domain/pongFromProjectorToControllerEvent';
 import useEventHandler from 'Events/Handlers/useEventHandler';
+import { debounce } from 'Helpers/debounce';
 import {
   ProjectorDimensionsMessage,
   projectorDimensionsMessageKey,
 } from 'Interfaces/projectorDimensionsMessage';
 import IState from 'Interfaces/State';
 import React, { useContext, useLayoutEffect } from 'react';
-
-// Reference: https://stackoverflow.com/questions/52891199/debounce-and-react-window-resize-this-reference-issue
-function debounce(func, wait, immediate) {
-  var timeout;
-  return function () {
-    // @ts-ignore
-    var context: any = this as any,
-      args = arguments;
-    var later = function () {
-      timeout = null;
-      if (!immediate) func.apply(context, args);
-    };
-    var callNow = immediate && !timeout;
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-    if (callNow) func.apply(context, args);
-  };
-}
 
 export default function ProjectorRoute() {
   const [raiseEvent] = useEventHandler();
