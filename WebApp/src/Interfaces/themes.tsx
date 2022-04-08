@@ -14,7 +14,7 @@ export interface ITheme {
   backgroundImageUri?: string;
 }
 
-export const defaultSongTheme: ITheme = {
+export const defaultTheme: ITheme = {
   backgroundColor: 'black',
   textColor: '#333333',
   lineHeight: 'normal',

@@ -5,7 +5,7 @@ import IState from '../../Interfaces/State';
 import ISongResourceReference from '../../Interfaces/SongResourceReference';
 import { fileSystemApp } from '../../FileSystem/fileSystemTools';
 import ActiveResourcePointer from '../../Interfaces/ActiveResourcePointer';
-import { defaultSongTheme, ITheme } from '../../Interfaces/themes';
+import { defaultTheme, ITheme } from '../../Interfaces/themes';
 import useFitText from 'use-fit-text';
 import SongHandler from './Handlers/SongHandler/SongHandler';
 import BibleVerseHandler from './Handlers/BibleVerseHandler';
@@ -137,7 +137,7 @@ const ProjectorView = ({
 
   return (
     <>
-      <ThemeProvider theme={defaultSongTheme}>
+      <ThemeProvider theme={defaultTheme}>
         <StyledProjectorView
           isBlank={isBlank}
           blankColor={

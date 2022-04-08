@@ -1,6 +1,6 @@
 import { db } from './indexDbGateway';
 
-import { exportToJson, importFromJson } from './internal-idb-backup-and-restore.js'
+import { exportToJson, importFromJson, clearDatabase } from './internal-idb-backup-and-restore.js'
 
 
 // Function to download data to a file
@@ -34,6 +34,14 @@ export const restore = async (fileText: string) => {
         await importFromJson(db, fileText);
     } catch (e) {
         alert('An error occured on attempting to restore backup')
+    }
+}
+
+export const clearAll = async () => {
+    try {
+        await clearDatabase(db);
+    } catch (e) {
+        alert('An error occured when attempting to delete all data')
     }
 }
 

@@ -13,6 +13,7 @@ const MainPanel = () => {
   return (
     <div>
       <StyledTitle>Settings</StyledTitle>
+      <br />
       <BackupAndRestore />
     </div>
   );

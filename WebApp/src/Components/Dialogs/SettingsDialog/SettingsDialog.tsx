@@ -1,6 +1,5 @@
 import React, { useState, useContext } from 'react';
 import { Dialog, Classes, Tabs, Tab, TabId } from '@blueprintjs/core';
-import { settingsRepo } from 'Storage/settingsRepository';
 import IState from 'Interfaces/State';
 import MainPanel from './Panels/MainPanel';
 import ThemePanel from './Panels/ThemePanel';

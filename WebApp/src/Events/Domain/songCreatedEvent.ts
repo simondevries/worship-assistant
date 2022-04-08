@@ -1,6 +1,6 @@
 import AppEvent from './appEvent';
 import ISong from '../../Interfaces/Song/Song';
-import { defaultSongTheme, ITheme } from '../../Interfaces/themes';
+import { defaultTheme, ITheme } from '../../Interfaces/themes';
 
 export const SongCreatedEventName = 'SongCreated';
 
@@ -8,7 +8,7 @@ export default class extends AppEvent {
   song: ISong;
   source: any;
   theme: ITheme;
-  constructor(isExternalEvent, song, theme = defaultSongTheme) {
+  constructor(isExternalEvent, song, theme = defaultTheme) {
     super(SongCreatedEventName, isExternalEvent);
     this.song = song;
     this.theme = theme;

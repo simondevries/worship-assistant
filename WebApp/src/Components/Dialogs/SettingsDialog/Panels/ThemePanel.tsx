@@ -8,10 +8,7 @@ import {
 import styled from 'styled-components';
 import { settingsRepo } from '../../../../Storage/settingsRepository';
 import ProjectorView from '../../../ProjectorView/ProjectorView';
-import {
-  defaultSongTheme,
-  ITheme,
-} from '../../../../Interfaces/themes';
+import { defaultTheme, ITheme } from '../../../../Interfaces/themes';
 import { Context } from '../../../../Common/Store/Store';
 import { ISettings } from 'Interfaces/Settings';
 import { State } from '@storybook/api';
@@ -66,14 +63,14 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
   const [isWallpaperSelectionOpen, setIsWallpaperSelectionOpen] =
     useState(false);
   const [editingState, setEditingState] =
-    useState<ITheme>(defaultSongTheme);
+    useState<ITheme>(defaultTheme);
 
   useEffect(() => {
     async function fetchData() {
       const res: ISettings = await settingsRepo.get('settings');
 
       setEditingState({
-        ...defaultSongTheme,
+        ...defaultTheme,
         ...res.globalSlideTheme,
       });
     }

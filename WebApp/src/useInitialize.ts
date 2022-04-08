@@ -1,93 +1,29 @@
+import IState from 'Interfaces/State';
 import PongFromProjectorToControllerEvent from './Events/Domain/pongFromProjectorToControllerEvent';
 import PingProjectorEventName from './Events/Domain/pingProjector';
 import { settingsRepo } from './Storage/settingsRepository';
 import { songsRepo } from './Storage/songsRepository';
 import { scheduleRepo } from './Storage/scheduleRepository';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import fetchStatus from './Common/FetchStatus/fetchStatus';
 import useModal from './Components/Dialogs/useModal';
 import ISchedule, { emptySchedule, hasUserFileHandler, ProjectorViewMode, scheduleSchemaMigrator } from './Interfaces/Schedule';
 import ISongResourceReference from './Interfaces/SongResourceReference';
 import newScheduleCreatedEvent from './Events/Domain/newScheduleCreatedEvent';
 import useEventHandler from './Events/Handlers/useEventHandler';
+import useInitializeState from 'Storage/useInitializeState';
+import { Context } from 'Common/Store/Store';
 
 function useInitialize(dispatch) {
   const [loadingState, setLoadingState] = useState('Loading');
   const [scheduleModalOpen, setScheduleModalOpen] = useModal(false);
-  const [
-    userFileHandlerPermissionManagerOpen,
-    setUserFileHandlerPermissionManagerOpen,
-  ] = useModal(false);
-  const [raiseEvent] = useEventHandler();
-
-  const primeSettings = async () => {
-    const settings = await settingsRepo.get();
-
-    dispatch({
-      type: 'setSettings',
-      payload: settings,
-    });
-
-    return settings;
-  };
-
-  const primeActiveSongs = async (currentSchedule) => {
-    let array = [];
-    for (const index in currentSchedule.resources) {
-      if (currentSchedule.resources[index].resourceType !== 'SONG') {
-        continue;
-      }
-
-      const result = await songsRepo.get(
-        (currentSchedule.resources[index] as ISongResourceReference)
-          .id,
-      );
-      if (result) {
-        array = array.concat(result);
-      }
-    }
-    return array;
-  };
-
-  const handleNoSchedule = (currentSchedule, raiseEvent) => {
-    if (!currentSchedule) {
-      // AppToaster.show({
-      //   intent: Intent.DANGER,
-      //   message:
-      //     'Could not find an active service. Go to the schedule dialog and create a new schedule.',
-      // });
-      // throw Error();
-
-      // todo (sdv) hacks
-      raiseEvent(new newScheduleCreatedEvent(false, emptySchedule()));
-      setTimeout(() => {
-        window.location.reload();
-      }, 500);
-    }
-  };
-
-  const primeState = (currentSchedule, activeSongs) => {
-    dispatch({
-      type: 'setCurrentSchedule',
-      payload: {
-        // todo (sdv) code split across two parts of the app here and scheduleManageDialog create
-        ...currentSchedule,
-        activeResourcePointer: {
-          slideIndex: 0,
-          resourceId: null,
-        },
-        resources: currentSchedule.resources,
-        activeSongs: activeSongs,
-      } as ISchedule,
-    });
-
-    dispatch({ type: 'navigationArrowKeysEnabled', payload: true });
-  };
+  const [currentSchedule] = useInitializeState(dispatch, setLoadingState);
+  const [state] = useContext(Context);
 
   /** Only open welcome modal if hasn't come to site recently */
-  const openModals = (currentSchedule) => {
+  const checkForModalToOpen = () => {
     var ONE_HOUR = 60 * 60 * 1000; /* ms */
-
+    const currentSchedule = (state as IState).currentSchedule;
     const lastUpdated = localStorage.getItem('lastOpened');
     const hasUserFileHandlerInSchedule = hasUserFileHandler(
       currentSchedule,
@@ -110,6 +46,18 @@ function useInitialize(dispatch) {
   };
 
   useEffect(() => {
+    if (loadingState === fetchStatus.Loaded) {
+      checkForModalToOpen()
+    }
+  }, [loadingState])
+
+  const [
+    userFileHandlerPermissionManagerOpen,
+    setUserFileHandlerPermissionManagerOpen,
+  ] = useModal(false);
+  const [raiseEvent] = useEventHandler();
+
+  useEffect(() => {
     const isOnControllerPage = window.location.pathname.indexOf('/project') === -1;
     if (isOnControllerPage) {
       console.log('pinging projector')
@@ -120,41 +68,6 @@ function useInitialize(dispatch) {
     }
   }, []);
 
-  useEffect(() => {
-    // wait for db to initialize... not pretty
-    setTimeout(() => {
-      async function initState() {
-        try {
-          const settings = await primeSettings();
-
-          const schedules = await scheduleRepo.getAll();
-          let currentSchedule: ISchedule =
-            schedules &&
-            settings &&
-            schedules.find(
-              (s) => s.id === settings.currentScheduleId,
-            )
-
-
-          currentSchedule = scheduleSchemaMigrator(currentSchedule)
-
-          handleNoSchedule(currentSchedule, raiseEvent);
-
-          let activeSongs = await primeActiveSongs(currentSchedule);
-
-          primeState(currentSchedule, activeSongs);
-
-          openModals(currentSchedule);
-
-          setLoadingState(fetchStatus.Loaded);
-        } catch (e) {
-          console.warn(e);
-          setLoadingState(fetchStatus.Failed);
-        }
-      }
-      initState();
-    }, 500);
-  }, []);
   return [
     loadingState,
     scheduleModalOpen,

@@ -1,18 +1,11 @@
-import React, { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Context } from '../../Common/Store/Store';
-import { Button, Card, H5, H3 } from '@blueprintjs/core';
+import { Button, Card, H5 } from '@blueprintjs/core';
 import { Dialog, Classes } from '@blueprintjs/core';
-import styled, { css } from 'styled-components/macro';
-import { DateInput } from '@blueprintjs/datetime';
-import { scheduleRepo } from '../../Storage/scheduleRepository';
-import { settingsRepo } from '../../Storage/settingsRepository';
-import NewId from '../../Helpers/newId';
+import styled from 'styled-components/macro';
 import useEventHandler from '../../Events/Handlers/useEventHandler';
-import NewScheduleCreatedEvent from '../../Events/Domain/newScheduleCreatedEvent';
 import getUrlFromFileHandle from '../../Helpers/getUrlFromFileHandle';
-import LoadScheduleEvent from '../../Events/Domain/loadScheduleEvent';
 import AddActiveVideoEvent from '../../Events/Domain/addActiveVideoEvent';
-import loadScheduleEvent from '../../Events/Domain/loadScheduleEvent';
 import IState from '../../Interfaces/State';
 import { userFileHandlerRepo } from '../../Storage/userFileHandlerRepository';
 
