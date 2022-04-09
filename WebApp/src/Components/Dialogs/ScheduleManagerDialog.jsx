@@ -159,9 +159,13 @@ const ScheduleManagerDialog = ({ setOpen }) => {
                         <>
                           <tr>
                             <H5 style={{ 'padding-top': '10px' }}>
-                              {s.date.toLocaleDateString('en-gb') +
+                              {new Date(s.date).toLocaleDateString(
+                                'en-gb',
+                              ) +
                                 ' ' +
-                                s.date.toLocaleTimeString('en-gb')}
+                                new Date(s.date).toLocaleTimeString(
+                                  'en-gb',
+                                )}
                             </H5>
                             <StyledTd>
                               <StyledActionButton

@@ -14,13 +14,13 @@ import styled from '@emotion/styled';
 import { ImageResults } from './ImageResult';
 
 const StyledImageContainer = styled.div<{ isSelected: boolean }>`
+  border: 2px solid transparent;
   ${({ isSelected }) =>
     isSelected &&
     `
         border: 2px solid white;
     `}
   position: relative;
-
   img {
     cursor: pointer;
   }
@@ -30,16 +30,40 @@ const StyledImageContainer = styled.div<{ isSelected: boolean }>`
     width: 15px;
     height: 15px;
   }
+  .author {
+    padding-left: 6px;
+    display: none;
+    font-size: 10px;
+    background: #4b4b4bc7;
+    color: white;
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+  }
+
+  &:hover {
+    .author {
+      display: block;
+    }
+  }
 `;
 
 const StyledImageResultWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
+  gap: 10px;
 `;
 
 const StyledInput = styled.input`
   width: 100%;
 `;
+
+const StyledSearchContainer = styled.div`
+  display: flex;
+  gap: 10px;
+  margin-bottom: 18px;
+`;
+
 const StyledDialog = styled(Dialog)`
   min-width: 700px;
   width: fit-content;
@@ -83,15 +107,17 @@ const ImageSelectionDialog = ({
         onClose={onClose}
       >
         <div className={Classes.DIALOG_BODY}>
-          <StyledInput
-            type="search"
-            onChange={(e) => setSearchValue(e.target.value)}
-            value={searchValue}
-            className={Classes.INPUT}
-            placeholder="Enter search term. Try 'smoke'"
-          />
+          <StyledSearchContainer>
+            <StyledInput
+              type="search"
+              onChange={(e) => setSearchValue(e.target.value)}
+              value={searchValue}
+              className={Classes.INPUT}
+              placeholder="Enter search term. Try 'smoke'"
+            />
 
-          <Button onClick={getImagesFromApi}>Search</Button>
+            <Button onClick={getImagesFromApi}>Search</Button>
+          </StyledSearchContainer>
           <StyledImageResultWrapper>
             {searchResults?.results.map((res) => {
               return (
@@ -109,6 +135,24 @@ const ImageSelectionDialog = ({
                   {res.id === selectedImageId && (
                     <input type="checkbox" checked />
                   )}
+                  <div className="author">
+                    Image by{' '}
+                    <a
+                      rel="noopener noreferrer"
+                      href={res?.user?.links?.html ?? ''}
+                      target="_blank"
+                    >
+                      {res?.user?.username ?? ''}
+                    </a>{' '}
+                    on{' '}
+                    <a
+                      rel="noopener noreferrer"
+                      target="_blank"
+                      href={'https://unsplash.com/'}
+                    >
+                      Unsplash
+                    </a>
+                  </div>
                 </StyledImageContainer>
               );
             })}

@@ -54,6 +54,10 @@ const StyledBody = styled.div`
   display: flex;
   flex-direction: row;
   height: 100%;
+  background: #3a4650;
+  padding-left: 10px;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
 `;
 
 const ThemePanel = ({ activeResourcePointer, onClose }) => {
@@ -142,7 +146,7 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
               </td>
             </tr>
             <tr>
-              <td>Vertical Align</td>
+              <td>Justify</td>
               <td>
                 {' '}
                 <ButtonGroup>
@@ -182,11 +186,11 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
               </td>
             </tr>
             <tr>
-              <td>Horizontal Align</td>
+              <td>Alignment</td>
               <td>
                 <ButtonGroup>
                   <Button
-                    icon="caret-up"
+                    icon="alignment-top"
                     onClick={() =>
                       setEditingState({
                         ...editingState,
@@ -208,7 +212,7 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
                   ></Button>
 
                   <Button
-                    icon="caret-down"
+                    icon="alignment-bottom"
                     onClick={() =>
                       setEditingState({
                         ...editingState,
@@ -221,9 +225,62 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
               </td>
             </tr>
             <tr>
-              <td>Background Colour</td>
+              <td>Text Border</td>
               <td>
                 {' '}
+                <Button
+                  onClick={() => {
+                    setEditingState({
+                      ...editingState,
+                      showTextBorder: !editingState.showTextBorder,
+                    });
+                  }}
+                  active={editingState.showTextBorder}
+                >
+                  {editingState.showTextBorder
+                    ? 'Enabled'
+                    : 'Disabled'}
+                </Button>
+              </td>
+            </tr>
+            <tr>
+              <td>Font Size</td>
+              <td>
+                <ButtonGroup>
+                  <Button
+                    icon="plus"
+                    onClick={() => {
+                      setEditingState({
+                        ...editingState,
+                        fontSize: editingState.fontSize + 0.1,
+                      });
+                    }}
+                  ></Button>
+
+                  <Button
+                    icon="minus"
+                    onClick={() => {
+                      setEditingState({
+                        ...editingState,
+                        fontSize: editingState.fontSize - 0.1,
+                      });
+                    }}
+                  ></Button>
+                </ButtonGroup>
+              </td>
+            </tr>
+            <tr>
+              <td>Background</td>
+              <td
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  flexDirection: 'column',
+                  // alignItems: 'center',
+                  gap: '5',
+                }}
+              >
+                <b>Color</b>
                 <input
                   type="color"
                   value={editingState.backgroundColor}
@@ -234,13 +291,7 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
                     })
                   }
                 />
-              </td>
-            </tr>
 
-            <tr>
-              <td>Wallpaper</td>
-              <td>
-                {' '}
                 <ButtonGroup>
                   <Button
                     icon="search"
@@ -248,11 +299,12 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
                       setIsWallpaperSelectionOpen(true);
                     }}
                   >
-                    Search
+                    Image
                   </Button>
                 </ButtonGroup>
               </td>
             </tr>
+
             <tr>
               <td>Text Colour</td>
               <td>
@@ -266,49 +318,6 @@ const ThemePanel = ({ activeResourcePointer, onClose }) => {
                     });
                   }}
                 />
-              </td>
-            </tr>
-            <tr>
-              <td>Text border</td>
-              <td>
-                {' '}
-                <Button
-                  onClick={() => {
-                    setEditingState({
-                      ...editingState,
-                      showTextBorder: !editingState.showTextBorder,
-                    });
-                  }}
-                  active={editingState.showTextBorder}
-                >
-                  Text border
-                </Button>
-              </td>
-            </tr>
-            <tr>
-              <td>Font Size</td>
-              <td>
-                <ButtonGroup>
-                  <Button
-                    icon="chevron-up"
-                    onClick={() => {
-                      setEditingState({
-                        ...editingState,
-                        fontSize: editingState.fontSize + 0.1,
-                      });
-                    }}
-                  ></Button>
-
-                  <Button
-                    icon="chevron-down"
-                    onClick={() => {
-                      setEditingState({
-                        ...editingState,
-                        fontSize: editingState.fontSize - 0.1,
-                      });
-                    }}
-                  ></Button>
-                </ButtonGroup>
               </td>
             </tr>
           </StyledTable>
