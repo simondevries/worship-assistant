@@ -36,6 +36,7 @@ export default function ({ resource }: Props) {
         activeResourcePointer={activeResourcePointer}
         previewMode={true}
         globalTheme={state.settings.globalSlideTheme}
+        ccliNumber={state.settings.ccliNumber}
       />
     </BaseNonActiveSlide>
   );

@@ -1,10 +1,12 @@
 import {
   Button,
+  Callout,
   Card,
   Classes,
   Intent,
   Spinner,
 } from '@blueprintjs/core';
+import { INTENT_PRIMARY } from '@blueprintjs/core/lib/esm/common/classes';
 import styled from '@emotion/styled';
 import React, { useEffect, useState } from 'react';
 import {
@@ -19,16 +21,17 @@ const StyledButtonGroup = styled.div`
   gap: 15px;
 `;
 
-const StyledCard = styled(Card)`
+const StyledCallout = styled(Callout)`
   margin-bottom: 10px;
 `;
 
-const StyledDeleteAllCard = styled(StyledCard)`
+const StyledDeleteAllCard = styled(Card)`
   margin-top: 10px;
   margin-bottom: 10px;
   display: flex;
   gap: 20px;
   flex-direction: column;
+  margin-bottom: 10px;
 `;
 
 const StyledTitle = styled.div`
@@ -92,13 +95,12 @@ const BackupAndRestore = () => {
 
   return (
     <>
-      <StyledCard>
-        <StyledTitle>Backup and Restore</StyledTitle>
+      <StyledCallout intent={Intent.PRIMARY}>
         Worship Assitant stores all songs, bible verses and
         application metadata on the browser. A copy of the database
         can be downloaded for safekeeping as a backup or used to
         transfer your data across to another computer.
-      </StyledCard>
+      </StyledCallout>
       <StyledButtonGroup>
         {' '}
         <Button onClick={onExport}>Export</Button>

@@ -5,6 +5,7 @@ export interface ISettings {
   currentSchemaVersion: number;
   currentScheduleId: string;
   globalSlideTheme: ITheme;
+  ccliNumber: string | undefined;
   projectorScreenDimensions: IProjectorScreenDimensions;
 }
 
@@ -16,6 +17,7 @@ export interface IProjectorScreenDimensions {
 export const defaultSettings: ISettings = {
   currentSchemaVersion: 0.1,
   currentScheduleId: newId(),
+  ccliNumber: undefined,
   globalSlideTheme: defaultTheme,
   projectorScreenDimensions: { width: 500, height: 500 }
 }

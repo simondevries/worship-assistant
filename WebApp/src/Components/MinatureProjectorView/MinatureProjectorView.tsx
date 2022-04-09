@@ -46,6 +46,7 @@ const MinatureProjectorView = ({
         previewMode={true}
         activeResourcePointer={activeResourcePointer}
         globalTheme={overrideTheme ?? state.settings.globalSlideTheme}
+        ccliNumber={state.settings.ccliNumber}
         height={slideSizeResolver.getSmallerVersionOfProjectorView(
           currentElementsWidth,
           projectorWidth,

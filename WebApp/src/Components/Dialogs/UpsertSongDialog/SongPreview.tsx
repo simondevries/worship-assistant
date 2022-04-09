@@ -55,6 +55,7 @@ const SongPreview = ({ song }: Props) => {
                   activeSongs={[song]}
                   resourceReference={{ id: song.id }}
                   globalTheme={new ThemeBuilder().build()}
+                  ccliNumber={undefined}
                 ></SongHandler>
               </SongHandlerContainer>
             </StyledContainer>

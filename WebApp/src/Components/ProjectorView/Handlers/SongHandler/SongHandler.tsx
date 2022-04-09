@@ -1,3 +1,4 @@
+import styled from '@emotion/styled';
 import IResourceReference from 'Interfaces/ResourceReference';
 import Song, { songSelectors } from 'Interfaces/Song/Song';
 import { ITheme } from 'Interfaces/themes';
@@ -9,11 +10,13 @@ const SongHandler = ({
   slideIndex,
   activeSongs,
   globalTheme,
+  ccliNumber,
 }: {
   resourceReference: IResourceReference;
   slideIndex: number;
   activeSongs: Song[];
   globalTheme: ITheme;
+  ccliNumber: string | undefined;
 }) => {
   const song =
     activeSongs.find((s) => s.id === resourceReference.id) ??
@@ -31,8 +34,17 @@ const SongHandler = ({
 
   const content = lyricsInUserOrder[slideIndex]?.content ?? '';
 
+  const footer =
+    ccliNumber && ccliNumber.trim() !== ''
+      ? `CCLI number: ${ccliNumber}`
+      : undefined;
+
   return (
-    <GenericTextHandler globalTheme={globalTheme} text={content} />
+    <GenericTextHandler
+      globalTheme={globalTheme}
+      text={content}
+      footer={footer}
+    />
   );
 };
 

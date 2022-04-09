@@ -22,7 +22,9 @@ export class ThemeBuilder {
             textIsUnderlined: true,
             textVerticalAlign: 'M',
             fontFamily: 'Helvetica',
-            showTextBorder: true
+            showTextBorder: true,
+            lineSpacing: 1,
+            letterSpacing: 1
         }
     }
 }

@@ -34,6 +34,7 @@ export default function ProjectorRoute() {
         previewMode={false}
         activeResourcePointer={activeResourcePointer}
         globalTheme={(state as IState).settings.globalSlideTheme}
+        ccliNumber={(state as IState).settings.ccliNumber}
       />
     </>
   );

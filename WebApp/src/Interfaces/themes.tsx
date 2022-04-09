@@ -12,6 +12,8 @@ export interface ITheme {
   fontFamily: string;
   showTextBorder: boolean;
   backgroundImageUri?: string;
+  lineSpacing: number;
+  letterSpacing: number;
 }
 
 export const defaultTheme: ITheme = {
@@ -27,6 +29,8 @@ export const defaultTheme: ITheme = {
   name: 'Default',
   fontFamily: '"Myriad Pro" "Helvetica" "Century Gothic" "Arial"',
   showTextBorder: true,
+  lineSpacing: 1,
+  letterSpacing: 1,
 };
 
 export const themes: ITheme[] = [

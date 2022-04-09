@@ -9,8 +9,10 @@ import ISong from '../../../Interfaces/Song/Song';
 import SongHandler from './SongHandler/SongHandler';
 const DemoSongHandler = ({
   globalTheme,
+  ccliNumber,
 }: {
   globalTheme: ITheme;
+  ccliNumber: string | undefined;
 }) => {
   return (
     <SongHandler
@@ -22,6 +24,7 @@ const DemoSongHandler = ({
         .build()}
       slideIndex={1}
       globalTheme={globalTheme}
+      ccliNumber={ccliNumber}
     ></SongHandler>
   );
 };

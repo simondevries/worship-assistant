@@ -56,6 +56,7 @@ type Props = {
   className?: string;
   useDemoText?: boolean;
   globalTheme: ITheme;
+  ccliNumber: string | undefined;
 };
 
 /**
@@ -67,6 +68,7 @@ const ProjectorView = ({
   className,
   globalTheme,
   useDemoText,
+  ccliNumber,
 }: Props) => {
   const [state] = useContext<Array<IState>>(Context);
 
@@ -89,7 +91,12 @@ const ProjectorView = ({
 
   const renderAppropriateHandler = () => {
     if (useDemoText) {
-      return <DemoSongHandler globalTheme={globalTheme} />;
+      return (
+        <DemoSongHandler
+          globalTheme={globalTheme}
+          ccliNumber={ccliNumber}
+        />
+      );
     }
 
     if (!resourceReference || !resourceReference.resourceType) return;
@@ -102,6 +109,7 @@ const ProjectorView = ({
             slideIndex={activeResourcePointer.slideIndex}
             activeSongs={state?.currentSchedule.activeSongs}
             globalTheme={globalTheme}
+            ccliNumber={ccliNumber}
           />
         );
       case 'slideshow':

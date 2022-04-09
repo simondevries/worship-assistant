@@ -9,6 +9,18 @@ interface SSHandlerProps {
   inverseFontColor: string;
 }
 
+const StyledFooter = styled.div`
+  height: 5%;
+  color: black;
+  text-align: right;
+  padding-right: 1%;
+`;
+
+const StyledScreenSizeContent = styled.div`
+  height: 95%;
+  overflow: hidden;
+`;
+
 const SSongHandler = styled.div<SSHandlerProps>`
   word-wrap: break-word;
   white-space: break-spaces;
@@ -71,21 +83,23 @@ interface Dimensions {
 const useGetFontSize = (
   dimensions: Dimensions,
   configuredFontSize: number,
-): string => {
+): number => {
   const currentFontSizeBeforeScaling = configuredFontSize * 5; // we'll be working with pt here
 
   const heightMultiplier = dimensions.height / 100;
   const currentFontSize =
     currentFontSizeBeforeScaling * heightMultiplier;
 
-  return `${currentFontSize}pt`;
+  return currentFontSize; // assumsed caller uses pt
 };
 
 const GenericTextHandler = ({
   text,
   globalTheme,
+  footer,
 }: {
   text: string;
+  footer?: string;
   globalTheme: ITheme;
 }) => {
   const [dimensions, setDimensions] = useState<Dimensions>({
@@ -94,7 +108,7 @@ const GenericTextHandler = ({
   });
   const containerRef = useRef<HTMLDivElement>(null);
   const fontSize = useGetFontSize(dimensions, globalTheme.fontSize);
-
+  const footerFontSize = fontSize / 2.5;
   useLayoutEffect(() => {
     function updateSize() {
       setDimensions({
@@ -113,7 +127,7 @@ const GenericTextHandler = ({
     <SSongHandler
       data-testid="songhandler-container"
       style={{
-        fontSize: fontSize,
+        fontSize: `${fontSize}pt`,
       }}
       theme={globalTheme}
       inverseFontColor={
@@ -121,8 +135,14 @@ const GenericTextHandler = ({
       }
       ref={containerRef}
     >
-      {text}
+      <StyledScreenSizeContent>{text}</StyledScreenSizeContent>
+      {footer && (
+        <StyledFooter style={{ fontSize: `${footerFontSize}pt` }}>
+          {footer}
+        </StyledFooter>
+      )}
     </SSongHandler>
+    // </div>
   );
 };
 
