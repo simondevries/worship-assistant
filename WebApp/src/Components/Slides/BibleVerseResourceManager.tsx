@@ -2,7 +2,9 @@ import React from 'react';
 import ActiveResourcePointer from '../../Interfaces/ActiveResourcePointer';
 import ResourceReference from '../../Interfaces/ResourceReference';
 import BibleVerseSlide from './NonActiveSlide/BibleVerse/BibleVerseSlide';
-import BibleVerse from '../../Interfaces/BibleVerse';
+import BibleVerse, {
+  BibleVerseContent,
+} from '../../Interfaces/BibleVerse';
 import ActiveBibleVerseSlide from './ActiveSlide/ActiveBibleVerseSlide';
 
 interface Props {
@@ -12,24 +14,43 @@ interface Props {
   resource: ResourceReference;
 }
 
-export default function ({
+const BibleVerseResourceManager = ({
   isActiveResource,
   resource,
   activeResourcePointer,
-}: Props) {
-  if (isActiveResource) {
-    return (
-      <ActiveBibleVerseSlide
-        resource={resource}
-      ></ActiveBibleVerseSlide>
-    );
-  }
+  updateSlideNumber,
+}: Props) => {
+  const bibleVerseContent: BibleVerseContent[] =
+    resource?.bibleVerseContent ?? [];
 
   return (
-    <BibleVerseSlide
-      resource={resource}
-      slideIndex={0}
-      resourceId={resource.id}
-    />
+    <>
+      {bibleVerseContent.map((verse, indx) => {
+        const isActiveSlde =
+          isActiveResource &&
+          activeResourcePointer.slideIndex === indx;
+
+        if (isActiveSlde) {
+          return (
+            <ActiveBibleVerseSlide
+              resource={resource}
+            ></ActiveBibleVerseSlide>
+          );
+        } else {
+          return (
+            <div onClick={() => updateSlideNumber(indx)}>
+              <BibleVerseSlide
+                verseText={verse.text}
+                slideIndex={0}
+                resourceId={resource.id}
+              />
+            </div>
+          );
+        }
+      })}
+    </>
   );
-}
+  //
+};
+
+export default BibleVerseResourceManager;

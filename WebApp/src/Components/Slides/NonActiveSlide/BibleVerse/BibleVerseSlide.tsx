@@ -16,11 +16,11 @@ const StyledCard = styled(Card)`
 interface Props {
   slideIndex: number;
   resourceId: string;
-  resource: ResourceReference;
+  verseText: string;
 }
 
 export default function ({
-  resource,
+  verseText,
   slideIndex,
   resourceId,
 }: Props) {
@@ -29,7 +29,7 @@ export default function ({
       slideIndex={slideIndex}
       resourceId={resourceId}
     >
-      <>{resource.bibleVerseContent}</>
+      <>{verseText}</>
     </BaseNonActiveSlide>
   );
 }

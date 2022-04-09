@@ -110,7 +110,11 @@ const ProjectorView = ({
         );
       case 'bibleverse':
         return (
-          <BibleVerseHandler resourceReference={resourceReference} />
+          <BibleVerseHandler
+            resourceReference={resourceReference}
+            slideIndex={activeResourcePointer.slideIndex}
+            globalTheme={globalTheme}
+          />
         );
       case 'youtube':
         return (

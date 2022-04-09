@@ -1,18 +1,19 @@
 import React from 'react';
-import { getBibleVerse } from "./bibleGateway";
+import { getBibleVerse } from './bibleGateway';
 import BibleVerse from '../Interfaces/BibleVerse';
 
+test('gets shortest bible verse in multiple translations', async () => {
+  let queryResult = await getBibleVerse('Numbers 11:35-12:2', 'kjv');
+  expect(queryResult.length).toBe(3); // note newline
+  expect(queryResult[0].bookName).toBe('Numbers'); // note newline
+  expect(queryResult[0].chapter).toBe(11); // note newline
+  expect(queryResult[0].verse).toBe(35); // note newline
+  expect(queryResult[0].text).toBe(
+    'And the people journeyed from Kibroth-hattaavah unto Hazeroth; and abode at Hazeroth.\n',
+  );
 
-test('gets shortest bible verse in KJV', async () => {
-  let sample = {
-    id: '123',
-    resourceType: 'BIBLEVERSE',
-    book: 'John',
-    chapter: '11',
-    verse: '35',
-    translation: "kjv",  // note KJV
-    source: "",
-    bibleVerseContent: "",
-  } as BibleVerse;
-  await expect(getBibleVerse(sample)).resolves.toBe('Jesus wept.\n');  // note newline
+  queryResult = await getBibleVerse('Numbers 11:35-12:2', 'web');
+  expect(queryResult[0].text).toBe(
+    'From Kibroth Hattaavah the people traveled to Hazeroth; and they stayed at Hazeroth.\n',
+  );
 });

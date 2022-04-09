@@ -1,42 +1,54 @@
+import { BibleGatewayProvider } from 'BibleVerse/bibleVerseResolver';
 import Resource from './resource';
 
 export default interface BibleVerse extends Resource {
-  book: string;
-  chapter: string;
-  verse: string;
-  source: string;
+  passageReference: string;
+  book: string;// Remove
+  chapter: string; // Remove
+  verse: string; // Remove
+  source: BibleGatewayProvider;
   translation: string;
-  bibleVerseContent: string;
+  bibleVerseContent: BibleVerseContent[];
 }
 
-export const initNewBibleVerse = (
+export interface BibleVerseContent {
+  bookId: string;
+  bookName: string;
+  chapter: number;
+  verse: number;
+  text: string;
+}
+
+export const initNewBibleVerseQuery = (
   id,
-  book,
-  chapter,
-  verse,
   translation,
-  source,
-  bibleVerseContent,
+  searchTerm,
+  content
 ) => {
   return {
     id: id,
     resourceType: 'BIBLEVERSE',
-    book: book,
-    chapter: chapter,
-    verse: verse,
     translation: translation,
-    source: source,
-    bibleVerseContent: bibleVerseContent,
+    source: BibleGatewayProvider.BibleApi,
+    bibleVerseContent: content,
+    passageReference: searchTerm
   } as BibleVerse;
 };
 
-export const addBibleVerseContent = (
-  bibleVerse,
-  bibleVerseContent,
+
+export const isLastSlideSelected = (
+  bibleVerseContent: BibleVerseContent[] | undefined,
+  slideIndex: number,
 ) => {
-  return { ...bibleVerse, bibleVerseContent };
+
+  if (!bibleVerseContent) return true;
+
+  return slideIndex >= bibleVerseContent.length - 1;
 };
 
-export const isLastSlideSelected = () => true;
-
-export const lastSlideIndex = () => 0;
+export const lastSlideIndex = (
+  bibleVerseContent: BibleVerseContent[] | undefined,
+) => {
+  if (!bibleVerseContent) return 0;
+  return bibleVerseContent.length - 1;
+}

@@ -1,21 +1,23 @@
+import { BibleVerseContent } from './../Interfaces/BibleVerse';
 import IResourceReference from "../Interfaces/ResourceReference";
 
 export class ResourceReferenceBuilder {
-    bibleVerseContent?: string = 'abibleversecontent'
+    bibleVerseContent: BibleVerseContent[] = [new BibleVerseContentBuilder().build()];
     id: string = 'anid';
-    
-    withId(id): ResourceReferenceBuilder{
+
+
+    withId(id): ResourceReferenceBuilder {
         this.id = id;
         return this;
     }
 
-    withBibleVerse = (bibleVerse: string) => {
-        this.bibleVerseContent = bibleVerse;
+    withBibleVerseContent = (bibleVerseContent: BibleVerseContent[]) => {
+        this.bibleVerseContent = bibleVerseContent;
         return this;
     }
 
     withoutBibleVerse = () => {
-        this.bibleVerseContent = undefined;
+        this.bibleVerseContent = [];
         return this;
     }
 
@@ -23,6 +25,25 @@ export class ResourceReferenceBuilder {
         return {
             id: this.id,
             bibleVerseContent: this.bibleVerseContent
+        }
+    }
+}
+
+export class BibleVerseContentBuilder {
+    bookId: string = 'NUM';
+    bookName: string = 'Numbers';
+    chapter: number = 1;
+    text: string = 'versetext';
+    verse: number = 1;
+
+
+    build(): BibleVerseContent {
+        return {
+            bookId: this.bookId,
+            bookName: this.bookName,
+            chapter: this.chapter,
+            verse: this.verse,
+            text: this.text
         }
     }
 }

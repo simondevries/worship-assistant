@@ -15,10 +15,6 @@ import SongAddedToScheduleEvent from '../../Events/Domain/songAddedToScheduleEve
 import ISong from '../../Interfaces/Song/Song';
 import { fileSystemApp } from '../../FileSystem/fileSystemTools';
 import VideoCreatedEvent from '../../Events/Domain/videoCreatedEvent';
-import {
-  initNewBibleVerse,
-  addBibleVerseContent,
-} from '../../Interfaces/BibleVerse';
 import BibleVerseAddedToScheduleEvent from '../../Events/Domain/bibleVerseAddedToScheduleEvent';
 import { isValidBibleVerse } from '../../BibleVerse/utils';
 import newId from '../../Helpers/newId';
@@ -30,6 +26,10 @@ import { userFileHandlerRepo } from '../../Storage/userFileHandlerRepository';
 import AddSongDialog from '../Dialogs/UpsertSongDialog/AddSongDialog';
 import AddActiveVideoEvent from '../../Events/Domain/addActiveVideoEvent';
 import getUrlFromFileHandle from '../../Helpers/getUrlFromFileHandle';
+import BibleVerse, {
+  BibleVerseContent,
+  initNewBibleVerseQuery,
+} from '../../Interfaces/BibleVerse';
 
 const StyledOmnibarContainer = styled.div`
   -webkit-filter: blur(0);
@@ -183,7 +183,7 @@ const Search = () => {
     setIsSlideShowModalOpen(true);
   };
 
-  const addBibleVerse = async () => {
+  const addBibleVerse = async (translation: string) => {
     if (
       !searchbox ||
       !isValidBibleVerse(searchValue) ||
@@ -195,29 +195,26 @@ const Search = () => {
     }
 
     setIsAddingBibleVerse(true);
-    const book = searchValue.split(' ')[0];
-    const chapter = searchValue.split(' ')[1].split(':')[0];
-    const verse = searchValue.split(' ')[1].split(':')[1];
-    let bibleQuery = initNewBibleVerse(
+    let verses: BibleVerseContent | undefined;
+    try {
+      verses = await bibleVerseResolver(searchValue, translation);
+    } catch {
+      alert('An error occured when loading the bible verse');
+      return;
+    }
+    let bibleVerse = initNewBibleVerseQuery(
       newId(),
-      book,
-      chapter,
-      verse,
-      'kjv',
-      'bible-api.com',
-      null,
+      translation,
+      searchValue,
+      verses,
     );
-    const verseContent = await bibleVerseResolver(bibleQuery);
-    let finalBibleVerse = addBibleVerseContent(
-      bibleQuery,
-      verseContent,
-    );
+
     setIsAddingBibleVerse(false);
 
     raiseEvent(
       new BibleVerseAddedToScheduleEvent(
         false,
-        finalBibleVerse,
+        bibleVerse,
         (state as IState).searchBar.insertResourceAtIndex,
       ),
     );
@@ -301,8 +298,24 @@ const Search = () => {
                 </StyledDropdownItem>
               )}
               {(!searchValue || isValidBibleVerse(searchValue)) && (
-                <StyledDropdownItem onClick={addBibleVerse}>
-                  🕮 Add Bible Verse
+                <StyledDropdownItem
+                  onClick={() => addBibleVerse('kjv')}
+                >
+                  🕮 Add Bible Verse - King James Version (KJV)
+                </StyledDropdownItem>
+              )}
+              {(!searchValue || isValidBibleVerse(searchValue)) && (
+                <StyledDropdownItem
+                  onClick={() => addBibleVerse('bbe')}
+                >
+                  🕮 Add Bible Verse - Basic English (BBE)
+                </StyledDropdownItem>
+              )}
+              {(!searchValue || isValidBibleVerse(searchValue)) && (
+                <StyledDropdownItem
+                  onClick={() => addBibleVerse('web')}
+                >
+                  🕮 Add Bible Verse - World English (WEB)
                 </StyledDropdownItem>
               )}
               {!searchValue && (

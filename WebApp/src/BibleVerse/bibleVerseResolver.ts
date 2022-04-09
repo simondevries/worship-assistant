@@ -1,16 +1,21 @@
 import BibleVerse from '../Interfaces/BibleVerse';
 import { getBibleVerse } from './bibleGateway';
 
+export enum BibleGatewayProvider {
+  BibleApi
+}
+
 export const bibleVerseResolver = async (
-  bibleVerse: any,
+  searchValue: string, translation: string,
 ): Promise<any> => {
-  switch (bibleVerse.source) {
-    case 'bible-api.com':
-      return await getBibleVerse(bibleVerse);
+
+  switch (BibleGatewayProvider.BibleApi) {
+    case BibleGatewayProvider.BibleApi:
+      return await getBibleVerse(searchValue, translation);
 
     default:
       console.error(
-        `No bible verse found for ${bibleVerse && bibleVerse.source}`,
+        `No bible verse found for ${searchValue}`,
       );
   }
-};
+}

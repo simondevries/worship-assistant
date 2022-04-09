@@ -39,6 +39,7 @@ const SlideResolver = ({
           resource={resource}
           isActiveResource={isActiveResource}
           activeResourcePointer={activeResourcePointer}
+          updateSlideNumber={updateSlideNumberLocal(resource.id)}
         />
       );
     case 'VIDEO':

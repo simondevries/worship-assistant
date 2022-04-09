@@ -36,7 +36,7 @@ const getResource = (id, currentSchedule) => {
   return resource;
 };
 
-export default (raiseEvent) => {
+const useGoToSlideProcessor = (raiseEvent) => {
   const [state] = useContext(Context);
 
   const currentSchedule: ISchedule = state.currentSchedule;
@@ -152,7 +152,7 @@ const isLastSlideSelected = (
     case 'SONG':
       return isLastSongSelected(activeSongs, resource.id, slideIndex);
     case 'BIBLEVERSE':
-      return isLastBibleVerseSelected();
+      return isLastBibleVerseSelected(resource.bibleVerseContent, slideIndex);
     default:
       throw Error(
         `No isListSlideSelected handler for ${resource.resourceType}`,
@@ -172,7 +172,7 @@ const getLastSlideIndexOfResource = (
     case 'SONG':
       return songLastSlideIndex(activeSongs, resource.id);
     case 'BIBLEVERSE':
-      return bibleVerseLastSlideIndex();
+      return bibleVerseLastSlideIndex(resource.bibleVerseContent);
     default:
       throw Error(
         `No isListSlideSelected handler for ${resource.resourceType}`,
@@ -250,3 +250,5 @@ const getNextResourceId = (activeResourcePointer, resourceOrder) => {
 
   return resourceOrder[position + 1];
 };
+
+export default useGoToSlideProcessor;

@@ -6,14 +6,11 @@ import { Button, Card } from '@blueprintjs/core';
 import ResourceReference from '../../../Interfaces/ResourceReference';
 import BibleVerse from '../../../Interfaces/BibleVerse';
 import ActiveSlideContainer from './ActiveSlideContainer';
+import MinatureProjectorView from 'Components/MinatureProjectorView/MinatureProjectorView';
 
 const StyledButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
-`;
-
-const StyledProjectorView = styled(ProjectorView)`
-  height: 150px;
 `;
 
 export const slideWidth = 300;
@@ -22,7 +19,7 @@ type Props = {
   resource: ResourceReference;
 };
 
-export default function ({ resource }: Props) {
+const ActiveBibleVerseSlide = ({ resource }: Props) => {
   const [state, dispatch] = useContext(Context);
 
   const activeResourcePointer =
@@ -33,15 +30,12 @@ export default function ({ resource }: Props) {
       slideIndex={activeResourcePointer.slideIndex}
       resourceId={activeResourcePointer.resourceId}
     >
-      {`${resource.book} ${resource.chapter}:${resource.verse} (${resource.translation})`}
-      <StyledProjectorView
-        previewMode={true}
-        activeResourcePointer={activeResourcePointer}
-        globalTheme={state.settings.globalTheme}
-      />
+      <MinatureProjectorView />
       <StyledButtonContainer>
         <Button>Slide Settings</Button>
       </StyledButtonContainer>
     </ActiveSlideContainer>
   );
-}
+};
+
+export default ActiveBibleVerseSlide;

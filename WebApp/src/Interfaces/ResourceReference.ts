@@ -1,3 +1,4 @@
+import { BibleVerseContent } from './BibleVerse';
 import IVerse from './Verse';
 import ISong from './Song/Song';
 import State from './State';
@@ -8,12 +9,8 @@ export default interface IResourceReference {
   id: string;
   resourceType?: string;
   content?: string; // Song - in use?
-  bibleVerseContent?: string; // Bible verse
-  book?: string; // Bible verse
-  chapter?: string; // Bible verse
-  verse?: string; // Bible verse
-  source?: string; // Bible verse
-  translation?: string; // Bible verse
+  bibleVerseContent?: BibleVerseContent[]; // Bible verse
+  passageReference?: string; // Bible verse
   embeddedPowerPointUrl?: string; // SlideShow
   lyrics?: string; // song
   youTubeUrl?: string; // youtube
@@ -36,7 +33,7 @@ export const resolveTitle = (state: State, resourceReference: IResourceReference
       const bibleVerse = state.currentSchedule.resources.find(
         (s) => s.id === resourceReference.id,
       );
-      return `${bibleVerse?.book}  ${bibleVerse?.chapter}:${bibleVerse?.verse}`;
+      return bibleVerse?.passageReference;
     case 'video':
       const video = state.currentSchedule.resources.find(
         (s) => s.id === resourceReference.id,
