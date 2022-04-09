@@ -1,4 +1,4 @@
-import { Classes } from '@blueprintjs/core';
+import { Button, Classes } from '@blueprintjs/core';
 import SongPartLabelTag from 'Common/SongPartLabel/SongPartLabelTag';
 import { useRef, useState } from 'react';
 import { plainTextTolyricTagProcessor } from 'Reducers/SongReducers/plainTextTolyricTagProcessor';
@@ -27,6 +27,13 @@ const StyledEditableTextContent = styled(AceEditor)`
   /* max-height: 1000px; */
 `;
 
+const StyledTagButton = styled(Button)`
+  .verse-name-label {
+    margin-bottom: 0px;
+    padding: 3px 5px;
+  }
+`;
+
 const StyledInTextTags = styled.div`
   .tag {
     position: absolute;
@@ -37,9 +44,16 @@ const StyledInTextTags = styled.div`
   flex: 1;
 `;
 
-const StyledSongPartLabel = styled(SongPartLabelTag)`
-  cursor: pointer;
-`;
+const StyledSongPartLabel = (props: any) => {
+  return (
+    <StyledTagButton>
+      <SongPartLabelTag {...props} fillContainer={true} />
+    </StyledTagButton>
+  );
+};
+// styled(SongPartLabelTag)`
+//   cursor: pointer;
+// `;
 
 const StyledTagContainer = styled.div`
   display: flex;

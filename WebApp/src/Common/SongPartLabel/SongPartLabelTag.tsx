@@ -56,6 +56,7 @@ const SongPartLabelTag = ({
 
   labels.push(
     <StyledVerseNameLabel
+      className="verse-name-label" // referenced externally
       color={tagDetails.color}
       background={tagDetails.background}
     >

@@ -1,7 +1,9 @@
 import SongPartLabelTag from 'Common/SongPartLabel/SongPartLabelTag';
+import { Context } from 'Common/Store/Store';
 import SongHandler from 'Components/ProjectorView/Handlers/SongHandler/SongHandler';
 import Song, { songSelectors } from 'Interfaces/Song/Song';
-import React from 'react';
+import IState from 'Interfaces/State';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { ThemeBuilder } from 'testBuilders/themeBuilder';
 const StyledPreviewsContainer = styled.div`
@@ -36,6 +38,8 @@ interface Props {
 }
 
 const SongPreview = ({ song }: Props) => {
+  const [state] = useContext(Context);
+
   const lyricsInUserOrder =
     songSelectors.lyricsInUserSpecificedOrder(song);
   return (
@@ -54,7 +58,9 @@ const SongPreview = ({ song }: Props) => {
                   slideIndex={index}
                   activeSongs={[song]}
                   resourceReference={{ id: song.id }}
-                  globalTheme={new ThemeBuilder().build()}
+                  globalTheme={
+                    (state as IState).settings.globalSlideTheme
+                  }
                   ccliNumber={undefined}
                 ></SongHandler>
               </SongHandlerContainer>

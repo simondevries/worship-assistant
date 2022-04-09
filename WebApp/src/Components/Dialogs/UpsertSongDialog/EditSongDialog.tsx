@@ -95,7 +95,7 @@ const EditSongDialog = ({ setEditSongModalOpen, songId }) => {
         className={Classes.DARK}
         isOpen
         canEscapeKeyClose={true}
-        title="Create a new song"
+        title="Edit song"
         isCloseButtonShown={true}
         onClose={() => setEditSongModalOpen(false)}
       >
