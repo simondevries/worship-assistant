@@ -12,6 +12,8 @@ export interface SetCurrentProjectorSizeAction extends ReducerAction {
   type: 'setCurrentProjectorSize'
 }
 
+
+// NOTE: I am in the process of moving the reducer out a common file and into each model. The model should then have tests against the reducers
 function reducers(state: IState, action: ReducerAction): IState {
   switch (action.type) {
     // Resources
@@ -180,6 +182,35 @@ function reducers(state: IState, action: ReducerAction): IState {
         currentSchedule: {
           ...state.currentSchedule,
           activeVideos: videos.concat(action.payload),
+        },
+      };
+
+    case 'addImageToActiveImages':
+      const images =
+        (state.currentSchedule.activeImages &&
+          state.currentSchedule.activeImages.filter(
+            (s) =>
+              s &&
+              action &&
+              action.payload &&
+              s.id !== action.payload.id,
+          )) ||
+        [];
+
+      return {
+        ...state,
+        currentSchedule: {
+          ...state.currentSchedule,
+          activeImages: images.concat(action.payload),
+        },
+      };
+
+    case 'clearActiveImages':
+      return {
+        ...state,
+        currentSchedule: {
+          ...state.currentSchedule,
+          activeImages: [],
         },
       };
 

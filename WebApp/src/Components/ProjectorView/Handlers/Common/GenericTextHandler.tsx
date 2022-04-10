@@ -11,14 +11,25 @@ interface SSHandlerProps {
 
 const StyledFooter = styled.div`
   height: 5%;
-  color: black;
   text-align: right;
   padding-right: 1%;
 `;
 
-const StyledScreenSizeContent = styled.div`
+const StyledScreenSizeContent = styled.div<{ theme: ITheme }>`
   height: 95%;
   overflow: hidden;
+
+  // sdv - a bit gross how this is split between StyledScreenSizeContent & SSongHandler
+
+  display: flex;
+  flex-direction: column;
+  justify-content: ${({ theme }) => {
+    return theme.textVerticalAlign === 'T'
+      ? 'start'
+      : theme.textVerticalAlign === 'M'
+      ? 'center'
+      : 'end';
+  }};
 `;
 
 const SSongHandler = styled.div<SSHandlerProps>`
@@ -41,14 +52,7 @@ const SSongHandler = styled.div<SSHandlerProps>`
     theme.textIsItalic ? 'italic' : 'none'};
   font-weight: ${({ theme }) => (theme.textIsBold ? 'bold' : 'none')};
   font-family: ${({ theme }) => theme.fontFamily ?? 'Arial'};
-  display: flex;
-  justify-content: ${({ theme }) => {
-    return theme.textVerticalAlign === 'T'
-      ? 'start'
-      : theme.textVerticalAlign === 'M'
-      ? 'center'
-      : 'end';
-  }};
+
   ${({ theme }) => {
     return (
       theme.backgroundImageUri &&
@@ -57,7 +61,6 @@ const SSongHandler = styled.div<SSHandlerProps>`
       background-size: cover;`
     );
   }}
-  flex-direction: column;
   ${({ theme, inverseFontColor }) => {
     return theme.showTextBorder === false
       ? ''
@@ -108,7 +111,7 @@ const GenericTextHandler = ({
   });
   const containerRef = useRef<HTMLDivElement>(null);
   const fontSize = useGetFontSize(dimensions, globalTheme.fontSize);
-  const footerFontSize = fontSize / 2.5;
+  const footerFontSize = fontSize / 2.15;
   useLayoutEffect(() => {
     function updateSize() {
       setDimensions({
@@ -135,7 +138,9 @@ const GenericTextHandler = ({
       }
       ref={containerRef}
     >
-      <StyledScreenSizeContent>{text}</StyledScreenSizeContent>
+      <StyledScreenSizeContent theme={globalTheme}>
+        {text}
+      </StyledScreenSizeContent>
       {footer && (
         <StyledFooter style={{ fontSize: `${footerFontSize}pt` }}>
           {footer}

@@ -3,6 +3,7 @@ import ResourceReference from './ResourceReference';
 import newId from '../Helpers/newId';
 import ActiveResourcePointer from './ActiveResourcePointer';
 import IActiveVideo from './ActiveVideo';
+import IActiveImage from './ActiveImage';
 
 export default interface ISchedule {
   id: string;
@@ -12,6 +13,7 @@ export default interface ISchedule {
   resources: ResourceReference[];
   activeSongs: Song[];
   activeVideos: IActiveVideo[];
+  activeImages: IActiveImage[];
   title: string;
   currentProjectorViewMode: {
     mode: ProjectorViewMode;
@@ -26,6 +28,7 @@ export enum ProjectorViewMode {
 
 
 export const emptySchedule = (): ISchedule => {
+
   return {
     id: newId(),
     resources: [],
@@ -38,6 +41,7 @@ export const emptySchedule = (): ISchedule => {
     resourceOrder: [],
     activeSongs: [],
     activeVideos: [],
+    activeImages: [],
     currentProjectorViewMode: { mode: ProjectorViewMode.Standard }
 
   };

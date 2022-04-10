@@ -3,7 +3,6 @@ import styled, { ThemeProvider } from 'styled-components/macro';
 import { Context } from '../../Common/Store/Store';
 import IState from '../../Interfaces/State';
 import ISongResourceReference from '../../Interfaces/SongResourceReference';
-import { fileSystemApp } from '../../FileSystem/fileSystemTools';
 import ActiveResourcePointer from '../../Interfaces/ActiveResourcePointer';
 import { defaultTheme, ITheme } from '../../Interfaces/themes';
 import useFitText from 'use-fit-text';
@@ -18,6 +17,7 @@ import { ProjectorViewMode } from 'Interfaces/Schedule';
 import SettingsDialog, {
   SettingsDialogTab,
 } from 'Components/Dialogs/SettingsDialog/SettingsDialog';
+import ImageHandler from './Handlers/ImageHandler';
 
 const StyledCentering = styled.div`
   height: 100%;
@@ -56,7 +56,7 @@ type Props = {
   className?: string;
   useDemoText?: boolean;
   globalTheme: ITheme;
-  ccliNumber: string | undefined;
+  ccliNumber?: string;
 };
 
 /**
@@ -136,7 +136,12 @@ const ProjectorView = ({
           ></VideoHandler>
         );
       case 'image':
-        return <div>Image</div>;
+        return (
+          <ImageHandler
+            resourceReference={resourceReference}
+            previewMode={previewMode}
+          ></ImageHandler>
+        );
       default:
         return 'not found';
     }

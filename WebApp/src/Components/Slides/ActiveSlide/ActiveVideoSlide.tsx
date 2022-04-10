@@ -32,7 +32,7 @@ export default function ({ resource }) {
         activeResourcePointer={activeResourcePointer}
         previewMode={true}
         globalTheme={state.settings.globalSlideTheme}
-        ccliNumber={state.settings.ccliNumber}
+        // ccliNumber={state.settings.ccliNumber}
       />
       <StyledButtonContainer>
         {resource.title}

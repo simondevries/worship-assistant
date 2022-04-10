@@ -1,7 +1,8 @@
+import { FilePickerType, verifyFileHandlePermission } from 'FileSystem/fileSystemTools';
 import { userFileHandlerRepo } from '../Storage/userFileHandlerRepository';
 
-export default async (fileHandle) => {
-  if ((await verifyPermission(fileHandle, true)) === false) {
+const getUrlFromFileHandle = async (fileHandle) => {
+  if ((await verifyFileHandlePermission(fileHandle, false)) === false) {
     console.error(
       `User did not grant permission to '${fileHandle.name}'`,
     );
@@ -9,25 +10,8 @@ export default async (fileHandle) => {
   }
 
   const file = await fileHandle.getFile();
-  let blob = new Blob([file], { type: 'video/mp4' });
+  let blob = new Blob([file], { type: 'video/mp4' }); // Not sure if file type actually matters here?
   return URL.createObjectURL(blob);
 };
 
-async function verifyPermission(fileHandle, withWrite) {
-  const opts = {} as any;
-  if (withWrite) {
-    opts.writable = false;
-    // For Chrome 86 and later...
-    opts.mode = 'read';
-  }
-  // Check if we already have permission, if so, return true.
-  if ((await fileHandle.queryPermission(opts)) === 'granted') {
-    return true;
-  }
-  // Request permission to the file, if the user grants permission, return true.
-  if ((await fileHandle.requestPermission(opts)) === 'granted') {
-    return true;
-  }
-  // The user did nt grant permission, return false.
-  return false;
-}
+export default getUrlFromFileHandle;

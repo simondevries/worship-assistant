@@ -1,3 +1,4 @@
+import { IResource } from 'Interfaces/resource';
 import { defaultSettings, ISettings } from './../Interfaces/Settings';
 import PongFromProjectorToControllerEvent from '../Events/Domain/pongFromProjectorToControllerEvent';
 import PingProjectorEventName from '../Events/Domain/pingProjector';
@@ -6,12 +7,12 @@ import { songsRepo } from './songsRepository';
 import { scheduleRepo } from './scheduleRepository';
 import { useState, useEffect } from 'react';
 import fetchStatus from '../Common/FetchStatus/fetchStatus';
-import useModal from '../Components/Dialogs/useModal';
 import ISchedule, { emptySchedule, scheduleSchemaMigrator } from '../Interfaces/Schedule';
 import ISongResourceReference from '../Interfaces/SongResourceReference';
 import newScheduleCreatedEvent from '../Events/Domain/newScheduleCreatedEvent';
 import useEventHandler from '../Events/Handlers/useEventHandler';
 import UpdateSettingsEvent from 'Events/Domain/updateSettingsEvent';
+import { userFileHandlerRepo } from './userFileHandlerRepository';
 
 function useInitializeState(dispatch: (payload: any) => void, setLoadingState: (state: string) => void) {
   const [raiseEvent] = useEventHandler();
@@ -50,6 +51,22 @@ function useInitializeState(dispatch: (payload: any) => void, setLoadingState: (
     }
     return array;
   };
+
+  const primeActiveVideos = async (currentSchedule) => {
+    // let array = [];
+    // const a = currentSchedule.resources.map((resource) => {
+    //   if (resource.resourceType !== 'IMAGE') {
+    //     continue;
+    //   }
+
+    //   await userFileHandlerRepo.get(resource.id);
+    // });
+
+    // a.forEach(handle => {
+
+    // })
+
+  }
 
   const handleNoSchedule = (currentSchedule, raiseEvent) => {
     if (!currentSchedule) {
@@ -120,6 +137,8 @@ function useInitializeState(dispatch: (payload: any) => void, setLoadingState: (
           let activeSongs = await primeActiveSongs(currentSchedule);
 
           primeState(currentSchedule, activeSongs);
+
+          primeActiveVideos(currentSchedule);
 
           setLoadingState(fetchStatus.Loaded);
 

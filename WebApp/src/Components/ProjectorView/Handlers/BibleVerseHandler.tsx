@@ -15,15 +15,29 @@ const BibleVerseHandler = ({
   slideIndex,
   globalTheme,
 }: Prop) => {
-  const selectedVerse =
-    (resourceReference.bibleVerseContent &&
-      resourceReference.bibleVerseContent[slideIndex]?.text) ??
-    '';
+  const selectedContent =
+    resourceReference.bibleVerseContent &&
+    resourceReference.bibleVerseContent[slideIndex];
 
+  const selectedVerse = selectedContent?.text ?? '';
+  let selectedPassageReference = '';
+
+  if (
+    selectedContent &&
+    selectedContent.bookName &&
+    selectedContent.chapter &&
+    selectedContent?.verse
+  ) {
+    selectedPassageReference = `${selectedContent?.bookName ?? ''} ${
+      selectedContent?.chapter ?? ''
+    }:${selectedContent?.verse}`;
+  }
+  //
   return (
     <GenericTextHandler
       text={selectedVerse}
       globalTheme={globalTheme}
+      footer={selectedPassageReference}
     />
   );
 };

@@ -1,3 +1,7 @@
+import addActiveImageEvent from 'Events/Domain/addActiveImageEvent';
+import { AddActiveImageEventName } from './../Domain/addActiveImageEvent';
+import { ImageCreatedEventName } from './../Domain/imageCreatedEvent';
+import imageCreatedEvent from 'Events/Domain/imageCreatedEvent';
 import { UpdateSettingsEventName } from './../Domain/updateSettingsEvent';
 import { PingProjectorEventName } from './../Domain/pingProjector';
 import SongCreatedEvent, {
@@ -136,6 +140,22 @@ const useBroadcastMessageEventProcessor = () => {
     );
   };
 
+  const ImageAddedToScheduleEventHandler = (
+    event: imageCreatedEvent,
+  ) => {
+    if (
+      event.eventType !== ImageCreatedEventName ||
+      event.isExternalEvent
+    )
+      return;
+
+    const message = new MessageToProjector(event);
+
+    bc.postMessage(
+      crossBrowserMessageMapper.toString(message)
+    );
+  };
+
   const SlideShowAddedToScheduleEventHandler = (
     event: SlideShowAddedToScheduleEvent,
   ) => {
@@ -169,6 +189,20 @@ const useBroadcastMessageEventProcessor = () => {
   const AddActiveVideoEventHandler = (event: AddActiveVideoEvent) => {
     if (
       event.eventType !== AddActiveVideoEventName ||
+      event.isExternalEvent
+    )
+      return;
+
+    const message = new MessageToProjector(event);
+
+    bc.postMessage(
+      crossBrowserMessageMapper.toString(message)
+    );
+  };
+
+  const AddActiveImageEventHandler = (event: addActiveImageEvent) => {
+    if (
+      event.eventType !== AddActiveImageEventName ||
       event.isExternalEvent
     )
       return;
@@ -342,12 +376,14 @@ const useBroadcastMessageEventProcessor = () => {
     SongEditedEventHandler,
     VideoModeChangeEventHandler,
     BibleVerseAddedToScheduleEventHandler,
+    AddActiveImageEventHandler,
     ProjectorWindowClosedEventHandler,
     PingReceivedFromControllerEventHandler,
     RequestPongFromProjectorEventHandler,
     PongToControllerInternalEventHandler,
     SlideBlackoutEventHandler,
     UpdateSettingsEventHandler,
+    ImageAddedToScheduleEventHandler
   ];
   return [arr];
 };

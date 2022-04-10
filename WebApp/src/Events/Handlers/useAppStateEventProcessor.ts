@@ -1,3 +1,5 @@
+import { AddActiveImageEventName } from './../Domain/addActiveImageEvent';
+import imageCreatedEvent, { ImageCreatedEventName } from 'Events/Domain/imageCreatedEvent';
 import UpdateSettingsEvent, { UpdateSettingsEventName } from './../Domain/updateSettingsEvent';
 import SlideBlackoutEvent, { SlidedBlackoutEventName } from 'Events/Domain/slideBlackoutEvent';
 import { defaultProjectorWidth, defaultProjectorHeight } from './../../Components/Slides/ActiveSlide/helpers/slideSizeResolver';
@@ -44,6 +46,7 @@ import ProjectorWindowClosedEvent, {
   ProjectorWindowClosedEventName,
 } from '../Domain/projectorWindowClosedEvent';
 import PongFromProjectorToControllerEvent, { PongFromProjectorToControllerEventName } from 'Events/Domain/pongFromProjectorToControllerEvent';
+import addActiveImageEvent from 'Events/Domain/addActiveImageEvent';
 
 const useAppStateEventProcessors = () => {
   const [state, dispatch] = useContext(Context);
@@ -64,6 +67,19 @@ const useAppStateEventProcessors = () => {
       type: 'addResourceToSchedule',
       payload: {
         resourceType: 'VIDEO',
+        index: event.index,
+        id: event.id,
+      },
+    });
+  };
+
+  const ImageCreatedEventHandler = (event: imageCreatedEvent) => {
+    if (event.eventType !== ImageCreatedEventName) return;
+
+    dispatch({
+      type: 'addResourceToSchedule',
+      payload: {
+        resourceType: 'IMAGE',
         index: event.index,
         id: event.id,
       },
@@ -127,7 +143,8 @@ const useAppStateEventProcessors = () => {
     dispatch({
       type: 'addResourceToSchedule',
       payload: {
-        ...event.bibleVerse,
+        bibleVerseContent: event.bibleVerse.bibleVerseContent,
+        passageReference: event.bibleVerse.passageReference,
         id: event.bibleVerse.id,
         index: event.index,
         resourceType: 'BIBLEVERSE',
@@ -156,6 +173,7 @@ const useAppStateEventProcessors = () => {
 
     dispatch({ type: 'clearActiveSongs' });
     dispatch({ type: 'clearActiveVideos' });
+    dispatch({ type: 'clearActiveImages' });
   };
 
   const RemoveResourceFromScheduleEventHandler = (
@@ -194,6 +212,15 @@ const useAppStateEventProcessors = () => {
 
     dispatch({
       type: 'addVideoToActiveVideos',
+      payload: { id: event.resourceId, url: event.url },
+    });
+  };
+
+  const AddActiveImageEventHandler = (event: addActiveImageEvent) => {
+    if (event.eventType !== AddActiveImageEventName) return;
+
+    dispatch({
+      type: 'addImageToActiveImages',
       payload: { id: event.resourceId, url: event.url },
     });
   };
@@ -253,6 +280,8 @@ const useAppStateEventProcessors = () => {
     SlideShowAddedToScheduleEventHandler,
     MoveResourceEventHandler,
     VideoCreatedEventHandler,
+    AddActiveImageEventHandler,
+    ImageCreatedEventHandler,
     LoadScheduleEventHandler,
     AddActiveVideoEventHandler,
     SongEditedEventHandler,

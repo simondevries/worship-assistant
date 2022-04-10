@@ -13,7 +13,6 @@ import { songsRepo } from '../../Storage/songsRepository';
 import useEventHandler from '../../Events/Handlers/useEventHandler';
 import SongAddedToScheduleEvent from '../../Events/Domain/songAddedToScheduleEvent';
 import ISong from '../../Interfaces/Song/Song';
-import { fileSystemApp } from '../../FileSystem/fileSystemTools';
 import VideoCreatedEvent from '../../Events/Domain/videoCreatedEvent';
 import BibleVerseAddedToScheduleEvent from '../../Events/Domain/bibleVerseAddedToScheduleEvent';
 import { isValidBibleVerse } from '../../BibleVerse/utils';
@@ -30,6 +29,9 @@ import BibleVerse, {
   BibleVerseContent,
   initNewBibleVerseQuery,
 } from '../../Interfaces/BibleVerse';
+import imageCreatedEvent from 'Events/Domain/imageCreatedEvent';
+import addActiveImageEvent from 'Events/Domain/addActiveImageEvent';
+import { FilePickerType, openFile } from 'FileSystem/fileSystemTools';
 
 const StyledOmnibarContainer = styled.div`
   -webkit-filter: blur(0);
@@ -120,11 +122,6 @@ const StyledInput = styled.input`
 const StyledSearchIcon = styled(Icon)``;
 // const StyledInput = styled
 
-export default function () {
-  console.log({});
-  return <Search />;
-}
-
 const Search = () => {
   const [searchValue, setSearchValue] = useState('');
   const [allSongs, setAllSongs] = useState([]);
@@ -144,9 +141,54 @@ const Search = () => {
     });
   };
 
+  const addImage = async () => {
+    let fileHandle, url;
+    try {
+      fileHandle = await openFile(FilePickerType.Image);
+      if (!fileHandle || fileHandle == null) {
+        return;
+      }
+      url = await getUrlFromFileHandle(fileHandle);
+    } catch (e: any) {
+      if (e.name === 'AbortError') {
+        return;
+      }
+      alert('An error occured on retrieving the image');
+      console.warn(e);
+      return;
+    }
+    const imageId = newId();
+
+    raiseEvent(
+      new imageCreatedEvent(
+        false,
+        imageId,
+        (state as IState).searchBar.insertResourceAtIndex,
+        fileHandle,
+      ),
+    );
+
+    raiseEvent(new addActiveImageEvent(false, imageId, url));
+
+    onClose();
+  };
+
   const addVideo = async () => {
-    const fileHandle = await fileSystemApp.openFile();
-    const url = await getUrlFromFileHandle(fileHandle);
+    let fileHandle, url;
+    try {
+      fileHandle = await openFile(FilePickerType.Video);
+      if (!fileHandle || fileHandle == null) {
+        return;
+      }
+      url = await getUrlFromFileHandle(fileHandle);
+    } catch (e: any) {
+      if (e.name === 'AbortError') {
+        return;
+      }
+      alert('An error occured on retrieving the video');
+      console.warn(e);
+      return;
+    }
     const videoId = newId();
 
     raiseEvent(
@@ -319,7 +361,7 @@ const Search = () => {
                 </StyledDropdownItem>
               )}
               {!searchValue && (
-                <StyledDropdownItem onClick={() => alert('todo')}>
+                <StyledDropdownItem onClick={addImage}>
                   📷 Add Image
                 </StyledDropdownItem>
               )}
@@ -389,3 +431,5 @@ const Search = () => {
     </>
   );
 };
+
+export default Search;

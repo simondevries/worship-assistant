@@ -1,11 +1,11 @@
+import { hasNativeFileSystem } from './../FileSystem/fileSystemTools';
 import { useState, useEffect } from 'react';
-import { fileSystemApp } from '../FileSystem/fileSystemTools';
 
 export const useBrowserSupported = () => {
   const [isSupported, setIsSupported] = useState<any>(null);
 
   useEffect(() => {
-    const fileSystemSupported = fileSystemApp.hasNativeFS;
+    const fileSystemSupported = hasNativeFileSystem();
 
     var raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
     const chromeVersion = raw ? parseInt(raw[2], 10) : false;

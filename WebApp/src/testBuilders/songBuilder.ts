@@ -11,9 +11,9 @@ Consider all the worlds Thy hands have made
 I see the stars, I hear the rolling thunder
 Thy power throughout the universe displayed`},
     {
-        name: "v2", content: `Then sings \nmy soul, my Savior God to Thee\n
-How great Thou art, how great Thou art\n
-Then sings my soul, my Savior God to Thee\n
+        name: "v2", content: `Then sings my soul, my Savior God to Thee
+How great Thou art, how great Thou art
+Then sings my soul, my Savior God to Thee
 How great Thou art, how great Thou art`}];
 
     withVerseOrder(order: string[]): SongBuilder {

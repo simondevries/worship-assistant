@@ -1,3 +1,5 @@
+import { ImageCreatedEventName } from './../Domain/imageCreatedEvent';
+import imageCreatedEvent from 'Events/Domain/imageCreatedEvent';
 import { UpdateSettingsEventName } from './../Domain/updateSettingsEvent';
 import { Type } from './../../Components/Dialogs/ImageSelectionDialog/ImageResult';
 import { songsRepo } from '../../Storage/songsRepository';
@@ -23,7 +25,7 @@ import MoveResourceEvent, {
 import reducers from '../../Reducers/reducers';
 import IState from '../../Interfaces/State';
 import RemoveResourceFromScheduleEvent, {
-  RemoveResourceFromScheduleEventName,
+  RemoveResourceFromScheduleEventName
 } from '../Domain/removeResourceFromScheduleEvent';
 import newId from '../../Helpers/newId';
 import BibleVerseAddedToScheduleEvent, {
@@ -40,6 +42,21 @@ import SongEditedEvent, {
 } from '../Domain/songEditedEvent';
 import { userFileHandlerRepo } from '../../Storage/userFileHandlerRepository';
 import UpdateSettingsEvent from 'Events/Domain/updateSettingsEvent';
+import ISchedule from 'Interfaces/Schedule';
+import IScheduleDto from 'Interfaces/indexDb/ScheduleDto';
+
+
+const toScheduleDto = (schedule: ISchedule): IScheduleDto => {
+
+  return {
+    id: schedule.id,
+    date: schedule.date,
+    activeResourcePointer: schedule.activeResourcePointer,
+    resourceOrder: schedule.resourceOrder,
+    resources: schedule.resources,
+    title: schedule.title
+  }
+}
 
 const useIndexDbEventProcessor = () => {
   const [state, dispatch] = useContext(Context);
@@ -73,7 +90,7 @@ const useIndexDbEventProcessor = () => {
     });
 
     scheduleRepo.set(
-      updatedState.currentSchedule,
+      toScheduleDto(updatedState.currentSchedule),
       updatedState.currentSchedule.id,
     );
   };
@@ -107,7 +124,7 @@ const useIndexDbEventProcessor = () => {
     });
 
     scheduleRepo.set(
-      updatedState.currentSchedule,
+      toScheduleDto(updatedState.currentSchedule),
       updatedState.currentSchedule.id,
     );
   };
@@ -139,7 +156,7 @@ const useIndexDbEventProcessor = () => {
     });
 
     scheduleRepo.set(
-      updatedState.currentSchedule,
+      toScheduleDto(updatedState.currentSchedule),
       updatedState.currentSchedule.id,
     );
   };
@@ -159,7 +176,7 @@ const useIndexDbEventProcessor = () => {
     });
 
     scheduleRepo.set(
-      updatedState.currentSchedule,
+      toScheduleDto(updatedState.currentSchedule),
       updatedState.currentSchedule.id,
     );
   };
@@ -184,7 +201,7 @@ const useIndexDbEventProcessor = () => {
     });
 
     scheduleRepo.set(
-      updatedState.currentSchedule,
+      toScheduleDto(updatedState.currentSchedule),
       updatedState.currentSchedule.id,
     );
   };
@@ -206,7 +223,31 @@ const useIndexDbEventProcessor = () => {
     });
 
     scheduleRepo.set(
-      updatedState.currentSchedule,
+      toScheduleDto(updatedState.currentSchedule),
+      updatedState.currentSchedule.id,
+    );
+
+    userFileHandlerRepo.set(event.fileHandle, event.id);
+  };
+
+  const ImageCreatedEventHandler = (event: imageCreatedEvent) => {
+    if (
+      event.eventType !== ImageCreatedEventName ||
+      event.isExternalEvent
+    )
+      return;
+
+    const updatedState = reducers(state, {
+      type: 'addResourceToSchedule',
+      payload: {
+        resourceType: 'IMAGE',
+        index: event.index,
+        id: event.id,
+      },
+    });
+
+    scheduleRepo.set(
+      toScheduleDto(updatedState.currentSchedule),
       updatedState.currentSchedule.id,
     );
 
@@ -246,6 +287,7 @@ const useIndexDbEventProcessor = () => {
     SongEditedEventHandler,
     SlideShowAddedToScheduleEventHandler,
     BibleVerseAddedToScheduleEventHandler,
+    ImageCreatedEventHandler,
     LoadScheduleEventHandler,
     UpdateSettingsEventHandler];
   return [arr];
