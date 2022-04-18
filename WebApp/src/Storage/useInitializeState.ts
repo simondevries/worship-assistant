@@ -1,4 +1,3 @@
-import { IResource } from 'Interfaces/resource';
 import { defaultSettings, ISettings } from './../Interfaces/Settings';
 import PongFromProjectorToControllerEvent from '../Events/Domain/pongFromProjectorToControllerEvent';
 import PingProjectorEventName from '../Events/Domain/pingProjector';

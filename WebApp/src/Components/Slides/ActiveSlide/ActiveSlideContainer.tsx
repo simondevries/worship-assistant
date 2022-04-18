@@ -7,29 +7,25 @@ import IState from '../../../Interfaces/State';
 import focusOnProjectView from '../../../Hooks/focusOnProjectView';
 
 const StyledContainer = styled(Card)`
-  background: #666f76 !important;
   justify-content: space-between;
   display: flex;
   flex-direction: column;
   width: 300px;
+  background: #29353e !important;
   font-size: 15pt;
   min-height: 250px;
 `;
 
-export default ({ children, slideIndex, resourceId }) => {
-  const [state] = useContext(Context);
-  const [openOrFocus] = focusOnProjectView(resourceId, slideIndex);
-
-  const openNewWindowButton = (
-    <Button intent="primary" onClick={openOrFocus}>
-      Open new monitor window
-    </Button>
-  );
-
+const ActiveSlideContainer = ({
+  children,
+  slideIndex,
+  resourceId,
+}) => {
   return (
     <StyledContainer id={`slide${slideIndex}resource${resourceId}`}>
-      {!state.hasProjectorsAttached && openNewWindowButton}
       {children}
     </StyledContainer>
   );
 };
+
+export default ActiveSlideContainer;

@@ -1,67 +1,80 @@
+import {
+  Button,
+  Card,
+  Divider,
+  Elevation,
+  Icon,
+} from '@blueprintjs/core';
+import MinatureProjectorView from 'Components/MinatureProjectorView/MinatureProjectorView';
 import React, { useContext } from 'react';
-import { Button, Card, Elevation, Icon } from '@blueprintjs/core';
-import styled from 'styled-components/macro';
-import useModal from '../Dialogs/useModal';
+import styled from 'styled-components';
 import AddSongDialog from '../Dialogs/UpsertSongDialog/AddSongDialog';
 import SlideSettingsDialog from '../Dialogs/SettingsDialog/SettingsDialog';
-import { Context } from '../../Common/Store/Store';
-import ScheduleManagerDialog from '../Dialogs/ScheduleManagerDialog';
-import IState from '../../Interfaces/State';
-import focusOnProjectView from '../../Hooks/focusOnProjectView';
-import castIcon from './cast.svg';
-export const sidebarWidth = 70;
-export const sidebarMargin = 15;
+import useModal from 'Components/Dialogs/useModal';
+import { Context } from 'Common/Store/Store';
+import focusOnProjectView from 'Hooks/focusOnProjectView';
+import ScheduleManagerDialog from 'Components/Dialogs/ScheduleManagerDialog';
+import ActiveSongSlide from 'Components/Slides/ActiveSlide/ActiveSongSlide';
 
-const StyledIconButton = styled(Button)`
-  width: 100%;
+const SSidebarSection = styled.div`
+  margin-bottom: 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 10px;
-  padding-bottom: 10px;
+`;
+const SButtonRow = styled.div`
+  display: flex;
+`;
+
+const SButton = styled(Button)<{ highlight?: boolean }>`
+  width: 100px;
+  height: 75px;
   text-align: center;
-`;
-
-const StyledIcon = styled(Icon)`
-  margin: auto;
-  margin-bottom: 10px;
-`;
-const StyledContainer = styled(Card)`
+  ${({ highlight }) =>
+    highlight === true ? `background: white;` : ''}
+  .bp3-button {
+    background: white;
+  }
   display: flex;
   flex-direction: column;
-  width: ${sidebarWidth}px;
-  height: 100%;
-  margin-right: ${sidebarMargin}px;
-  align-items: center;
-  padding: 0px;
-  padding-top: 20px;
   gap: 5px;
 `;
 
-const addIcon = (
-  <StyledIcon icon={'new-object'} iconSize={20}></StyledIcon>
-);
-const folderOpenIcon = (
-  <StyledIcon icon={'folder-open'} iconSize={20}></StyledIcon>
-);
-const searchIcon = (
-  <StyledIcon icon={'search'} iconSize={20}></StyledIcon>
-);
-const cogIcon = <StyledIcon icon={'cog'} iconSize={20}></StyledIcon>;
-const googleDriveBackup = (
-  <StyledIcon icon={'cloud-upload'} iconSize={20}></StyledIcon>
-);
-const alertIcon = (
-  <StyledIcon icon={'send-message'} iconSize={20}></StyledIcon>
-);
-const logIcon = (
-  <StyledIcon icon={'console'} iconSize={20}></StyledIcon>
-);
-const desktopIcon = (
-  <StyledIcon icon={'desktop'} iconSize={20}></StyledIcon>
-);
+// const SButtonContainer = styled.div`
+//   display: flex;
+//   margin-bottom: 10px;
+// `;
 
-const Sidebar = () => {
+const SButtonContainerWithoutMargin = styled.div`
+  display: flex;
+`;
+
+const SProjectorButtons = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+`;
+
+const SSidebarContainer = styled(Card)`
+  min-width: 300px;
+  max-width: 500px;
+  background: #1e2124;
+  padding: 15px;
+  padding-top: 0px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+// const SSidebarContainer = styled.div`
+//   display: flex;
+//   gap: 10px;
+//   margin-bottom: 15px;
+// `;
+
+export default function Sidebar({ className }) {
   const [addSongModalOpen, setAddSongModalOpen] = useModal();
   const [settingsModalOpen, setSettingsModalOpen] = useModal();
   const [scheduleModalOpen, setScheduleModalOpen] = useModal(false);
@@ -71,12 +84,11 @@ const Sidebar = () => {
     state?.activeResourcePointer?.slideIndex,
   );
 
-  const setScheduleModalOpenHacks = setScheduleModalOpen as Function;
-  const setSettingsModalOpenHacks = setSettingsModalOpen as Function;
-  const setAddSongModalOpenHacks = setAddSongModalOpen as Function;
-
   return (
-    <StyledContainer elevation={Elevation.FOUR}>
+    <SSidebarContainer
+      className={className}
+      elevation={Elevation.FOUR}
+    >
       {addSongModalOpen && (
         <AddSongDialog
           setAddSongModalOpen={setAddSongModalOpen}
@@ -94,88 +106,101 @@ const Sidebar = () => {
       {scheduleModalOpen && (
         <ScheduleManagerDialog setOpen={setScheduleModalOpen} />
       )}
-      <StyledIconButton
-        className="SearchButton"
-        onClick={() => {
-          dispatch({
-            type: 'setSearchVisible',
-            payload: true,
-          });
-        }}
-        icon={searchIcon}
-        minimal
-      >
-        Add to schedule
-      </StyledIconButton>
-      <StyledIconButton
-        className="side-bar_add-schedule"
-        onClick={() => setAddSongModalOpenHacks(true)}
-        icon={addIcon}
-        minimal
-      >
-        New song
-      </StyledIconButton>
-      <StyledIconButton
-        onClick={() => setScheduleModalOpenHacks(true)}
-        icon={folderOpenIcon}
-        minimal
-      >
-        Previous service
-      </StyledIconButton>
-      <StyledIconButton
-        icon={desktopIcon}
-        onClick={openOrFocus}
-        minimal
-      >
-        New projector screen
-      </StyledIconButton>
+      <div style={{ marginBottom: '15px' }}>
+        <ActiveSongSlide />
+      </div>
+      <SSidebarSection>
+        <h3>Manage</h3>
+        <SButtonRow>
+          <SButton icon={'draw'}>Theme</SButton>
 
-      <StyledIconButton
-        icon={cogIcon}
-        onClick={() => setSettingsModalOpenHacks(true)}
-        minimal
-      >
-        Settings
-      </StyledIconButton>
-
-      {window.location.origin.indexOf('localhost') !== -1 && (
-        <StyledIconButton
-          icon={logIcon}
-          onClick={() => console.log({ state })}
-          minimal
-        >
-          Log state
-        </StyledIconButton>
-      )}
-      {/* <StyledIconButton
-        icon={<Icon icon={<img src={castIcon} />} />}
-        onClick={() => {
-          alert('todo');
-        }}
-        minimal
-      >
-        Cast
-      </StyledIconButton>
-      <StyledIconButton
-        icon={googleDriveBackup}
-        onClick={() => {
-          alert('todo');
-        }}
-        minimal
-      >
-        Google drive backup
-      </StyledIconButton>
-      <StyledIconButton
-        icon={alertIcon}
-        onClick={() => {
-          alert('todo');
-        }}
-        minimal
-      >
-        Alerts
-      </StyledIconButton> */}
-    </StyledContainer>
+          <SButton onClick={openOrFocus} icon={'desktop'}>
+            {state.hasProjectorsAttached === false
+              ? 'Open Output'
+              : 'Focus Output'}
+          </SButton>
+        </SButtonRow>
+        <SButtonRow>
+          <SButton icon={'folder-open'}>Open Service</SButton>
+          <SButton icon={'cog'}>Settings</SButton>
+        </SButtonRow>
+      </SSidebarSection>
+      <SSidebarSection>
+        <h3>Schedule</h3>
+        <SButtonRow>
+          <SButton
+            highlight={true}
+            icon={'search'}
+            onClick={() => {
+              dispatch({
+                type: 'setSearchVisible',
+                payload: true,
+              });
+            }}
+          >
+            Search
+          </SButton>
+          <SButton
+            onClick={() => {
+              dispatch({
+                type: 'setSearchVisible',
+                payload: true,
+              });
+            }}
+            icon={'music'}
+          >
+            Add Song
+          </SButton>
+        </SButtonRow>
+        <SButtonRow>
+          <SButton
+            icon={'book'}
+            onClick={() => {
+              dispatch({
+                type: 'setSearchVisible',
+                payload: true,
+              });
+            }}
+          >
+            Add Bible Verse
+          </SButton>
+          <SButton
+            icon={'mobile-video'}
+            onClick={() => {
+              dispatch({
+                type: 'setSearchVisible',
+                payload: true,
+              });
+            }}
+          >
+            Add Video
+          </SButton>
+        </SButtonRow>
+        <SButtonRow>
+          <SButton
+            onClick={() => {
+              dispatch({
+                type: 'setSearchVisible',
+                payload: true,
+              });
+            }}
+            icon={'media'}
+          >
+            Add Image
+          </SButton>
+          <SButton
+            icon={'presentation'}
+            onClick={() => {
+              dispatch({
+                type: 'setSearchVisible',
+                payload: true,
+              });
+            }}
+          >
+            Add Google slides
+          </SButton>
+        </SButtonRow>
+      </SSidebarSection>
+    </SSidebarContainer>
   );
-};
-
-export default Sidebar;
+}

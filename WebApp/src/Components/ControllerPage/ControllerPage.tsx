@@ -26,20 +26,6 @@ const StyledResourcesContainer = styled.div`
   margin-left: calc(50vw - ${slideWidth / 2}px);
   margin-right: calc(50vw + ${slideWidth / 2}px);
 `;
-// todo (sdv) experimental expires 05/21
-
-// const StyledActiveResource = styled.div`
-//   width: ${slideWidth}px;
-//   height: 300px;
-//   background: red;
-//   position: absolute;
-//   left: calc(
-//     (
-//         100vw - (${sidebarWidth}px + ${sidebarMargin}px) -
-//           ${slideWidth / 2}px
-//       ) / 2
-//   );
-// `;
 
 const StyledWelcomeCard = styled(Card)`
   display: flex;
@@ -65,7 +51,7 @@ const StyledControllerPage = styled.div`
   justify-content: stretch;
 `;
 
-const ControllerPage = () => {
+const ControllerPage = ({ className }) => {
   const [state, dispatch] = useContext<any>(Context);
 
   if (!state || !state.settings || !state.currentSchedule)
@@ -109,7 +95,7 @@ const ControllerPage = () => {
     state.currentSchedule.activeResourcePointer;
   if (!sortedResources || !sortedResources.length) {
     return (
-      <StyledWelcomeCard>
+      <StyledWelcomeCard className={className}>
         {/* */}
         {/* <StyledNoResourcesButton
           onClick={() => openSearch(0)}
@@ -131,7 +117,7 @@ const ControllerPage = () => {
   }
 
   return (
-    <StyledControllerPage>
+    <StyledControllerPage className={className}>
       <StyledResourcesContainer>
         {sortedResources &&
           sortedResources.map(

@@ -29,6 +29,14 @@ const StyledControllerPageContainer = styled.div`
   display: flex;
   flex-direction: row;
   height: 100vh;
+  gap: 3px;
+
+  .mainPanel {
+    flex: 10 1 auto;
+  }
+  .sideBar {
+    flex: 6 1 auto;
+  }
 `;
 
 const StyledEventsReceived = styled.div`
@@ -123,9 +131,8 @@ const AppRouter = () => {
           </Route>
           <Route path="/controller" exact>
             <StyledControllerPageContainer>
-              <Sidebar />
-
-              <ControllerPage />
+              <Sidebar className={'sideBar'} />
+              <ControllerPage className={'mainPanel'} />
               {/* <input type="button" onClick={onFocusTab} /> */}
             </StyledControllerPageContainer>
           </Route>
