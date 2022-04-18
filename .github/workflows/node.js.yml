@@ -5,9 +5,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, testCi ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, testCi ]
 
 jobs:
   build:
@@ -27,6 +27,8 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: cd WebApp
+    - run: pwd
+    - run: ls
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
