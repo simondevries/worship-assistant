@@ -6,11 +6,10 @@ import RemoveResourceFromScheduleEvent from '../../../../Events/Domain/removeRes
 import MoveResourceEvent from '../../../../Events/Domain/moveResourceEvent';
 import IState from 'Interfaces/State';
 import useEventHandler from 'Events/Handlers/useEventHandler';
-import { resolveTitle } from 'Interfaces/ResourceReference';
 import EditSongDialog from 'Components/Dialogs/UpsertSongDialog/EditSongDialog';
 import { Context } from 'Common/Store/Store';
 import useModal from '../../../Dialogs/useModal';
-import IResource from 'Interfaces/resource';
+import IResource, { Resource } from 'Interfaces/resource';
 const StyledTooltip = styled(Tooltip)`
   width: 100%;
   .bp3-popover-target {
@@ -54,7 +53,7 @@ const ResourceHeader = ({ resource }: { resource: IResource }) => {
     useState(false);
   const [editSongModalOpen, setEditSongModalOpen] = useModal();
 
-  const title = resolveTitle(state, resource);
+  const title = Resource.selectors.getTitle(state, resource);
   return (
     <StyledHeader>
       {editSongModalOpen && (

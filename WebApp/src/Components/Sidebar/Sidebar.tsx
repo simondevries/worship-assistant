@@ -15,6 +15,11 @@ import { Context } from 'Common/Store/Store';
 import focusOnProjectView from 'Hooks/focusOnProjectView';
 import ScheduleManagerDialog from 'Components/Dialogs/ScheduleManagerDialog';
 import ActiveSongSlide from 'Components/Slides/ActiveSlide/ActiveSongSlide';
+import { Resource } from 'Interfaces/resource';
+import IState from 'Interfaces/State';
+import ActiveBibleVerseSlide from 'Components/Slides/ActiveSlide/ActiveBibleVerseSlide';
+import ActiveVideoSlide from 'Components/Slides/ActiveSlide/ActiveVideoSlide';
+import ActiveImageSlide from 'Components/Slides/ActiveSlide/ActiveImageSlide';
 
 const SSidebarSection = styled.div`
   margin-bottom: 30px;
@@ -78,10 +83,16 @@ export default function Sidebar({ className }) {
   const [addSongModalOpen, setAddSongModalOpen] = useModal();
   const [settingsModalOpen, setSettingsModalOpen] = useModal();
   const [scheduleModalOpen, setScheduleModalOpen] = useModal(false);
-  const [state, dispatch] = useContext(Context);
+  const [state, dispatch]: [state: IState, dispatch: any] =
+    useContext(Context);
   const [openOrFocus] = focusOnProjectView(
-    state?.activeResourcePointer?.resourceId,
-    state?.activeResourcePointer?.slideIndex,
+    state?.currentSchedule.activeResourcePointer?.resourceId,
+    state?.currentSchedule.activeResourcePointer?.slideIndex,
+  );
+
+  const resource = Resource.selectors.getResource(
+    state.currentSchedule.activeResourcePointer.resourceId,
+    state.currentSchedule.resources,
   );
 
   return (
@@ -107,7 +118,16 @@ export default function Sidebar({ className }) {
         <ScheduleManagerDialog setOpen={setScheduleModalOpen} />
       )}
       <div style={{ marginBottom: '15px' }}>
-        <ActiveSongSlide />
+        {resource?.resourceType === 'SONG' && <ActiveSongSlide />}
+        {resource?.resourceType === 'BIBLEVERSE' && (
+          <ActiveBibleVerseSlide resource={resource} />
+        )}
+        {resource?.resourceType === 'VIDEO' && (
+          <ActiveVideoSlide resource={resource} />
+        )}
+        {resource?.resourceType === 'IMAGE' && (
+          <ActiveImageSlide resource={resource} />
+        )}
       </div>
       <SSidebarSection>
         <h3>Manage</h3>

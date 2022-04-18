@@ -1,3 +1,4 @@
+import { ResourceType } from 'Interfaces/ResourceReference';
 import IResource from '../resource';
 import { ITheme } from '../themes';
 // Based off https://docs.openlyrics.org/en/latest/dataformat.html#basic-structure
@@ -6,7 +7,7 @@ export default interface Song extends IResource {
   id: string;
   lyrics: Lyrics[];
 
-  resourceType: string,
+  resourceType: ResourceType,
   theme?: ITheme,
   properties: {
     title: string;

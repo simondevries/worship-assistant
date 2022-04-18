@@ -2,7 +2,7 @@ import { AddActiveImageEventName } from './../Domain/addActiveImageEvent';
 import imageCreatedEvent, { ImageCreatedEventName } from 'Events/Domain/imageCreatedEvent';
 import UpdateSettingsEvent, { UpdateSettingsEventName } from './../Domain/updateSettingsEvent';
 import SlideBlackoutEvent, { SlidedBlackoutEventName } from 'Events/Domain/slideBlackoutEvent';
-import { defaultProjectorWidth, defaultProjectorHeight } from './../../Components/Slides/ActiveSlide/helpers/slideSizeResolver';
+import { defaultProjectorWidth, defaultProjectorHeight } from '../../Components/Slides/ActiveSlide/helpers/slideSizeResolver';
 import { useContext } from 'react';
 import SongCreatedEvent, {
   SongCreatedEventName,
