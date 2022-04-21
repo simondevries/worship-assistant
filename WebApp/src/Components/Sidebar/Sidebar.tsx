@@ -6,10 +6,12 @@ import {
   Icon,
 } from '@blueprintjs/core';
 import MinatureProjectorView from 'Components/MinatureProjectorView/MinatureProjectorView';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import AddSongDialog from '../Dialogs/UpsertSongDialog/AddSongDialog';
-import SlideSettingsDialog from '../Dialogs/SettingsDialog/SettingsDialog';
+import SlideSettingsDialog, {
+  SettingsDialogTab,
+} from '../Dialogs/SettingsDialog/SettingsDialog';
 import useModal from 'Components/Dialogs/useModal';
 import { Context } from 'Common/Store/Store';
 import focusOnProjectView from 'Hooks/focusOnProjectView';
@@ -20,6 +22,11 @@ import IState from 'Interfaces/State';
 import ActiveBibleVerseSlide from 'Components/Slides/ActiveSlide/ActiveBibleVerseSlide';
 import ActiveVideoSlide from 'Components/Slides/ActiveSlide/ActiveVideoSlide';
 import ActiveImageSlide from 'Components/Slides/ActiveSlide/ActiveImageSlide';
+import IResourceReference from 'Interfaces/ResourceReference';
+import BlankActiveSlideForSidebar from 'Components/Slides/ActiveSlide/BlankActiveSlideForSidebar';
+import useAddVideo from 'Hooks/useAddVideo';
+import AddSlideShowDialog from 'Components/Dialogs/AddSlideShowDialog/AddSlideShowDialog';
+import useAddImage from 'Hooks/useAddImage';
 
 const SSidebarSection = styled.div`
   margin-bottom: 30px;
@@ -79,18 +86,42 @@ const SSidebarContainer = styled(Card)`
 //   margin-bottom: 15px;
 // `;
 
+const SidebarProjector = (props) => {
+  const { resource } = props;
+  return (
+    <>
+      {!resource && <BlankActiveSlideForSidebar />}
+      {resource?.resourceType === 'SONG' && <ActiveSongSlide />}
+      {resource?.resourceType === 'BIBLEVERSE' && (
+        <ActiveBibleVerseSlide resource={resource} />
+      )}
+      {resource?.resourceType === 'VIDEO' && (
+        <ActiveVideoSlide resource={resource} />
+      )}
+      {resource?.resourceType === 'IMAGE' && (
+        <ActiveImageSlide resource={resource} />
+      )}
+    </>
+  );
+};
+
 export default function Sidebar({ className }) {
+  const [settingsDialogTabToOpen, setSettingsDialogTabToOpen] =
+    useState<SettingsDialogTab>();
   const [addSongModalOpen, setAddSongModalOpen] = useModal();
+  const [isSlideShowModalOpen, setIsSlideShowModalOpen] = useModal();
   const [settingsModalOpen, setSettingsModalOpen] = useModal();
   const [scheduleModalOpen, setScheduleModalOpen] = useModal(false);
   const [state, dispatch]: [state: IState, dispatch: any] =
     useContext(Context);
+  const [addImage] = useAddImage();
   const [openOrFocus] = focusOnProjectView(
     state?.currentSchedule.activeResourcePointer?.resourceId,
     state?.currentSchedule.activeResourcePointer?.slideIndex,
   );
+  const [addVideo] = useAddVideo();
 
-  const resource = Resource.selectors.getResource(
+  const activeResource = Resource.selectors.getResource(
     state.currentSchedule.activeResourcePointer.resourceId,
     state.currentSchedule.resources,
   );
@@ -112,27 +143,33 @@ export default function Sidebar({ className }) {
           activeResourcePointer={
             state.currentSchedule.activeResourcePointer
           }
+          openTab={settingsDialogTabToOpen}
         />
       )}
       {scheduleModalOpen && (
         <ScheduleManagerDialog setOpen={setScheduleModalOpen} />
       )}
+      {isSlideShowModalOpen && (
+        <AddSlideShowDialog
+          setModalOpen={setIsSlideShowModalOpen}
+          index={1} // todo (sdv)
+        />
+      )}
       <div style={{ marginBottom: '15px' }}>
-        {resource?.resourceType === 'SONG' && <ActiveSongSlide />}
-        {resource?.resourceType === 'BIBLEVERSE' && (
-          <ActiveBibleVerseSlide resource={resource} />
-        )}
-        {resource?.resourceType === 'VIDEO' && (
-          <ActiveVideoSlide resource={resource} />
-        )}
-        {resource?.resourceType === 'IMAGE' && (
-          <ActiveImageSlide resource={resource} />
-        )}
+        <SidebarProjector resource={activeResource} />
       </div>
       <SSidebarSection>
         <h3>Manage</h3>
         <SButtonRow>
-          <SButton icon={'draw'}>Theme</SButton>
+          <SButton
+            icon={'draw'}
+            onClick={() => {
+              setSettingsDialogTabToOpen(SettingsDialogTab.Theme);
+              setSettingsModalOpen(true);
+            }}
+          >
+            Theme
+          </SButton>
 
           <SButton onClick={openOrFocus} icon={'desktop'}>
             {state.hasProjectorsAttached === false
@@ -141,8 +178,23 @@ export default function Sidebar({ className }) {
           </SButton>
         </SButtonRow>
         <SButtonRow>
-          <SButton icon={'folder-open'}>Open Service</SButton>
-          <SButton icon={'cog'}>Settings</SButton>
+          <SButton
+            icon={'folder-open'}
+            onClick={() => {
+              setScheduleModalOpen(true);
+            }}
+          >
+            Open Service
+          </SButton>
+          <SButton
+            onClick={() => {
+              setSettingsDialogTabToOpen(SettingsDialogTab.Main);
+              setSettingsModalOpen(true);
+            }}
+            icon={'cog'}
+          >
+            Settings
+          </SButton>
         </SButtonRow>
       </SSidebarSection>
       <SSidebarSection>
@@ -187,10 +239,7 @@ export default function Sidebar({ className }) {
           <SButton
             icon={'mobile-video'}
             onClick={() => {
-              dispatch({
-                type: 'setSearchVisible',
-                payload: true,
-              });
+              addVideo();
             }}
           >
             Add Video
@@ -199,10 +248,7 @@ export default function Sidebar({ className }) {
         <SButtonRow>
           <SButton
             onClick={() => {
-              dispatch({
-                type: 'setSearchVisible',
-                payload: true,
-              });
+              addImage();
             }}
             icon={'media'}
           >
@@ -211,10 +257,7 @@ export default function Sidebar({ className }) {
           <SButton
             icon={'presentation'}
             onClick={() => {
-              dispatch({
-                type: 'setSearchVisible',
-                payload: true,
-              });
+              setIsSlideShowModalOpen(true);
             }}
           >
             Add Google slides

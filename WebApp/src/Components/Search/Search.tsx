@@ -23,7 +23,6 @@ import { bibleVerseResolver } from '../../BibleVerse/bibleVerseResolver';
 import IState from '../../Interfaces/State';
 import { userFileHandlerRepo } from '../../Storage/userFileHandlerRepository';
 import AddSongDialog from '../Dialogs/UpsertSongDialog/AddSongDialog';
-import AddActiveVideoEvent from '../../Events/Domain/addActiveVideoEvent';
 import getUrlFromFileHandle from '../../Helpers/getUrlFromFileHandle';
 import BibleVerse, {
   BibleVerseContent,
@@ -32,6 +31,8 @@ import BibleVerse, {
 import imageCreatedEvent from 'Events/Domain/imageCreatedEvent';
 import addActiveImageEvent from 'Events/Domain/addActiveImageEvent';
 import { FilePickerType, openFile } from 'FileSystem/fileSystemTools';
+import useAddVideo from 'Hooks/useAddVideo';
+import useAddImage from 'Hooks/useAddImage';
 
 const StyledOmnibarContainer = styled.div`
   -webkit-filter: blur(0);
@@ -133,76 +134,14 @@ const Search = () => {
   const [isSlideShowModalOpen, setIsSlideShowModalOpen] = useModal();
   const [isAddSongModalOpen, setIsAddSongModalOpen] = useModal();
   const searchbox = useRef<HTMLInputElement>(null);
+  const [addVideo] = useAddVideo();
+  const [addImage] = useAddImage();
 
   const onClose = () => {
     dispatch({
       type: 'setSearchVisible',
       payload: false,
     });
-  };
-
-  const addImage = async () => {
-    let fileHandle, url;
-    try {
-      fileHandle = await openFile(FilePickerType.Image);
-      if (!fileHandle || fileHandle == null) {
-        return;
-      }
-      url = await getUrlFromFileHandle(fileHandle);
-    } catch (e: any) {
-      if (e.name === 'AbortError') {
-        return;
-      }
-      alert('An error occured on retrieving the image');
-      console.warn(e);
-      return;
-    }
-    const imageId = newId();
-
-    raiseEvent(
-      new imageCreatedEvent(
-        false,
-        imageId,
-        (state as IState).searchBar.insertResourceAtIndex,
-        fileHandle,
-      ),
-    );
-
-    raiseEvent(new addActiveImageEvent(false, imageId, url));
-
-    onClose();
-  };
-
-  const addVideo = async () => {
-    let fileHandle, url;
-    try {
-      fileHandle = await openFile(FilePickerType.Video);
-      if (!fileHandle || fileHandle == null) {
-        return;
-      }
-      url = await getUrlFromFileHandle(fileHandle);
-    } catch (e: any) {
-      if (e.name === 'AbortError') {
-        return;
-      }
-      alert('An error occured on retrieving the video');
-      console.warn(e);
-      return;
-    }
-    const videoId = newId();
-
-    raiseEvent(
-      new VideoCreatedEvent(
-        false,
-        videoId,
-        (state as IState).searchBar.insertResourceAtIndex,
-        fileHandle,
-      ),
-    );
-
-    raiseEvent(new AddActiveVideoEvent(false, videoId, url));
-
-    onClose();
   };
 
   const changeSlideShowModalVisiblity = (visibility) => {
@@ -335,7 +274,12 @@ const Search = () => {
                 </StyledDropdownItem>
               )}
               {!searchValue && (
-                <StyledDropdownItem onClick={() => addVideo()}>
+                <StyledDropdownItem
+                  onClick={() => {
+                    addVideo();
+                    onClose();
+                  }}
+                >
                   🎥 Add Video
                 </StyledDropdownItem>
               )}
@@ -361,7 +305,12 @@ const Search = () => {
                 </StyledDropdownItem>
               )}
               {!searchValue && (
-                <StyledDropdownItem onClick={addImage}>
+                <StyledDropdownItem
+                  onClick={() => {
+                    addImage();
+                    onClose();
+                  }}
+                >
                   📷 Add Image
                 </StyledDropdownItem>
               )}
