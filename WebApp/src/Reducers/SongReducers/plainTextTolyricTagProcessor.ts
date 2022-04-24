@@ -188,7 +188,7 @@ const correctCasing = (word: IWord) => {
 
         case 'solo':
             return 'Solo'
-        case 'prechrous':
+        case 'prechorus':
             return 'Pre Chorus'
 
         case 'instrumental':

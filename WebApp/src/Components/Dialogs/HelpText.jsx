@@ -88,7 +88,7 @@ export default function () {
             </code>
           </td>
           <td>
-            pre-chrous part A, first pre-chorus part A, first
+            pre-chorus part A, first pre-chorus part A, first
             pre-chorus part B, …
           </td>
         </tr>

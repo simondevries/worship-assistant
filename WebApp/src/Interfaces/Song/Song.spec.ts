@@ -29,22 +29,22 @@ describe('toInternalVerseTag', () => {
 
     it('should get tag details for chorus', () => {
         const res = songSelectors.getSongTagDetails('c');
-        expect(res.readableValue).toEqual('Chrous');
+        expect(res.readableValue).toEqual('Chorus');
     })
 
-    it('should get tag details for pre-chrous', () => {
+    it('should get tag details for pre-chorus', () => {
         const res = songSelectors.getSongTagDetails('p');
-        expect(res.readableValue).toEqual('Pre-Chrous');
+        expect(res.readableValue).toEqual('Pre-Chorus');
     })
 
     it('should ignore spaces', () => {
         const res = songSelectors.getSongTagDetails('c  1  b');
-        expect(res.readableValue).toEqual('Chrous 1B');
+        expect(res.readableValue).toEqual('Chorus 1B');
     })
 
     // it('should get tag details for instrumental solo ', () => {
     //     const res = songSelectors.getSongTagDetails('i');
-    //     expect(res).toBe('Pre-Chrous');
+    //     expect(res).toBe('Pre-Chorus');
     // })
 
 })
@@ -67,7 +67,7 @@ describe('toInternalVerseTag', () => {
         expect(toInternalVerseTag('bridgeses 1')).toBe('b1');
         expect(toInternalVerseTag('bridge')).toBe('b');
 
-        expect(toInternalVerseTag('chrous')).toBe('c');
+        expect(toInternalVerseTag('chorus')).toBe('c');
         expect(toInternalVerseTag('b1')).toBe('b1');
         expect(toInternalVerseTag('bridgeses1')).toBe('b1');
         expect(toInternalVerseTag('bridge')).toBe('b');
