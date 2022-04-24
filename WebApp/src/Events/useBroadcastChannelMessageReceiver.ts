@@ -1,7 +1,6 @@
 import useEventHandler from './Handlers/useEventHandler';
 import AppEvent from './Domain/appEvent';
-import { useEffect, useState, useContext } from 'react';
-import { Context } from '../Common/Store/Store';
+import { useEffect, useState } from 'react';
 import { crossBrowserMessageMapper } from './Domain/CrossBrowserMessage';
 
 let bc = new BroadcastChannel('worshipAssistApp');
@@ -9,7 +8,6 @@ let bc = new BroadcastChannel('worshipAssistApp');
 
 const useBroadcastChannelMessageReceiver = () => {
   const [raiseEvent] = useEventHandler();
-  const [dispatch] = useContext(Context);
   const [eventsReceived, setEventsReceived] = useState<
     Array<AppEvent>
   >([]);
@@ -96,7 +94,7 @@ const useBroadcastChannelMessageReceiver = () => {
 
       setEventsReceived(eventsReceived.concat([message.payload]));
     };
-  }, []);
+  }, [eventsReceived, raiseEvent]);
 
   return [eventsReceived];
 };

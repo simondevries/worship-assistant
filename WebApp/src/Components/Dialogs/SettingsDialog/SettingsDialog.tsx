@@ -7,10 +7,6 @@ import { Context } from 'Common/Store/Store';
 import styled from '@emotion/styled';
 import ActiveResourcePointer from 'Interfaces/ActiveResourcePointer';
 
-const StyledThemeTab = styled(Tab)`
-  flex-grow: 1;
-`;
-
 const StyledDialog = styled(Dialog)`
   min-width: 700px;
   width: fit-content;

@@ -6,7 +6,7 @@ import ProjectorWindowClosedEvent from '../Events/Domain/projectorWindowClosedEv
 
 import IState from '../Interfaces/State';
 
-export default (resourceId, slideIndex) => {
+const useAppStateEventProcessor = (resourceId, slideIndex) => {
   const [state]: Array<IState> = useContext(Context);
   const [raiseEvent] = useEventHandler();
 
@@ -59,3 +59,5 @@ export default (resourceId, slideIndex) => {
 
   return [openOrFocus];
 };
+
+export default useAppStateEventProcessor;

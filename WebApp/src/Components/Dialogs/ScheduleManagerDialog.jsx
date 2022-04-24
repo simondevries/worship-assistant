@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { Context } from '../../Common/Store/Store';
+import { useState, useEffect } from 'react';
 import { Button, Card, H5, Icon, H4 } from '@blueprintjs/core';
 import { Dialog, Classes } from '@blueprintjs/core';
 import styled from 'styled-components/macro';
@@ -67,7 +66,6 @@ const StyledTipHeader = styled(H5)`
 const ScheduleManagerDialog = ({ setOpen }) => {
   const [showOpenConfirm, setShowOpenConfirm] = useState(false);
   const [schedules, setSchedules] = useState([]);
-  const [] = useContext(Context);
   const [raiseEvent] = useEventHandler();
   const [showUserFileHandlerModal, setShowUserFileHandlerModal] =
     useState(false);

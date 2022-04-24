@@ -1,6 +1,4 @@
-import React from 'react';
 import styled from 'styled-components';
-import ResourceReference from '../../../Interfaces/ResourceReference';
 
 const StyledSlideShowPlayer = styled.iframe`
   width: 100%;
@@ -11,7 +9,7 @@ const StyledSlideShowPlayer = styled.iframe`
 //   resourceReference: ResourceReference;
 // }
 
-export default ({ resourceReference }) => {
+const slideShowHandler = ({ resourceReference }) => {
   return (
     <StyledSlideShowPlayer
       id={`focusable-object--${resourceReference.id}`}
@@ -22,3 +20,5 @@ export default ({ resourceReference }) => {
     ></StyledSlideShowPlayer>
   );
 };
+
+export default slideShowHandler;

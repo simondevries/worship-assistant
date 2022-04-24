@@ -2,7 +2,7 @@ import AppEvent from './appEvent';
 
 export const ImageCreatedEventName = 'ImageCreated';
 
-export default class extends AppEvent {
+export default class ImageCreatedEvent extends AppEvent {
   id: string;
   index: number;
   fileHandle: any;

@@ -2,9 +2,9 @@ import AppEvent from './appEvent';
 import ISong from '../../Interfaces/Song/Song';
 import { defaultTheme, ITheme } from '../../Interfaces/themes';
 
-export const SongEditedEventEventName = 'SongEditedEvent';
+export const SongEditedEventName = 'SongEditedEvent';
 
-export default class extends AppEvent {
+export default class SongEditedEvent extends AppEvent {
   index: number;
   song: ISong;
   theme: ITheme;
@@ -14,7 +14,7 @@ export default class extends AppEvent {
     song,
     theme = defaultTheme,
   ) {
-    super(SongEditedEventEventName, isExternalEvent);
+    super(SongEditedEventName, isExternalEvent);
     this.index = index;
     this.song = song;
     this.theme = theme;

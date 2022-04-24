@@ -1,5 +1,3 @@
-import React from 'react';
-
 // from openlyrics 
 export default function () {
   return (

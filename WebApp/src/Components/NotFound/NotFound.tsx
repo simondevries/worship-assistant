@@ -13,7 +13,7 @@ const StyledContainer = styled.div`
   gap: 20px;
 `;
 
-export default () => {
+const NotFound = () => {
   const history = useHistory();
 
   return (
@@ -25,3 +25,5 @@ export default () => {
     </StyledContainer>
   );
 };
+
+export default NotFound;

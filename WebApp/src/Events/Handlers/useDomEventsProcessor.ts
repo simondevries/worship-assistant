@@ -2,7 +2,7 @@ import SlideChangeEvent, {
   SlideChangedEventName,
 } from '../Domain/slideChangeEvent';
 import VideoModeChangeEvent, {
-  VideoMoodeChangeEventName,
+  VideoModeChangeEventName,
 } from '../Domain/VideoModeChangeEvent';
 
 const useDomEventsProcessor = () => {
@@ -37,7 +37,7 @@ const useDomEventsProcessor = () => {
   const VideoModeChangeEvent = (
     videoModeChangeEvent: VideoModeChangeEvent,
   ) => {
-    if (videoModeChangeEvent.eventType !== VideoMoodeChangeEventName)
+    if (videoModeChangeEvent.eventType !== VideoModeChangeEventName)
       return;
 
     const element: any = document.getElementById(

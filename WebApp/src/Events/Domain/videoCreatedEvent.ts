@@ -2,7 +2,7 @@ import AppEvent from './appEvent';
 
 export const VideoCreatedEventName = 'VideoCreated';
 
-export default class extends AppEvent {
+export default class VideoCreatedEvent extends AppEvent {
   id: string;
   index: number;
   fileHandle: any;

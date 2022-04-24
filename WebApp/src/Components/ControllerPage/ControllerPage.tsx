@@ -50,13 +50,6 @@ const StyledWelcomeCard = styled(Card)`
   justify-content: space-between;
 `;
 
-const StyledNoResourcesButton = styled(Button)`
-  height: 50px;
-  position: absolute;
-  top: 50vh;
-  left: 47vw;
-`;
-
 const StyledControllerPage = styled.div`
   height: 100%;
   width: 100%;

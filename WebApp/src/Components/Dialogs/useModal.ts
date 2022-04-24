@@ -1,7 +1,7 @@
 import { useState, useContext } from 'react';
 import { Context } from '../../Common/Store/Store';
 
-export default (initialMode = false): Array<any> => {
+const useModal = (initialMode = false): Array<any> => {
   const [, dispatch] = useContext(Context);
 
   const [modalOpen, setModalOpen] = useState(initialMode);
@@ -21,3 +21,5 @@ export default (initialMode = false): Array<any> => {
   const toggle = () => localSetModalOpen(!modalOpen);
   return [modalOpen, localSetModalOpen, toggle];
 };
+
+export default useModal;

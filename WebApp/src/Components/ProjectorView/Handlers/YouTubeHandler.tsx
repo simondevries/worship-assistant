@@ -6,7 +6,7 @@ const StyledYouTubePlayer = styled.iframe`
   height: 100%;
 `;
 
-export default ({ resourceReference }) => {
+const youtubeHandler = ({ resourceReference }) => {
   return (
     <StyledYouTubePlayer
       id="ytplayer"
@@ -16,3 +16,5 @@ export default ({ resourceReference }) => {
     ></StyledYouTubePlayer>
   );
 };
+
+export default youtubeHandler;

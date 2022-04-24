@@ -4,7 +4,7 @@ import BibleVerse from '../../Interfaces/BibleVerse';
 export const BibleVerseAddedToScheduleEventName =
   'BibleVerseAddedToSchedule2';
 
-export default class extends AppEvent {
+export default class BibleVerseAddedToScheduleEvent extends AppEvent {
   bibleVerse: BibleVerse;
   index: number;
   constructor(isExternalEvent, bibleVerse, index) {

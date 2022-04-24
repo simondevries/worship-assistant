@@ -59,7 +59,6 @@ export default class LoginPage extends React.Component {
     var request = window.gapi.client.drive.files.get({
       fileId: '1uCEmrH30AI89x1IcjmIs6BPdYgl6Y_S_',
     });
-    const self = this;
     request.execute(function (resp) {
       console.log('Title: ' + resp.title);
       console.log('Description: ' + resp.description);

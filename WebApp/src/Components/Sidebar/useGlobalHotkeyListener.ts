@@ -1,5 +1,5 @@
 import { Context } from '../../Common/Store/Store';
-import { useContext } from 'react';
+import { useContext, useCallback } from 'react';
 
 import { useState, useEffect } from 'react';
 import GoToNextSlideEvent from '../../Events/Domain/goToNextSlideEvent';
@@ -12,7 +12,7 @@ const useGlobalHotkeyListener = () => {
   const [state, dispatch] = useContext(Context);
   const [raiseEvent] = useEventHandler();
 
-  const isSlideShowSelected = () => {
+  const isSlideShowSelected = useCallback(() => {
     const activeResourcePointer = (state as IState).currentSchedule
       .activeResourcePointer;
 
@@ -20,11 +20,12 @@ const useGlobalHotkeyListener = () => {
       (resource) => resource.id === activeResourcePointer.resourceId,
     );
     return resource?.resourceType === 'SLIDESHOW';
-  };
+  }, [state]);
 
   useEffect(() => {
     const upHandler = (e) => {
       if (e.key && e.key.toLowerCase() === 'escape') {
+        setKeyPressed(true)
         dispatch({
           type: 'setSearchVisible',
           payload: false,
@@ -36,6 +37,7 @@ const useGlobalHotkeyListener = () => {
         state.navigationArrowKeysEnabled &&
         !isSlideShowSelected()
       ) {
+        setKeyPressed(true)
         e.preventDefault();
         raiseEvent(new GoToNextSlideEvent(false));
       }
@@ -45,10 +47,12 @@ const useGlobalHotkeyListener = () => {
         state.navigationArrowKeysEnabled &&
         !isSlideShowSelected()
       ) {
+        setKeyPressed(true)
         e.preventDefault();
         raiseEvent(new GoToPreviousSlideEvent(false));
       }
       if (e.code === "Backquote") {
+        setKeyPressed(true)
         dispatch({
           type: 'setSearchVisible',
           payload: true,
@@ -66,7 +70,7 @@ const useGlobalHotkeyListener = () => {
     return () => {
       window.removeEventListener('keyup', upHandler);
     };
-  }, [state, dispatch]); // Empty array ensures that effect is only run on mount and unmount
+  }, [state, dispatch, isSlideShowSelected, raiseEvent]); // Empty array ensures that effect is only run on mount and unmount
 
   return keyPressed;
 }

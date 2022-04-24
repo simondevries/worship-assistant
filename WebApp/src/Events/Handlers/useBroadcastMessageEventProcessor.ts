@@ -29,10 +29,10 @@ import AddActiveVideoEvent, {
   AddActiveVideoEventName,
 } from '../Domain/addActiveVideoEvent';
 import SongEditedEvent, {
-  SongEditedEventEventName,
+  SongEditedEventName,
 } from '../Domain/songEditedEvent';
 import VideoModeChangeEvent, {
-  VideoMoodeChangeEventName,
+  VideoModeChangeEventName,
 } from '../Domain/VideoModeChangeEvent';
 import BibleVerseAddedToScheduleEvent, {
   BibleVerseAddedToScheduleEventName,
@@ -216,7 +216,7 @@ const useBroadcastMessageEventProcessor = () => {
 
   const SongEditedEventHandler = (event: SongEditedEvent) => {
     if (
-      event.eventType !== SongEditedEventEventName ||
+      event.eventType !== SongEditedEventName ||
       event.isExternalEvent
     )
       return;
@@ -233,7 +233,7 @@ const useBroadcastMessageEventProcessor = () => {
     event: VideoModeChangeEvent,
   ) => {
     if (
-      event.eventType !== VideoMoodeChangeEventName ||
+      event.eventType !== VideoModeChangeEventName ||
       event.isExternalEvent
     )
       return;

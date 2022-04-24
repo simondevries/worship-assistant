@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useCallback } from 'react';
 import { Context } from '../../Common/Store/Store';
 import { Button, Card, H5 } from '@blueprintjs/core';
 import { Dialog, Classes } from '@blueprintjs/core';
@@ -22,13 +22,6 @@ const StyledActionButton = styled(Button)`
 
 const SpacerTr = styled.tr`
   height: 20px;
-`;
-const StyledInput = styled.input``;
-
-const StyledNewButton = styled(Button)`
-  padding: 14px 20px;
-  margin-bottom: 30px;
-  margin-top: 7px;
 `;
 
 const StyledTd = styled.td`
@@ -72,6 +65,21 @@ const UserFileHandlerPermissionManagerDialog = ({ setOpen }) => {
   >([]);
   const [showConfirm, setShowConfirm] = useState<string>();
   const [raiseEvent] = useEventHandler();
+
+
+  const onClose = useCallback(() => {
+    if (fileHandlesMetadata?.some((fh) => fh.status !== 'SUCCESS')) {
+      const res = window.confirm(
+        'Closing without granting access may cause some video and image content not to load. Are you sure you want to continue?',
+      );
+
+      if (res === false) {
+        return;
+      }
+    }
+
+    setOpen(false);
+  }, [fileHandlesMetadata, setOpen]);
 
   useEffect(() => {
     const init = async () => {
@@ -122,21 +130,7 @@ const UserFileHandlerPermissionManagerDialog = ({ setOpen }) => {
     //   if (r.resourceType !== 'VIDEO') return;
 
     // });
-  }, []);
-
-  const onClose = () => {
-    if (fileHandlesMetadata?.some((fh) => fh.status !== 'SUCCESS')) {
-      const res = window.confirm(
-        'Closing without granting access may cause some video and image content not to load. Are you sure you want to continue?',
-      );
-
-      if (res === false) {
-        return;
-      }
-    }
-
-    setOpen(false);
-  };
+  }, [onClose, raiseEvent, state]);
 
   const grantAll = async () => {
     let updatedFileHandleMetadata = fileHandlesMetadata;
@@ -239,6 +233,7 @@ const UserFileHandlerPermissionManagerDialog = ({ setOpen }) => {
                         <H5>{fileHandle.name}</H5>
                         <StyledTd>
                           <StyledActionButton
+                            text={showConfirm}
                             intent={
                               fileHandle.status === 'PENDING'
                                 ? 'none'
@@ -269,14 +264,14 @@ const UserFileHandlerPermissionManagerDialog = ({ setOpen }) => {
             {fileHandlesMetadata?.some(
               (h) => h.status !== 'SUCCESS',
             ) && (
-              <StyledFooterButton
-                onClick={grantAll}
-                icon="confirm"
-                intent="success"
-              >
-                Grant access to all
-              </StyledFooterButton>
-            )}
+                <StyledFooterButton
+                  onClick={grantAll}
+                  icon="confirm"
+                  intent="success"
+                >
+                  Grant access to all
+                </StyledFooterButton>
+              )}
           </div>
         </div>
       </Dialog>
