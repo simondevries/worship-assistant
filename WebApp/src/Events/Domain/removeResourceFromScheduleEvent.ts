@@ -1,10 +1,9 @@
 import AppEvent from './appEvent';
-import Song from '../../Interfaces/Song/Song';
 
 export const RemoveResourceFromScheduleEventName =
   'RemoveResourceFromScheduleEventName';
 
-export default class extends AppEvent {
+export default class RemoveResourceFromScheduleEvent extends AppEvent {
   id: number;
   constructor(isExternalEvent, id) {
     super(RemoveResourceFromScheduleEventName, isExternalEvent);

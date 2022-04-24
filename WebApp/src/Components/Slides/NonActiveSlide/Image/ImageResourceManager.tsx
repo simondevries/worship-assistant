@@ -1,7 +1,4 @@
 import React from 'react';
-import { Button, Card, Elevation } from '@blueprintjs/core';
-import styled from 'styled-components/macro';
-import BaseNonActiveSlide from '../../../../Common/BaseNonActiveSlide/BaseNonActiveSlide';
 import IResource from 'Interfaces/resource';
 import NonActiveImageSlide from './NonActiveImageSlide';
 import ActiveImageSlide from 'Components/Slides/ActiveSlide/ActiveImageSlide';

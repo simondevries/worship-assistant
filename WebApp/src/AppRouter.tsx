@@ -1,7 +1,6 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import { Context } from './Common/Store/Store';
 import ControllerPage from './Components/ControllerPage/ControllerPage';
-import ProjectorView from './Components/ProjectorView/ProjectorView';
 import Search from './Components/Search/Search';
 import {
   BrowserRouter as Router,
@@ -20,7 +19,6 @@ import useBroadcastChannelMessageHandler from './Events/useBroadcastChannelMessa
 import Tour from 'reactour';
 import NotFound from './Components/NotFound/NotFound';
 import UserFileHandlerPermissionManagerDialog from './Components/Dialogs/UserFileHandlerPermissionManagerDialog';
-import IState from './Interfaces/State';
 import LoginPage from './Login';
 import tourSteps from './tourSteps';
 import ProjectorRoute from 'Components/ProjectorRoute/ProjectorRoute';

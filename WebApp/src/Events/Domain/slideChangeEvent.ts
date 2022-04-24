@@ -1,9 +1,8 @@
 import AppEvent from './appEvent';
-import ISong from '../../Interfaces/Song/Song';
 
 export const SlideChangedEventName = 'SlideChangedEventName';
 
-export default class extends AppEvent {
+export default class SlideChangedEvent extends AppEvent {
   resourceId: any;
   slideIndex: any;
   constructor(isExternalEvent, resourceId, slideIndex) {

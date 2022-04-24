@@ -2,12 +2,8 @@ import React, { useState, useContext } from 'react';
 import {
   Dialog,
   Classes,
-  Tabs,
-  Tab,
-  TabId,
   Button,
 } from '@blueprintjs/core';
-import { settingsRepo } from 'Storage/settingsRepository';
 import IState from 'Interfaces/State';
 import { Context } from 'Common/Store/Store';
 import styled from '@emotion/styled';

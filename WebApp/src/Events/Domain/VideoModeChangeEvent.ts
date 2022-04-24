@@ -1,15 +1,13 @@
 import AppEvent from './appEvent';
-import ISong from '../../Interfaces/Song/Song';
-import { defaultTheme, ITheme } from '../../Interfaces/themes';
 
-export const VideoMoodeChangeEventName = 'VideoMoodeChange';
+export const VideoModeChangeEventName = 'VideoModeChange';
 
-export default class extends AppEvent {
+export default class VideoModeChangeEvent extends AppEvent {
   action: string;
   resourceId: string;
 
   constructor(isExternalEvent, action, resourceId) {
-    super(VideoMoodeChangeEventName, isExternalEvent);
+    super(VideoModeChangeEventName, isExternalEvent);
     this.action = action;
     this.resourceId = resourceId;
   }

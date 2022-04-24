@@ -2,11 +2,9 @@ import React, { useContext, useState } from 'react';
 import { Context } from '../../../Common/Store/Store';
 
 import styled from 'styled-components';
-import { Button, Card } from '@blueprintjs/core';
+import { Button } from '@blueprintjs/core';
 import ActiveSlideContainer from './ActiveSlideContainer';
 import IState from 'Interfaces/State';
-import { ISettings } from 'Interfaces/Settings';
-import slideSizeResolver from './helpers/slideSizeResolver';
 import SlideBlackoutEvent from 'Events/Domain/slideBlackoutEvent';
 import useEventHandler from 'Events/Handlers/useEventHandler';
 import SettingsDialog, {

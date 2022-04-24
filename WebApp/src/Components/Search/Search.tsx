@@ -21,11 +21,10 @@ import useModal from '../Dialogs/useModal';
 import AddSlideShowDialog from '../Dialogs/AddSlideShowDialog/AddSlideShowDialog';
 import { bibleVerseResolver } from '../../BibleVerse/bibleVerseResolver';
 import IState from '../../Interfaces/State';
-import { userFileHandlerRepo } from '../../Storage/userFileHandlerRepository';
 import AddSongDialog from '../Dialogs/UpsertSongDialog/AddSongDialog';
 import AddActiveVideoEvent from '../../Events/Domain/addActiveVideoEvent';
 import getUrlFromFileHandle from '../../Helpers/getUrlFromFileHandle';
-import BibleVerse, {
+import {
   BibleVerseContent,
   initNewBibleVerseQuery,
 } from '../../Interfaces/BibleVerse';
@@ -295,7 +294,7 @@ const Search = () => {
     return () => {
       dispatch({ type: 'navigationArrowKeysEnabled', payload: true });
     };
-  }, []);
+  }, [dispatch]);
 
   const searchResult = SearchQuery(searchValue, allSongs);
   return (

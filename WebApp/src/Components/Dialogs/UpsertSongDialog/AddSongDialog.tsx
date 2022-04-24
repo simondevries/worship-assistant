@@ -1,13 +1,12 @@
-import React, { useRef, useState } from 'react';
-import { Button, EditableText, FileInput } from '@blueprintjs/core';
-import { Dialog, Classes } from '@blueprintjs/core';
+import React, { useState } from 'react';
+import { Button, EditableText } from '@blueprintjs/core';
+import { Classes } from '@blueprintjs/core';
 import newId from '../../../Helpers/newId';
 import SongCreatedEvent from '../../../Events/Domain/songCreatedEvent';
 import useEventHandler from '../../../Events/Handlers/useEventHandler';
 import SongAddedToScheduleEvent from '../../../Events/Domain/songAddedToScheduleEvent';
-import ISong, { songSelectors } from '../../../Interfaces/Song/Song';
+import ISong from '../../../Interfaces/Song/Song';
 import SongEditor from './SongDialogComponents/SongEditor';
-import useModal from '../useModal';
 import styled from '@emotion/styled';
 import songReducers from 'Reducers/SongReducers/songReducers';
 import SongPreview from './SongPreview';
@@ -173,23 +172,23 @@ export default AddSongDialog;
 //   }
 // }
 
-{
-  /* Todo import songs */
-}
-{
-  /* <FileInput 
-              disabled={importSongButtonDisabled} 
-              text={"Select file"}
-              buttonText={"Import File"}
-              fill={true}
-              large={true}
-              inputProps={
-                {
-                  id: "file",
-                  accept:".sng, .song, .swg, .sbsong, .wow-song, .xml",
-                  ref: fileField,
-                  onChange: handleFileSelected
-                }
-              }
-            /> */
-}
+// {
+//   /* Todo import songs */
+// }
+// {
+//   /* <FileInput
+//               disabled={importSongButtonDisabled}
+//               text={"Select file"}
+//               buttonText={"Import File"}
+//               fill={true}
+//               large={true}
+//               inputProps={
+//                 {
+//                   id: "file",
+//                   accept:".sng, .song, .swg, .sbsong, .wow-song, .xml",
+//                   ref: fileField,
+//                   onChange: handleFileSelected
+//                 }
+//               }
+//             /> */
+// }

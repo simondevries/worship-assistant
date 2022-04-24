@@ -1,12 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
-  Button,
   EditableText,
-  Popover,
-  Position,
 } from '@blueprintjs/core';
 import styled from 'styled-components/macro';
-import HelpText from '../../HelpText';
 import LyricEditor from './LyricEditor';
 
 const StyledContainer = styled.div`

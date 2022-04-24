@@ -1,17 +1,8 @@
-import React, { useState } from 'react';
-import { Button, Card, Elevation, H5 } from '@blueprintjs/core';
+import React from 'react';
 import styled from 'styled-components/macro';
-import Verse from '../../../../Interfaces/Verse';
 import BaseNonActiveSlide from '../../../../Common/BaseNonActiveSlide/BaseNonActiveSlide';
-import IVerse from '../../../../Interfaces/Verse';
 import useFitText from 'use-fit-text';
 import ResourceReference from '../../../../Interfaces/ResourceReference';
-
-const StyledCard = styled(Card)`
-  width: 300px;
-  height: 200px;
-  margin-bottom: 10px;
-`;
 
 interface Props {
   resource: ResourceReference;
@@ -25,7 +16,7 @@ const StyledIframe = styled.iframe`
   pointer-events: none;
 `;
 
-export default function ({
+export default function SlideShowSlide({
   resource,
   slideIndex,
   resourceId,

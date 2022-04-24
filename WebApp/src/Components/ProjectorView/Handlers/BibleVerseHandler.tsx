@@ -1,5 +1,4 @@
 import React from 'react';
-import ISongResourceReference from '../../../Interfaces/SongResourceReference';
 import IResourceReference from 'Interfaces/ResourceReference';
 import GenericTextHandler from './Common/GenericTextHandler';
 import { ITheme } from 'Interfaces/themes';
@@ -28,9 +27,8 @@ const BibleVerseHandler = ({
     selectedContent.chapter &&
     selectedContent?.verse
   ) {
-    selectedPassageReference = `${selectedContent?.bookName ?? ''} ${
-      selectedContent?.chapter ?? ''
-    }:${selectedContent?.verse}`;
+    selectedPassageReference = `${selectedContent?.bookName ?? ''} ${selectedContent?.chapter ?? ''
+      }:${selectedContent?.verse}`;
   }
   //
   return (

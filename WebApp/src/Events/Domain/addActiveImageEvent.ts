@@ -1,9 +1,8 @@
 import AppEvent from './appEvent';
-import ISong from '../../Interfaces/Song/Song';
 
 export const AddActiveImageEventName = 'AddActiveImageEventName';
 
-export default class extends AppEvent {
+export default class AddActiveImageEvent extends AppEvent {
   resourceId: any;
   url: any;
   constructor(isExternalEvent, resourceId, url) {

@@ -1,9 +1,6 @@
 import React from 'react';
 import ActiveResourcePointer from '../../Interfaces/ActiveResourcePointer';
 import ResourceReference from '../../Interfaces/ResourceReference';
-import BibleVerseSlide from './NonActiveSlide/BibleVerse/BibleVerseSlide';
-import BibleVerse from '../../Interfaces/BibleVerse';
-import ActiveBibleVerseSlide from './ActiveSlide/ActiveBibleVerseSlide';
 import ActiveSlideShowSlide from './ActiveSlide/ActiveSlideShowSlide';
 import SlideShowSlide from './NonActiveSlide/SlideShow/SlideShowSlide';
 
@@ -14,10 +11,9 @@ interface Props {
   resource: ResourceReference;
 }
 
-export default function ({
+export default function slideShowResourceManager({
   isActiveResource,
   resource,
-  activeResourcePointer,
 }: Props) {
   if (isActiveResource) {
     return (

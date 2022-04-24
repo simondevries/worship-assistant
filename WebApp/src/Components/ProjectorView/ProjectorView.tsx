@@ -1,22 +1,18 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import styled, { ThemeProvider } from 'styled-components/macro';
 import { Context } from '../../Common/Store/Store';
 import IState from '../../Interfaces/State';
-import ISongResourceReference from '../../Interfaces/SongResourceReference';
 import ActiveResourcePointer from '../../Interfaces/ActiveResourcePointer';
 import { defaultTheme, ITheme } from '../../Interfaces/themes';
-import useFitText from 'use-fit-text';
 import SongHandler from './Handlers/SongHandler/SongHandler';
 import BibleVerseHandler from './Handlers/BibleVerseHandler';
 import SlideShowHandler from './Handlers/SlideShowHandler';
 import YouTubeHandler from './Handlers/YouTubeHandler';
-import { Button, Card } from '@blueprintjs/core';
+import { Button } from '@blueprintjs/core';
 import VideoHandler from './Handlers/VideoHandler';
 import DemoSongHandler from './Handlers/DemoSongHandler';
 import { ProjectorViewMode } from 'Interfaces/Schedule';
-import SettingsDialog, {
-  SettingsDialogTab,
-} from 'Components/Dialogs/SettingsDialog/SettingsDialog';
+
 import ImageHandler from './Handlers/ImageHandler';
 
 const StyledCentering = styled.div`
@@ -27,13 +23,6 @@ const StyledCentering = styled.div`
   top: 40%;
   position: fixed;
 `;
-
-const StyledPowerPointPresenter = styled.iframe`
-  width: 100%;
-  height: 100%;
-`;
-
-const StyledVideo = styled.video``;
 
 const StyledProjectorView = styled.div<{
   isBlank: boolean;

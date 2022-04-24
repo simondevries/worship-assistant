@@ -3,7 +3,7 @@ import ProjectorView from 'Components/ProjectorView/ProjectorView';
 import slideSizeResolver from 'Components/Slides/ActiveSlide/helpers/slideSizeResolver';
 import IState from 'Interfaces/State';
 import { ITheme } from 'Interfaces/themes';
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useRef } from 'react';
 
 import styled from 'styled-components';
 

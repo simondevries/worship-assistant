@@ -3,16 +3,13 @@ import {
   Button,
   Classes,
   ButtonGroup,
-  FormGroup,
 } from '@blueprintjs/core';
 import styled from 'styled-components';
 import { settingsRepo } from '../../../../Storage/settingsRepository';
-import ProjectorView from '../../../ProjectorView/ProjectorView';
 import { defaultTheme, ITheme } from '../../../../Interfaces/themes';
 import { Context } from '../../../../Common/Store/Store';
 import { ISettings } from 'Interfaces/Settings';
 import { State } from '@storybook/api';
-import { ReducerAction } from 'Reducers/reducers';
 import ImageSelectionDialog from 'Components/Dialogs/ImageSelectionDialog/ImageSelectionDialog';
 import UpdateSettingsEvent from 'Events/Domain/updateSettingsEvent';
 import useEventHandler from 'Events/Handlers/useEventHandler';
@@ -62,7 +59,8 @@ const StyledBody = styled.div`
 
 const ThemePanel = ({ activeResourcePointer, onClose }) => {
   const [raiseEvent] = useEventHandler();
-  const [state, dispatch]: [State, (action: ReducerAction) => void] =
+  console.log(activeResourcePointer)
+  const state: State =
     useContext(Context);
   const [isWallpaperSelectionOpen, setIsWallpaperSelectionOpen] =
     useState(false);

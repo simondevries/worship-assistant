@@ -1,7 +1,6 @@
 import { ImageCreatedEventName } from './../Domain/imageCreatedEvent';
 import imageCreatedEvent from 'Events/Domain/imageCreatedEvent';
 import { UpdateSettingsEventName } from './../Domain/updateSettingsEvent';
-import { Type } from './../../Components/Dialogs/ImageSelectionDialog/ImageResult';
 import { songsRepo } from '../../Storage/songsRepository';
 import { scheduleRepo } from '../../Storage/scheduleRepository';
 import { settingsRepo } from '../../Storage/settingsRepository';
@@ -38,7 +37,7 @@ import LoadScheduleEvent, {
   LoadScheduleEventName,
 } from '../Domain/loadScheduleEvent';
 import SongEditedEvent, {
-  SongEditedEventEventName,
+  SongEditedEventName,
 } from '../Domain/songEditedEvent';
 import { userFileHandlerRepo } from '../../Storage/userFileHandlerRepository';
 import UpdateSettingsEvent from 'Events/Domain/updateSettingsEvent';
@@ -97,7 +96,7 @@ const useIndexDbEventProcessor = () => {
 
   const SongEditedEventHandler = (event: SongEditedEvent) => {
     if (
-      event.eventType !== SongEditedEventEventName ||
+      event.eventType !== SongEditedEventName ||
       event.isExternalEvent
     )
       return;

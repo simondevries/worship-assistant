@@ -1,9 +1,7 @@
 import React, { useContext } from 'react';
 import { Button, Card } from '@blueprintjs/core';
-import { slideWidth } from './ActiveSongSlide';
 import styled from 'styled-components';
 import { Context } from '../../../Common/Store/Store';
-import IState from '../../../Interfaces/State';
 import focusOnProjectView from '../../../Hooks/focusOnProjectView';
 
 const StyledContainer = styled(Card)`
@@ -16,7 +14,7 @@ const StyledContainer = styled(Card)`
   min-height: 250px;
 `;
 
-export default ({ children, slideIndex, resourceId }) => {
+const ActiveSlideContainer = ({ children, slideIndex, resourceId }) => {
   const [state] = useContext(Context);
   const [openOrFocus] = focusOnProjectView(resourceId, slideIndex);
 
@@ -33,3 +31,5 @@ export default ({ children, slideIndex, resourceId }) => {
     </StyledContainer>
   );
 };
+
+export default ActiveSlideContainer;

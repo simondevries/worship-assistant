@@ -1,4 +1,3 @@
-import IResourceReference from "../Interfaces/ResourceReference";
 import ISong, { Lyrics } from 'Interfaces/Song/Song';
 
 export class SongBuilder {
@@ -23,7 +22,7 @@ How great Thou art, how great Thou art`}];
 
     withNullLyricContent(): SongBuilder {
         // @ts-ignore
-        this.lyrics = this.lyrics.map((l, indx) => {
+        this.lyrics = this.lyrics.map((l) => {
             return { ...l, content: null }
         });
         return this;

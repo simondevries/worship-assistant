@@ -1,4 +1,3 @@
-import BibleVerse from '../Interfaces/BibleVerse';
 import { getBibleVerse } from './bibleGateway';
 
 export enum BibleGatewayProvider {

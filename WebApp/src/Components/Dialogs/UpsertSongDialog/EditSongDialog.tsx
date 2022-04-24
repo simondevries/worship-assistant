@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, EditableText } from '@blueprintjs/core';
-import { Dialog, Classes } from '@blueprintjs/core';
+import { Classes } from '@blueprintjs/core';
 import useEventHandler from '../../../Events/Handlers/useEventHandler';
 import SongEditedEvent from '../../../Events/Domain/songEditedEvent';
 import ISong from '../../../Interfaces/Song/Song';

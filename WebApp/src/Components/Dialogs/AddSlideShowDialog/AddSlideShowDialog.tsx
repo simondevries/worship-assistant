@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   Button,
   Dialog,
@@ -91,7 +91,8 @@ const StyledProviderCard = styled(Card)`
 
 const StyledPptInstructions = styled(Collapse)``;
 
-export default ({ setModalOpen, index }) => {
+const AddSlideShowDialog = ({ setModalOpen, index }) => {
+  console.log(index)
   const [state] = useContext<Array<IState>>(Context);
   const [url, setUrl] = useState<string>();
   const [showError, setHasError] = useState<boolean>();
@@ -300,3 +301,5 @@ export default ({ setModalOpen, index }) => {
     </>
   );
 };
+
+export default AddSlideShowDialog

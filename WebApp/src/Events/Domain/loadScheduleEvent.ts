@@ -1,10 +1,9 @@
 import AppEvent from './appEvent';
-import ISong from '../../Interfaces/Song/Song';
 import ISchedule from '../../Interfaces/Schedule';
 
 export const LoadScheduleEventName = 'LoadScheduleEventName';
 
-export default class extends AppEvent {
+export default class LoadScheduleEvent extends AppEvent {
   schedule: ISchedule;
   constructor(isExternalEvent, schedule) {
     super(LoadScheduleEventName, isExternalEvent);

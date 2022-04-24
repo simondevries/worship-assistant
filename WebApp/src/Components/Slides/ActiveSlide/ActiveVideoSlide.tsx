@@ -1,10 +1,9 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { Context } from '../../../Common/Store/Store';
 
 import styled from 'styled-components';
 import ProjectorView from '../../ProjectorView/ProjectorView';
 import { Button } from '@blueprintjs/core';
-import { playVideo } from '../../../__OLD_ChromeExtensionGateway/gateway';
 import ActiveResourcePointer from '../../../Interfaces/ActiveResourcePointer';
 import ActiveSlideContainer from './ActiveSlideContainer';
 import useEventHandler from '../../../Events/Handlers/useEventHandler';
@@ -16,11 +15,11 @@ const StyledButtonContainer = styled.div`
   flex-direction: row;
 `;
 
-export default function ({ resource }) {
+export default function ActiveVideoSlide({ resource }) {
   const [raiseEvent] = useEventHandler();
   const [state] = useContext<Array<IState>>(Context);
 
-  const [showControls, setShowControls] = useState();
+  // const [showControls, setShowControls] = useState();
   const activeResourcePointer: ActiveResourcePointer = {
     resourceId: resource.id,
     slideIndex: 0,
@@ -32,7 +31,7 @@ export default function ({ resource }) {
         activeResourcePointer={activeResourcePointer}
         previewMode={true}
         globalTheme={state.settings.globalSlideTheme}
-        // ccliNumber={state.settings.ccliNumber}
+      // ccliNumber={state.settings.ccliNumber}
       />
       <StyledButtonContainer>
         {resource.title}

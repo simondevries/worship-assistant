@@ -1,21 +1,10 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { Button, Card, Elevation, H5 } from '@blueprintjs/core';
-import styled from 'styled-components/macro';
-import Verse from '../../../../Interfaces/Verse';
+import React, { useContext } from 'react';
 import BaseNonActiveSlide from 'Common/BaseNonActiveSlide/BaseNonActiveSlide';
-import BibleVerse from '../../../../Interfaces/BibleVerse';
-import { bibleVerseResolver } from '../../../../BibleVerse/bibleVerseResolver';
 import ResourceReference from '../../../../Interfaces/ResourceReference';
 import ActiveResourcePointer from '../../../../Interfaces/ActiveResourcePointer';
 import ProjectorView from '../../../ProjectorView/ProjectorView';
 import { Context } from 'Common/Store/Store';
 import IState from 'Interfaces/State';
-
-const StyledCard = styled(Card)`
-  width: 300px;
-  height: 200px;
-  margin-bottom: 10px;
-`;
 
 interface Props {
   slideIndex: number;
@@ -23,7 +12,7 @@ interface Props {
   resource: ResourceReference;
 }
 
-export default function ({ resource }: Props) {
+export default function NonActiveVideoSlide({ resource }: Props) {
   const activeResourcePointer: ActiveResourcePointer = {
     resourceId: resource.id,
     slideIndex: 0,

@@ -6,7 +6,6 @@ import {
   Intent,
   Spinner,
 } from '@blueprintjs/core';
-import { INTENT_PRIMARY } from '@blueprintjs/core/lib/esm/common/classes';
 import styled from '@emotion/styled';
 import React, { useEffect, useState } from 'react';
 import {
@@ -32,10 +31,6 @@ const StyledDeleteAllCard = styled(Card)`
   gap: 20px;
   flex-direction: column;
   margin-bottom: 10px;
-`;
-
-const StyledTitle = styled.div`
-  height: 100%;
 `;
 
 declare var confirm;
@@ -64,7 +59,7 @@ const BackupAndRestore = () => {
       }
     };
     processFileSelected();
-  }, [isOpenFileLoading]);
+  }, [isOpenFileLoading, filesContent]);
 
   const onExport = async () => {
     setExportCompleteMessage(false);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Card, Elevation, H5 } from '@blueprintjs/core';
+import { Card, Elevation } from '@blueprintjs/core';
 import styled from 'styled-components/macro';
 import useEventHandler from '../../Events/Handlers/useEventHandler';
 import SlideChangeEvent from '../../Events/Domain/slideChangeEvent';

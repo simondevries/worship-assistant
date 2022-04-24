@@ -3,10 +3,7 @@ import ProjectorView from 'Components/ProjectorView/ProjectorView';
 import PongFromProjectorToControllerEventName from 'Events/Domain/pongFromProjectorToControllerEvent';
 import useEventHandler from 'Events/Handlers/useEventHandler';
 import { debounce } from 'Helpers/debounce';
-import {
-  ProjectorDimensionsMessage,
-  projectorDimensionsMessageKey,
-} from 'Interfaces/projectorDimensionsMessage';
+
 import IState from 'Interfaces/State';
 import React, { useContext, useLayoutEffect } from 'react';
 
@@ -22,7 +19,7 @@ export default function ProjectorRoute() {
     );
     updateSize();
     // return () => window.removeEventListener('resize', updateSize);
-  }, []);
+  }, [raiseEvent]);
   const [state] = useContext(Context);
 
   const activeResourcePointer = (state as IState)?.currentSchedule

@@ -2,7 +2,7 @@ import React from 'react';
 import ActiveResourcePointer from '../../Interfaces/ActiveResourcePointer';
 import ResourceReference from '../../Interfaces/ResourceReference';
 import BibleVerseSlide from './NonActiveSlide/BibleVerse/BibleVerseSlide';
-import BibleVerse, {
+import {
   BibleVerseContent,
 } from '../../Interfaces/BibleVerse';
 import ActiveBibleVerseSlide from './ActiveSlide/ActiveBibleVerseSlide';

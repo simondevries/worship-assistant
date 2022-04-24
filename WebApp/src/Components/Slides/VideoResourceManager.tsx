@@ -1,10 +1,5 @@
-import React, { useContext } from 'react';
-import NonActiveSongSlide from './NonActiveSlide/Song/SongSlide';
-import { Context } from '../../Common/Store/Store';
-import State from '../../Interfaces/State';
+import React from 'react';
 import ActiveResourcePointer from '../../Interfaces/ActiveResourcePointer';
-import Resource from '../../Interfaces/resource';
-import ActiveSongSlide from './ActiveSlide/ActiveSongSlide';
 import ActiveVideoSlide from './ActiveSlide/ActiveVideoSlide';
 import NonActiveVideoSlide from './NonActiveSlide/Video/NonActiveVideoSlide';
 
@@ -15,9 +10,7 @@ interface Props {
   resource: any;
 }
 
-export default function ({ isActiveResource, resource }: Props) {
-  const [state]: Array<State> = useContext(Context);
-
+export default function videoResourceManager({ isActiveResource, resource }: Props) {
   if (isActiveResource) {
     return <ActiveVideoSlide resource={resource} />;
   }

@@ -1,10 +1,8 @@
 import AppEvent from './appEvent';
-import ISong from '../../Interfaces/Song/Song';
-import { defaultTheme, ITheme } from '../../Interfaces/themes';
 
 export const MoveResourceEventName = 'MoveResourceUp';
 
-export default class extends AppEvent {
+export default class MoveResourceEvent extends AppEvent {
   id: string; // todo (sdv) move id to app event
   direction: number;
   constructor(isExternalEvent, id, direction) {

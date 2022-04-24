@@ -1,4 +1,3 @@
-import styled from '@emotion/styled';
 import IResourceReference from 'Interfaces/ResourceReference';
 import Song, { songSelectors } from 'Interfaces/Song/Song';
 import { ITheme } from 'Interfaces/themes';

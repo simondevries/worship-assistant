@@ -1,9 +1,7 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import IResourceReference from '../../../Interfaces/ResourceReference';
-import { userFileHandlerRepo } from '../../../Storage/userFileHandlerRepository';
 import { Context } from '../../../Common/Store/Store';
-import getUrlFromFileHandle from '../../../Helpers/getUrlFromFileHandle';
 import IState from '../../../Interfaces/State';
 
 const StyledVideoPlayer = styled.video`
@@ -16,7 +14,7 @@ interface Props {
   previewMode: boolean;
 }
 
-export default ({ resourceReference, previewMode }: Props) => {
+const VideoHandler = ({ resourceReference, previewMode }: Props) => {
   const [state] = useContext(Context);
 
   const activeVideo = (state as IState)?.currentSchedule?.activeVideos?.find(
@@ -39,12 +37,13 @@ export default ({ resourceReference, previewMode }: Props) => {
   return (
     <>
       <StyledVideoPlayer
-        id={`videoPlayer-${resourceReference.id}${
-          previewMode ? 'sometexttobreakthereference' : '' // todo (sdv) hacks to prevent the video from starting
-        }`}
+        id={`videoPlayer-${resourceReference.id}${previewMode ? 'sometexttobreakthereference' : '' // todo (sdv) hacks to prevent the video from starting
+          }`}
         // controls={!previewMode}
         src={activeVideo?.url}
       ></StyledVideoPlayer>
     </>
   );
 };
+
+export default VideoHandler;

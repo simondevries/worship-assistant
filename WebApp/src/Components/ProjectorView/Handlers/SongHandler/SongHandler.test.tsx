@@ -1,6 +1,4 @@
 import {
-  act,
-  prettyDOM,
   render,
   screen,
 } from '@testing-library/react';

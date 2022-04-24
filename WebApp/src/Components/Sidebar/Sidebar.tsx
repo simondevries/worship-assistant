@@ -6,9 +6,7 @@ import AddSongDialog from '../Dialogs/UpsertSongDialog/AddSongDialog';
 import SlideSettingsDialog from '../Dialogs/SettingsDialog/SettingsDialog';
 import { Context } from '../../Common/Store/Store';
 import ScheduleManagerDialog from '../Dialogs/ScheduleManagerDialog';
-import IState from '../../Interfaces/State';
 import focusOnProjectView from '../../Hooks/focusOnProjectView';
-import castIcon from './cast.svg';
 export const sidebarWidth = 70;
 export const sidebarMargin = 15;
 
@@ -48,12 +46,6 @@ const searchIcon = (
   <StyledIcon icon={'search'} iconSize={20}></StyledIcon>
 );
 const cogIcon = <StyledIcon icon={'cog'} iconSize={20}></StyledIcon>;
-const googleDriveBackup = (
-  <StyledIcon icon={'cloud-upload'} iconSize={20}></StyledIcon>
-);
-const alertIcon = (
-  <StyledIcon icon={'send-message'} iconSize={20}></StyledIcon>
-);
 const logIcon = (
   <StyledIcon icon={'console'} iconSize={20}></StyledIcon>
 );

@@ -1,5 +1,4 @@
 import IState from '../Interfaces/State';
-import ISongResourceReference from '../Interfaces/SongResourceReference';
 import { ProjectorViewMode } from 'Interfaces/Schedule';
 
 export interface ReducerAction {

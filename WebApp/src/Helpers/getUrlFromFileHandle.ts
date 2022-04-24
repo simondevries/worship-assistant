@@ -1,5 +1,4 @@
-import { FilePickerType, verifyFileHandlePermission } from 'FileSystem/fileSystemTools';
-import { userFileHandlerRepo } from '../Storage/userFileHandlerRepository';
+import { verifyFileHandlePermission } from 'FileSystem/fileSystemTools';
 
 const getUrlFromFileHandle = async (fileHandle) => {
   if ((await verifyFileHandlePermission(fileHandle, false)) === false) {

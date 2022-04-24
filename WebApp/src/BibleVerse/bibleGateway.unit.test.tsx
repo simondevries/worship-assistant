@@ -1,6 +1,4 @@
-import React from 'react';
 import { getBibleVerse } from './bibleGateway';
-import BibleVerse from '../Interfaces/BibleVerse';
 
 test('gets shortest bible verse in multiple translations', async () => {
   let queryResult = await getBibleVerse('Numbers 11:35-12:2', 'kjv');

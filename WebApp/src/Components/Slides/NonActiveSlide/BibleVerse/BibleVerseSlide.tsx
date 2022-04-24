@@ -1,17 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Button, Card, Elevation, H5 } from '@blueprintjs/core';
-import styled from 'styled-components/macro';
-import Verse from '../../../../Interfaces/Verse';
+import React from 'react';
 import BaseNonActiveSlide from '../../../../Common/BaseNonActiveSlide/BaseNonActiveSlide';
-import BibleVerse from '../../../../Interfaces/BibleVerse';
-import { bibleVerseResolver } from '../../../../BibleVerse/bibleVerseResolver';
-import ResourceReference from '../../../../Interfaces/ResourceReference';
-
-const StyledCard = styled(Card)`
-  width: 300px;
-  height: 200px;
-  margin-bottom: 10px;
-`;
 
 interface Props {
   slideIndex: number;
@@ -19,7 +7,7 @@ interface Props {
   verseText: string;
 }
 
-export default function ({
+export default function bibleVerseSlide({
   verseText,
   slideIndex,
   resourceId,

@@ -5,7 +5,6 @@ import Song, { songSelectors } from 'Interfaces/Song/Song';
 import IState from 'Interfaces/State';
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { ThemeBuilder } from 'testBuilders/themeBuilder';
 const StyledPreviewsContainer = styled.div`
   flex-grow: 1;
   margin-bottom: 10px;

@@ -1,7 +1,5 @@
-import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import BibleVerseHandler from './BibleVerseHandler';
-import { BibleVerseContent } from 'Interfaces/BibleVerse';
 import { BibleVerseContentBuilder } from 'testBuilders/resourceReferenceBuilder';
 import { ThemeBuilder } from 'testBuilders/themeBuilder';
 

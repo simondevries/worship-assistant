@@ -1,9 +1,8 @@
 import AppEvent from './appEvent';
-import ISong from '../../Interfaces/Song/Song';
 
 export const AddActiveVideoEventName = 'AddActiveVideoEventName';
 
-export default class extends AppEvent {
+export default class AddActiveVideoEvent extends AppEvent {
   resourceId: any;
   url: any;
   constructor(isExternalEvent, resourceId, url) {

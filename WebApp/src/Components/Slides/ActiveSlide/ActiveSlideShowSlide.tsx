@@ -1,10 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Context } from '../../../Common/Store/Store';
 import styled from 'styled-components';
-import ProjectorView from '../../ProjectorView/ProjectorView';
-import { Button, Card } from '@blueprintjs/core';
+import { Button } from '@blueprintjs/core';
 import ResourceReference from '../../../Interfaces/ResourceReference';
-import BibleVerse from '../../../Interfaces/BibleVerse';
 import ActiveSlideContainer from './ActiveSlideContainer';
 import focusOnProjectView from '../../../Hooks/focusOnProjectView';
 
@@ -38,17 +36,6 @@ const StyledButtonContainer = styled.div`
   flex-direction: row;
 `;
 
-const StyledProjectorView = styled(ProjectorView)`
-  height: 150px;
-`;
-
-const StyledIframe = styled.iframe`
-  width: 100%;
-  height: 100%;
-`;
-
-const StyledActiveSlideContainer = styled.div``;
-
 const StyledCloseButton = styled(Button)`
   padding: 19px 40px;
   font-size: 20px;
@@ -61,8 +48,8 @@ type Props = {
   resource: ResourceReference;
 };
 
-export default function ({ resource }: Props) {
-  const [state, dispatch] = useContext(Context);
+export default function ActiveSlideShowSlide({ resource }: Props) {
+  const context = useContext(Context);
   const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(true);
   const [focusProjector] = focusOnProjectView(resource?.id, 0);
 
@@ -72,19 +59,19 @@ export default function ({ resource }: Props) {
 
   useEffect(() => {
     focusProjector();
-  }, []);
+  }, [focusProjector]);
 
   return (
     <ActiveSlideContainer
       slideIndex={
-        state.currentSchedule.activeResourcePointer.slideIndex
+        context.state.currentSchedule.activeResourcePointer.slideIndex
       }
       resourceId={
-        state.currentSchedule.activeResourcePointer.resourceId
+        context.state.currentSchedule.activeResourcePointer.resourceId
       }
     >
       <>
-        {state.hasProjectorsAttached && isOverlayOpen && (
+        {context.state.hasProjectorsAttached && isOverlayOpen && (
           <StyledBackdrop onClick={overlayClick}>
             <StyledOverlayContainer>
               <h3>
@@ -110,7 +97,7 @@ export default function ({ resource }: Props) {
         title={resource.id}
         src={resource.embeddedPowerPointUrl}
       /> */}
-        {state.hasProjectorsAttached && (
+        {context.state.hasProjectorsAttached && (
           <Button
             intent="primary"
             onClick={() => {

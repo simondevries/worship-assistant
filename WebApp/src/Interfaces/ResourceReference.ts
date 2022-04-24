@@ -1,6 +1,4 @@
 import { BibleVerseContent } from './BibleVerse';
-import IVerse from './Verse';
-import ISong from './Song/Song';
 import State from './State';
 
 // todo (sdv) rename to resource

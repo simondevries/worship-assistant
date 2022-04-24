@@ -1,10 +1,8 @@
 import React, { useContext } from 'react';
 import { Context } from '../../../Common/Store/Store';
 import styled from 'styled-components';
-import ProjectorView from '../../ProjectorView/ProjectorView';
-import { Button, Card } from '@blueprintjs/core';
+import { Button } from '@blueprintjs/core';
 import ResourceReference from '../../../Interfaces/ResourceReference';
-import BibleVerse from '../../../Interfaces/BibleVerse';
 import ActiveSlideContainer from './ActiveSlideContainer';
 import MinatureProjectorView from 'Components/MinatureProjectorView/MinatureProjectorView';
 
@@ -20,10 +18,11 @@ type Props = {
 };
 
 const ActiveBibleVerseSlide = ({ resource }: Props) => {
-  const [state, dispatch] = useContext(Context);
+  console.log(resource)
+  const context = useContext(Context);
 
   const activeResourcePointer =
-    state.currentSchedule.activeResourcePointer;
+    context.state.currentSchedule.activeResourcePointer;
 
   return (
     <ActiveSlideContainer

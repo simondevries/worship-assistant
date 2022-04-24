@@ -1,4 +1,4 @@
-import { Button, Classes } from '@blueprintjs/core';
+import { Button } from '@blueprintjs/core';
 import SongPartLabelTag from 'Common/SongPartLabel/SongPartLabelTag';
 import { useRef, useState } from 'react';
 import { plainTextTolyricTagProcessor } from 'Reducers/SongReducers/plainTextTolyricTagProcessor';
@@ -73,7 +73,7 @@ export default function LyricEditor({ lyrics, setLyrics }: Props) {
 
   const aceRef = useRef<any>(undefined);
 
-  const textSelected = (selectedText: any, e: any) => {
+  const textSelected = (selectedText: any) => {
     setSelectedLyrics(selectedText);
   };
 

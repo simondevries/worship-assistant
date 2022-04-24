@@ -1,4 +1,4 @@
-import BibleVerse, { BibleVerseContent } from '../Interfaces/BibleVerse';
+import { BibleVerseContent } from '../Interfaces/BibleVerse';
 //
 export const getBibleVerse = async (searchValue: string, translation: string) => {
   const res = await fetch(

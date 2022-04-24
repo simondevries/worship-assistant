@@ -23,7 +23,6 @@ import removeResourceFromScheduleEvent, {
 import BibleVerseAddedToScheduleEvent, {
   BibleVerseAddedToScheduleEventName,
 } from '../Domain/bibleVerseAddedToScheduleEvent';
-import newId from '../../Helpers/newId';
 import SlideShowAddedToScheduleEvent, {
   SlideShowAddedToScheduleEventName,
 } from '../Domain/slideShowAddedToScheduleEvent';
@@ -40,7 +39,7 @@ import addActiveVideoEvent, {
   AddActiveVideoEventName,
 } from '../Domain/addActiveVideoEvent';
 import SongEditedEvent, {
-  SongEditedEventEventName,
+  SongEditedEventName,
 } from '../Domain/songEditedEvent';
 import ProjectorWindowClosedEvent, {
   ProjectorWindowClosedEventName,
@@ -50,6 +49,7 @@ import addActiveImageEvent from 'Events/Domain/addActiveImageEvent';
 
 const useAppStateEventProcessors = () => {
   const [state, dispatch] = useContext(Context);
+  console.log(state)
 
   const SongCreatedEventHandler = (event: SongCreatedEvent) => {
     if (event.eventType !== SongCreatedEventName) return;
@@ -107,7 +107,7 @@ const useAppStateEventProcessors = () => {
   };
 
   const SongEditedEventHandler = (event: SongEditedEvent) => {
-    if (event.eventType !== SongEditedEventEventName) return;
+    if (event.eventType !== SongEditedEventName) return;
     dispatch({
       type: 'editSong',
       payload: event.song,
