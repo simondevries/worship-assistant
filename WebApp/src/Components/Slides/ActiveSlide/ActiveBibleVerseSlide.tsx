@@ -7,6 +7,7 @@ import ResourceReference from '../../../Interfaces/ResourceReference';
 import BibleVerse from '../../../Interfaces/BibleVerse';
 import ActiveSlideContainer from './ActiveSlideContainer';
 import MinatureProjectorView from 'Components/MinatureProjectorView/MinatureProjectorView';
+import CommonActiveSlideButtons from 'Common/CommonActiveSlideButtons/CommonActiveSlideButtons';
 
 const StyledButtonContainer = styled.div`
   display: flex;
@@ -32,7 +33,7 @@ const ActiveBibleVerseSlide = ({ resource }: Props) => {
     >
       <MinatureProjectorView />
       <StyledButtonContainer>
-        <Button>Slide Settings</Button>
+        <CommonActiveSlideButtons />
       </StyledButtonContainer>
     </ActiveSlideContainer>
   );
