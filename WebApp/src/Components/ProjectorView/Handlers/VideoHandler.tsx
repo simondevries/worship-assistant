@@ -19,17 +19,19 @@ interface Props {
 export default ({ resourceReference, previewMode }: Props) => {
   const [state] = useContext(Context);
 
-  const activeVideo = (state as IState)?.currentSchedule?.activeVideos?.find(
+  const activeVideo = (
+    state as IState
+  )?.currentSchedule?.activeVideos?.find(
     (v) => v.id === resourceReference.id,
   );
 
   if (!activeVideo) {
     if (previewMode) {
       return (
-        <div>
+        <span>
           Unable to display video, ensure you have granted access to
           the file
-        </div>
+        </span>
       );
     } else {
       return null;

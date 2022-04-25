@@ -10,6 +10,7 @@ import ActiveSlideContainer from './ActiveSlideContainer';
 import useEventHandler from '../../../Events/Handlers/useEventHandler';
 import VideoModeChangeEvent from '../../../Events/Domain/VideoModeChangeEvent';
 import IState from 'Interfaces/State';
+import CommonActiveSlideButtons from 'Common/CommonActiveSlideButtons/CommonActiveSlideButtons';
 
 const StyledButtonContainer = styled.div`
   display: flex;
@@ -37,6 +38,7 @@ export default function ({ resource }) {
       <StyledButtonContainer>
         {resource.title}
 
+        <CommonActiveSlideButtons />
         <Button
           icon="play"
           onClick={() =>

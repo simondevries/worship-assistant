@@ -18,6 +18,7 @@ const Template: ComponentStory<typeof BibleVerseHandler> = (args) => (
     resourceReference={args.resourceReference}
     slideIndex={0}
     globalTheme={new ThemeBuilder().build()}
+    isBlank={false}
   />
 );
 

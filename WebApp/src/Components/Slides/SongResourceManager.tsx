@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import NonActiveSongSlide from './NonActiveSlide/Song/SongSlide';
+import SongSlide from './NonActiveSlide/Song/SongSlide';
 import { Context } from '../../Common/Store/Store';
 import State from '../../Interfaces/State';
 import ActiveResourcePointer from '../../Interfaces/ActiveResourcePointer';
@@ -47,25 +47,20 @@ const SongResourceManager = ({
   return (
     <>
       {songsInUserSpecifiedOrder &&
-        songsInUserSpecifiedOrder.map((verse, slideIndex) => {
-          if (
-            isActiveResource &&
-            slideIndex === activeResourcePointer.slideIndex
-          ) {
-            return <ActiveSongSlide />;
-          } else {
-            return (
-              <NonActiveSongSlide
-                slideIndex={slideIndex}
-                onClick={() => onSlideClick(slideIndex)}
-                verse={verse}
-                resourceId={resource.id}
-                isFirstSlide={slideIndex === 0}
-                isLastSlide={slideIndex === song.lyrics.length - 1}
-              />
-            );
-          }
-        })}
+        songsInUserSpecifiedOrder.map((verse, slideIndex) => (
+          <SongSlide
+            slideIndex={slideIndex}
+            onClick={() => onSlideClick(slideIndex)}
+            verse={verse}
+            resourceId={resource.id}
+            isFirstSlide={slideIndex === 0}
+            isLastSlide={slideIndex === song.lyrics.length - 1}
+            isSelected={
+              isActiveResource &&
+              slideIndex === activeResourcePointer.slideIndex
+            }
+          />
+        ))}
     </>
   );
 };

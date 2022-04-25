@@ -8,6 +8,8 @@ import getUrlFromFileHandle from '../../Helpers/getUrlFromFileHandle';
 import AddActiveVideoEvent from '../../Events/Domain/addActiveVideoEvent';
 import IState from '../../Interfaces/State';
 import { userFileHandlerRepo } from '../../Storage/userFileHandlerRepository';
+import addActiveImageEvent from 'Events/Domain/addActiveImageEvent';
+import { ResourceType } from 'Interfaces/ResourceReference';
 
 // todo (Sdv)
 
@@ -63,6 +65,7 @@ interface IFileHandleMetadata {
   status: string;
   resourceId: string;
   fileHandle: any;
+  resourceType: 'VIDEO' | 'IMAGE';
 }
 
 const UserFileHandlerPermissionManagerDialog = ({ setOpen }) => {
@@ -79,7 +82,8 @@ const UserFileHandlerPermissionManagerDialog = ({ setOpen }) => {
       const resources = (
         state as IState
       ).currentSchedule.resources.filter(
-        (r) => r.resourceType === 'VIDEO',
+        (r) =>
+          r.resourceType === 'VIDEO' || r.resourceType === 'IMAGE',
       );
 
       for (const res in resources) {
@@ -96,12 +100,18 @@ const UserFileHandlerPermissionManagerDialog = ({ setOpen }) => {
             status: isGranted === true ? 'SUCCESS' : 'PENDING',
             resourceId: r.id,
             fileHandle: fileHandle,
+            resourceType: r.resourceType,
           } as IFileHandleMetadata;
           localFileHandles.push(obj);
 
-          if (isGranted) {
+          if (isGranted && r.resourceType === 'VIDEO') {
             const url = await getUrlFromFileHandle(fileHandle);
             raiseEvent(new AddActiveVideoEvent(false, r.id, url));
+          }
+
+          if (isGranted && r.resourceType === 'IMAGE') {
+            const url = await getUrlFromFileHandle(fileHandle);
+            raiseEvent(new addActiveImageEvent(false, r.id, url));
           }
         }
       }
@@ -169,13 +179,23 @@ const UserFileHandlerPermissionManagerDialog = ({ setOpen }) => {
     );
 
     if (url) {
-      raiseEvent(
-        new AddActiveVideoEvent(
-          false,
-          fileHandleMetadata.resourceId,
-          url,
-        ),
-      );
+      if (fileHandleMetadata.resourceType === 'VIDEO') {
+        raiseEvent(
+          new AddActiveVideoEvent(
+            false,
+            fileHandleMetadata.resourceId,
+            url,
+          ),
+        );
+      } else if (fileHandleMetadata.resourceType === 'IMAGE') {
+        raiseEvent(
+          new addActiveImageEvent(
+            false,
+            fileHandleMetadata.resourceId,
+            url,
+          ),
+        );
+      }
 
       const updated = fileHandlesMetadata
         .filter((h) => h.name !== fileHandleMetadata.name)
@@ -219,7 +239,7 @@ const UserFileHandlerPermissionManagerDialog = ({ setOpen }) => {
         <div className={Classes.DIALOG_BODY}>
           <Card>
             The schedule uses videos and images from your file system.
-            When you reopen a schedule you will need to grant access
+            When you re Worship Studio you will need to grant access
             to these files again.
             <br />
             <small>

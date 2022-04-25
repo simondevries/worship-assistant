@@ -3,7 +3,7 @@ import { Button, Card, Elevation } from '@blueprintjs/core';
 import styled from 'styled-components/macro';
 import BaseNonActiveSlide from '../../../../Common/BaseNonActiveSlide/BaseNonActiveSlide';
 import IResource from 'Interfaces/resource';
-import NonActiveImageSlide from './NonActiveImageSlide';
+import ImageSlide from './ImageSlide';
 import ActiveImageSlide from 'Components/Slides/ActiveSlide/ActiveImageSlide';
 
 interface Props {
@@ -15,11 +15,9 @@ const ImageResourceManager = ({
   resource,
   isActiveResource,
 }: Props) => {
-  if (isActiveResource) {
-    return <ActiveImageSlide resource={resource} />;
-  }
-
-  return <NonActiveImageSlide resource={resource} />;
+  return (
+    <ImageSlide resource={resource} isActive={isActiveResource} />
+  );
 };
 
 export default ImageResourceManager;

@@ -100,10 +100,12 @@ const GenericTextHandler = ({
   text,
   globalTheme,
   footer,
+  isBlank,
 }: {
   text: string;
   footer?: string;
   globalTheme: ITheme;
+  isBlank: boolean;
 }) => {
   const [dimensions, setDimensions] = useState<Dimensions>({
     width: 0,
@@ -126,6 +128,10 @@ const GenericTextHandler = ({
     updateSize();
   }, []);
 
+  const TextContent = () => {
+    return <></>;
+  };
+
   return (
     <SSongHandler
       data-testid="songhandler-container"
@@ -139,15 +145,14 @@ const GenericTextHandler = ({
       ref={containerRef}
     >
       <StyledScreenSizeContent theme={globalTheme}>
-        {text}
+        {!isBlank && text}
       </StyledScreenSizeContent>
       {footer && (
         <StyledFooter style={{ fontSize: `${footerFontSize}pt` }}>
-          {footer}
+          {!isBlank && footer}
         </StyledFooter>
       )}
     </SSongHandler>
-    // </div>
   );
 };
 

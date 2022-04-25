@@ -11,12 +11,14 @@ const SongHandler = ({
   activeSongs,
   globalTheme,
   ccliNumber,
+  isBlank,
 }: {
   resourceReference: IResourceReference;
   slideIndex: number;
   activeSongs: Song[];
   globalTheme: ITheme;
   ccliNumber: string | undefined;
+  isBlank: boolean;
 }) => {
   const song =
     activeSongs.find((s) => s.id === resourceReference.id) ??
@@ -44,6 +46,7 @@ const SongHandler = ({
       globalTheme={globalTheme}
       text={content}
       footer={footer}
+      isBlank={isBlank}
     />
   );
 };

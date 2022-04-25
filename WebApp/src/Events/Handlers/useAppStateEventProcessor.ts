@@ -1,7 +1,7 @@
 import { AddActiveImageEventName } from './../Domain/addActiveImageEvent';
 import imageCreatedEvent, { ImageCreatedEventName } from 'Events/Domain/imageCreatedEvent';
 import UpdateSettingsEvent, { UpdateSettingsEventName } from './../Domain/updateSettingsEvent';
-import SlideBlackoutEvent, { SlidedBlackoutEventName } from 'Events/Domain/slideBlackoutEvent';
+import ChangeProjectorModeEvent, { ChangeProjectorModeEventName } from 'Events/Domain/changeProjectorModeEvent';
 import { defaultProjectorWidth, defaultProjectorHeight } from '../../Components/Slides/ActiveSlide/helpers/slideSizeResolver';
 import { useContext } from 'react';
 import SongCreatedEvent, {
@@ -47,6 +47,7 @@ import ProjectorWindowClosedEvent, {
 } from '../Domain/projectorWindowClosedEvent';
 import PongFromProjectorToControllerEvent, { PongFromProjectorToControllerEventName } from 'Events/Domain/pongFromProjectorToControllerEvent';
 import addActiveImageEvent from 'Events/Domain/addActiveImageEvent';
+import { ProjectorViewMode } from 'Interfaces/Schedule';
 
 const useAppStateEventProcessors = () => {
   const [state, dispatch] = useContext(Context);
@@ -250,14 +251,28 @@ const useAppStateEventProcessors = () => {
     });
   };
 
-  const SlideBlackoutEventHandler = (event: SlideBlackoutEvent) => {
-    const shouldContinue = event.eventType === SlidedBlackoutEventName;
+  const SlideBlackoutEventHandler = (event: ChangeProjectorModeEvent) => {
+    const shouldContinue = event.eventType === ChangeProjectorModeEventName;
     if (!shouldContinue) return;
 
-    dispatch({
-      type: 'setProjectorViewBlank',
-      payload: event.color
-    });
+    if (event.projectorMode === ProjectorViewMode.Blackout) {
+      dispatch({
+        type: 'setProjectorViewBlackout',
+        payload: event.color
+      });
+    }
+
+    if (event.projectorMode === ProjectorViewMode.Blank) {
+      dispatch({
+        type: 'setProjectorViewBlank'
+      });
+    }
+
+    if (event.projectorMode === ProjectorViewMode.Standard) {
+      dispatch({
+        type: 'setProjectorViewStandard'
+      });
+    }
   };
 
 

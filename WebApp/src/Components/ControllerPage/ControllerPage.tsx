@@ -13,6 +13,11 @@ const StyledAddButton = styled(Button)`
 
 const addIcon = <Icon icon="add" iconSize={20} />;
 
+const StyledWelcomeCardContainer = styled.div`
+  width: 100%;
+  height: 100%;
+`;
+
 const StyledResourceContainer = styled.div`
   display: flex;
   align-items: center;
@@ -28,12 +33,14 @@ const StyledResourcesContainer = styled.div`
 `;
 
 const StyledWelcomeCard = styled(Card)`
+  width: 300px;
   display: flex;
   align-items: center;
   height: 150px;
   margin: auto;
   flex-direction: column;
   justify-content: space-between;
+  text-align: center;
 `;
 
 const StyledNoResourcesButton = styled(Button)`
@@ -95,24 +102,26 @@ const ControllerPage = ({ className }) => {
     state.currentSchedule.activeResourcePointer;
   if (!sortedResources || !sortedResources.length) {
     return (
-      <StyledWelcomeCard className={className}>
-        {/* */}
-        {/* <StyledNoResourcesButton
+      <StyledWelcomeCardContainer>
+        <StyledWelcomeCard className={className}>
+          {/* */}
+          {/* <StyledNoResourcesButton
           onClick={() => openSearch(0)}
           icon="add"
           large
         > */}
-        To add your first resource, click 'Add to schedule' or press
-        the ` key on your keyboard
-        <span
-          role="img"
-          aria-label="clap"
-          style={{ fontSize: '40px' }}
-        >
-          👏
-        </span>
-        {/* </StyledNoResourcesButton> */}
-      </StyledWelcomeCard>
+          Your service is a blank canvas! <br /> Go ahead and add your
+          first service items!
+          <span
+            role="img"
+            aria-label="clap"
+            style={{ fontSize: '40px' }}
+          >
+            👏
+          </span>
+          {/* </StyledNoResourcesButton> */}
+        </StyledWelcomeCard>
+      </StyledWelcomeCardContainer>
     );
   }
 

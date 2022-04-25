@@ -36,13 +36,15 @@ const StyledPowerPointPresenter = styled.iframe`
 const StyledVideo = styled.video``;
 
 const StyledProjectorView = styled.div<{
-  isBlank: boolean;
+  isBlackout: boolean;
   blankColor: string;
   previewMode: boolean;
   theme: ITheme;
 }>`
-  background: ${({ theme, isBlank, blankColor }) =>
-    isBlank ? blankColor : theme.backgroundColor};
+  background: ${({ theme, isBlackout, blankColor }) =>
+    isBlackout && blankColor?.toLowerCase() !== 'blank'
+      ? blankColor
+      : theme.backgroundColor};
   color: ${({ theme }) => theme.primary};
   width: 100%;
   height: 100%;
@@ -74,13 +76,18 @@ const ProjectorView = ({
 
   if (!state || !state.currentSchedule) return null;
 
+  const isBlackout =
+    state.currentSchedule.currentProjectorViewMode.mode ===
+    ProjectorViewMode.Blackout;
+
+  const isBlank =
+    state.currentSchedule.currentProjectorViewMode.mode ===
+    ProjectorViewMode.Blank;
+
   const resourceReference =
-    state &&
-    state.currentSchedule &&
-    activeResourcePointer &&
-    activeResourcePointer.resourceId &&
-    state.currentSchedule.resources &&
-    state.currentSchedule.resources.find(
+    state?.currentSchedule &&
+    activeResourcePointer?.resourceId &&
+    state.currentSchedule.resources?.find(
       (r) =>
         r &&
         r.id &&
@@ -110,6 +117,7 @@ const ProjectorView = ({
             activeSongs={state?.currentSchedule.activeSongs}
             globalTheme={globalTheme}
             ccliNumber={ccliNumber}
+            isBlank={isBlank}
           />
         );
       case 'slideshow':
@@ -122,6 +130,7 @@ const ProjectorView = ({
             resourceReference={resourceReference}
             slideIndex={activeResourcePointer.slideIndex}
             globalTheme={globalTheme}
+            isBlank={isBlank}
           />
         );
       case 'youtube':
@@ -148,15 +157,12 @@ const ProjectorView = ({
   };
 
   const isFullScreen = window.innerHeight !== window.screen.height;
-  const isBlank =
-    state.currentSchedule.currentProjectorViewMode.mode ===
-    ProjectorViewMode.Blank;
 
   return (
     <>
       <ThemeProvider theme={defaultTheme}>
         <StyledProjectorView
-          isBlank={isBlank}
+          isBlackout={isBlackout}
           blankColor={
             state.currentSchedule.currentProjectorViewMode
               ?.blankColor ?? 'black'
@@ -164,7 +170,7 @@ const ProjectorView = ({
           previewMode={previewMode}
           className={`${className} projectorView`}
         >
-          {!isBlank && renderAppropriateHandler()}
+          {!isBlackout && renderAppropriateHandler()}
           {!isFullScreen && !resourceReference && !previewMode && (
             <StyledCentering>
               <div>

@@ -7,6 +7,8 @@ import SlideChangeEvent from '../../Events/Domain/slideChangeEvent';
 const StyledCard = styled(Card)<any>`
   width: 300px;
   padding: 7px 10px;
+  ${({ isSelectedSlide }) =>
+    isSelectedSlide && `background: #565656 !important;`}}
 
   ${(props: any) =>
     !props.isFirstSlide
@@ -20,12 +22,13 @@ const StyledCard = styled(Card)<any>`
 `;
 
 type Props = {
-  children: JSX.Element;
+  children: JSX.Element[] | JSX.Element;
   slideIndex: number;
   resourceId: string;
   className?: string;
   isFirstSlide?: boolean;
   isLastSlide?: boolean;
+  isSelectedSlide?: boolean;
 };
 
 const BaseNonActiveSlide = ({
@@ -35,6 +38,7 @@ const BaseNonActiveSlide = ({
   className,
   isFirstSlide,
   isLastSlide,
+  isSelectedSlide,
 }: Props) => {
   const [raiseEvent] = useEventHandler();
 
@@ -50,9 +54,10 @@ const BaseNonActiveSlide = ({
       id={`slide${slideIndex}resource${resourceId}`}
       onClick={onSlideClick}
       interactive={true}
-      elevation={Elevation.TWO}
+      elevation={isSelectedSlide ? Elevation.FOUR : Elevation.TWO}
       isFirstSlide={isFirstSlide}
       isLastSlide={isLastSlide}
+      isSelectedSlide={isSelectedSlide}
     >
       {children}
     </StyledCard>

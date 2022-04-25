@@ -16,17 +16,12 @@ interface Props {
 }
 
 export default function ({ isActiveResource, resource }: Props) {
-  const [state]: Array<State> = useContext(Context);
-
-  if (isActiveResource) {
-    return <ActiveVideoSlide resource={resource} />;
-  }
-
   return (
     <NonActiveVideoSlide
       resource={resource}
       slideIndex={0}
       resourceId={resource.id}
+      isActive={isActiveResource}
     />
   );
 }

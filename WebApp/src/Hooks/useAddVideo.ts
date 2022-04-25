@@ -13,7 +13,7 @@ const useAddVideo = () => {
     const [raiseEvent] = useEventHandler();
     const [state] = useContext(Context);
 
-    const addVideo = async () => {
+    const addVideo = async (indexToAddAt: number) => {
         let fileHandle, url;
         try {
             fileHandle = await openFile(FilePickerType.Video);
@@ -35,7 +35,7 @@ const useAddVideo = () => {
             new videoCreatedEvent(
                 false,
                 videoId,
-                (state as IState).searchBar.insertResourceAtIndex,
+                indexToAddAt,
                 fileHandle,
             ),
         );

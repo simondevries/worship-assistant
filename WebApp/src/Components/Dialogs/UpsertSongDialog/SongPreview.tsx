@@ -62,6 +62,7 @@ const SongPreview = ({ song }: Props) => {
                     (state as IState).settings.globalSlideTheme
                   }
                   ccliNumber={undefined}
+                  isBlank={false}
                 ></SongHandler>
               </SongHandlerContainer>
             </StyledContainer>

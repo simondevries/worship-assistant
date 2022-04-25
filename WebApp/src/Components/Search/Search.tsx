@@ -276,7 +276,10 @@ const Search = () => {
               {!searchValue && (
                 <StyledDropdownItem
                   onClick={() => {
-                    addVideo();
+                    addVideo(
+                      (state as IState).searchBar
+                        .insertResourceAtIndex ?? 0,
+                    );
                     onClose();
                   }}
                 >
@@ -307,7 +310,10 @@ const Search = () => {
               {!searchValue && (
                 <StyledDropdownItem
                   onClick={() => {
-                    addImage();
+                    addImage(
+                      (state as IState).searchBar
+                        .insertResourceAtIndex ?? 0,
+                    );
                     onClose();
                   }}
                 >

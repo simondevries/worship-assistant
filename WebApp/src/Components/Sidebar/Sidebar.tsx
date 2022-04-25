@@ -239,7 +239,7 @@ export default function Sidebar({ className }) {
           <SButton
             icon={'mobile-video'}
             onClick={() => {
-              addVideo();
+              addVideo(state?.currentSchedule?.resources?.length);
             }}
           >
             Add Video
@@ -248,7 +248,7 @@ export default function Sidebar({ className }) {
         <SButtonRow>
           <SButton
             onClick={() => {
-              addImage();
+              addImage(state?.currentSchedule?.resources?.length);
             }}
             icon={'media'}
           >
@@ -262,6 +262,18 @@ export default function Sidebar({ className }) {
           >
             Add Google slides
           </SButton>
+        </SButtonRow>
+
+        <SButtonRow>
+          {window.location.origin.indexOf('localhost') !== -1 && (
+            <SButton
+              icon={'console'}
+              onClick={() => console.log({ state })}
+              minimal
+            >
+              Log state
+            </SButton>
+          )}
         </SButtonRow>
       </SSidebarSection>
     </SSidebarContainer>

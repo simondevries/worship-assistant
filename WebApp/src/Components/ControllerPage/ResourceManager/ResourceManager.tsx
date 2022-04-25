@@ -6,7 +6,7 @@ import ResourceHeader from './ResourceHeader/ResourceHeader';
 const StyledContentContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: start;
   overflow-y: auto;
   height: 100%;
 `;

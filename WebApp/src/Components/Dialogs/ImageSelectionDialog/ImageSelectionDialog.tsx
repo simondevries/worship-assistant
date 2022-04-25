@@ -119,7 +119,7 @@ const ImageSelectionDialog = ({
             <Button onClick={getImagesFromApi}>Search</Button>
           </StyledSearchContainer>
           <StyledImageResultWrapper>
-            {searchResults?.results.map((res) => {
+            {searchResults?.results?.map((res) => {
               return (
                 <StyledImageContainer
                   isSelected={res.id === selectedImageId}

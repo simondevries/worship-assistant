@@ -8,12 +8,14 @@ type Prop = {
   resourceReference: IResourceReference;
   slideIndex: number;
   globalTheme: ITheme;
+  isBlank: boolean;
 };
 
 const BibleVerseHandler = ({
   resourceReference,
   slideIndex,
   globalTheme,
+  isBlank,
 }: Prop) => {
   const selectedContent =
     resourceReference.bibleVerseContent &&
@@ -32,12 +34,13 @@ const BibleVerseHandler = ({
       selectedContent?.chapter ?? ''
     }:${selectedContent?.verse}`;
   }
-  //
+
   return (
     <GenericTextHandler
       text={selectedVerse}
       globalTheme={globalTheme}
       footer={selectedPassageReference}
+      isBlank={isBlank}
     />
   );
 };

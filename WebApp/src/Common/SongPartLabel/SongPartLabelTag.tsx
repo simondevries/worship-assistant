@@ -20,7 +20,7 @@ const StyledNumberLabel = styled(StyledTitleLabel)`
   padding-right: 5px;
 `;
 
-const StyledVerseNameLabel = styled(StyledTitleLabel)<{
+export const StyledTextLabel = styled(StyledTitleLabel)<{
   background: string;
   color: string;
 }>`
@@ -55,13 +55,13 @@ const SongPartLabelTag = ({
   const tagDetails = songSelectors.getSongTagDetails(verseName);
 
   labels.push(
-    <StyledVerseNameLabel
+    <StyledTextLabel
       className="verse-name-label" // referenced externally
       color={tagDetails.color}
       background={tagDetails.background}
     >
       {tagDetails.readableValue}
-    </StyledVerseNameLabel>,
+    </StyledTextLabel>,
   );
   return (
     <StyledLabelContainer className={className} onClick={onClick}>

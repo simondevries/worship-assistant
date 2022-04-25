@@ -15,6 +15,7 @@ export default interface ISchedule {
   activeVideos: IActiveVideo[];
   activeImages: IActiveImage[];
   title: string;
+
   currentProjectorViewMode: {
     mode: ProjectorViewMode;
     blankColor?: 'White' | 'Black'
@@ -22,6 +23,7 @@ export default interface ISchedule {
 }
 
 export enum ProjectorViewMode {
+  Blackout,
   Blank,
   Standard
 }
@@ -62,4 +64,23 @@ export const scheduleSchemaMigrator = (schedule: ISchedule) => {
 
 
   return updatedSchedule;
+}
+
+
+export const Schedule = {
+  selectors: {
+
+    isProjectorBlank: (schedule?: ISchedule) =>
+      schedule?.currentProjectorViewMode?.mode === ProjectorViewMode.Blank,
+
+    isProjectorWhiteout: (schedule?: ISchedule) =>
+      schedule?.currentProjectorViewMode?.blankColor === 'White' && schedule?.currentProjectorViewMode?.mode === ProjectorViewMode.Blackout,
+
+
+    isProjectorBlackout: (schedule?: ISchedule) =>
+      schedule?.currentProjectorViewMode?.blankColor === 'Black' && schedule?.currentProjectorViewMode?.mode === ProjectorViewMode.Blackout,
+
+
+  }
+
 }

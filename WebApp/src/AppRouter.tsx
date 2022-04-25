@@ -36,6 +36,7 @@ const StyledControllerPageContainer = styled.div`
   }
   .sideBar {
     flex: 6 1 auto;
+    max-width: 350px;
   }
 `;
 
@@ -115,12 +116,12 @@ const AppRouter = () => {
       {!process.env.NODE_ENV ||
         (process.env.NODE_ENV === 'development' && (
           <StyledEventsReceived>
-            {eventsReceived.map((e) => (
-              <>
+            {eventsReceived.map((e, indx) => (
+              <div id={indx.toString()}>
                 {JSON.stringify(e)}
                 {eventsReceived.length}
                 <br />
-              </>
+              </div>
             ))}
           </StyledEventsReceived>
         ))}

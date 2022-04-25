@@ -21,9 +21,10 @@ interface Props {
   slideIndex: number;
   resourceId: string;
   resource: ResourceReference;
+  isActive: boolean;
 }
 
-export default function ({ resource }: Props) {
+export default function ({ resource, isActive }: Props) {
   const activeResourcePointer: ActiveResourcePointer = {
     resourceId: resource.id,
     slideIndex: 0,
@@ -31,7 +32,11 @@ export default function ({ resource }: Props) {
   const [state] = useContext<Array<IState>>(Context);
 
   return (
-    <BaseNonActiveSlide slideIndex={0} resourceId={resource.id}>
+    <BaseNonActiveSlide
+      slideIndex={0}
+      resourceId={resource.id}
+      isSelectedSlide={isActive}
+    >
       <ProjectorView
         activeResourcePointer={activeResourcePointer}
         previewMode={true}

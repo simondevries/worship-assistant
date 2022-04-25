@@ -26,27 +26,20 @@ const BibleVerseResourceManager = ({
   return (
     <>
       {bibleVerseContent.map((verse, indx) => {
-        const isActiveSlde =
+        const isActiveSlide =
           isActiveResource &&
           activeResourcePointer.slideIndex === indx;
 
-        if (isActiveSlde) {
-          return (
-            <ActiveBibleVerseSlide
-              resource={resource}
-            ></ActiveBibleVerseSlide>
-          );
-        } else {
-          return (
-            <div onClick={() => updateSlideNumber(indx)}>
-              <BibleVerseSlide
-                verseText={verse.text}
-                slideIndex={0}
-                resourceId={resource.id}
-              />
-            </div>
-          );
-        }
+        return (
+          <div onClick={() => updateSlideNumber(indx)}>
+            <BibleVerseSlide
+              bibleVerseContent={verse}
+              slideIndex={indx}
+              resourceId={resource.id}
+              isActiveSlide={isActiveSlide}
+            />
+          </div>
+        );
       })}
     </>
   );

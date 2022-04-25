@@ -53,8 +53,15 @@ function reducers(state: IState, action: ReducerAction): IState {
       };
 
     // Schedule
+    case 'setProjectorViewBlackout':
+      return { ...state, currentSchedule: { ...state.currentSchedule, currentProjectorViewMode: { mode: ProjectorViewMode.Blackout, blankColor: action.payload } } } as IState;
+
     case 'setProjectorViewBlank':
-      return { ...state, currentSchedule: { ...state.currentSchedule, currentProjectorViewMode: { mode: ProjectorViewMode.Blank, blankColor: action.payload } } } as IState;
+      return { ...state, currentSchedule: { ...state.currentSchedule, currentProjectorViewMode: { mode: ProjectorViewMode.Blank, blankColor: undefined } } } as IState;
+
+    case 'setProjectorViewStandard':
+      return { ...state, currentSchedule: { ...state.currentSchedule, currentProjectorViewMode: { mode: ProjectorViewMode.Standard, blankColor: undefined } } } as IState;
+
 
 
     case 'setCurrentSchedule':

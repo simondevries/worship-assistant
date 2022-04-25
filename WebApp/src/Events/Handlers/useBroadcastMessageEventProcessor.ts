@@ -43,7 +43,7 @@ import ProjectorWindowClosedEvent, {
 import RequestPongFromProjectorEvent, { PongFromProjectorToControllerEventName } from 'Events/Domain/pongFromProjectorToControllerEvent';
 import { crossBrowserMessageMapper, MessageToController, MessageToProjector } from 'Events/Domain/CrossBrowserMessage';
 import PongFromProjectorToControllerEvent from 'Events/Domain/pongFromProjectorToControllerEvent';
-import { SlidedBlackoutEventName } from 'Events/Domain/slideBlackoutEvent';
+import { ChangeProjectorModeEventName } from 'Events/Domain/changeProjectorModeEvent';
 import UpdateSettingsEvent from 'Events/Domain/updateSettingsEvent';
 
 let bc = new BroadcastChannel('worshipAssistApp');
@@ -318,7 +318,7 @@ const useBroadcastMessageEventProcessor = () => {
 
 
   const SlideBlackoutEventHandler = (event: RequestPongFromProjectorEvent) => {
-    const shouldContinue = event.eventType === SlidedBlackoutEventName && !event.isExternalEvent;
+    const shouldContinue = event.eventType === ChangeProjectorModeEventName && !event.isExternalEvent;
     if (!shouldContinue) return;
 
     const message = new MessageToProjector(event);

@@ -13,7 +13,7 @@ const useAddImage = () => {
     const [raiseEvent] = useEventHandler();
     const [state] = useContext(Context);
 
-    const addImage = async () => {
+    const addImage = async (indexToAddImage: number) => {
         let fileHandle, url;
         try {
             fileHandle = await openFile(FilePickerType.Image);
@@ -35,7 +35,7 @@ const useAddImage = () => {
             new imageCreatedEvent(
                 false,
                 imageId,
-                (state as IState).searchBar.insertResourceAtIndex,
+                indexToAddImage,
                 fileHandle,
             ),
         );

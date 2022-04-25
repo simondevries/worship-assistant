@@ -8,16 +8,21 @@ import React, { useContext } from 'react';
 
 interface Props {
   resource: IResource;
+  isActive: boolean;
 }
 
-export default function NonActiveImageSlide({ resource }: Props) {
+export default function ImageSlide({ resource, isActive }: Props) {
   const activeResourcePointer: ActiveResourcePointer = {
     resourceId: resource.id,
     slideIndex: 0,
   };
   const [state] = useContext<Array<IState>>(Context);
   return (
-    <BaseNonActiveSlide slideIndex={0} resourceId={resource.id}>
+    <BaseNonActiveSlide
+      isSelectedSlide={isActive}
+      slideIndex={0}
+      resourceId={resource.id}
+    >
       <ProjectorView
         activeResourcePointer={activeResourcePointer}
         previewMode={true}

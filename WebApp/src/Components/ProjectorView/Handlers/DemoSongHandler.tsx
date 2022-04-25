@@ -16,6 +16,7 @@ const DemoSongHandler = ({
 }) => {
   return (
     <SongHandler
+      isBlank={false}
       activeSongs={[
         new SongBuilder().withReference('asongreference').build(),
       ]}
